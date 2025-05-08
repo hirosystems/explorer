@@ -1,6 +1,9 @@
+import { useAppDispatch } from '@/common/state/hooks';
+import { setQuickNavUrl } from '@/features/search/search-slice';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { ArrowRight, KeyReturn } from '@phosphor-icons/react';
-import { ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import { ReactNode, useEffect } from 'react';
 
 import {
   MempoolTenureChangeTransaction,
@@ -22,7 +25,7 @@ import {
 } from '../../../common/utils/utils';
 import { Text } from '../../../ui/Text';
 import StxIcon from '../../../ui/icons/StxIcon';
-import { SearchLink } from './SearchLink';
+import { SearchItemTitle } from './SearchItemTitle';
 import { TxTag } from './TxTag';
 
 function ResultItemWrapper({ children, ...props }: FlexProps) {
@@ -35,6 +38,7 @@ function ResultItemWrapper({ children, ...props }: FlexProps) {
       alignItems={'center'}
       gap={2}
       justifyContent={'space-between'}
+      cursor={'pointer'}
       _hover={{
         background: 'surfaceSecondary',
       }}
@@ -48,7 +52,12 @@ function ResultItemWrapper({ children, ...props }: FlexProps) {
 function ResultItemIcon({ type }: { type?: 'arrow' | 'enter' | undefined }) {
   if (type === 'enter') {
     return (
-      <Flex alignItems={'center'} gap={1.5} flex={'0 0 auto'}>
+      <Flex
+        alignItems={'center'}
+        gap={1.5}
+        flex={'0 0 auto'}
+        display={{ base: 'none', md: 'flex' }}
+      >
         <Icon h={3.5} w={3.5} color={'iconSecondary'}>
           <KeyReturn />
         </Icon>
@@ -77,9 +86,10 @@ export function ResultItem({
   url: string;
   iconType?: 'arrow' | 'enter';
 }) {
+  const router = useRouter();
   return (
-    <ResultItemWrapper>
-      <SearchLink href={url}>{value}</SearchLink>
+    <ResultItemWrapper onClick={() => router.push(url)}>
+      <SearchItemTitle>{value}</SearchItemTitle>
       <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
   );
@@ -89,13 +99,23 @@ function TxResultItem({
   tx,
   children,
   iconType = 'arrow',
+  url,
 }: {
   tx: Transaction | MempoolTransaction;
   children: ReactNode;
   iconType?: 'arrow' | 'enter';
+  url: string;
 }) {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setQuickNavUrl(url));
+    return () => {
+      dispatch(setQuickNavUrl(''));
+    };
+  }, [dispatch, url]);
+  const router = useRouter();
   return (
-    <ResultItemWrapper>
+    <ResultItemWrapper onClick={() => router.push(url)}>
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
         {children}
         <TxTag
@@ -123,8 +143,10 @@ export function TokenTransferResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx} iconType={iconType}>
-      <SearchLink href={url}>{microToStacksFormatted(tx.token_transfer.amount)} STX</SearchLink>
+    <TxResultItem tx={tx} iconType={iconType} url={url}>
+      <SearchItemTitle href={url}>
+        {microToStacksFormatted(tx.token_transfer.amount)} STX
+      </SearchItemTitle>
       <Flex gap={1.5} alignItems={'center'}>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddleDeprecated(tx.sender_address, 4)}
@@ -140,18 +162,10 @@ export function TokenTransferResultItem({
   );
 }
 
-export function ContractDeployResultItem({
-  tx,
-  url,
-  iconType = 'arrow',
-}: {
-  tx: ContractDeployTxs;
-  url: string;
-  iconType?: 'arrow' | 'enter';
-}) {
+export function ContractDeployResultItem({ tx, url }: { tx: ContractDeployTxs; url: string }) {
   return (
-    <TxResultItem tx={tx}>
-      <SearchLink href={url}>{getContractName(tx.smart_contract.contract_id)}</SearchLink>
+    <TxResultItem tx={tx} url={url}>
+      <SearchItemTitle href={url}>{getContractName(tx.smart_contract.contract_id)}</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
@@ -169,8 +183,8 @@ export function ContractCallResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx}>
-      <SearchLink href={url}>{tx.contract_call.function_name}</SearchLink>
+    <TxResultItem tx={tx} url={url}>
+      <SearchItemTitle href={url}>{tx.contract_call.function_name}</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
@@ -188,8 +202,8 @@ export function CoinbaseResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx}>
-      <SearchLink href={url}>Coinbase</SearchLink>
+    <TxResultItem tx={tx} url={url}>
+      <SearchItemTitle href={url}>Coinbase</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
@@ -207,8 +221,8 @@ export function TenureChangeResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx}>
-      <SearchLink href={url}>Tenure Change</SearchLink>
+    <TxResultItem tx={tx} url={url}>
+      <SearchItemTitle href={url}>Tenure Change</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
@@ -227,10 +241,11 @@ export function BnsResultItem({
   url: string;
   iconType?: 'arrow' | 'enter';
 }) {
+  const router = useRouter();
   return (
-    <ResultItemWrapper>
+    <ResultItemWrapper onClick={() => router.push(url)}>
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
-        <SearchLink href={url}>{bns}</SearchLink>
+        <SearchItemTitle href={url}>{bns}</SearchItemTitle>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddleDeprecated(address, 5)}
         </Text>
@@ -251,10 +266,11 @@ export function BlockResultItem({
   url: string;
   iconType?: 'arrow' | 'enter';
 }) {
+  const router = useRouter();
   return (
-    <ResultItemWrapper py={2.5}>
+    <ResultItemWrapper py={2.5} onClick={() => router.push(url)}>
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
-        <SearchLink href={url}>
+        <SearchItemTitle href={url}>
           <Flex
             alignItems={'center'}
             gap={1.5}
@@ -283,7 +299,7 @@ export function BlockResultItem({
               #{height}
             </Text>
           </Flex>
-        </SearchLink>
+        </SearchItemTitle>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddleDeprecated(hash, 4)}
         </Text>
