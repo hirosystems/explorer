@@ -97,7 +97,7 @@ export const secondaryPages: SecondaryPage[] = [
   {
     id: 'sandbox',
     label: 'Sandbox',
-    href: '/sandbox',
+    href: '/sandbox/deploy',
   },
   // {
   //   id: 'status-center',
