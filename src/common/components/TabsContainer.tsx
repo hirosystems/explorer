@@ -28,11 +28,10 @@ export const TabsContainer: FC<
             justifyContent={['flex-start', 'flex-start', 'space-between', 'space-between']}
             alignItems={['flex-start', 'flex-start', 'center', 'center']}
             width="full"
-            flexWrap="wrap"
           >
-            <Flex width={'auto'}>
+            <Flex width={'auto'} flexWrap={'wrap'}>
               {tabs.map(tab => (
-                <Tabs.Trigger key={`${tab.id}-title`} value={tab.id}>
+                <Tabs.Trigger key={`${tab.id}-title`} value={tab.id} w="max-content">
                   {tab.title}
                 </Tabs.Trigger>
               ))}
