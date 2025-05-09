@@ -26,7 +26,8 @@ export const linkRecipe = defineRecipe({
         },
       },
       underline: {
-        textDecoration: 'none',
+        textDecoration: 'underline',
+        textDecorationColor: 'var(--stacks-colors-redesign-border-secondary)',
         _hover: {
           textDecoration: 'underline',
         },

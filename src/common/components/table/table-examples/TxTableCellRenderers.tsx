@@ -145,7 +145,7 @@ export const TimeStampCellRenderer = (value: string) => {
   return (
     <Flex
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-end"
       bg="surfacePrimary"
       borderRadius="md"
       py={0.5}

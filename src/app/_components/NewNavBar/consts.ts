@@ -46,11 +46,11 @@ export const primaryPages: PrimaryPage[] = [
     label: 'Transactions',
     href: '/transactions',
   },
-  // {
-  //   id: 'mempool',
-  //   label: 'Mempool',
-  //   href: '/mempool',
-  // },
+  {
+    id: 'mempool',
+    label: 'Mempool',
+    href: '/mempool',
+  },
   {
     id: 'sbtc',
     label: 'sBTC',

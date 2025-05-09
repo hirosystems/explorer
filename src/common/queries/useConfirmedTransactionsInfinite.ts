@@ -6,7 +6,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Transaction, TransactionType } from '@stacks/stacks-blockchain-api-types';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
@@ -21,7 +21,7 @@ type FilterProps = {
   toAddress?: string;
   startTime?: string;
   endTime?: string;
-  type?: string[];
+  transactionType?: string[];
   order?: 'asc' | 'desc' | undefined;
   sortBy?: string;
 };
@@ -82,7 +82,7 @@ interface Options {
 export function useConfirmedTransactions(
   limit = DEFAULT_LIST_LIMIT,
   offset = 0,
-  { fromAddress, toAddress, startTime, endTime, type, order, sortBy }: FilterProps = {},
+  { fromAddress, toAddress, startTime, endTime, transactionType, order, sortBy }: FilterProps = {},
   options: any = {}
 ): UseQueryResult<GenericResponseType<Transaction>> {
   const apiClient = useApiClient();
@@ -97,6 +97,7 @@ export function useConfirmedTransactions(
       ...(endTime ? [{ endTime }] : []),
       ...(order ? [{ order }] : []),
       ...(sortBy ? [{ sortBy }] : []),
+      ...(transactionType ? [{ transactionType }] : []),
     ],
     queryFn: async () => {
       if (fromAddress?.endsWith('.btc')) {
@@ -118,6 +119,9 @@ export function useConfirmedTransactions(
             ...(endTime && { end_time: Number(endTime) }),
             ...(sortBy && {
               sort_by: sortBy as 'block_height' | 'burn_block_time' | 'fee' | undefined,
+            }),
+            ...(transactionType && {
+              type: transactionType as TransactionType[],
             }),
             order,
           },

@@ -6,7 +6,11 @@ import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTrigger
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
-export function TransactionTypeFilterPopover() {
+export function TransactionTypeFilterPopover({
+  defaultTransactionType,
+}: {
+  defaultTransactionType: string[] | undefined;
+}) {
   return (
     <TableTabPopover
       id={'transaction-type-filter-popover'}
@@ -15,7 +19,12 @@ export function TransactionTypeFilterPopover() {
         offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
         sameWidth: true,
       }}
-      trigger={(open, setOpen) => <TransactionTypeFilterTriggerText open={open} />}
+      trigger={(open, setOpen) => (
+        <TransactionTypeFilterTriggerText
+          open={open}
+          defaultTransactionType={defaultTransactionType}
+        />
+      )}
       content={(open, setOpen) => (
         <Box px={1.5} pt={2} pb={3}>
           <TransactionTypeFilterForm
@@ -23,6 +32,7 @@ export function TransactionTypeFilterPopover() {
               setOpen(false);
             }}
             open={open}
+            defaultTransactionType={defaultTransactionType}
           />
         </Box>
       )}
