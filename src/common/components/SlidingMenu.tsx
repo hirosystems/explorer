@@ -52,9 +52,11 @@ export const SlidingMenu = ({
         overflow="hidden"
         transition="height 0.5s ease"
         height={
-          !isOpen
-            ? `${triggerHeight * 4}px`
-            : `${contentRef?.current?.scrollHeight ?? 0 + triggerHeight * 4}px`
+          isOpen
+            ? contentRef?.current?.scrollHeight
+              ? `${contentRef?.current?.scrollHeight + triggerHeight * 4}px`
+              : `${triggerHeight * 4}px`
+            : `${triggerHeight * 4}px`
         }
         position="absolute"
         zIndex="dropdown"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useHomePageData } from '@/app/home-redesign/context';
+import { useHomePageData } from '@/app/context';
 import { useColorMode } from '@/components/ui/color-mode';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -107,23 +107,20 @@ function NetworkOverviewChart() {
               horizontal={false}
               stroke={lineColor}
             />
-
             <XAxis
               dataKey="time"
+              interval="preserveStartEnd"
               axisLine={{ stroke: lineColor }}
               tickLine={false}
-              interval="preserveStartEnd"
               minTickGap={10}
               tick={{
                 color: 'var(--stacks-colors-text-secondary)',
                 fill: 'var(--stacks-colors-text-secondary)',
               }}
-              tickCount={6}
               style={{
                 fontFamily: 'var(--font-matter-mono)',
                 fontSize: 'var(--stacks-font-sizes-xs)',
               }}
-              scale="point"
             />
             <Tooltip
               content={<ChartTooltip />}

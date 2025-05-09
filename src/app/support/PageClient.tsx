@@ -1,19 +1,30 @@
 'use client';
 
-import { Stack } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { ListItem } from '../../ui/ListItem';
 import { Text } from '../../ui/Text';
-import { TextLink } from '../../ui/TextLink';
+import { TextLink, TextLinkProps } from '../../ui/TextLink';
 import { UnorderedList } from '../../ui/UnorderedList';
 import { PageTitle } from '../_components/PageTitle';
 
-function ExternalLink({ children, href }: { children: ReactNode; href: string }) {
+function ExternalLink({
+  children,
+  href,
+  ...rest
+}: { children: ReactNode; href: string } & TextLinkProps) {
   return (
-    <TextLink href={href} target={'_blank'} color={'purple.600'} textDecoration={'underline'}>
+    <TextLink
+      href={href}
+      target={'_blank'}
+      color={'purple.600'}
+      textDecoration={'underline'}
+      fontSize={'sm'}
+      {...rest}
+    >
       {children}
     </TextLink>
   );
@@ -34,20 +45,37 @@ const SupportPage: NextPage = () => {
             </Text>
             <UnorderedList display={'flex'} flexDirection={'column'} gap={4} pl={2}>
               <ListItem>
-                <Text fontSize={'sm'}>
+                <Text fontSize={'sm'} display={'inline'}>
                   For users, two of the most popular Stacks wallets provide help centers, which can
-                  help you find answers to common questions around transactions. You can find the{' '}
-                  <ExternalLink href={'https://leather.io/guides'}>Leather guides</ExternalLink>{' '}
-                  here and the{' '}
-                  <ExternalLink href={'https://support.xverse.app/hc/en-us'}>
-                    Xverse support center here
-                  </ExternalLink>
+                  help you find answers to common questions around transactions. You can find the
+                </Text>
+                &nbsp;
+                <ExternalLink
+                  href={'https://leather.io/guides'}
+                  whiteSpace={'nowrap'}
+                  display={'inline'}
+                >
+                  Leather guides
+                </ExternalLink>
+                &nbsp;
+                <Text fontSize={'sm'} display={'inline'}>
+                  here and the
+                </Text>
+                &nbsp;
+                <ExternalLink
+                  href={'https://support.xverse.app/hc/en-us'}
+                  whiteSpace={'nowrap'}
+                  display={'inline'}
+                >
+                  Xverse support center here
+                </ExternalLink>
+                <Text fontSize={'sm'} display={'inline'}>
                   .
                 </Text>
               </ListItem>
               <ListItem>
                 <Text fontSize={'sm'}>
-                  For developers, you can learn more about transactions in Stacks documentation.
+                  For developers, you can learn more about transactions in the Stacks documentation.
                 </Text>
               </ListItem>
             </UnorderedList>
@@ -62,37 +90,82 @@ const SupportPage: NextPage = () => {
             <Text fontSize={'xl'} fontWeight={'medium'}>
               Accessing your wallet and assets
             </Text>
-            <Text fontSize={'sm'}>
-              If you are having trouble accessing your wallet or assets in it, please reach out to
-              your wallet provider directly.{' '}
+            <Box>
+              <Text fontSize={'sm'} display={'inline'}>
+                If you are having trouble accessing your wallet or assets in it, please reach out to
+                your wallet provider directly.
+              </Text>
+              &nbsp;
               <ExternalLink
                 href={'https://www.stacks.co/explore/ecosystem?category=All+Teams#wallets'}
+                display={'inline'}
+                whiteSpace={'nowrap'}
               >
                 A list of Stacks wallets can be found here
               </ExternalLink>
-              .
-            </Text>
+              <Text fontSize={'sm'} display={'inline'}>
+                .
+              </Text>
+            </Box>
           </Stack>
         </Card>
         <Card lineHeight={'tall'} p={8} pb={10}>
-          <Stack gap={4}>
+          <Stack gap={4} flexWrap={'wrap'}>
             <Text fontSize={'xl'} fontWeight={'medium'}>
               General questions about Stacks
             </Text>
-            <Text fontSize={'sm'}>
-              Check out the{' '}
-              <ExternalLink href={'https://www.stacks.co/'}>Stacks website</ExternalLink>, which has
-              an{' '}
-              <ExternalLink href={'https://www.stacks.co/learn/introduction'}>
+            <Box>
+              <Text fontSize={'sm'} display={'inline'}>
+                Check out the
+              </Text>
+              &nbsp;
+              <ExternalLink
+                href={'https://www.stacks.co/'}
+                whiteSpace={'nowrap'}
+                display={'inline'}
+              >
+                Stacks website
+              </ExternalLink>
+              <Text fontSize={'sm'} display={'inline'}>
+                , which has an
+              </Text>
+              &nbsp;
+              <ExternalLink
+                href={'https://www.stacks.co/learn/introduction'}
+                whiteSpace={'nowrap'}
+                display={'inline'}
+              >
                 overview of Stacks
               </ExternalLink>
-              , a <ExternalLink href={'https://www.stacks.co/learn/faq'}>helpful FAQ</ExternalLink>,
-              and more.
-            </Text>
-            <Text fontSize={'sm'}>
-              You can also get involved with the community and join{' '}
-              <ExternalLink href={'https://stacks.chat'}>the Stacks Discord</ExternalLink>.
-            </Text>
+              &nbsp;
+              <Text fontSize={'sm'} display={'inline'}>
+                , a
+              </Text>
+              &nbsp;
+              <ExternalLink
+                href={'https://www.stacks.co/learn/faq'}
+                whiteSpace={'nowrap'}
+                display={'inline'}
+              >
+                helpful FAQ
+              </ExternalLink>
+              &nbsp;
+              <Text fontSize={'sm'} display={'inline'}>
+                , and more.
+              </Text>
+            </Box>
+            <Box>
+              <Text fontSize={'sm'} display={'inline'}>
+                You can also get involved with the community and join
+              </Text>
+              &nbsp;
+              <ExternalLink href={'https://stacks.chat'} whiteSpace={'nowrap'} display={'inline'}>
+                the Stacks Discord
+              </ExternalLink>
+              <Text fontSize={'sm'} display={'inline'}>
+                .
+              </Text>
+            </Box>
           </Stack>
         </Card>
         <Card lineHeight={'tall'} p={8} pb={10}>
@@ -114,13 +187,19 @@ const SupportPage: NextPage = () => {
             <Text fontSize={'xl'} fontWeight={'medium'}>
               Found a bug in the Stacks blockchain?
             </Text>
-            <Text fontSize={'sm'}>
-              <ExternalLink href={'https://immunefi.com/bounty/stacks/'}>
+            <Box>
+              <ExternalLink
+                href={'https://immunefi.com/bounty/stacks/'}
+                display={'inline'}
+                whiteSpace={'nowrap'}
+              >
                 Participate in the Stacks bounty program
               </ExternalLink>{' '}
-              with ImmuneFi and receive bounties ranging from $1,000 to $1,000,000 depending on how
-              critical the bug is.
-            </Text>
+              <Text fontSize={'sm'} display={'inline'}>
+                with ImmuneFi and receive bounties ranging from $1,000 to $1,000,000 depending on
+                how critical the bug is.
+              </Text>
+            </Box>
           </Stack>
         </Card>
       </Stack>

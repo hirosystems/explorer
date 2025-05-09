@@ -46,21 +46,21 @@ export const primaryPages: PrimaryPage[] = [
     label: 'Transactions',
     href: '/transactions',
   },
-  {
-    id: 'mempool',
-    label: 'Mempool',
-    href: '/mempool',
-  },
+  // {
+  //   id: 'mempool',
+  //   label: 'Mempool',
+  //   href: '/mempool',
+  // },
   {
     id: 'sbtc',
     label: 'sBTC',
     href: '/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token',
   },
-  {
-    id: 'stacking',
-    label: 'Stacking',
-    href: '/stacking',
-  },
+  // {
+  //   id: 'stacking',
+  //   label: 'Stacking',
+  //   href: '/stacking',
+  // },
   {
     id: 'signers',
     label: 'Signers',
@@ -71,16 +71,16 @@ export const primaryPages: PrimaryPage[] = [
     label: 'Tokens',
     href: '/tokens',
   },
-  {
-    id: 'nfts',
-    label: 'NFTs',
-    href: '/nfts',
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    href: '/analytics',
-  },
+  // {
+  //   id: 'nfts',
+  //   label: 'NFTs',
+  //   href: '/nfts',
+  // },
+  // {
+  //   id: 'analytics',
+  //   label: 'Analytics',
+  //   href: '/analytics',
+  // },
 ];
 
 export type SecondaryPageLabel = 'Sandbox' | 'Status Center' | 'Support';
@@ -99,11 +99,11 @@ export const secondaryPages: SecondaryPage[] = [
     label: 'Sandbox',
     href: '/sandbox',
   },
-  {
-    id: 'status-center',
-    label: 'Status Center',
-    href: '/status-center',
-  },
+  // {
+  //   id: 'status-center',
+  //   label: 'Status Center',
+  //   href: '/status-center',
+  // },
   {
     id: 'support',
     label: 'Support',

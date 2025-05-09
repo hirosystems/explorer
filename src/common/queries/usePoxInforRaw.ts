@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { useGlobalContext } from '../context/useGlobalContext';
 
-interface PoxInfo {
+export interface PoxInfo {
   contract_id: string;
   pox_activation_threshold_ustx: number;
   first_burnchain_block_height: number;
