@@ -4,11 +4,7 @@ import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
 import { ArrowsClockwise, Cube, PhoneCall, Question } from '@phosphor-icons/react';
 
-import {
-  MempoolTransaction,
-  Transaction,
-  TransactionType,
-} from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../constants/constants';
 
