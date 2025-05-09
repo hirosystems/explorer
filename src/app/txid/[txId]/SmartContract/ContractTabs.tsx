@@ -13,7 +13,7 @@ export const ContractTabs: FC<{
   if (!contract) return null;
 
   return (
-    <Tabs.Root lazyMount>
+    <Tabs.Root lazyMount defaultValue={source ? 'source' : 'available-functions'}>
       <Tabs.List>
         {source && <Tabs.Trigger value="source">Source code</Tabs.Trigger>}
         <Tabs.Trigger value="available-functions">Available functions</Tabs.Trigger>

@@ -1,3 +1,4 @@
+import StxIconBold from '@/ui/icons/StacksIconBold';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Flex, Icon, IconProps } from '@chakra-ui/react';
 
@@ -39,7 +40,7 @@ export function Logo({
           zIndex={2}
         >
           <Icon h={4.5} w={4.5} color="iconInvert" aria-label="Homepage" {...iconProps}>
-            <StxIcon />
+            <StxIconBold />
           </Icon>
         </Flex>
       </ExplorerLink>

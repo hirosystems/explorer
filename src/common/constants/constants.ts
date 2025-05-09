@@ -61,4 +61,4 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
   testnet: '0xff000000',
 };
 
-export const PAGE_MAX_WIDTH = '1280px';
+export const PAGE_MAX_WIDTH = '1580px';

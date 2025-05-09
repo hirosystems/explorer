@@ -26,7 +26,7 @@ export const SettingsPopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
       boxShadow={{ base: 'none', lg: isOpen ? 'var(--stacks-shadows-elevation2)' : 'none' }}
     >
       <ThemeSetting />
-      <CurrencySetting />
+      {/* <CurrencySetting /> */}
       <NetworkSetting />
     </Stack>
   );
