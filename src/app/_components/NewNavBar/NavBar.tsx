@@ -1,7 +1,6 @@
 'use client';
 
 import { TokenPrice } from '@/common/types/tokenPrice';
-import { Input } from '@/ui/Input';
 import { Box, Flex, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import { List } from '@phosphor-icons/react';
 
@@ -55,9 +54,9 @@ export const SharedMobileNavBar = ({ onIconClick, icon, ...props }: SharedMobile
       {...props}
     >
       <Logo logoSize={9} ringsOn={true} />
-      <Flex gap={3}>
-        <Box flexGrow={1} flexShrink={1} maxWidth="150px" h={12}>
-          <Input placeholder="Explore" bg="surfaceSecondary" h={12} variant="redesignPrimary" />
+      <Flex gap={3} alignItems="center">
+        <Box flexGrow={1} flexShrink={1} maxWidth="170px">
+          <Search fullScreen={true} />
         </Box>
         <Flex
           bg="surfacePrimary"
