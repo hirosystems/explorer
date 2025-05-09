@@ -1,5 +1,4 @@
-import { Field, Fieldset } from '@chakra-ui/react';
-import { Flex, FlexProps, StackProps } from '@chakra-ui/react';
+import { Field, Fieldset, Flex, FlexProps, StackProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Switch, SwitchProps } from '../../../components/ui/switch';
@@ -19,7 +18,7 @@ export function ControlsLayout({
   children: ReactNode;
 } & FlexProps) {
   return (
-    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest}>
+    <Flex direction={horizontal ? { base: 'column', md: 'row' } : 'column'} gap={3} {...rest}>
       {children}
     </Flex>
   );
