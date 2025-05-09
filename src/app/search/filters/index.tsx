@@ -7,7 +7,8 @@ import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { AddressFilter } from './Address';
 import { DateFilter } from './Date';
-
+import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
+import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 export interface FilterProps {
   filters: Record<string, string | undefined>;
 }
@@ -73,11 +74,14 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
         <ClearFiltersButton filters={filters} />
       </Flex>
       <Flex gap={2} mt={0.5} direction={['column', 'row']}>
-        <AddressFilter
+        <AddressFilterPopover
           defaultFromAddress={filters.fromAddress}
           defaultToAddress={filters.toAddress}
         />
-        <DateFilter defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
+        <DateFilterPopover
+          defaultStartTime={filters.startTime}
+          defaultEndTime={filters.endTime}
+        />
       </Flex>
     </Stack>
   );
