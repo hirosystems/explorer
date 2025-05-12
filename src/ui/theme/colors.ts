@@ -56,9 +56,9 @@ export const COLORS = {
     100: { value: '#EEF2FB' },
     200: { value: '#E5EBFA' },
     300: { value: '#CEDAFA' },
-    400: { value: '#7F97F1' },
-    500: { value: '#5C6CF2' },
-    600: { value: '#5546FF' },
+    400: { value: '#FF8761' }, // stacks-purple-400 (#7F97F1) = stacks-400 (#FF8761)
+    500: { value: '#5C6CF2' }, 
+    600: { value: '#FC6432' }, // stacks-purple-600 (#5546FF) = stacks-500 (#FC6432)
     700: { value: '#2323C7' },
     800: { value: '#0F0FA9' },
     850: { value: '#2D2294' },
