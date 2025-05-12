@@ -29,6 +29,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();
+
   return (
     <html
       lang="en"
