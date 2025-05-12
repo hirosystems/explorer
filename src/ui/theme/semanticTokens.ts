@@ -276,18 +276,6 @@ export const NEW_SEMANTIC_TOKENS = {
     borderTertiary: {
       value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
     },
-    // TODO: find and replace all the uses of the non-namespaced border semantic color variables
-    // border: {
-    //   primary: {
-    //     value: { base: '{colors.neutral.sand-300}', _dark: '{colors.neutral.sand-600}' },
-    //   },
-    //   secondary: {
-    //     value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
-    //   },
-    //   tertiary: {
-    //     value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
-    //   },
-    // },
     iconPrimary: {
       value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
     },
@@ -303,24 +291,6 @@ export const NEW_SEMANTIC_TOKENS = {
     iconError: {
       value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
     },
-    // TODO: find and replace all the uses of the non-namespaced icon semantic color variables
-    // icon: {
-    //   primary: {
-    //     value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
-    //   },
-    //   secondary: {
-    //     value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
-    //   },
-    //   tertiary: {
-    //     value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
-    //   },
-    //   invert: {
-    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
-    //   },
-    //   error: {
-    //     value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
-    //   },
-    // },
     surfacePrimary: {
       value: { base: '{colors.neutral.sand-150}', _dark: '{colors.neutral.sand-900}' },
     },
@@ -339,27 +309,6 @@ export const NEW_SEMANTIC_TOKENS = {
     surfaceInvert: {
       value: { base: '{colors.neutral.sand-800}', _dark: '{colors.neutral.sand-100}' },
     },
-    // TODO: find and replace all the uses of the non-namespaced surface semantic color variables
-    // surface: {
-    //   primary: {
-    //     value: { base: '{colors.neutral.sand-150}', _dark: '{colors.neutral.sand-900}' },
-    //   },
-    //   secondary: {
-    //     value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
-    //   },
-    //   tertiary: {
-    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
-    //   },
-    //   fourth: {
-    //     value: { base: '{colors.white}', _dark: '{colors.neutral.sand-800}' },
-    //   },
-    //   fifth: {
-    //     value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
-    //   },
-    //   invert: {
-    //     value: { base: '{colors.neutral.sand-800}', _dark: '{colors.neutral.sand-100}' },
-    //   },
-    // },
     textPrimary: {
       value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
     },
@@ -378,27 +327,6 @@ export const NEW_SEMANTIC_TOKENS = {
     textError: {
       value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
     },
-    // TODO: find and replace all the uses of the non-namespaced text semantic color variables
-    // text: {
-    //   primary: {
-    //     value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
-    //   },
-    //   secondary: {
-    //     value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
-    //   },
-    //   tertiary: {
-    //     value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
-    //   },
-    //   interactive: {
-    //     value: { base: '{colors.accent.stacks-600}', _dark: '{colors.accent.stacks-400}' },
-    //   },
-    //   invert: {
-    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
-    //   },
-    //   error: {
-    //     value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
-    //   },
-    // },
     signerHealth: {
       lowSurface: {
         value: { base: '{colors.feedback.red-100}', _dark: '{colors.feedback.red-900}' },

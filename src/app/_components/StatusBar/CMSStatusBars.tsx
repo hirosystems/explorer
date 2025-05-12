@@ -1,10 +1,13 @@
-import { Stack } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/react';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { BLOCKS } from '@contentful/rich-text-types';
+import { IncidentImpact } from 'statuspage.io';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
-import { IncidentContent } from '../../../common/types/incidents';
+import { ContentType, IncidentContent } from '../../../common/types/incidents';
 import { getRichTextRenderOptions } from '../../../common/utils/getRichTextRenderOptions';
 import { StatusBarBase } from './StatusBarBase';
+import { getIncidentImpactIcon } from './utils';
 
 export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent | null }) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
@@ -17,6 +20,7 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
           (alert.fields.showOnMainnet && !isTestnet) ||
           networkUrl?.includes(alert.fields.networkUrlSubstring)
       );
+
   return (
     <Stack
       _empty={{
@@ -24,17 +28,25 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
       }}
     >
       {incidentsToShow?.map((incident, i) => {
+        const icon = getIncidentImpactIcon(incident?.fields?.impact);
+
+        const content = (
+          <Stack gap={2} flexGrow={1}>
+            {documentToReactComponents(
+              incident?.fields?.content,
+              getRichTextRenderOptions(incident?.fields?.impact)()
+            )}
+          </Stack>
+        );
+
         return (
           <StatusBarBase
             key={incident?.sys?.id}
-            impact={incident?.fields?.impact}
             content={
-              <Stack gap={2} flexGrow={1}>
-                {documentToReactComponents(
-                  incident?.fields?.content,
-                  getRichTextRenderOptions(incident?.fields?.impact)()
-                )}
-              </Stack>
+              <Flex gap={1.5} alignItems="center">
+                {icon}
+                {content}
+              </Flex>
             }
           />
         );
