@@ -27,7 +27,7 @@ exports[`TokenRow renders correctly 1`] = `
               width="36"
             />
             <a
-              class="link css-zibos"
+              class="link css-1uushrr"
               href="/token/0x5678?chain=mainnet"
             >
               TestToken (TT)
@@ -41,7 +41,7 @@ exports[`TokenRow renders correctly 1`] = `
             class="css-1gy64qm"
           >
             <a
-              class="link css-m05bwu"
+              class="link css-bvh881"
               href="/txid/0x1234?chain=mainnet"
             >
               0x1234
