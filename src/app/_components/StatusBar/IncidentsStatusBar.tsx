@@ -8,42 +8,49 @@ import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedInc
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { StatusBarBase } from './StatusBarBase';
-import { getColor } from './utils';
+import { getColor, getIncidentImpactIcon } from './utils';
 
-function IncidentsStatusBar(props: StackProps) {
+function IncidentsStatusBarBase(props: StackProps) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
-  const { data: unresolvedIncidentsResponse, isFetching } = useUnresolvedIncidents();
+  const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
   const incidents = unresolvedIncidentsResponse?.incidents;
   const statusBarRef = useRef<HTMLDivElement | null>(null);
 
   if (!incidents?.length) {
     return null;
   }
+
   return (
     <Stack {...props}>
       {incidents?.map(({ name, impact }) => {
         const isTestnetUpdate = name.includes('Testnet Update:');
         if (isTestnetUpdate && !isTestnet) return null;
+        const icon = getIncidentImpactIcon(impact);
+        const content = (
+          <Flex flexWrap="wrap" flexGrow={1}>
+            <Text fontSize="xs" display="inline">
+              {`${name}${name.endsWith('.') ? '' : '.'} More information on the`}&nbsp;
+              <TextLink
+                href="https://status.hiro.so/"
+                target="_blank"
+                color={getColor(impact)}
+                display="inline"
+                textDecoration="underline"
+              >
+                Hiro status page
+              </TextLink>
+              .
+            </Text>
+          </Flex>
+        );
         return (
           <StatusBarBase
             key={name}
             ref={statusBarRef}
-            impact={impact}
             content={
-              <Flex flexWrap="wrap" flexGrow={1}>
-                <Text fontSize="xs" display="inline">
-                  {`${name}${name.endsWith('.') ? '' : '.'} More information on the`}&nbsp;
-                  <TextLink
-                    href="https://status.hiro.so/"
-                    target="_blank"
-                    color={getColor(impact)}
-                    display="inline"
-                    textDecoration="underline"
-                  >
-                    Hiro status page
-                  </TextLink>
-                  .
-                </Text>
+              <Flex gap={1.5} alignItems="center">
+                {icon}
+                {content}
               </Flex>
             }
           />
@@ -53,7 +60,7 @@ function IncidentsStatusBar(props: StackProps) {
   );
 }
 
-export function IncidentsStatusBarWithErrorBoundary(props: StackProps) {
+export function IncidentsStatusBar(props: StackProps) {
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
@@ -64,7 +71,7 @@ export function IncidentsStatusBarWithErrorBoundary(props: StackProps) {
           }}
           onReset={reset}
         >
-          <IncidentsStatusBar {...props} />
+          <IncidentsStatusBarBase {...props} />
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>

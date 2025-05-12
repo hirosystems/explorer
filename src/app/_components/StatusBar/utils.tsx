@@ -1,3 +1,5 @@
+import { Icon } from '@chakra-ui/react';
+import { Info, Warning } from '@phosphor-icons/react';
 import { IncidentImpact } from 'statuspage.io';
 
 export const getColor = (incidentImpact: IncidentImpact) => {
@@ -11,3 +13,15 @@ export const getColor = (incidentImpact: IncidentImpact) => {
       return 'var(--stacks-colors-status-page-incident-impact)';
   }
 };
+
+export function getIncidentImpactIcon(impact: IncidentImpact) {
+  return !impact || impact === IncidentImpact.None ? (
+    <Icon color={getColor(impact)}>
+      <Info />
+    </Icon>
+  ) : (
+    <Icon color={getColor(impact)}>
+      <Warning />
+    </Icon>
+  );
+}
