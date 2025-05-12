@@ -29,7 +29,6 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
                 btcBlockHeight={block.burn_block_height}
                 stxBlockHeight={block.height}
                 stxBlockHash={block.hash}
-                fontSize={'16px'}
               />
             </Flex>
           ),

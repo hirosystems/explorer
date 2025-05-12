@@ -1,3 +1,5 @@
+import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
+import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -7,8 +9,7 @@ import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { AddressFilter } from './Address';
 import { DateFilter } from './Date';
-import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
-import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
+
 export interface FilterProps {
   filters: Record<string, string | undefined>;
 }
@@ -78,10 +79,7 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
           defaultFromAddress={filters.fromAddress}
           defaultToAddress={filters.toAddress}
         />
-        <DateFilterPopover
-          defaultStartTime={filters.startTime}
-          defaultEndTime={filters.endTime}
-        />
+        <DateFilterPopover defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
       </Flex>
     </Stack>
   );
