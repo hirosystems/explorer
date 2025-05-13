@@ -11,7 +11,6 @@ import {
   truncateHex,
   validateStacksContractId,
 } from '@/common/utils/utils';
-import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
@@ -159,7 +158,11 @@ export const columns: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     accessorKey: TxTableColumns.Fee,
-    cell: info => FeeCellRenderer(info.getValue() as string),
+    cell: info => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full">
+        {FeeCellRenderer(info.getValue() as string)}
+      </Flex>
+    ),
     enableSorting: false,
   },
   {
@@ -170,7 +173,11 @@ export const columns: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     accessorKey: TxTableColumns.BlockTime,
-    cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+    cell: info => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full" className="block-time-container">
+        {TimeStampCellRenderer(formatBlockTime(info.getValue() as number))}
+      </Flex>
+    ),
     enableSorting: false,
   },
 ];
@@ -304,16 +311,6 @@ export function TxsTable({
 
   const { total, results: txs = [] } = data || {};
   const isTableFiltered = Object.values(filters).some(v => v != null && v !== '');
-
-  // filter data based on active filters, ie transaction type
-  // const { activeFilters } = useFilterAndSortState();
-  // const filteredTxs = useMemo(
-  //   () =>
-  //     activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
-  //   [txs, activeFilters]
-  // );
-
-  // const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);

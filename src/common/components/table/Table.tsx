@@ -276,6 +276,7 @@ export function Table<T>({
     <ChakraTable.Root
       width="full"
       css={{
+        tableLayout: 'fixed',
         '& td': {
           borderBottom: 'none',
         },
