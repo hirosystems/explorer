@@ -27,7 +27,6 @@ export function RecentBlocks() {
         defaultValue={'btc'}
         gap={2}
         lazyMount
-        unmountOnExit
         aria-label="Block view options"
       >
         <HStack gap={0} pb={3} w={'100%'}>
