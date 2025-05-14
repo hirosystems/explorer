@@ -120,7 +120,7 @@ export const FeeCellRenderer = (value: string) => {
   const microStx = formatStacksAmount(value);
 
   return (
-    <Flex alignItems="center" justifyContent="flex-end" gap={1}>
+    <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
         {stx.length > microStx.length ? <MicroStxIcon /> : <StacksIconThin />}
       </Icon>
@@ -146,7 +146,6 @@ export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
   const content = (
     <Flex
       alignItems="center"
-      justifyContent="flex-end"
       bg="surfacePrimary"
       borderRadius="md"
       py={0.5}

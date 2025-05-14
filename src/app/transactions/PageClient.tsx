@@ -13,6 +13,7 @@ import { ArrowRight } from '@phosphor-icons/react';
 
 import { TxPageFilters } from './page';
 import { CompressedTxTableData } from './utils';
+import { ButtonLink } from '@/ui/ButtonLink';
 
 export default function ({
   filters,
@@ -36,16 +37,9 @@ export default function ({
           <Text textStyle="heading-md" color="textPrimary">
             Latest transactions
           </Text>
-          <NextLink href={buildUrl('/mempool', network)} variant={'buttonLink'} size={'lg'}>
-            <Flex gap={1.5} alignItems="center">
-              <Text textStyle="text-medium-sm" color="textPrimary">
-                View pending transactions in Mempool
-              </Text>
-              <Icon w={3.5} h={3.5}>
-                <ArrowRight />
-              </Icon>
-            </Flex>
-          </NextLink>
+          <ButtonLink href={buildUrl('/mempool', network)} buttonLinkSize="big">
+            View pending transactions in Mempool
+          </ButtonLink>
         </Flex>
         <Stack gap={5}>
           <TxTableFilters filters={filters} />
