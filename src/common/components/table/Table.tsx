@@ -275,6 +275,7 @@ export function Table<T>({
   let content: React.ReactNode = (
     <ChakraTable.Root
       width="full"
+      tableLayout="fixed"
       css={{
         '& td': {
           borderBottom: 'none',
@@ -309,6 +310,10 @@ export function Table<T>({
                     sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
                   }
                   minH={13}
+                  minW={header.column.columnDef.minSize ? `${header.column.columnDef.minSize}px` : 'auto'}
+                  maxW={header.column.columnDef.maxSize ? `${header.column.columnDef.maxSize}px` : 'auto'}
+                  w={header.column.columnDef.size ? `${header.column.columnDef.size}px` : 'auto'}
+                  boxSizing="border-box"
                 >
                   <Flex
                     w="full"
@@ -387,6 +392,10 @@ export function Table<T>({
                 _groupHover={{
                   bg: 'surfacePrimary',
                 }}
+                minW={cell.column.columnDef.minSize ? `${cell.column.columnDef.minSize}px` : 'auto'}
+                maxW={cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : 'auto'}
+                w={cell.column.columnDef.size ? `${cell.column.columnDef.size}px` : 'auto'}
+                boxSizing="border-box"
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </ChakraTable.Cell>

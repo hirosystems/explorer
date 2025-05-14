@@ -103,6 +103,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.Transaction,
     cell: info => TransactionTitleCellRenderer(info.getValue() as TxTableTransactionColumnData),
     enableSorting: false,
+    minSize: undefined,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.TxId,
@@ -110,6 +113,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.TxId,
     cell: info => TxLinkCellRenderer(truncateHex(info.getValue() as string, 4, 5, false)),
     enableSorting: false,
+    minSize: undefined,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.TxType,
@@ -117,6 +123,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.TxType,
     cell: info => <TxTypeCellRenderer txType={info.getValue() as string} />,
     enableSorting: false,
+    minSize: undefined,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.From,
@@ -124,6 +133,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.From,
     cell: info => AddressLinkCellRenderer(info.getValue() as TxTableAddressColumnData),
     enableSorting: false,
+    minSize: 120,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.ArrowRight,
@@ -131,6 +143,8 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.ArrowRight,
     cell: info => IconCellRenderer(info.getValue() as JSX.Element),
     enableSorting: false,
+    size: 45,
+    maxSize: 45,
   },
   {
     id: TxTableColumns.To,
@@ -138,6 +152,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.To,
     cell: info => AddressLinkCellRenderer(info.getValue() as TxTableAddressColumnData),
     enableSorting: false,
+    minSize: 120,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.Fee,
@@ -147,8 +164,15 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     accessorKey: TxTableColumns.Fee,
-    cell: info => FeeCellRenderer(info.getValue() as string),
+    cell: info => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full">
+        {FeeCellRenderer(info.getValue() as string)}
+      </Flex>
+    ),
     enableSorting: false,
+    minSize: undefined,
+    maxSize: undefined,
+    size: undefined,
   },
   {
     id: TxTableColumns.BlockTime,
@@ -158,8 +182,13 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     accessorKey: TxTableColumns.BlockTime,
-    cell: info => TimeStampCellRenderer(formatTimestamp(info.getValue() as number)),
+    cell: info => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full">
+        {TimeStampCellRenderer(formatTimestamp(info.getValue() as number))}
+      </Flex>
+    ),
     enableSorting: false,
+   
   },
 ];
 
