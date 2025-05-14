@@ -80,7 +80,7 @@ function CycleHeader() {
       flexDirection={{ base: 'column', sm: 'row' }}
     >
       <Stack justify={'space-between'}>
-        <Text textStyle={'heading-xs'} fontFamily="var(--font-matter)" whiteSpace={'nowrap'}>
+        <Text textStyle={'heading-xs'} whiteSpace={'nowrap'}>
           Current cycle
         </Text>
         <Flex
@@ -92,11 +92,7 @@ function CycleHeader() {
           py="2"
           width="fit-content"
         >
-          <Text
-            textStyle={['heading-md', 'heading-lg']}
-            fontFamily="var(--font-matter)"
-            lineHeight={'redesign.none'}
-          >
+          <Text textStyle={['heading-md', 'heading-lg']} lineHeight={'redesign.none'}>
             {cycleId}
           </Text>
         </Flex>
@@ -116,8 +112,9 @@ function CycleHeader() {
           <ProgressDot />
         </Icon>
         <Text
-          textStyle={['text-medium-sm', 'heading-xs']}
-          fontFamily="var(--font-matter)"
+          textStyle="heading-xs"
+          fontSize={['sm', 'xl']}
+          fontWeight={['medium', 'regular']}
           whiteSpace={'nowrap'}
         >
           Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
