@@ -79,6 +79,7 @@ export const columnDefinitions: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     enableSorting: false,
+    size: 150,
   },
 ];
 

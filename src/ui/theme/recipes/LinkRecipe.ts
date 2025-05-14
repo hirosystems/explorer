@@ -39,9 +39,11 @@ export const linkRecipe = defineRecipe({
         },
       },
       buttonLink: {
-        p: '0 !important',
-        pb: '0.5 !important',
+        p: '0',
+        pb: '0.5',
         textDecoration: 'none !important',
+        // textDecoration: 'none',
+
         fontFamily: 'var(--font-instrument-sans)',
         color: 'textPrimary',
         borderBottom: '2px solid',

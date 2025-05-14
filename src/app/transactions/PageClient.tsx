@@ -6,6 +6,7 @@ import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { buildUrl } from '@/common/utils/buildUrl';
+import { ButtonLink } from '@/ui/ButtonLink';
 import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
@@ -13,7 +14,6 @@ import { ArrowRight } from '@phosphor-icons/react';
 
 import { TxPageFilters } from './page';
 import { CompressedTxTableData } from './utils';
-import { ButtonLink } from '@/ui/ButtonLink';
 
 export default function ({
   filters,

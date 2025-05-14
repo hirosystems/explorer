@@ -275,7 +275,7 @@ export function Table<T>({
   let content: React.ReactNode = (
     <ChakraTable.Root
       width="full"
-      tableLayout="fixed"
+      // tableLayout="fixed"
       css={{
         '& td': {
           borderBottom: 'none',
@@ -290,6 +290,7 @@ export function Table<T>({
             {headerGroup.headers.map((header, columnIndex) => {
               const { column } = header;
               const sortDirection = column.getIsSorted();
+
               return (
                 <ChakraTable.ColumnHeader
                   key={header.id}
@@ -310,9 +311,21 @@ export function Table<T>({
                     sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
                   }
                   minH={13}
-                  minW={header.column.columnDef.minSize ? `${header.column.columnDef.minSize}px` : 'auto'}
-                  maxW={header.column.columnDef.maxSize ? `${header.column.columnDef.maxSize}px` : 'auto'}
-                  w={header.column.columnDef.size ? `${header.column.columnDef.size}px` : 'auto'}
+                  minW={
+                    header.column.columnDef.minSize
+                      ? `${header.column.columnDef.minSize}px`
+                      : undefined
+                  }
+                  maxW={
+                    header.column.columnDef.maxSize
+                      ? `${header.column.columnDef.maxSize}px`
+                      : undefined
+                  }
+                  w={
+                    header.column.columnDef.size
+                      ? `${header.column.columnDef.size}px`
+                      : 'auto !important'
+                  }
                   boxSizing="border-box"
                 >
                   <Flex
@@ -383,23 +396,33 @@ export function Table<T>({
             className="group"
             minH={13}
           >
-            {row.getVisibleCells().map((cell, columnIndex) => (
-              <ChakraTable.Cell
-                key={cell.id}
-                py={3}
-                px={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
-                css={{ ...getCommonPinningStyles(cell.column) }}
-                _groupHover={{
-                  bg: 'surfacePrimary',
-                }}
-                minW={cell.column.columnDef.minSize ? `${cell.column.columnDef.minSize}px` : 'auto'}
-                maxW={cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : 'auto'}
-                w={cell.column.columnDef.size ? `${cell.column.columnDef.size}px` : 'auto'}
-                boxSizing="border-box"
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </ChakraTable.Cell>
-            ))}
+            {row.getVisibleCells().map((cell, columnIndex) => {
+              return (
+                <ChakraTable.Cell
+                  key={cell.id}
+                  py={3}
+                  px={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
+                  css={{ ...getCommonPinningStyles(cell.column) }}
+                  _groupHover={{
+                    bg: 'surfacePrimary',
+                  }}
+                  minW={
+                    cell.column.columnDef.minSize ? `${cell.column.columnDef.minSize}px` : undefined
+                  }
+                  maxW={
+                    cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : undefined
+                  }
+                  w={
+                    cell.column.columnDef.size
+                      ? `${cell.column.columnDef.size}px`
+                      : 'auto !important'
+                  }
+                  boxSizing="border-box"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </ChakraTable.Cell>
+              );
+            })}
           </ChakraTable.Row>
         ))}
       </ChakraTable.Body>
