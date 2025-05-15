@@ -1,6 +1,15 @@
 import { useFilterParams } from '@/common/utils/search-param-utils';
-import { Flex, HStack, Icon, Link, Stack, StackProps } from '@chakra-ui/react';
-import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
+import {
+  Flex,
+  FlexProps,
+  HStack,
+  Icon,
+  IconButton,
+  Link,
+  Stack,
+  StackProps,
+} from '@chakra-ui/react';
+import { ArrowRight, Command, KeyReturn, MagnifyingGlass, Trash, X } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
@@ -58,7 +67,6 @@ export function SearchResultsWrapper({
   children,
   ...stackProps
 }: { children: ReactNode } & StackProps) {
-  const dispatch = useAppDispatch();
   return (
     <Stack
       zIndex={-1}
@@ -70,7 +78,6 @@ export function SearchResultsWrapper({
       borderRadius={['none', 'none', 'none', 'redesign.xxl']}
       boxShadow={'var(--stacks-shadows-elevation3)'}
       gap={4}
-      onClick={() => dispatch(blur())}
       {...stackProps}
     >
       {children}
@@ -447,7 +454,10 @@ function SearchPreview() {
   );
 }
 
-function SearchInput({ searchTermFromQueryParams = '' }) {
+function SearchInput({
+  searchTermFromQueryParams = '',
+  ...flexProps
+}: { searchTermFromQueryParams?: string } & FlexProps) {
   const dispatch = useAppDispatch();
   const tempSearchTerm = useAppSelector(selectTempSearchTerm);
   const searchTerm = useAppSelector(selectSearchTerm);
@@ -496,7 +506,7 @@ function SearchInput({ searchTermFromQueryParams = '' }) {
   ]);
 
   return (
-    <DoubleGradientBorderWrapper>
+    <DoubleGradientBorderWrapper {...flexProps}>
       <Flex
         background={'surfaceSecondary'}
         alignItems={'center'}
@@ -558,6 +568,27 @@ export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
             background={'surfaceTertiary'}
           >
             {children}
+            {isSearchFieldFocused && (
+              <IconButton
+                h={12}
+                w={12}
+                color="iconPrimary"
+                onClick={() => {
+                  dispatch(blur());
+                }}
+                bg={'surfacePrimary'}
+                position={'absolute'}
+                top={-1}
+                right={0}
+                zIndex={10000}
+                borderRadius={'redesign.lg'}
+                _hover={{
+                  bg: 'surfaceFifth',
+                }}
+              >
+                <X />
+              </IconButton>
+            )}
           </Flex>
         );
       }
@@ -566,10 +597,17 @@ export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
     [isSearchFieldFocused, fullScreen]
   );
 
+  const inputMaxWidthFullscreen =
+    fullScreen && isSearchFieldFocused ? 'calc(100% - var(--stacks-spacing-16))' : 'none';
+
   return (
     <Wrapper>
       <HStack width="full" position={'relative'} zIndex={'modal'}>
-        <SearchInput searchTermFromQueryParams={searchTermFromQueryParams} />
+        <SearchInput
+          searchTermFromQueryParams={searchTermFromQueryParams}
+          maxW={[inputMaxWidthFullscreen, inputMaxWidthFullscreen, inputMaxWidthFullscreen, 'lg']}
+          position={fullScreen && isSearchFieldFocused ? 'relative' : undefined}
+        />
         {isSearchFieldFocused && (
           <SearchResultsWrapper height={fullScreen ? '100vh' : 'auto'}>
             {isLoading ? null : searchResponse && searchResponse.data ? (
