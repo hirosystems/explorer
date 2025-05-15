@@ -136,7 +136,7 @@ function StxStats() {
           <StxIcon />
         </Icon>
         <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
-          ${abbreviateNumber(stackedStx, 1)} STX
+          {abbreviateNumber(stackedStx, 1)} STX
         </Text>
       </Flex>
       &nbsp;
