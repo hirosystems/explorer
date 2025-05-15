@@ -352,6 +352,7 @@ export function SignersMap({
             width: '100%',
             backgroundColor: mapContainerBackgroundColor,
             borderRadius: '0.75rem',
+            zIndex: 0,
           }}
           bounds={BOUNDS}
           maxBoundsViscosity={1.0}

@@ -26,7 +26,8 @@ export function NavBlock({
       href={buildUrl(href!, network)}
       height={8}
       width={8}
-      border="2px solid var(--stacks-colors-slate-50)"
+      border="2px solid"
+      borderColor="redesignBorderPrimary"
       borderRadius="md"
       style={
         isDisabled
@@ -39,7 +40,7 @@ export function NavBlock({
       }
     >
       <Flex alignItems="center" justifyContent="center" height="100%" width="100%">
-        <Icon h={4} w={4} fill="var(--stacks-colors-slate-50)">
+        <Icon h={4} w={4} color="iconTertiary">
           {direction === NavDirection.Forward ? <ArrowRight /> : <ArrowLeft />}
         </Icon>
       </Flex>

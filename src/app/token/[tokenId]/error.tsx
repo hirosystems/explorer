@@ -1,16 +1,15 @@
 'use client';
 
+import { PageTitle } from '@/app/_components/PageTitle';
+import { ErrorMessageLayout } from '@/common/components/ErrorMessageLayout';
+import { Section } from '@/common/components/Section';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { useError } from '@/common/hooks/useError';
+import { ExplorerError } from '@/common/types/Error';
+import { buildUrl } from '@/common/utils/buildUrl';
+import { DeprecatedButtonLink } from '@/ui/DeprecatedButtonLink';
 import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
-
-import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
-import { Section } from '../../../common/components/Section';
-import { useGlobalContext } from '../../../common/context/useGlobalContext';
-import { useError } from '../../../common/hooks/useError';
-import { ExplorerError } from '../../../common/types/Error';
-import { buildUrl } from '../../../common/utils/buildUrl';
-import { ButtonLink } from '../../../ui/ButtonLink';
-import { PageTitle } from '../../_components/PageTitle';
 
 const defaultErrorMessage = 'Failed to fetch token';
 
@@ -34,20 +33,17 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6 }}
-                      linkProps={{ href: buildUrl('/', network) }}
-                    >
+                    <DeprecatedButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
                       Go home
-                    </ButtonLink>
+                    </DeprecatedButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6, variant: 'secondary' }}
-                      linkProps={{ href: buildUrl('/tokens', network) }}
+                    <DeprecatedButtonLink
+                      href={buildUrl('/tokens', network)}
+                      buttonLinkSize="small"
                     >
                       All tokens
-                    </ButtonLink>
+                    </DeprecatedButtonLink>
                   </Box>
                 </HStack>
               }

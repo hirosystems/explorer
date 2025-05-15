@@ -1,18 +1,18 @@
+import { BlockLink, ExplorerLink } from '@/common/components/ExplorerLinks';
+import { Timestamp } from '@/common/components/Timestamp';
+import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
+import { useBlocksByBurnBlock } from '@/common/queries/useBlocksByBurnBlock';
+import { truncateMiddleDeprecated } from '@/common/utils/utils';
+import { Text } from '@/ui/Text';
+import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
+import StacksIconThin from '@/ui/icons/StacksIconThin';
+import { Caption } from '@/ui/typography';
 import { Box, Flex, Grid, HStack, Icon, Stack } from '@chakra-ui/react';
 import { ArrowElbowLeftDown } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
-import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
-import { Timestamp } from '../../../../common/components/Timestamp';
-import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { truncateMiddleDeprecated } from '../../../../common/utils/utils';
-import { Text } from '../../../../ui/Text';
-import BitcoinCircleIcon from '../../../../ui/icons/BitcoinCircleIcon';
-import StxIcon from '../../../../ui/icons/StxIcon';
-import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
@@ -64,7 +64,7 @@ const StxBlockRow = ({
 }) => {
   const icon = isFirst ? (
     <Icon h={2.5} w={2.5} color={'white'}>
-      <StxIcon />
+      <StacksIconThin />
     </Icon>
   ) : undefined;
   return minimized ? (
@@ -78,7 +78,6 @@ const StxBlockRow = ({
         gridColumn="1 / 2"
         alignItems="center"
         zIndex="docked"
-        // bg="surface"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>

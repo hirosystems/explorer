@@ -1,7 +1,6 @@
 'use client';
 
-import { useHomePageData } from '@/app/home-redesign/context';
-import { useMempoolFee } from '@/common/queries/useMempoolFee';
+import { useHomePageData } from '@/app/context';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';

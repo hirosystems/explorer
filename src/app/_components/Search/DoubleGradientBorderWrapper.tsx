@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 const transition = 'opacity 0.3s cubic-bezier(0.48, 0, 0.83, 0.67)';
@@ -84,10 +84,12 @@ const visibleGradientBorderStyle = {
   },
 };
 
-export function DoubleGradientBorderWrapper({ children }: { children: ReactNode }) {
+export function DoubleGradientBorderWrapper({
+  children,
+  ...flexProps
+}: { children: ReactNode } & FlexProps) {
   return (
     <Flex
-      maxW={'lg'}
       width={'full'}
       borderRadius="redesign.lg"
       _after={outerBorderDefaultStyle}
@@ -95,6 +97,7 @@ export function DoubleGradientBorderWrapper({ children }: { children: ReactNode 
       flex="1"
       _hover={visibleGradientBorderStyle}
       _focusWithin={visibleGradientBorderStyle}
+      {...flexProps}
     >
       <Flex
         position="absolute"

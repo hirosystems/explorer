@@ -7,7 +7,7 @@ import { X } from '@phosphor-icons/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const filterSearchParams = ['fromAddress', 'toAddress', 'startTime', 'endTime'];
+const filterSearchParams = ['fromAddress', 'toAddress', 'startTime', 'endTime', 'transactionType'];
 
 function getSearchParamsWithoutFilters(searchParams: URLSearchParams) {
   const params = new URLSearchParams(searchParams);

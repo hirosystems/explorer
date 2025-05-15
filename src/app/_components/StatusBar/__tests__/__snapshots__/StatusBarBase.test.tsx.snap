@@ -9,7 +9,7 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
       class="css-fevtbh"
     >
       <div
-        class="css-w64dtj"
+        class="css-14c2uc9"
       >
         <svg
           aria-hidden="true"
@@ -43,7 +43,7 @@ exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
       class="css-fevtbh"
     >
       <div
-        class="css-w64dtj"
+        class="css-14c2uc9"
       >
         <svg
           aria-hidden="true"

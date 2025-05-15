@@ -1,5 +1,4 @@
-import { useHomePageData } from '@/app/home-redesign/context';
-import { useMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
+import { useHomePageData } from '@/app/context';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { capitalize, semanticTokenToCssVar } from '@/common/utils/utils';
 import { SkeletonCircle } from '@/components/ui/skeleton';
@@ -245,7 +244,14 @@ const TypesList = ({
   onItemHover: (item: TransactionTypeData | null) => void;
   className?: string;
 } & StackProps) => (
-  <Stack gap={0} minW={`${LIST_MIN_WIDTH}px`} flexShrink="1" className={className} {...stackProps}>
+  <Stack
+    gap={0}
+    minW={`${LIST_MIN_WIDTH}px`}
+    maxW={['360px', '360px', '360px', 'unset']}
+    flexShrink="1"
+    className={className}
+    {...stackProps}
+  >
     {data.map(item => (
       <TypeListItem
         key={item.name}
@@ -450,7 +456,7 @@ export function TxCountChart() {
             width={PIE_CHART_WIDTH}
             height={PIE_CHART_HEIGHT}
             position="relative"
-            mx="auto"
+            mx={['auto', 'auto', 'auto', 'unset']}
           >
             <CenterDisplay
               value={centerDisplayValue}
