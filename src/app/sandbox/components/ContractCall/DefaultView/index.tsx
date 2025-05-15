@@ -1,7 +1,7 @@
 import { Box, Grid } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { Caption, Text } from '../../../../../ui/typography';
+import { Text } from '../../../../../ui/typography';
 import { PopularContracts } from './PopularContracts';
 import { SearchContractsForm } from './SearchContractsForm';
 
