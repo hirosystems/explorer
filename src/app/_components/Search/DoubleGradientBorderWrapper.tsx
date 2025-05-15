@@ -90,7 +90,6 @@ export function DoubleGradientBorderWrapper({
 }: { children: ReactNode } & FlexProps) {
   return (
     <Flex
-      maxW={['none', 'none', 'none', 'lg']}
       width={'full'}
       borderRadius="redesign.lg"
       _after={outerBorderDefaultStyle}
