@@ -4,6 +4,7 @@ import {
   formatStacksAmount,
   getContractName,
   microToStacksFormatted,
+  truncateHex,
   truncateStxAddress,
 } from '@/common/utils/utils';
 import { Text, TextProps } from '@/ui/Text';
@@ -70,7 +71,7 @@ export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
 export const TxLinkCellRenderer = (value: string) => {
   return (
     <TxLink txId={value} variant="tableLink">
-      <EllipsisText>{value}</EllipsisText>
+      <EllipsisText>{truncateHex(value, 4, 5, false)}</EllipsisText>
     </TxLink>
   );
 };
