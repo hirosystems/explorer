@@ -108,7 +108,7 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.TxId,
     header: 'ID',
     accessorKey: TxTableColumns.TxId,
-    cell: info => TxLinkCellRenderer(truncateHex(info.getValue() as string, 4, 5, false)),
+    cell: info => TxLinkCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {

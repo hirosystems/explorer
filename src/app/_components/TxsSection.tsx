@@ -18,7 +18,6 @@ import { TxTableColumns } from '@/common/components/table/table-examples/types';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
-import { truncateHex } from '@/common/utils/utils';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
@@ -38,7 +37,7 @@ export const columnDefinitions: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.TxId,
     header: 'ID',
     accessorKey: TxTableColumns.TxId,
-    cell: info => TxLinkCellRenderer(truncateHex(info.getValue() as string, 4, 5, false)),
+    cell: info => TxLinkCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
