@@ -8,11 +8,13 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { HybridExplorerBanner } from './Banner/HybridExplorerBanner';
+import { TestnetBanner } from './Banner/TestnetBanner';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
 import { NavBar as NewNavBar } from './NewNavBar/NavBar';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
-import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
+import { IncidentsStatusBar } from './StatusBar/IncidentsStatusBar';
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
 
 const StyledWrapper = styled(Stack)<{ bg: string }>`
@@ -50,10 +52,12 @@ export function PageWrapper({
 }) {
   return (
     <>
-      <Stack width={'100%'} top={0} backdropFilter={'blur(10px)'} bg={'surfaceOpposite'}>
+      <Stack gap={0} top={0} w="full">
         <NonHiroNetworkWarningBar />
-        <IncidentsStatusBarWithErrorBoundary />
+        <IncidentsStatusBar />
         <CMSStatusBars statusBarContent={statusBarContent} />
+        <HybridExplorerBanner />
+        <TestnetBanner />
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-2xl" p={6} minHeight={'100vh'}>
