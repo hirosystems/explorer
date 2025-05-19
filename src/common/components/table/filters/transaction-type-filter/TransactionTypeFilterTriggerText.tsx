@@ -1,4 +1,4 @@
-import { capitalize } from '@/common/utils/utils';
+import { getTxTypeLabel } from '@/common/utils/transactions';
 
 import { FilterTriggerText } from '../FilterTriggerText';
 
@@ -14,7 +14,7 @@ export function TransactionTypeFilterTriggerText({
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
   const firstActiveFilter = transactionType?.[0];
   const firstActiveFilterFormatted = firstActiveFilter
-    ? capitalize(firstActiveFilter.replace(/_/g, ' '))
+    ? getTxTypeLabel(firstActiveFilter)
     : '';
   const otherActiveFilters = transactionType?.slice(1);
   const triggerTextSuffix =
