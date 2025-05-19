@@ -13,11 +13,21 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_BURN_BLOCKS_LIMIT } from '../constants/constants';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
+
+export const getBurnBlocksQueryKey = (
+  limit: number,
+  activeNetworkKey: string,
+  queryKeyExtension?: string
+) =>
+  queryKeyExtension
+    ? [BURN_BLOCKS_QUERY_KEY, limit, activeNetworkKey, queryKeyExtension]
+    : [BURN_BLOCKS_QUERY_KEY, limit, activeNetworkKey];
 
 export function useBurnBlocksInfinite(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
@@ -25,10 +35,9 @@ export function useBurnBlocksInfinite(
   queryKeyExtension?: string
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useInfiniteQuery({
-    queryKey: queryKeyExtension
-      ? [BURN_BLOCKS_QUERY_KEY, limit, queryKeyExtension]
-      : [BURN_BLOCKS_QUERY_KEY, limit],
+    queryKey: getBurnBlocksQueryKey(limit, activeNetworkKey, queryKeyExtension),
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       return await callApiWithErrorHandling(apiClient, '/extended/v2/burn-blocks/', {
         params: { query: { limit, offset: pageParam } },
@@ -47,10 +56,9 @@ export function useSuspenseBurnBlocks(
   queryKeyExtension?: string
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useSuspenseInfiniteQuery({
-    queryKey: queryKeyExtension
-      ? [BURN_BLOCKS_QUERY_KEY, limit, queryKeyExtension]
-      : [BURN_BLOCKS_QUERY_KEY, limit],
+    queryKey: getBurnBlocksQueryKey(limit, activeNetworkKey, queryKeyExtension),
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       return await callApiWithErrorHandling(apiClient, '/extended/v2/burn-blocks/', {
         params: { query: { limit, offset: pageParam } },
@@ -70,10 +78,12 @@ export function useBurnBlocks(
   queryKeyExtension?: string
 ): UseQueryResult<GenericResponseType<BurnBlock>> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useQuery({
     queryKey: [
       BURN_BLOCKS_QUERY_KEY,
       limit,
+      activeNetworkKey,
       ...(offset ? [offset] : []),
       ...(queryKeyExtension ? [queryKeyExtension] : []),
     ],

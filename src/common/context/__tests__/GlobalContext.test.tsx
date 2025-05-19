@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { CookiesProvider } from 'react-cookie';
 
 import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
+import { QueryProvider } from '../../utils/test-utils/render-utils';
 import { GlobalContext, GlobalContextProvider } from '../GlobalContextProvider';
 
 const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
@@ -56,11 +57,13 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
-          <GlobalContextTestComponent />
-        </GlobalContextProvider>
-      </CookiesProvider>
+      <QueryProvider>
+        <CookiesProvider>
+          <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+            <GlobalContextTestComponent />
+          </GlobalContextProvider>
+        </CookiesProvider>
+      </QueryProvider>
     );
 
     expect(screen.getByText('Global Context Test')).toBeInTheDocument();
@@ -75,11 +78,13 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
-          <GlobalContextTestComponent />
-        </GlobalContextProvider>
-      </CookiesProvider>
+      <QueryProvider>
+        <CookiesProvider>
+          <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+            <GlobalContextTestComponent />
+          </GlobalContextProvider>
+        </CookiesProvider>
+      </QueryProvider>
     );
 
     const networks = getContextField('networks');

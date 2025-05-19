@@ -10,22 +10,37 @@ import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { ONE_SECOND, TWO_MINUTES } from './query-stale-time';
 
 export const GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY = 'getBlocksByBurnBlock';
 
+export const getBlocksByBurnBlockQueryKey = (
+  heightOrHash: string | number,
+  activeNetworkKey: string,
+  rangeQueryKey?: string,
+  queryKeyExtension?: string
+) => [
+  GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY,
+  heightOrHash,
+  activeNetworkKey,
+  rangeQueryKey,
+  queryKeyExtension,
+];
+
 export const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
 
 export function useGetStxBlocksByBurnBlockQuery() {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
 
   return (
     heightOrHash: string | number,
     numStxBlocksPerBtcBlock: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT
   ) => ({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, 'special'],
+    queryKey: getBlocksByBurnBlockQueryKey(heightOrHash, activeNetworkKey, 'special'),
     queryFn: async () => {
       if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(
@@ -53,9 +68,15 @@ export function useBlocksByBurnBlock(
   queryKeyExtension?: string
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   const rangeQueryKey = offset ? `${offset}-${offset + limit}` : '';
   return useInfiniteQuery({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, rangeQueryKey, queryKeyExtension],
+    queryKey: getBlocksByBurnBlockQueryKey(
+      heightOrHash,
+      activeNetworkKey,
+      rangeQueryKey,
+      queryKeyExtension
+    ),
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(
@@ -80,8 +101,14 @@ export function useSuspenseBlocksByBurnBlock(
   queryKeyExtension?: string
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useSuspenseInfiniteQuery({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, queryKeyExtension],
+    queryKey: getBlocksByBurnBlockQueryKey(
+      heightOrHash,
+      activeNetworkKey,
+      undefined,
+      queryKeyExtension
+    ),
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(

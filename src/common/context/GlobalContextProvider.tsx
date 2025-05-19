@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -78,6 +79,11 @@ export const GlobalContextProvider: FC<{
     ? btcAddressBaseUrl[0]
     : btcAddressBaseUrl;
   const activeNetworkKey = queryApiUrl || NetworkModeUrlMap[queryNetworkMode];
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    queryClient.clear();
+  }, [activeNetworkKey, queryClient]);
 
   const addedCustomNetworks: Record<string, Network> = JSON.parse(
     addedCustomNetworksCookie || '{}'

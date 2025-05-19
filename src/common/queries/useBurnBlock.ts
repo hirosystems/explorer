@@ -10,17 +10,25 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
+import { useGlobalContext } from '../context/useGlobalContext';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
+
+export const getBurnBlockQueryKey = (heightOrHash: string | number, activeNetworkKey: string) => [
+  'burn-block',
+  heightOrHash,
+  activeNetworkKey,
+];
 
 export function useFetchBurnBlock(): (
   heightOrHash: string | number
 ) => Promise<BurnBlock | undefined> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   const queryClient = useQueryClient();
 
   return async (heightOrHash: string | number) => {
-    const queryKey = [BURN_BLOCKS_QUERY_KEY, heightOrHash];
+    const queryKey = getBurnBlockQueryKey(heightOrHash, activeNetworkKey);
 
     const cachedData = queryClient.getQueryData<BurnBlock>(queryKey);
     if (cachedData) {
@@ -66,8 +74,9 @@ export function useBurnBlock(
   options: any = {}
 ): UseQueryResult<BurnBlock> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useQuery({
-    queryKey: ['burn-block', heightOrHash],
+    queryKey: getBurnBlockQueryKey(heightOrHash, activeNetworkKey),
     queryFn: async () => {
       if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(
@@ -88,8 +97,9 @@ export function useSuspenseBurnBlock(
   options: any = {}
 ): UseSuspenseQueryResult<BurnBlock> {
   const apiClient = useApiClient();
+  const { activeNetworkKey } = useGlobalContext();
   return useSuspenseQuery({
-    queryKey: ['burn-block', heightOrHash],
+    queryKey: getBurnBlockQueryKey(heightOrHash, activeNetworkKey),
     queryFn: async () => {
       if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(
