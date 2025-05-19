@@ -1,13 +1,12 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
-import { ONE_HOUR } from '@/common/queries/query-stale-time';
 import { useColorMode } from '@/components/ui/color-mode';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
 import { ChartTooltip } from './ChartTooltip';
 import {
@@ -55,6 +54,8 @@ function NetworkOverviewChart() {
           fullDate: date.toISOString(),
           blocksMined: item.stx_blocks_count,
           dailyTransactions: item.total_tx_count,
+          burnBlockHeight: item.burn_block_height,
+          burnBlockHash: item.burn_block_hash,
         };
       });
   }, [stxBlocksCountPerBtcBlock]);

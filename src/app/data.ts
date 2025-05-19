@@ -35,6 +35,8 @@ export interface RecentBlocks {
   btcBlocks: GenericResponseType<UIBtcBlock[]>;
   stxBlocks: GenericResponseType<UIStxBlock[]>;
   stxBlocksCountPerBtcBlock: Array<{
+    burn_block_height: number;
+    burn_block_hash: string;
     burn_block_time: string;
     stx_blocks_count: number;
     total_tx_count: number;
@@ -228,6 +230,8 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
   const recentBtcBlockData = btcBlocksData.results.slice(0, RECENT_BTC_BLOCKS_COUNT);
 
   const stxBlocksCountPerBtcBlock = btcBlocksData.results.map((block: BurnBlock) => ({
+    burn_block_height: block.burn_block_height,
+    burn_block_hash: block.burn_block_hash,
     burn_block_time: block.burn_block_time,
     stx_blocks_count: block.stacks_blocks.length,
     total_tx_count: block.total_tx_count,

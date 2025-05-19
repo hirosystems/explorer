@@ -1,3 +1,4 @@
+import { truncateMiddle } from '@/common/utils/utils';
 import { useColorMode } from '@/components/ui/color-mode';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
@@ -59,7 +60,17 @@ export function ChartTooltip({ active, payload, label }: TooltipProps<number, st
               : 'var(--stacks-colors-neutral-sand-100)'
           }
         >
-          {payload[0].value?.toLocaleString()}
+          {payload[0].value?.toLocaleString()} txs
+        </Text>
+        <Text
+          textStyle={'text-medium-xs'}
+          color={
+            colorMode === 'light'
+              ? 'var(--stacks-colors-neutral-sand-200)'
+              : 'var(--stacks-colors-neutral-sand-300)'
+          }
+        >
+          {`In Bitcoin block ${truncateMiddle(dataPoint?.burnBlockHash, 4, 4)}`}
         </Text>
       </Stack>
     );
