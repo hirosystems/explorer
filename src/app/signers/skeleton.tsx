@@ -120,13 +120,8 @@ export const SignersDistributionSkeleton = () => (
 
 export const SignersHeaderSkeleton = () => (
   <SignersHeaderLayout
-    stackingHeader={<Skeleton width="30%" height="14px" />}
-    currentCycleCard={<SignersStatsSectionSkeleton />}
-    stxStakedCard={<SignersStatsSectionSkeleton />}
-    nextCycleCard={<SignersStatsSectionSkeleton />}
     signerDistribution={<SignersDistributionSkeleton />}
     signerDistributionHeader={<Skeleton width="30%" height="14px" />}
-    historicalStackingDataLink={<Skeleton width="30%" height="14px" />}
     signersMap={<SignersMapSkeleton />}
   />
 );
