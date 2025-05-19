@@ -19,7 +19,7 @@ export function Timestamp({ ts, ...rest }: TimestampProps & FlexProps) {
     <Tooltip content={readableTimestamp}>
       <Flex alignItems="center" {...rest}>
         <Value suppressHydrationWarning={true}>
-          <RelativeTimeDisplay timestampInMs={ts} />
+          <RelativeTimeDisplay timestampInSeconds={ts} />
         </Value>
       </Flex>
     </Tooltip>

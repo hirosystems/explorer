@@ -21,10 +21,8 @@ dayjs.extend(updateLocale);
 dayjs.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
-    past: (time: string) => {
-      return time === 'Now' ? time : `${time} ago`;
-    },
-    s: 'Now',
+    past: (time: string) => `${time} ago`,
+    s: '<1 minute',
     m: '1 min',
     mm: '%d mins',
     h: 'an hr',

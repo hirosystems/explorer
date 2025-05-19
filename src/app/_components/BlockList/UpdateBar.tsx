@@ -59,7 +59,7 @@ export function UpdateBarBase({
     <>{latestBlocksCount}</>
   ) : latestStxBlock ? (
     <>
-      Last update <RelativeTimeDisplay timestampInMs={latestStxBlock.timestamp} />
+      Last update <RelativeTimeDisplay timestampInSeconds={latestStxBlock.timestamp} />
     </>
   ) : null;
 
