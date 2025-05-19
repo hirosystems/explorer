@@ -9,7 +9,7 @@ import {
   Stack,
   StackProps,
 } from '@chakra-ui/react';
-import { ArrowRight, Command, KeyReturn, MagnifyingGlass, Trash, X } from '@phosphor-icons/react';
+import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
@@ -240,6 +240,7 @@ function SearchResults({
                     key={index}
                     tx={recentResultItem.result.metadata}
                     url={searchEntityUrl}
+                    iconType={iconType}
                   />
                 );
               case 'coinbase':
