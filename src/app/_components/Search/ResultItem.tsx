@@ -49,7 +49,27 @@ function ResultItemWrapper({ children, ...props }: FlexProps) {
   );
 }
 
-function ResultItemIcon({ type }: { type?: 'arrow' | 'enter' | undefined }) {
+function ResultItemIcon({ type, url }: { type?: 'arrow' | 'enter' | undefined; url: string }) {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  useEffect(() => {
+    if (type === 'enter') {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          dispatch(blur());
+          router.push(url);
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [type, url, dispatch, router]);
+
   if (type === 'enter') {
     return (
       <Flex
@@ -96,7 +116,7 @@ export function ResultItem({
       }}
     >
       <SearchItemTitle>{value}</SearchItemTitle>
-      <ResultItemIcon type={iconType} />
+      <ResultItemIcon type={iconType} url={url} />
     </ResultItemWrapper>
   );
 }
@@ -139,7 +159,7 @@ function TxResultItem({
           }
         />
       </Flex>
-      <ResultItemIcon type={iconType} />
+      <ResultItemIcon type={iconType} url={url} />
     </ResultItemWrapper>
   );
 }
@@ -173,9 +193,17 @@ export function TokenTransferResultItem({
   );
 }
 
-export function ContractDeployResultItem({ tx, url }: { tx: ContractDeployTxs; url: string }) {
+export function ContractDeployResultItem({
+  tx,
+  url,
+  iconType,
+}: {
+  tx: ContractDeployTxs;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
-    <TxResultItem tx={tx} url={url}>
+    <TxResultItem tx={tx} url={url} iconType={iconType}>
       <SearchItemTitle href={url}>{getContractName(tx.smart_contract.contract_id)}</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
@@ -194,7 +222,7 @@ export function ContractCallResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx} url={url}>
+    <TxResultItem tx={tx} url={url} iconType={iconType}>
       <SearchItemTitle href={url}>{tx.contract_call.function_name}</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
@@ -213,7 +241,7 @@ export function CoinbaseResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx} url={url}>
+    <TxResultItem tx={tx} url={url} iconType={iconType}>
       <SearchItemTitle href={url}>Coinbase</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
@@ -232,7 +260,7 @@ export function TenureChangeResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   return (
-    <TxResultItem tx={tx} url={url}>
+    <TxResultItem tx={tx} url={url} iconType={iconType}>
       <SearchItemTitle href={url}>Tenure Change</SearchItemTitle>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddleDeprecated(tx.tx_id, 4)}
@@ -267,7 +295,7 @@ export function BnsResultItem({
           {truncateMiddleDeprecated(address, 5)}
         </Text>
       </Flex>
-      <ResultItemIcon type={iconType} />
+      <ResultItemIcon type={iconType} url={url} />
     </ResultItemWrapper>
   );
 }
@@ -328,7 +356,7 @@ export function BlockResultItem({
           {truncateMiddleDeprecated(hash, 4)}
         </Text>
       </Flex>
-      <ResultItemIcon type={iconType} />
+      <ResultItemIcon type={iconType} url={url} />
     </ResultItemWrapper>
   );
 }
