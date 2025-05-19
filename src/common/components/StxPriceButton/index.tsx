@@ -41,8 +41,9 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
   );
 
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
+  const hasPrice = (currentStxPrice ?? 0) > 0 || (historicalStxPrice ?? 0) > 0;
 
-  if (!isMainnet) {
+  if (!isMainnet || !hasPrice) {
     return null;
   }
 
