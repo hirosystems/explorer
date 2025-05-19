@@ -66,6 +66,12 @@ describe('formatTimestampToRelativeTime', () => {
     const tenMinutesAgo = Math.floor(new Date('2024-06-01T12:24:56Z').getTime() / 1000);
     expect(formatTimestampToRelativeTime(tenMinutesAgo)).toBe('10 minutes ago');
   });
+
+  it('formats timestamps under one minute to \"<1 minute ago\"', () => {
+    // 30 seconds ago from the frozen time
+    const thirtySecondsAgo = Math.floor(new Date('2024-06-01T12:34:26Z').getTime() / 1000);
+    expect(formatTimestampToRelativeTime(thirtySecondsAgo)).toBe('<1 minute ago');
+  });
 });
 
 describe('formatTimestamp', () => {

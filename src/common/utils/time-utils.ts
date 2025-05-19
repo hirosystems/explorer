@@ -62,7 +62,13 @@ export function formatTimestamp(
 }
 
 export function formatTimestampToRelativeTime(timestampInSeconds: number): string {
-  const date = new Date(timestampInSeconds * 1000);
-  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
-  return relativeTime;
+  const timestampMs = timestampInSeconds * 1000;
+  const diff = Math.abs(Date.now() - timestampMs);
+
+  if (diff < 60_000) {
+    return '<1 minute ago';
+  }
+
+  const date = new Date(timestampMs);
+  return formatDistanceToNow(date, { addSuffix: true });
 }
