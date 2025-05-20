@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  QueryFunctionContext,
-  UseQueryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
+import { QueryFunctionContext, UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { ONE_HOUR } from './query-stale-time';
 

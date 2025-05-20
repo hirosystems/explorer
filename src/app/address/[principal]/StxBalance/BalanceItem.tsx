@@ -20,7 +20,7 @@ function UsdBalanceBase({ balance }: { balance: number }) {
   }
 
   return (
-    <Text mt="4px" color="ink.400" fontSize="14px" suppressHydrationWarning>
+    <Text mt={1} color="ink.400" fontSize="sm" suppressHydrationWarning>
       {usdBalance}
     </Text>
   );

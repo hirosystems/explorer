@@ -41,12 +41,13 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
 
   return (
     <Flex
-      height="24px"
+      h={6}
       justifyContent={'center'}
       alignItems={'center'}
       borderRadius="md"
-      padding="0px 8px"
-      ml={'5px'}
+      py={0}
+      px={2}
+      ml={1}
       fontSize={'xs'}
       _focus={{ outline: 0 }}
       flexShrink={0}
