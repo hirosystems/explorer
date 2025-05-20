@@ -1,6 +1,7 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { TokenPrice } from '@/common/types/tokenPrice';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
@@ -15,7 +16,7 @@ import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
 type MempoolFeeResponseKey = Exclude<keyof MempoolFeePriorities, 'all'>;
 
-function SectionHeader() {
+function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
       <HStack align="center" gap={2}>
@@ -45,7 +46,7 @@ function SectionHeader() {
           <StxThinIcon />
         </Icon>
         <Text textStyle="text-mono-xs" color="textPrimary">
-          1 STX = $1.84
+          1 STX = ${tokenPrice?.stxPrice?.toFixed(2)}
         </Text>
       </HStack>
     </HStack>
@@ -60,7 +61,15 @@ function TabIcon({ children }: { children: ReactNode }) {
   );
 }
 
-function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue?: number }) {
+function FeeData({
+  title,
+  ustxValue,
+  tokenPrice,
+}: {
+  title: ReactNode;
+  ustxValue?: number;
+  tokenPrice: TokenPrice;
+}) {
   const stxValue =
     ustxValue !== undefined ? Number((ustxValue / MICROSTACKS_IN_STACKS).toFixed(2)) : undefined;
   const formattedStxValue = stxValue !== undefined && stxValue < 0.01 ? '<0.01' : stxValue;
@@ -87,14 +96,18 @@ function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue?: number })
           /
         </Text>
         <Text textStyle="text-mono-sm" color="textSecondary">
-          $0.01
+          {stxValue === undefined
+            ? 'N/A'
+            : stxValue === 0
+              ? '<$0.01'
+              : `$${(stxValue * tokenPrice.stxPrice).toFixed(2)}`}
         </Text>
       </HStack>
     </Stack>
   );
 }
 
-function FeeTabs() {
+function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { mempoolFee } = useHomePageData();
   const availableTxTypeFees = Object.keys(mempoolFee || {}) as MempoolFeeResponseKey[];
   return (
@@ -115,8 +128,16 @@ function FeeTabs() {
             {availableTxTypeFees.map(txType => (
               <TabsContent key={txType} value={txType}>
                 <Flex gap={2} flexWrap={'wrap'}>
-                  <FeeData title="Low" ustxValue={mempoolFee?.[txType]?.low_priority} />
-                  <FeeData title="Standard" ustxValue={mempoolFee?.[txType]?.medium_priority} />
+                  <FeeData
+                    title="Low"
+                    ustxValue={mempoolFee?.[txType]?.low_priority}
+                    tokenPrice={tokenPrice}
+                  />
+                  <FeeData
+                    title="Standard"
+                    ustxValue={mempoolFee?.[txType]?.medium_priority}
+                    tokenPrice={tokenPrice}
+                  />
                   <FeeData
                     title={
                       <Flex align={'center'} gap={0.5}>
@@ -127,6 +148,7 @@ function FeeTabs() {
                       </Flex>
                     }
                     ustxValue={mempoolFee?.[txType]?.high_priority}
+                    tokenPrice={tokenPrice}
                   />
                 </Flex>
               </TabsContent>
@@ -141,11 +163,11 @@ function FeeTabs() {
   );
 }
 
-export function FeeSection() {
+export function FeeSection({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
-      <SectionHeader />
-      <FeeTabs />
+      <SectionHeader tokenPrice={tokenPrice} />
+      <FeeTabs tokenPrice={tokenPrice} />
     </Stack>
   );
 }
