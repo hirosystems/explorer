@@ -14,7 +14,7 @@ export const meta: Metadata = {
     type: 'website',
     siteName: 'explorer.hiro.so',
     description:
-      'Explore transactions and accounts on the Stacks blockchain. Clone any contract and experiment in your browser with the Explorer sandbox.',
+      'Explore blocks, transactions, accounts, and smart contracts on the Stacks blockchain with real-time data.',
     images: '/meta/og.jpg',
   },
   twitter: {
