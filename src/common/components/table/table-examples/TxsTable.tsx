@@ -7,11 +7,7 @@ import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import { formatTimestamp } from '@/common/utils/time-utils';
-import {
-  microToStacksFormatted,
-  truncateHex,
-  validateStacksContractId,
-} from '@/common/utils/utils';
+import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';

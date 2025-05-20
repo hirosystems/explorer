@@ -1,5 +1,4 @@
 import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
-import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
@@ -7,7 +6,7 @@ import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
 import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowsCounterClockwise, Cube, PhoneCall } from '@phosphor-icons/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
 export const getTransactionTypeFilterParams = (
   searchParams: URLSearchParams,
@@ -87,15 +86,14 @@ export function TransactionTypeFilterForm({
   onSubmit?: () => void;
   open: boolean;
 }) {
+  const prevOpenRef = useRef(open);
   const onTransactionTypeFilterSubmitHandler = useTransactionTypeFilterSubmitHandler();
   const {
     value: selectedFilters,
     getItemProps: getCheckboxProps,
     toggleValue: toggleSelectedFilter,
     setValue: setSelectedFilters,
-  } = useCheckboxGroup({
-    defaultValue: defaultTransactionType,
-  });
+  } = useCheckboxGroup({});
 
   // Syncs the selected filters with the search params. If the search params are cleared, the selected filters are cleared
   const searchParams = useSearchParams();
@@ -106,10 +104,13 @@ export function TransactionTypeFilterForm({
 
   // Resets the selected filters when the form is closed
   useEffect(() => {
-    if (!open) {
-      setSelectedFilters([]);
+    // Only reset the selected filters when the form is closed after being opened
+    if (prevOpenRef.current && !open) {
+      const transactionType = searchParams.get('transactionType');
+      setSelectedFilters(transactionType ? transactionType.split(',') : []);
     }
-  }, [open, setSelectedFilters]);
+    prevOpenRef.current = open;
+  }, [open, setSelectedFilters, searchParams]);
 
   return (
     <Stack gap={1.5}>
