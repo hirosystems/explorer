@@ -1,3 +1,4 @@
+import { Contract } from '@/common/types/tx';
 import { useFilterParams } from '@/common/utils/search-param-utils';
 import {
   Flex,
@@ -14,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
 
+import { TxSearchResult } from '@stacks/stacks-blockchain-api-types';
+
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
@@ -29,6 +32,7 @@ import {
   AddressSearchResult,
   BlockSearchResult,
   BnsSearchResult,
+  ContractSearchResult,
   SearchResult,
   SearchResultType,
 } from '../../../common/types/search-results';
@@ -210,6 +214,16 @@ function SearchResults({
                 hash={blockResult.entity_id}
                 url={searchEntityUrl}
                 iconType={iconType}
+              />
+            );
+          }
+          if (recentResultItem.result.entity_type === SearchResultType.ContractAddress) {
+            const contractResult = recentResultItem.result as ContractSearchResult;
+            return (
+              <ContractDeployResultItem
+                key={index}
+                tx={contractResult.metadata}
+                url={searchEntityUrl}
               />
             );
           }
