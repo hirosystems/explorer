@@ -30,7 +30,7 @@ export default function ({
       <Stack gap={8}>
         <Flex
           justifyContent={'space-between'}
-          alignItems={{ base: 'flex-start', md: 'flex-end' }}
+          alignItems={{ base: 'flex-start', md: 'baseline' }}
           flexDirection={{ base: 'column', md: 'row' }}
           gap={4}
         >

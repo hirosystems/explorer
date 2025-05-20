@@ -21,24 +21,25 @@ const ButtonLinkBase = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     const isExternal = linkProps?.href?.startsWith('http');
 
     const content = (
-      <Flex alignItems="center" gap={1} className="group">
+      <Flex className="group">
         <Text
           textStyle={buttonLinkSize === 'big' ? 'text-medium-sm' : 'text-medium-xs'}
           color="textPrimary"
         >
           {children}
+          <Icon
+            w={buttonLinkSize === 'big' ? 3.5 : 3}
+            h={buttonLinkSize === 'big' ? 3.5 : 3}
+            color="iconTertiary"
+            _groupHover={{
+              color: 'iconPrimary',
+            }}
+            aria-hidden="true"
+            ml={1}
+          >
+            <ArrowRight />
+          </Icon>
         </Text>
-        <Icon
-          w={buttonLinkSize === 'big' ? 3.5 : 3}
-          h={buttonLinkSize === 'big' ? 3.5 : 3}
-          color="iconTertiary"
-          _groupHover={{
-            color: 'iconPrimary',
-          }}
-          aria-hidden="true"
-        >
-          <ArrowRight />
-        </Icon>
       </Flex>
     );
 
@@ -47,7 +48,7 @@ const ButtonLinkBase = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         ref={ref}
         {...linkProps}
         variant="buttonLink"
-        h={buttonLinkSize === 'big' ? 6 : 5}
+        // h={buttonLinkSize === 'big' ? 6 : 5}
         w="fit-content"
       >
         {content}
@@ -57,7 +58,7 @@ const ButtonLinkBase = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         ref={ref}
         {...linkProps}
         variant="buttonLink"
-        h={buttonLinkSize === 'big' ? 6 : 5}
+        // h={buttonLinkSize === 'big' ? 6 : 5}
         w="fit-content"
       >
         {content}
