@@ -112,6 +112,26 @@ export const filterToFormattedValueMap: Record<string, (value: string) => string
   startTime: formatTimestamp,
 };
 
+export function isValidDateString(dateString: string): boolean {
+  const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateFormatRegex.test(dateString)) {
+    return false;
+  }
+
+  const [year, month, day] = dateString.split('-').map(Number);
+
+  if (isNaN(year) || isNaN(month) || isNaN(day) || month < 1 || month > 12 || day < 1 || day > 31) {
+    return false;
+  }
+
+  const utcDate = new UTCDate(year, month - 1, day);
+  return (
+    utcDate.getUTCFullYear() === year &&
+    utcDate.getUTCMonth() === month - 1 &&
+    utcDate.getUTCDate() === day
+  );
+}
+
 export const advancedSearchConfig: AdvancedSearchConfig = {
   'FROM:': {
     filter: 'fromAddress',
@@ -129,6 +149,9 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
     filter: 'endTime',
     type: 'YYYY-MM-DD',
     transform: (value: string) => {
+      if (!isValidDateString(value)) {
+        return null;
+      }
       const [year, month, day] = value.split('-').map(Number);
       const utcDate = new UTCDate(year, month - 1, day, 23, 59, 59);
       return Math.floor(utcDate.getTime() / 1000);
@@ -145,6 +168,9 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
     filter: 'startTime',
     type: 'YYYY-MM-DD',
     transform: (value: string) => {
+      if (!isValidDateString(value)) {
+        return null;
+      }
       const [year, month, day] = value.split('-').map(Number);
       const utcDate = new UTCDate(year, month - 1, day, 0, 0, 0);
       return Math.floor(utcDate.getTime() / 1000);
