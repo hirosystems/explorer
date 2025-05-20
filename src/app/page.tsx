@@ -14,7 +14,7 @@ import {
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
-import { getCurrentStxPrice } from './getTokenPriceInfo';
+import { getCurrentStxPrice, getTokenPrice } from './getTokenPriceInfo';
 
 export default async function HomeRedesign(props: {
   searchParams: Promise<Record<string, string>>;
@@ -22,6 +22,7 @@ export default async function HomeRedesign(props: {
   const searchParams = await props.searchParams;
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
+  const tokenPrice = await getTokenPrice();
   const [stxPrice, recentBlocks, stackingCycle, initialTxTableData, mempoolStats, mempoolFee] =
     await Promise.all([
       getCurrentStxPrice(),
@@ -49,7 +50,7 @@ export default async function HomeRedesign(props: {
           <TxsSection initialTxTableData={initialTxTableData} />
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
             <MempoolSection />
-            <FeeSection />
+            <FeeSection tokenPrice={tokenPrice} />
           </Flex>
         </Flex>
       </Stack>
