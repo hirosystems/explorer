@@ -3,6 +3,7 @@ import {
   advancedSearchConfig,
   buildAdvancedSearchQuery,
   getSearchPageUrl,
+  isValidDateString,
   parseAdvancedSearchQuery,
 } from '../useSearchQuery';
 
@@ -134,5 +135,42 @@ describe('getSearchPageUrl', () => {
         STX_ADDRESS_1
       )}&toAddress=${encodeURIComponent(STX_ADDRESS_2)}&endTime=1689983999`
     );
+  });
+});
+
+describe('isValidDateString', () => {
+  test('should return true for valid date formats', () => {
+    expect(isValidDateString('2023-01-01')).toBe(true);
+    expect(isValidDateString('2024-02-29')).toBe(true);
+    expect(isValidDateString('2023-12-31')).toBe(true);
+  });
+
+  test('should return false for invalid date formats', () => {
+    expect(isValidDateString('01-01-2023')).toBe(false);
+    expect(isValidDateString('2023/01/01')).toBe(false);
+    expect(isValidDateString('20230101')).toBe(false);
+    expect(isValidDateString('2023-1-1')).toBe(false);
+    expect(isValidDateString('23-01-01')).toBe(false);
+  });
+
+  test('should return false for dates with invalid ranges', () => {
+    expect(isValidDateString('2023-00-01')).toBe(false);
+    expect(isValidDateString('2023-13-01')).toBe(false);
+    expect(isValidDateString('2023-01-00')).toBe(false);
+    expect(isValidDateString('2023-01-32')).toBe(false);
+  });
+
+  test('should return false for invalid calendar dates', () => {
+    expect(isValidDateString('2023-02-29')).toBe(false);
+    expect(isValidDateString('2023-04-31')).toBe(false);
+    expect(isValidDateString('2023-06-31')).toBe(false);
+    expect(isValidDateString('2023-09-31')).toBe(false);
+    expect(isValidDateString('2023-11-31')).toBe(false);
+  });
+
+  test('should handle leap years correctly', () => {
+    expect(isValidDateString('2020-02-29')).toBe(true);
+    expect(isValidDateString('2000-02-29')).toBe(true);
+    expect(isValidDateString('2100-02-29')).toBe(false);
   });
 });
