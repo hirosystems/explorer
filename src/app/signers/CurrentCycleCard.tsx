@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, ClientOnly, Flex, Stack } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import { Suspense, useCallback, useMemo, useState } from 'react';
