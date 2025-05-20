@@ -46,9 +46,10 @@ const MobileContentTop = ({
 
         <motion.div
           key="settings-menu"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0, display: 'none' }}
           animate={{
             opacity: isSettingsMenuOpen ? 1 : 0,
+            display: isSettingsMenuOpen ? 'block' : 'none',
             pointerEvents: isSettingsMenuOpen ? 'auto' : 'none',
           }}
           exit={{
