@@ -158,15 +158,22 @@ function QuickLinks() {
   );
 }
 
-function SearchResults({
+export enum ResultItemsType {
+  SearchResults = 'SearchResults',
+  RecentResults = 'RecentResults',
+}
+
+function ResultItems({
   title,
   recentResults,
   iconType = 'arrow',
+  type,
   ...stackProps
 }: {
   title?: string;
   recentResults: SearchResult[];
   iconType?: 'arrow' | 'enter';
+  type: ResultItemsType;
 } & StackProps) {
   const network = useGlobalContext().activeNetwork;
   if (!recentResults.length) {
@@ -282,8 +289,19 @@ function SearchResults({
           if (recentResultItem.result.entity_type === SearchResultType.TxList) {
             const searchTerm = recentResultItem.result.entity_id;
             const searchPageUrl = getSearchPageUrl(searchTerm, network);
+            const txsCount = recentResultItem?.result?.metadata?.totalCount || 0;
+            const txsCountFormatted = txsCount > 1000 ? '1000+' : txsCount;
             return (
-              <ResultItem key={index} url={searchPageUrl} value={searchTerm} iconType={iconType} />
+              <ResultItem
+                key={index}
+                url={searchPageUrl}
+                value={
+                  type === ResultItemsType.RecentResults
+                    ? searchTerm
+                    : `${txsCountFormatted} result${txsCount === 1 ? '' : 's'} found`
+                }
+                iconType={iconType}
+              />
             );
           }
           return null;
@@ -492,18 +510,7 @@ function SearchInput({
   }, [searchTermFromQueryParams]);
 
   const handleSearch = useCallback(() => {
-    if (isAdvancedSearch) {
-      updateRecentResultsLocalStorage({
-        found: true,
-        result: {
-          entity_type: SearchResultType.TxList,
-          entity_id: tempSearchTerm,
-          txs: [],
-        },
-      });
-      router.push(searchPageUrl);
-      dispatch(blur());
-    } else if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {
+    if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {
       router.push(searchEntityUrl);
       dispatch(blur());
     } else {
@@ -626,21 +633,40 @@ export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
         {isSearchFieldFocused && (
           <SearchResultsWrapper height={fullScreen ? '100vh' : 'auto'}>
             {isLoading ? null : searchResponse && searchResponse.data ? (
-              <Stack pt={18}>
-                <SearchResults
-                  recentResults={[searchResponse.data]}
-                  iconType={'enter'}
-                  px={3}
-                  pb={4}
-                />
-              </Stack>
+              !searchResponse.data.found ? (
+                <Flex pt={18} pb={3} px={4}>
+                  <Stack px={4} py={3} bg="surfacePrimary" borderRadius={'redesign.lg'}>
+                    <Text textStyle="text-medium-sm" color="textSecondary">
+                      No results found.
+                    </Text>
+                    <Text textStyle="text-regular-sm" color="textSecondary">
+                      Try searching with an address, BNS name, transaction ID, token ID, contract
+                      ID, Stacks block hash or block height, or a syntax search.
+                    </Text>
+                  </Stack>
+                </Flex>
+              ) : (
+                <Stack pt={18}>
+                  <ResultItems
+                    recentResults={[searchResponse.data]}
+                    iconType={'enter'}
+                    px={3}
+                    pb={4}
+                    type={ResultItemsType.SearchResults}
+                  />
+                </Stack>
+              )
             ) : (
               <>
                 <Stack gap={6}>
                   <Stack px={4} gap={3} pt={16}>
                     <KeywordsPreview />
                   </Stack>
-                  <SearchResults title={'Recent results'} recentResults={recentResults} />
+                  <ResultItems
+                    title={'Recent results'}
+                    recentResults={recentResults}
+                    type={ResultItemsType.RecentResults}
+                  />
                 </Stack>
                 {!fullScreen && <QuickLinks />}
               </>
