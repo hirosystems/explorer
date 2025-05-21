@@ -381,7 +381,15 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
           if (block) {
             foundResult = blockToSearchResult(block);
           }
-        } catch (e) {}
+        } catch (e) {
+          notFoundResult = {
+            found: false,
+            result: {
+              entity_type: SearchResultType.UnknownHash,
+            },
+            error: 'Not found',
+          };
+        }
       } else {
         try {
           const data = await callApiWithErrorHandling(apiClient, '/extended/v1/search/{id}', {
@@ -407,8 +415,18 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
               } else {
                 notFoundResult = data;
               }
+            } else {
+              notFoundResult = data;
             }
-          } catch (e) {}
+          } catch (e) {
+            notFoundResult = {
+              found: false,
+              result: {
+                entity_type: SearchResultType.UnknownHash,
+              },
+              error: 'Unknown',
+            };
+          }
         }
       }
 
