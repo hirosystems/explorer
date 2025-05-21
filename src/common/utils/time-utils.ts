@@ -63,6 +63,18 @@ export function formatTimestamp(
 
 export function formatTimestampToRelativeTime(timestampInSeconds: number): string {
   const date = new Date(timestampInSeconds * 1000);
-  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+  let relativeTime = formatDistanceToNow(date, { addSuffix: true });
+  if (relativeTime.startsWith('less than a minute')) {
+    relativeTime = relativeTime.replace('less than a minute', '<1 minute');
+  }
+  if (relativeTime.startsWith('about ')) {
+    relativeTime = relativeTime.replace('about ', '~');
+  }
+  if (relativeTime.startsWith('almost ')) {
+    relativeTime = relativeTime.replace('almost ', '~');
+  }
+  if (relativeTime.startsWith('over ')) {
+    relativeTime = relativeTime.replace('over ', '>');
+  }
   return relativeTime;
 }
