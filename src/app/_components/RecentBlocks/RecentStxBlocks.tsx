@@ -11,6 +11,7 @@ import { BLOCK_HEIGHT, RECENT_STX_BLOCKS_COUNT } from './consts';
 
 export function RecentStxBlocks() {
   const recentStxBlocks = useHomePageData().initialRecentBlocks.stxBlocks;
+  const recentBtcBlocks = useHomePageData().initialRecentBlocks.btcBlocks;
 
   const { data: stxBlocksData, refetch } = useBlockList(RECENT_STX_BLOCKS_COUNT, {
     initialData: recentStxBlocks,
@@ -43,6 +44,19 @@ export function RecentStxBlocks() {
       .sort((a, b) => b - a);
   }, [stxBlocksByBurnBlockHeight]);
 
+  const totalStxBlockCountByBurnBlockHeight = useMemo(() => {
+    return Object.keys(stxBlocksByBurnBlockHeight).reduce(
+      (acc, burnBlockHeight) => {
+        const stxBlocksCount = recentBtcBlocks?.results?.find(
+          block => block.burn_block_height === Number(burnBlockHeight)
+        )?.stacks_blocks?.length;
+        acc[Number(burnBlockHeight)] = stxBlocksCount || 0;
+        return acc;
+      },
+      {} as Record<number, number>
+    );
+  }, [recentBtcBlocks]);
+
   const newestStxBlockHeight = stxBlocks[0]?.height;
 
   if (!newestStxBlockHeight) {
@@ -68,6 +82,7 @@ export function RecentStxBlocks() {
             btcBlockTime={stxBlocksByBurnBlockHeight[burnBlockHeight][0].burn_block_time}
             stxBlocks={stxBlocksByBurnBlockHeight[burnBlockHeight]}
             newestStxBlockHeight={newestStxBlockHeight}
+            totalStxBlockCount={totalStxBlockCountByBurnBlockHeight[burnBlockHeight]}
           />
         ))}
       </HStack>
