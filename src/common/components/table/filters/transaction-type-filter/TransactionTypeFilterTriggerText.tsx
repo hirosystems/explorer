@@ -13,9 +13,7 @@ export function TransactionTypeFilterTriggerText({
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
   const firstActiveFilter = transactionType?.[0];
-  const firstActiveFilterFormatted = firstActiveFilter
-    ? getTxTypeLabel(firstActiveFilter)
-    : '';
+  const firstActiveFilterFormatted = firstActiveFilter ? getTxTypeLabel(firstActiveFilter) : '';
   const otherActiveFilters = transactionType?.slice(1);
   const triggerTextSuffix =
     transactionType?.length > 1
