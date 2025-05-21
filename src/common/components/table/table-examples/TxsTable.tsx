@@ -282,12 +282,11 @@ export function TxsTable({
   }
 
   // fetch data
-  let { data, refetch } = useConfirmedTransactions(
+  let { data, refetch, isFetching } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
     {
-      placeholderData: (previousData: unknown) => previousData,
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
     }
@@ -390,6 +389,7 @@ export function TxsTable({
           />
         ) : null
       }
+      isLoading={isFetching}
     />
   );
 }
