@@ -50,6 +50,9 @@ describe('formatTimestampTo12HourTime', () => {
   });
 });
 
+// Helper to get a timestamp N seconds ago
+const secondsAgo = (s: number) => Math.floor(Date.now() / 1000) - s;
+
 describe('formatTimestampToRelativeTime', () => {
   beforeAll(() => {
     // Freeze time for consistent test results
@@ -65,6 +68,63 @@ describe('formatTimestampToRelativeTime', () => {
     // 10 minutes ago from the frozen time
     const tenMinutesAgo = Math.floor(new Date('2024-06-01T12:24:56Z').getTime() / 1000);
     expect(formatTimestampToRelativeTime(tenMinutesAgo)).toBe('10 minutes ago');
+  });
+
+  // The time ranges used here are simply the time ranges used in the formatDistanceToNow function from date-fns
+  it('returns "<1 minute ago" for times less than 30 seconds ago', () => {
+    // 10 seconds ago
+    expect(formatTimestampToRelativeTime(secondsAgo(10))).toBe('<1 minute ago');
+    // 29 seconds ago
+    expect(formatTimestampToRelativeTime(secondsAgo(29))).toBe('<1 minute ago');
+  });
+
+  it('returns "1 minute ago" for times between 30 and 90 seconds ago', () => {
+    // 31 seconds ago
+    expect(formatTimestampToRelativeTime(secondsAgo(31))).toBe('1 minute ago');
+    // 89 seconds ago
+    expect(formatTimestampToRelativeTime(secondsAgo(89))).toBe('1 minute ago');
+  });
+
+  it('returns "[2..44] minutes ago" for times between 1.5 and 44.5 minutes ago', () => {
+    // 2 minutes ago
+    expect(formatTimestampToRelativeTime(secondsAgo(2 * 60))).toBe('2 minutes ago');
+    // 44 minutes ago
+    expect(formatTimestampToRelativeTime(secondsAgo(44 * 60))).toBe('44 minutes ago');
+  });
+
+  it('returns "~1 hour ago" for times between 44.5 and 89.5 minutes ago', () => {
+    // 45 minutes ago
+    expect(formatTimestampToRelativeTime(secondsAgo(45 * 60))).toBe('~1 hour ago');
+    // 89 minutes ago
+    expect(formatTimestampToRelativeTime(secondsAgo(89 * 60))).toBe('~1 hour ago');
+  });
+
+  it('returns "~2 hours ago" for times between 89.5 minutes and 24 hours ago', () => {
+    // 2 hours ago
+    expect(formatTimestampToRelativeTime(secondsAgo(2 * 60 * 60))).toBe('~2 hours ago');
+    // 23 hours ago
+    expect(formatTimestampToRelativeTime(secondsAgo(23 * 60 * 60))).toBe('~23 hours ago');
+  });
+
+  it('returns "1 day ago" for times between 24 and 42 hours ago', () => {
+    // 25 hours ago
+    expect(formatTimestampToRelativeTime(secondsAgo(25 * 60 * 60))).toBe('1 day ago');
+  });
+
+  it('returns ">1 year ago" for times between 1 year 3 months and 1 year 9 months ago', () => {
+    // 1 year 4 months ago (approx 16 months)
+    const months = 16;
+    expect(formatTimestampToRelativeTime(secondsAgo(months * 30 * 24 * 60 * 60))).toMatch(
+      /^>1 year ago$/
+    );
+  });
+
+  it('returns "~2 years ago" for times between 1 year 9 months and 2 years ago', () => {
+    // 1 year 10 months ago (approx 22 months)
+    const months = 22;
+    expect(formatTimestampToRelativeTime(secondsAgo(months * 30 * 24 * 60 * 60))).toMatch(
+      /^~2 years ago$/
+    );
   });
 });
 
