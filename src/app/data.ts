@@ -32,8 +32,8 @@ export type UIStxBlock = Pick<
 export type UIMempoolStats = Pick<MempoolTransactionStatsResponse, 'tx_type_counts'>;
 
 export interface RecentBlocks {
-  btcBlocks: GenericResponseType<UIBtcBlock[]>;
-  stxBlocks: GenericResponseType<UIStxBlock[]>;
+  btcBlocks: GenericResponseType<UIBtcBlock>;
+  stxBlocks: GenericResponseType<UIStxBlock>;
   stxBlocksCountPerBtcBlock: Array<{
     burn_block_height: number;
     burn_block_hash: string;

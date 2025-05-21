@@ -16,11 +16,13 @@ export function StxBlockGroup({
   btcBlockTime,
   stxBlocks,
   newestStxBlockHeight,
+  totalStxBlockCount,
 }: {
   btcBlockHeight: number;
   btcBlockTime: number;
   stxBlocks: UIStxBlock[];
   newestStxBlockHeight: number;
+  totalStxBlockCount: number;
 }) {
   const network = useGlobalContext().activeNetwork;
 
@@ -96,7 +98,7 @@ export function StxBlockGroup({
                 color={'textSecondary'}
                 lineHeight={'redesign.shorter'}
               >
-                {stxBlocks.length} block{stxBlocks.length > 1 ? 's' : ''}
+                {totalStxBlockCount} block{totalStxBlockCount > 1 ? 's' : ''}
               </Text>
             </HStack>
             <Icon w={3} h={3} color={'iconTertiary'}>

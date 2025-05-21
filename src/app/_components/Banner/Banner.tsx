@@ -41,7 +41,15 @@ export const Banner = forwardRef<
       }}
       {...flexProps}
     >
-      <Flex gap={3} maxWidth={BREAKPOINTS['2xl']} alignItems="center" justifyContent="center">
+      <Flex
+        gap={3}
+        maxWidth={BREAKPOINTS['2xl']}
+        alignItems={['flex-start', 'flex-start', 'flex-start', 'center']}
+        justifyContent="center"
+        flexDirection={{ base: 'column', lg: 'row' }}
+        px={[5, 5, 5, undefined]}
+        py={[2, 2, 2, undefined]}
+      >
         {content}
 
         {isDismissible && bannerKey && (
@@ -57,7 +65,7 @@ export const Banner = forwardRef<
               <Icon h={3} w={3}>
                 <X />
               </Icon>
-              <Text>Close and don't show again</Text>
+              <Text>Dismiss</Text>
             </Flex>
           </Button>
         )}

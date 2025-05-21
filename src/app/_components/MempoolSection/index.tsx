@@ -4,7 +4,7 @@ import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
-import { HStack, Stack } from '@chakra-ui/react';
+import { Flex, HStack, Stack } from '@chakra-ui/react';
 
 import { TxCountChart } from './TxCountChart';
 
@@ -38,8 +38,11 @@ function TxCountSection() {
       flex="1"
       height="100%"
       alignSelf="stretch"
+      justifyContent={'center'}
     >
-      <TxCountChart />
+      <Flex maxW={'800px'} flexGrow="1">
+        <TxCountChart />
+      </Flex>
     </HStack>
   );
 }
