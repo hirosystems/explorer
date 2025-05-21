@@ -40,7 +40,7 @@ function ResultItemWrapper({ children, ...props }: FlexProps) {
       justifyContent={'space-between'}
       cursor={'pointer'}
       _hover={{
-        background: 'surfaceSecondary',
+        background: 'surfaceFifth',
       }}
       {...props}
     >
