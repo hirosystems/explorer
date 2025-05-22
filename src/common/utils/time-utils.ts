@@ -32,7 +32,10 @@ export const formatDate = (
 
 export function formatTimestampTo12HourTime(
   timestampInSeconds: number,
-  options?: { useLocalTime?: boolean }
+  options: { useLocalTime?: boolean; includeSeconds?: boolean } | undefined = {
+    useLocalTime: false,
+    includeSeconds: true,
+  }
 ) {
   const date = new Date(timestampInSeconds * 1000);
 
@@ -45,11 +48,11 @@ export function formatTimestampTo12HourTime(
   if (hours === 0) hours = 12;
 
   const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-  const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  const paddedSeconds = options?.includeSeconds ? (seconds < 10 ? `0${seconds}` : seconds) : '';
 
-  const tzLabel = options?.useLocalTime ? '' : ' (UTC)';
+  const tzLabel = options?.useLocalTime ? '' : '(UTC)';
 
-  return `${hours}:${paddedMinutes}:${paddedSeconds} ${ampm}${tzLabel}`;
+  return `${hours}:${paddedMinutes}${options?.includeSeconds ? `:${paddedSeconds}` : ''}${ampm ? ` ${ampm}` : ''}${tzLabel ? ` ${tzLabel}` : ''}`;
 }
 
 export function formatTimestamp(

@@ -18,9 +18,9 @@ describe('formatTimestampTo12HourTime', () => {
 
   it('formats timestamp as 12-hour time in UTC (explicit)', () => {
     const timestamp = 1718101530;
-    expect(formatTimestampTo12HourTime(timestamp, { useLocalTime: false })).toBe(
-      '10:25:30 AM (UTC)'
-    );
+    expect(
+      formatTimestampTo12HourTime(timestamp, { useLocalTime: false, includeSeconds: true })
+    ).toBe('10:25:30 AM (UTC)');
   });
 
   it('formats timestamp as 12-hour time in local time', () => {
@@ -43,7 +43,9 @@ describe('formatTimestampTo12HourTime', () => {
       }
     } as any;
 
-    expect(formatTimestampTo12HourTime(timestamp, { useLocalTime: true })).toBe('5:25:30 AM');
+    expect(
+      formatTimestampTo12HourTime(timestamp, { useLocalTime: true, includeSeconds: true })
+    ).toBe('5:25:30 AM');
 
     // Restore original Date
     global.Date = originalDate;
