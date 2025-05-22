@@ -91,6 +91,7 @@ export function StxBlockGroup({
               >
                 {formatTimestampTo12HourTime(btcBlockTime, {
                   useLocalTime: true,
+                  includeSeconds: true,
                 })}
               </Text>
               <Text
@@ -205,6 +206,7 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
               >
                 {formatTimestampTo12HourTime(stxBlock.burn_block_time, {
                   useLocalTime: true,
+                  includeSeconds: true,
                 })}
               </Text>
               <Text
@@ -303,6 +305,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'} suppressHydrationWarning>
                   {formatTimestampTo12HourTime(stxBlock.block_time, {
                     useLocalTime: true,
+                    includeSeconds: true,
                   })}
                 </Text>
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'}>

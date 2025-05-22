@@ -87,6 +87,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
               >
                 {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
                   useLocalTime: true,
+                  includeSeconds: true,
                 })}
               </Text>
             </Stack>
@@ -214,6 +215,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   >
                     {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
                       useLocalTime: true,
+                      includeSeconds: true,
                     })}
                   </Text>
                 </Stack>
