@@ -1,4 +1,4 @@
-import { Flex, Icon, IconProps, useBreakpointValue } from '@chakra-ui/react';
+import { Flex, Icon, IconProps } from '@chakra-ui/react';
 import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
 import React, { FC, ReactNode } from 'react';
 
@@ -45,27 +45,13 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): ReactNode => {
   }
 };
 
-const txIconCircleSizeBreakpointConfig = {
+const txIconCircleSize = {
   lg: 10,
-  md: 4.5,
-  sm: 4.5,
-  xs: 4.5,
   base: 4.5,
 };
-const txIconCircleSizeBreakpointConfigOptions = {
-  fallback: 'lg',
-  ssr: false,
-};
-const txIconSizeBreakpointConfig = {
+const txIconSize = {
   lg: 4,
-  md: 2.5,
-  sm: 2.5,
-  xs: 2.5,
   base: 2.5,
-};
-const txIconSizeBreakpointConfigOptions = {
-  fallback: 'lg',
-  ssr: false,
 };
 
 function convertFromCUIScaleToPx(cuiScale: number) {
@@ -74,26 +60,23 @@ function convertFromCUIScaleToPx(cuiScale: number) {
   return rem * 16; // parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
-const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
-  const txIconCircleSize = useBreakpointValue(
-    txIconCircleSizeBreakpointConfig,
-    txIconCircleSizeBreakpointConfigOptions
-  );
-  const txIconSize = useBreakpointValue(
-    txIconSizeBreakpointConfig,
-    txIconSizeBreakpointConfigOptions
-  );
-  const txIconCircleToStatusBubbleCircleScaleFactor = 0.6;
-  const statusBubbleCircleToIconScaleFactor = 1.2;
-  const statusBubbleCircleSize = convertFromCUIScaleToPx(
-    (txIconCircleSize as number) * txIconCircleToStatusBubbleCircleScaleFactor
-  );
-  const statusBubbleIconSize = convertFromCUIScaleToPx(
-    (txIconSize as number) *
-      txIconCircleToStatusBubbleCircleScaleFactor *
-      statusBubbleCircleToIconScaleFactor
-  );
+const txIconCircleToStatusBubbleCircleScaleFactor = 0.6;
+const statusBubbleCircleToIconScaleFactor = 1.2;
+const statusBubbleCircleSize = Object.fromEntries(
+  Object.entries(txIconCircleSize).map(([key, value]) => [
+    key,
+    `${convertFromCUIScaleToPx(value * txIconCircleToStatusBubbleCircleScaleFactor)}px`,
+  ])
+);
+const statusBubbleIconSize = Object.fromEntries(
+  Object.entries(txIconSize).map(([key, value]) => [
+    key,
+    `${convertFromCUIScaleToPx(value * txIconCircleToStatusBubbleCircleScaleFactor * statusBubbleCircleToIconScaleFactor)}px`,
+  ])
+);
 
+const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
+  // Only show the status bubble if the transaction is pending or failed
   if (txStatus !== TransactionStatus.PENDING && txStatus !== TransactionStatus.FAILED) {
     return null;
   }
@@ -113,8 +96,8 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
 
   return (
     <Flex
-      height={`${statusBubbleCircleSize}px`}
-      width={`${statusBubbleCircleSize}px`}
+      h={statusBubbleCircleSize}
+      w={statusBubbleCircleSize}
       position="absolute"
       bottom={0}
       right={0}
@@ -125,12 +108,7 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
       alignItems={'center'}
       justifyContent={'center'}
     >
-      <Icon
-        h={`${statusBubbleIconSize}px`}
-        w={`${statusBubbleIconSize}px`}
-        color={color}
-        bg={'surface'}
-      >
+      <Icon h={statusBubbleIconSize} w={statusBubbleIconSize} color={color} bg={'surface'}>
         {icon}
       </Icon>
     </Flex>
@@ -147,20 +125,10 @@ export const TxIcon: FC<
 
   const TxIcon = txType ? getTxTypeIcon(txType) : null;
 
-  const circleSize = useBreakpointValue(
-    txIconCircleSizeBreakpointConfig,
-    txIconCircleSizeBreakpointConfigOptions
-  );
-
-  const iconSize = useBreakpointValue(
-    txIconSizeBreakpointConfig,
-    txIconSizeBreakpointConfigOptions
-  );
-
   return (
     <Flex
-      height={`${convertFromCUIScaleToPx(circleSize as number)}px`}
-      width={`${convertFromCUIScaleToPx(circleSize as number)}px`}
+      h={txIconCircleSize}
+      w={txIconCircleSize}
       position="relative"
       bottom={0}
       right={0}
@@ -172,11 +140,7 @@ export const TxIcon: FC<
     >
       {showTxStatusBubble && <StatusBubble txStatus={txStatus} />}
       {TxIcon && (
-        <Icon
-          h={`${convertFromCUIScaleToPx(iconSize as number)}px`}
-          w={`${convertFromCUIScaleToPx(iconSize as number)}px`}
-          color={'text'}
-        >
+        <Icon h={txIconSize} w={txIconSize} color={'text'}>
           {TxIcon}
         </Icon>
       )}
