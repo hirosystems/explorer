@@ -6,7 +6,6 @@ import { TooltipProps } from 'recharts';
 
 export function ChartTooltip({ active, payload, label }: TooltipProps<number, string>) {
   const { colorMode } = useColorMode();
-
   if (active && payload && payload.length) {
     const dataPoint = payload[0]?.payload;
     const dateObj = dataPoint?.date as Date;
@@ -60,7 +59,7 @@ export function ChartTooltip({ active, payload, label }: TooltipProps<number, st
               : 'var(--stacks-colors-neutral-sand-100)'
           }
         >
-          {payload[0].value?.toLocaleString()} txs
+          {`${payload[0].value?.toLocaleString()} ${payload[0].name === 'Transactions' ? 'txs' : 'blocks'}`}
         </Text>
         <Text
           textStyle={'text-medium-xs'}

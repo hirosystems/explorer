@@ -1,6 +1,7 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
 import { useColorMode } from '@/components/ui/color-mode';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -16,6 +17,16 @@ import {
 } from './NetworkOverviewContextProvider';
 import { SectionHeader } from './SectionHeader';
 
+export type ChartConfig = {
+  dataKey: string;
+  name: string;
+  valueFormatter: (value: number) => string;
+  subtitle: string;
+  color: string;
+  gradientStart: string;
+  gradientEnd: string;
+};
+
 function NetworkOverviewChart() {
   const {
     initialRecentBlocks: { stxBlocksCountPerBtcBlock },
@@ -30,26 +41,20 @@ function NetworkOverviewChart() {
       (a, b) => Number(a.burn_block_time) - Number(b.burn_block_time)
     );
 
-    const lastBurnBlockTime = Number(sortedBlocks[sortedBlocks.length - 1].burn_block_time);
-    const sixHoursBeforeLastBlock = lastBurnBlockTime - 6 * 3600;
-
     return sortedBlocks
       .filter(item => {
+        const lastBurnBlockTime = Number(sortedBlocks[sortedBlocks.length - 1].burn_block_time);
+        const sixHoursBeforeLastBlock = lastBurnBlockTime - 6 * 3600;
         const burnBlockTime = Number(item.burn_block_time);
         return burnBlockTime >= sixHoursBeforeLastBlock;
       })
       .map(item => {
         const date = new Date(Number(item.burn_block_time) * 1000);
-
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const isPM = hours >= 12 && hours < 24;
-        const displayHour = hours % 12 === 0 ? 12 : hours % 12;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        const timeString = `${displayHour}:${formattedMinutes} ${isPM ? 'PM' : 'AM'}`;
-
         return {
-          time: timeString,
+          time: formatTimestampTo12HourTime(Number(item.burn_block_time), {
+            useLocalTime: true,
+            includeSeconds: false,
+          }),
           date: date,
           fullDate: date.toISOString(),
           blocksMined: item.stx_blocks_count,
@@ -60,7 +65,7 @@ function NetworkOverviewChart() {
       });
   }, [stxBlocksCountPerBtcBlock]);
 
-  const getChartConfig = (chartType: Chart) => {
+  const getChartConfig = (chartType: Chart): ChartConfig => {
     const commonColors = {
       color:
         colorMode === 'light'
@@ -73,7 +78,7 @@ function NetworkOverviewChart() {
       gradientEnd: colorMode === 'light' ? '#F3EFEC' : '#1C1815',
     };
 
-    const configs = {
+    const configs: Record<Chart, ChartConfig> = {
       [Chart.dailyTransactions]: {
         dataKey: 'dailyTransactions',
         ...commonColors,
@@ -96,7 +101,6 @@ function NetworkOverviewChart() {
   const renderAreaChart = (chartType: Chart) => {
     const config = getChartConfig(chartType);
     const gradientId = 'chartGradient';
-    const lineColor = 'var(--stacks-colors-redesign-border-secondary)';
 
     return (
       <>
@@ -116,7 +120,7 @@ function NetworkOverviewChart() {
               strokeDasharray="3 3"
               vertical={false}
               horizontal={false}
-              stroke={lineColor}
+              stroke={'var(--stacks-colors-redesign-border-secondary)'}
             />
             <Tooltip
               content={<ChartTooltip />}
@@ -171,6 +175,7 @@ function NetworkOverviewChart() {
                   md: 'block',
                 }}
                 textAlign="center"
+                suppressHydrationWarning
               >
                 {tick.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </Text>
