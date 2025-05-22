@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Flex, Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense, useState } from 'react';
 

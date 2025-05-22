@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, ClientOnly, useBreakpointValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import L, { LatLngTuple } from 'leaflet';
