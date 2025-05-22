@@ -238,6 +238,7 @@ export function TxsTable({
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
+  console.log('TxsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,

@@ -32,7 +32,6 @@ export function TransactionTypeFilterPopover({
               setOpen(false);
             }}
             open={open}
-            defaultTransactionType={defaultTransactionType}
           />
         </Box>
       )}

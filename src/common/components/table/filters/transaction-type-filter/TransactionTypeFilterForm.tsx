@@ -27,7 +27,8 @@ export function useTransactionTypeFilterSubmitHandler() {
   return async (transactionType: string[]) => {
     const params = new URLSearchParams(searchParams);
     const paramsWithTransactionTypeFilter = getTransactionTypeFilterParams(params, transactionType);
-    router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
+    // router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
+    router.replace(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
   };
 }
 
@@ -78,11 +79,9 @@ export const CheckboxItem = ({
 };
 
 export function TransactionTypeFilterForm({
-  defaultTransactionType,
   onSubmit,
   open,
 }: {
-  defaultTransactionType: string[] | undefined;
   onSubmit?: () => void;
   open: boolean;
 }) {
