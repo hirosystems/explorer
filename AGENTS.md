@@ -25,11 +25,8 @@ The Stacks Explorer is a Next.js (App Router) application used to monitor the St
 
 Always run `pnpm lint`, `pnpm test:unit`, and `pnpm build` before committing changes.
 
-## Workplan process
-Before coding any feature or bug fix:
-1. Create a workplan file under `docs/workplans/` named `<TaskID>-Description.md`.
-2. Include: Task ID, Problem Statement, Components Involved, Dependencies, Implementation Checklist (with checkboxes), Verification Steps, Decision Authority, Questions/Uncertainties (blocking and non-blocking), Acceptable Tradeoffs, Status, and Notes.
-3. Update Status from “Not Started” to “In Progress” when development begins, check off tasks as you go, record assumptions in Notes, and mark Status as “Completed” once verification steps pass.
+## Planning and test-driven development
+Always plan work before executing. Write out the problem description, analyze the problem, understand the idiomatic solutions, propose options, and choose the best solution to implement. Planning should be TDD‑driven, including writing tests prior to implementation. Think through verification steps before coding.
 
 ## Commit guidelines
 - Commit messages must follow Conventional Commits (enforced via commitlint).
