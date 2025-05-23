@@ -1,10 +1,8 @@
 import { Flex, Stack } from '@chakra-ui/react';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { BLOCKS } from '@contentful/rich-text-types';
-import { IncidentImpact } from 'statuspage.io';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
-import { ContentType, IncidentContent } from '../../../common/types/incidents';
+import { IncidentContent } from '../../../common/types/incidents';
 import { getRichTextRenderOptions } from '../../../common/utils/getRichTextRenderOptions';
 import { StatusBarBase } from './StatusBarBase';
 import { getIncidentImpactIcon } from './utils';

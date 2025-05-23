@@ -43,21 +43,22 @@ function useClearFilters() {
     clearSearchParamFilters();
   };
 }
-export function ClearFiltersButton({ filters }: { filters: TxPageFilters }) {
-  const [filtersActive, setFiltersActive] = useState<boolean>(Object.keys(filters).length > 0);
-  const { activeFilters } = useFilterAndSortState();
+export function ClearFiltersButton() {
+  const [arefiltersActive, setAreFiltersActive] = useState<boolean>(false);
+  // const { activeFilters } = useFilterAndSortState();
   const searchParamFilters = useSearchParamsFilters();
   const clearFilters = useClearFilters();
 
   useEffect(() => {
-    if (activeFilters.length > 0 || searchParamFilters.length > 0) {
-      setFiltersActive(true);
+    // if (activeFilters.length > 0 || searchParamFilters.length > 0) {
+    if (searchParamFilters.length > 0) {
+      setAreFiltersActive(true);
     } else {
-      setFiltersActive(false);
+      setAreFiltersActive(false);
     }
   }, [activeFilters, searchParamFilters]);
 
-  if (!filtersActive) {
+  if (!arefiltersActive) {
     return null;
   }
 

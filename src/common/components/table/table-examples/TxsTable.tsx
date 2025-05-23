@@ -32,6 +32,7 @@ import {
 } from './TxTableCellRenderers';
 import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
+import { useSearchParams } from 'next/navigation';
 
 export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
@@ -238,7 +239,8 @@ export function TxsTable({
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
-  console.log('TxsTable', { filters });
+  const searchParams = useSearchParams();
+  console.log('TxsTable', { filters, searchParams: searchParams.toString() });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,

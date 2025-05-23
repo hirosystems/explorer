@@ -96,13 +96,6 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
 
   return (
     <Page
-      filters={{
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-        transactionType: transactionType ? transactionType.split(',') : undefined,
-      }}
       initialTxTableData={initialTxTableData}
     />
   );

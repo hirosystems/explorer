@@ -54,7 +54,7 @@ export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
           <TransactionTypeFilterPopover defaultTransactionType={transactionType} />
           <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
           <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
-          <ClearFiltersButton filters={filters} />
+          <ClearFiltersButton />
         </Flex>
       </Flex>
     </Flex>

@@ -7,19 +7,14 @@ import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
-import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
-import { Flex, Icon, Stack } from '@chakra-ui/react';
-import { ArrowRight } from '@phosphor-icons/react';
+import { Flex, Stack } from '@chakra-ui/react';
 
-import { TxPageFilters } from './page';
 import { CompressedTxTableData } from './utils';
 
 export default function ({
-  filters,
   initialTxTableData,
 }: {
-  filters: TxPageFilters;
   initialTxTableData: GenericResponseType<CompressedTxTableData> | undefined;
 }) {
   const network = useGlobalContext().activeNetwork;
@@ -42,9 +37,9 @@ export default function ({
           </ButtonLink>
         </Flex>
         <Stack gap={5}>
-          <TxTableFilters filters={filters} />
-          <TxsTable filters={filters} initialData={initialTxTableData} />
-          <TxTableFiltersModal filters={filters} />
+          <TxTableFilters  />
+          <TxsTable  initialData={initialTxTableData} />
+          <TxTableFiltersModal  />
         </Stack>
       </Stack>
     </Stack>

@@ -12,7 +12,7 @@ export const getTransactionTypeFilterParams = (
   searchParams: URLSearchParams,
   transactionType: string[]
 ) => {
-  if (!transactionType) {
+  if (!transactionType || transactionType.length === 0) {
     searchParams.delete('transactionType');
   } else {
     searchParams.set('transactionType', transactionType.join(','));
@@ -28,7 +28,8 @@ export function useTransactionTypeFilterSubmitHandler() {
     const params = new URLSearchParams(searchParams);
     const paramsWithTransactionTypeFilter = getTransactionTypeFilterParams(params, transactionType);
     // router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
-    router.replace(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
+    // router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
+    window.history.replaceState(null, '', `?${paramsWithTransactionTypeFilter.toString()}`)
   };
 }
 
