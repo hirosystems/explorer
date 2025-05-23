@@ -2,7 +2,13 @@ import { Text } from '@/ui/Text';
 
 import { Banner } from './Banner';
 
-export const HybridExplorerBanner = () => {
+export const HYBRID_EXPLORER_BANNER_KEY = 'hybridExplorerBanner';
+
+export const HybridExplorerBanner = ({
+  hybridExplorerBannerCookie,
+}: {
+  hybridExplorerBannerCookie: string | undefined;
+}) => {
   return (
     <Banner
       content={
@@ -11,8 +17,9 @@ export const HybridExplorerBanner = () => {
           hybrid version during this transition.
         </Text>
       }
+      bannerKey={HYBRID_EXPLORER_BANNER_KEY}
       isDismissible
-      bannerKey={'hybrid-explorer-banner'}
+      isDismissedCookie={hybridExplorerBannerCookie === 'true'}
     />
   );
 };
