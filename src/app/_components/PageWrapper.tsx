@@ -44,11 +44,13 @@ export function PageWrapper({
   tokenPrice,
   statusBarContent,
   serverThemeCookie,
+  hybridExplorerBannerCookie,
 }: {
   children: ReactNode;
   tokenPrice: TokenPrice;
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
+  hybridExplorerBannerCookie: string | undefined;
 }) {
   return (
     <>
@@ -56,7 +58,7 @@ export function PageWrapper({
         <NonHiroNetworkWarningBar />
         <IncidentsStatusBar />
         <CMSStatusBars statusBarContent={statusBarContent} />
-        <HybridExplorerBanner />
+        <HybridExplorerBanner hybridExplorerBannerCookie={hybridExplorerBannerCookie} />
         <TestnetBanner />
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
