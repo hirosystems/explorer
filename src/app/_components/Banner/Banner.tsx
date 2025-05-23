@@ -5,23 +5,27 @@ import { Text } from '@/ui/Text';
 import { BREAKPOINTS } from '@/ui/theme/breakpoints';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
-import { ReactNode, forwardRef, useEffect, useState } from 'react';
+import { ReactNode, forwardRef, useCallback, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 export const Banner = forwardRef<
   HTMLDivElement,
   {
     content: ReactNode;
-    isDismissible?: boolean;
     bannerKey?: string;
+    isDismissible?: boolean;
+    isDismissedCookie?: boolean;
   } & Omit<FlexProps, 'content'>
->(({ content, bannerKey, isDismissible, ...flexProps }, ref) => {
-  const [isDismissed, setIsDismissed] = useState(false);
+>(({ content, bannerKey, isDismissible, isDismissedCookie, ...flexProps }, ref) => {
+  const [_, setCookie] = useCookies([bannerKey || '']);
+  const [isDismissed, setIsDismissed] = useState(isDismissedCookie || false);
 
-  useEffect(() => {
+  const handleDismiss = useCallback(() => {
     if (bannerKey) {
-      setIsDismissed(localStorage.getItem(bannerKey) === 'true');
+      setCookie(bannerKey, 'true');
+      setIsDismissed(true);
     }
-  }, [bannerKey]);
+  }, [bannerKey, setCookie]);
 
   if (isDismissed) {
     return null;
@@ -52,15 +56,8 @@ export const Banner = forwardRef<
       >
         {content}
 
-        {isDismissible && bannerKey && (
-          <Button
-            variant={'redesignPrimary'}
-            size={'small'}
-            onClick={() => {
-              setIsDismissed(true);
-              localStorage.setItem(bannerKey, 'true');
-            }}
-          >
+        {isDismissible && (
+          <Button variant={'redesignPrimary'} size={'small'} onClick={handleDismiss}>
             <Flex gap={1.5} alignItems="center">
               <Icon h={3} w={3}>
                 <X />
