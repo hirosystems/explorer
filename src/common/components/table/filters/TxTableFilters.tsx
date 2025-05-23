@@ -40,7 +40,7 @@ const MobileOpenFilterModalButton = () => {
   );
 };
 
-export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
+export const TxTableFilters = () => {
   const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
 
   return (

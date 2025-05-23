@@ -1,5 +1,3 @@
-import { TxPageFilters } from '@/app/transactions/page';
-import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
@@ -21,7 +19,11 @@ function useClearSearchParamFiltersHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const paramsWithoutFilters = getSearchParamsWithoutFilters(searchParams);
-  return () => router.push(`?${paramsWithoutFilters.toString()}`, { scroll: false });
+  // return () => router.push(`?${paramsWithoutFilters.toString()}`, { scroll: false });
+  return () => {
+    // router.push(`?${paramsWithoutFilters.toString()}`, { scroll: false });
+    window.history.replaceState(null, '', `?${paramsWithoutFilters.toString()}`);
+  };
 }
 
 function useSearchParamsFilters() {
@@ -37,9 +39,9 @@ function useSearchParamsFilters() {
 
 function useClearFilters() {
   const clearSearchParamFilters = useClearSearchParamFiltersHandler();
-  const { setActiveFilters } = useFilterAndSortState();
+  // const { setActiveFilters } = useFilterAndSortState();
   return () => {
-    setActiveFilters([]);
+    // setActiveFilters([]);
     clearSearchParamFilters();
   };
 }
@@ -56,7 +58,7 @@ export function ClearFiltersButton() {
     } else {
       setAreFiltersActive(false);
     }
-  }, [activeFilters, searchParamFilters]);
+  }, [searchParamFilters]);
 
   if (!arefiltersActive) {
     return null;
