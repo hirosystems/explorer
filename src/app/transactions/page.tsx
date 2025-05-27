@@ -94,9 +94,5 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     );
   }
 
-  return (
-    <Page
-      initialTxTableData={initialTxTableData}
-    />
-  );
+  return <Page initialTxTableData={initialTxTableData} />;
 }

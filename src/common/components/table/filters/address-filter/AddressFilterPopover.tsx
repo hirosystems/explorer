@@ -1,21 +1,17 @@
 import { Box } from '@chakra-ui/react';
 
 import { TableTabPopover } from '../TableTabPopover';
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 import { AddressFilterForm } from './AddressFilterForm';
 import { AddressFilterTriggerText } from './AddressFilterTriggerText';
-import { useSearchParamsFilters } from '../search-param-filter-utils';
 
 interface AddressFilterPopoverProps {
-  defaultFromAddress?: string;
-  defaultToAddress?: string;
   idExtension?: string;
 }
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
-export function AddressFilterPopover({
-  idExtension = '',
-}: AddressFilterPopoverProps) {
+export function AddressFilterPopover({ idExtension = '' }: AddressFilterPopoverProps) {
   const { fromAddress: searchParamFromAddress, toAddress: searchParamToAddress } =
     useSearchParamsFilters();
   return (

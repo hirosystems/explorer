@@ -37,9 +37,9 @@ export default function ({
           </ButtonLink>
         </Flex>
         <Stack gap={5}>
-          <TxTableFilters  />
-          <TxsTable  initialData={initialTxTableData} />
-          <TxTableFiltersModal  />
+          <TxTableFilters />
+          <TxsTable initialData={initialTxTableData} />
+          <TxTableFiltersModal />
         </Stack>
       </Stack>
     </Stack>

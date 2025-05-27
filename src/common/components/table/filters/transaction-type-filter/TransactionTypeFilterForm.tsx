@@ -79,9 +79,11 @@ export const CheckboxItem = ({
 export function TransactionTypeFilterForm({
   onSubmit,
   open,
+  transactionType,
 }: {
   onSubmit?: () => void;
   open: boolean;
+  transactionType: string[];
 }) {
   const prevOpenRef = useRef(open);
   const onTransactionTypeFilterSubmitHandler = useTransactionTypeFilterSubmitHandler();
@@ -90,24 +92,20 @@ export function TransactionTypeFilterForm({
     getItemProps: getCheckboxProps,
     toggleValue: toggleSelectedFilter,
     setValue: setSelectedFilters,
-  } = useCheckboxGroup({});
+  } = useCheckboxGroup();
 
-  // Syncs the selected filters with the search params. If the search params are cleared, the selected filters are cleared
-  const searchParams = useSearchParams();
+  // Syncs the selected filters with the transaction type prop
   useEffect(() => {
-    const transactionType = searchParams.get('transactionType');
-    setSelectedFilters(transactionType ? transactionType.split(',') : []);
-  }, [searchParams, setSelectedFilters]);
+    setSelectedFilters(transactionType || []);
+  }, [transactionType, setSelectedFilters]);
 
   // Resets the selected filters when the form is closed
   useEffect(() => {
-    // Only reset the selected filters when the form is closed after being opened
     if (prevOpenRef.current && !open) {
-      const transactionType = searchParams.get('transactionType');
-      setSelectedFilters(transactionType ? transactionType.split(',') : []);
+      setSelectedFilters(transactionType || []);
     }
     prevOpenRef.current = open;
-  }, [open, setSelectedFilters, searchParams]);
+  }, [open, setSelectedFilters, transactionType]);
 
   return (
     <Stack gap={1.5}>

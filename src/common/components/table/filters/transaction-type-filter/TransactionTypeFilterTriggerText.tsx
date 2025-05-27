@@ -3,9 +3,13 @@ import { getTxTypeLabel } from '@/common/utils/transactions';
 import { FilterTriggerText } from '../FilterTriggerText';
 import { useSearchParamsFilters } from '../search-param-filter-utils';
 
-export function TransactionTypeFilterTriggerText({ open }: { open: boolean }) {
-  const { transactionType } = useSearchParamsFilters();
-  // const transactionType = defaultTransactionType || [];
+export function TransactionTypeFilterTriggerText({
+  open,
+  transactionType,
+}: {
+  open: boolean;
+  transactionType: string[];
+}) {
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
   const firstActiveFilter = transactionType?.[0];

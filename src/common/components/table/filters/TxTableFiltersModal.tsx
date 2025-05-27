@@ -1,6 +1,5 @@
 'use client';
 
-import { TxPageFilters } from '@/app/transactions/page';
 import { useOpenedModal } from '@/common/components/modals/modal-slice';
 import { MODALS } from '@/common/constants/constants';
 import { AccordionRoot } from '@/components/ui/accordion';
@@ -18,14 +17,7 @@ type AccordionItem =
   | 'address-filter-accordion-item'
   | 'transaction-type-filter-accordion-item';
 
-const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
-  const {
-    startTime: defaultStartTime,
-    endTime: defaultEndTime,
-    fromAddress: defaultFromAddress,
-    toAddress: defaultToAddress,
-    transactionType: defaultTransactionType,
-  } = filters;
+const TxTableFiltersModalBody = () => {
   const [accordions, setAccordions] = useState<AccordionItem[]>([]);
 
   return (
@@ -47,12 +39,9 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
               accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
             )
           }
-          defaultTransactionType={defaultTransactionType}
         />
         <DateFilterAccordionItem
           id="date-filter-accordion-item"
-          defaultStartTime={defaultStartTime}
-          defaultEndTime={defaultEndTime}
           open={accordions.includes('date-filter-accordion-item')}
           onSubmit={() =>
             setAccordions(
@@ -62,8 +51,6 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
         />
         <AddressFilterAccordionItem
           id="address-filter-accordion-item"
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
           open={accordions.includes('address-filter-accordion-item')}
           onSubmit={() =>
             setAccordions(
@@ -76,7 +63,7 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
   );
 };
 
-export const TxTableFiltersModal = ({ filters }: { filters: TxPageFilters }) => {
+export const TxTableFiltersModal = () => {
   const modal = useOpenedModal();
   const open = useMemo(() => modal === MODALS.TxsTableFilters, [modal]);
 
@@ -88,7 +75,7 @@ export const TxTableFiltersModal = ({ filters }: { filters: TxPageFilters }) => 
           Filter
         </Text>
       }
-      body={<TxTableFiltersModalBody filters={filters} />}
+      body={<TxTableFiltersModalBody />}
     />
   );
 };

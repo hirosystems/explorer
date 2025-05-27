@@ -4,6 +4,7 @@ import {
   AccordionItemTrigger,
 } from '@/components/ui/accordion';
 
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
 import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTriggerText';
 
@@ -11,13 +12,13 @@ export const TransactionTypeFilterAccordionItem = ({
   id,
   open,
   onSubmit,
-  defaultTransactionType,
 }: {
   id: string;
   open: boolean;
   onSubmit?: () => void;
-  defaultTransactionType: string[] | undefined;
 }) => {
+  const { transactionType } = useSearchParamsFilters();
+
   return (
     <AccordionItem borderBottom={'none'} value={id}>
       <AccordionItemTrigger
@@ -28,10 +29,7 @@ export const TransactionTypeFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <TransactionTypeFilterTriggerText
-          open={open}
-          defaultTransactionType={defaultTransactionType}
-        />
+        <TransactionTypeFilterTriggerText open={open} transactionType={transactionType} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -42,7 +40,7 @@ export const TransactionTypeFilterAccordionItem = ({
         <TransactionTypeFilterForm
           open={open}
           onSubmit={onSubmit}
-          defaultTransactionType={defaultTransactionType}
+          transactionType={transactionType}
         />
       </AccordionItemContent>
     </AccordionItem>

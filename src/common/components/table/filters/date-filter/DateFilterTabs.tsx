@@ -3,7 +3,6 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { useMemo, useState } from 'react';
 
 import { DatePicker, DatePickerMode } from './DatePicker';
-import { useSearchParamsFilters } from '../search-param-filter-utils';
 
 interface DateFilterProps {
   defaultStartTime?: string;
