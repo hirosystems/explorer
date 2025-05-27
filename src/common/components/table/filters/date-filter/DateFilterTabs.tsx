@@ -12,9 +12,8 @@ interface DateFilterProps {
 }
 
 export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: DateFilterProps) {
-  const { startTime: searchParamStartTime, endTime: searchParamEndTime } = useSearchParamsFilters();
-  const defaultStartTimeNumber = searchParamStartTime ? parseTimestamp(searchParamStartTime) : null;
-  const defaultEndTimeNumber = searchParamEndTime ? parseTimestamp(searchParamEndTime) : null;
+  const defaultStartTimeNumber = defaultStartTime ? parseTimestamp(defaultStartTime) : null;
+  const defaultEndTimeNumber = defaultEndTime ? parseTimestamp(defaultEndTime) : null;
   const [selectedTab, setSelectedTab] = useState<DatePickerMode>('between');
 
   const tabs = useMemo(

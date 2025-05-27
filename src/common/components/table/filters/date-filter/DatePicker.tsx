@@ -230,7 +230,7 @@ export const useDateFilterSubmitHandler = () => {
   return async ({ startTime, endTime }: FormValues) => {
     const params = new URLSearchParams(searchParams);
     const paramsWithDateFilter = getDateFilterParams(params, startTime, endTime);
-    router.push(`?${paramsWithDateFilter.toString()}`, { scroll: false });
+    window.history.replaceState(null, '', `?${paramsWithDateFilter.toString()}`);
   };
 };
 

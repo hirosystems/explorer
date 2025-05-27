@@ -5,7 +5,7 @@ import ClarityIcon from '@/ui/icons/ClarityIcon';
 import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
 import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowsCounterClockwise, Cube, PhoneCall } from '@phosphor-icons/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef } from 'react';
 
 export const getTransactionTypeFilterParams = (
@@ -22,14 +22,11 @@ export const getTransactionTypeFilterParams = (
 
 export function useTransactionTypeFilterSubmitHandler() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   return async (transactionType: string[]) => {
     const params = new URLSearchParams(searchParams);
     const paramsWithTransactionTypeFilter = getTransactionTypeFilterParams(params, transactionType);
-    // router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
-    // router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
-    window.history.replaceState(null, '', `?${paramsWithTransactionTypeFilter.toString()}`)
+    window.history.replaceState(null, '', `?${paramsWithTransactionTypeFilter.toString()}`);
   };
 }
 

@@ -21,6 +21,7 @@ import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
 import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
+import { useSearchParamsFilters } from '../filters/search-param-filter-utils';
 import {
   AddressLinkCellRenderer,
   FeeCellRenderer,
@@ -32,8 +33,6 @@ import {
 } from './TxTableCellRenderers';
 import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
-import { useSearchParams } from 'next/navigation';
-import { useSearchParamsFilters } from '../filters/search-param-filter-utils';
 
 export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
@@ -240,7 +239,6 @@ export function TxsTable({
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
   const filters = useSearchParamsFilters();
-  console.log('TxsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -290,11 +288,9 @@ export function TxsTable({
       gcTime: THIRTY_SECONDS,
     }
   );
-  console.log('TxsTable', { data });
 
   // Reset pagination when filters change
   useEffect(() => {
-    console.log('restting pagination because filters changed');
     setPagination(prev => ({
       ...prev,
       pageIndex: 0,
