@@ -1,7 +1,6 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
-import { TxPageFilters } from '@/app/transactions/page';
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
@@ -225,7 +224,6 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
 };
 
 export interface TxsTableProps {
-  filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<TxTableData>[];
@@ -238,7 +236,7 @@ export function TxsTable({
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
-  const filters = useSearchParamsFilters();
+  const filters = useSearchParamsFilters(); // TODO: technically this means that the txs can be filtered on the homepage
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
