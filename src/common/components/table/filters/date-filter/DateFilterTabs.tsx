@@ -3,6 +3,7 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { useMemo, useState } from 'react';
 
 import { DatePicker, DatePickerMode } from './DatePicker';
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 
 interface DateFilterProps {
   defaultStartTime?: string;
@@ -11,8 +12,9 @@ interface DateFilterProps {
 }
 
 export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: DateFilterProps) {
-  const defaultStartTimeNumber = defaultStartTime ? parseTimestamp(defaultStartTime) : null;
-  const defaultEndTimeNumber = defaultEndTime ? parseTimestamp(defaultEndTime) : null;
+  const { startTime: searchParamStartTime, endTime: searchParamEndTime } = useSearchParamsFilters();
+  const defaultStartTimeNumber = searchParamStartTime ? parseTimestamp(searchParamStartTime) : null;
+  const defaultEndTimeNumber = searchParamEndTime ? parseTimestamp(searchParamEndTime) : null;
   const [selectedTab, setSelectedTab] = useState<DatePickerMode>('between');
 
   const tabs = useMemo(

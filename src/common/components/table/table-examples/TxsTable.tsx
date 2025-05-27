@@ -33,6 +33,7 @@ import {
 import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
 import { useSearchParams } from 'next/navigation';
+import { useSearchParamsFilters } from '../filters/search-param-filter-utils';
 
 export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
@@ -233,14 +234,13 @@ export interface TxsTableProps {
 }
 
 export function TxsTable({
-  filters,
   initialData,
   disablePagination = false,
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
-  const searchParams = useSearchParams();
-  console.log('TxsTable', { filters, searchParams: searchParams.toString() });
+  const filters = useSearchParamsFilters();
+  console.log('TxsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -290,9 +290,11 @@ export function TxsTable({
       gcTime: THIRTY_SECONDS,
     }
   );
+  console.log('TxsTable', { data });
 
   // Reset pagination when filters change
   useEffect(() => {
+    console.log('restting pagination because filters changed');
     setPagination(prev => ({
       ...prev,
       pageIndex: 0,

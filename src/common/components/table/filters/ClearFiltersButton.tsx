@@ -2,65 +2,31 @@ import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
-const filterSearchParams = ['fromAddress', 'toAddress', 'startTime', 'endTime', 'transactionType'];
-
-function getSearchParamsWithoutFilters(searchParams: URLSearchParams) {
-  const params = new URLSearchParams(searchParams);
-  filterSearchParams.forEach(param => {
-    params.delete(param);
-  });
-  return params;
-}
+import {
+  areAnySearchParamsFiltersActive,
+  useSearchParamsFilters,
+  useSearchParamsWithoutFilters,
+} from './search-param-filter-utils';
 
 function useClearSearchParamFiltersHandler() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const paramsWithoutFilters = getSearchParamsWithoutFilters(searchParams);
-  // return () => router.push(`?${paramsWithoutFilters.toString()}`, { scroll: false });
+  const paramsWithoutFilters = useSearchParamsWithoutFilters();
   return () => {
-    // router.push(`?${paramsWithoutFilters.toString()}`, { scroll: false });
     window.history.replaceState(null, '', `?${paramsWithoutFilters.toString()}`);
   };
 }
 
-function useSearchParamsFilters() {
-  const searchParams = useSearchParams();
-  const filters: string[] = [];
-  filterSearchParams.forEach(param => {
-    if (searchParams.has(param)) {
-      filters.push(param);
-    }
-  });
-  return filters;
-}
-
 function useClearFilters() {
   const clearSearchParamFilters = useClearSearchParamFiltersHandler();
-  // const { setActiveFilters } = useFilterAndSortState();
   return () => {
-    // setActiveFilters([]);
     clearSearchParamFilters();
   };
 }
 export function ClearFiltersButton() {
-  const [arefiltersActive, setAreFiltersActive] = useState<boolean>(false);
-  // const { activeFilters } = useFilterAndSortState();
   const searchParamFilters = useSearchParamsFilters();
   const clearFilters = useClearFilters();
 
-  useEffect(() => {
-    // if (activeFilters.length > 0 || searchParamFilters.length > 0) {
-    if (searchParamFilters.length > 0) {
-      setAreFiltersActive(true);
-    } else {
-      setAreFiltersActive(false);
-    }
-  }, [searchParamFilters]);
-
-  if (!arefiltersActive) {
+  if (!areAnySearchParamsFiltersActive(searchParamFilters)) {
     return null;
   }
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { TxPageFilters } from '@/app/transactions/page';
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
@@ -41,8 +40,6 @@ const MobileOpenFilterModalButton = () => {
 };
 
 export const TxTableFilters = () => {
-  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
-
   return (
     <Flex flexWrap={'wrap'} gap={4}>
       <MobileOpenFilterModalButton />
@@ -51,9 +48,9 @@ export const TxTableFilters = () => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover defaultTransactionType={transactionType} />
-          <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
-          <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
+          <TransactionTypeFilterPopover />
+          <DateFilterPopover />
+          <AddressFilterPopover />
           <ClearFiltersButton />
         </Flex>
       </Flex>
