@@ -22,7 +22,7 @@ function SectionHeader() {
       <ButtonLink
         href={buildUrl('/blocks', network)}
         buttonLinkSize="big"
-        display={{ base: 'none', sm: 'inline' }}
+        display={{ base: 'none', md: 'inline' }}
         aria-label="View all blockchain blocks"
       >
         View all blocks
@@ -83,7 +83,7 @@ export function RecentBlocksSection() {
       <ButtonLink
         href={buildUrl('/blocks', network)}
         buttonLinkSize="big"
-        display={{ base: 'inline', sm: 'none' }}
+        display={{ base: 'inline', md: 'none' }}
         aria-label="View all blockchain blocks"
       >
         View all blocks

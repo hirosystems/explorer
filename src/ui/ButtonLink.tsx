@@ -25,6 +25,7 @@ const ButtonLinkBase = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         <Text
           textStyle={buttonLinkSize === 'big' ? 'text-medium-sm' : 'text-medium-xs'}
           color="textPrimary"
+          whiteSpace={'nowrap'}
         >
           {children}
           <Icon

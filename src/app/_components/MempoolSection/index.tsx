@@ -18,7 +18,7 @@ function SectionHeader() {
       <ButtonLink
         href={buildUrl('/mempool', network)}
         buttonLinkSize="big"
-        display={['none', 'inline']}
+        display={{ base: 'none', md: 'inline' }}
         mr={2}
       >
         View mempool
@@ -56,7 +56,7 @@ export function MempoolSection() {
       <ButtonLink
         href={buildUrl('/mempool', network)}
         buttonLinkSize="big"
-        display={{ base: 'inline', sm: 'none' }}
+        display={{ base: 'inline', md: 'none' }}
       >
         View mempool
       </ButtonLink>
