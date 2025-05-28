@@ -1,15 +1,15 @@
 import { getTxTypeLabel } from '@/common/utils/transactions';
 
 import { FilterTriggerText } from '../FilterTriggerText';
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 
 export function TransactionTypeFilterTriggerText({
   open,
-  defaultTransactionType,
+  transactionType,
 }: {
   open: boolean;
-  defaultTransactionType: string[] | undefined;
+  transactionType: string[];
 }) {
-  const transactionType = defaultTransactionType || [];
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
   const firstActiveFilter = transactionType?.[0];

@@ -5,7 +5,7 @@ import { Input } from '@/ui/Input';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Field, FieldInputProps, FieldProps, Form, Formik, FormikProps } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import * as Yup from 'yup';
 
 interface AddressFilterProps {
@@ -39,12 +39,11 @@ export const getAddressFilterParams = (
 
 export function useAddressFilterSubmitHandler() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   return async ({ fromAddress, toAddress }: FormValues) => {
     const params = new URLSearchParams(searchParams);
     const paramsWithAddressFilter = getAddressFilterParams(params, fromAddress, toAddress);
-    router.push(`?${paramsWithAddressFilter.toString()}`, { scroll: false });
+    window.history.replaceState(null, '', `?${paramsWithAddressFilter.toString()}`);
   };
 }
 

@@ -44,7 +44,7 @@ export function ErrorBox({
           {errorMessage}
         </Text>
       </Flex>
-      <Flex gap="16px">
+      <Flex gap={4} alignItems="center">
         {homeButton && (
           <DeprecatedButtonLink href={buildUrl('/', network)} fontSize={'xs'}>
             Go home

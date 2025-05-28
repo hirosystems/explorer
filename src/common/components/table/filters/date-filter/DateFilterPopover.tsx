@@ -1,17 +1,15 @@
 import { Box } from '@chakra-ui/react';
 
 import { TableTabPopover } from '../TableTabPopover';
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 import { DateFilterTabs } from './DateFilterTabs';
 import { DateFilterTriggerText } from './DateFilterTriggerText';
 
-interface DateFilterProps {
-  defaultStartTime?: string;
-  defaultEndTime?: string;
-}
-
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
-export function DateFilterPopover({ defaultStartTime, defaultEndTime }: DateFilterProps) {
+export function DateFilterPopover() {
+  const { startTime, endTime } = useSearchParamsFilters();
+
   return (
     <TableTabPopover
       id={'date-filter-popover-redesign'}
@@ -21,18 +19,14 @@ export function DateFilterPopover({ defaultStartTime, defaultEndTime }: DateFilt
         sameWidth: true,
       }}
       trigger={(open, setOpen) => (
-        <DateFilterTriggerText
-          defaultStartTime={defaultStartTime}
-          defaultEndTime={defaultEndTime}
-          open={open}
-        />
+        <DateFilterTriggerText open={open} startTime={startTime} endTime={endTime} />
       )}
       content={(open, setOpen) => (
         <Box p={3}>
           <DateFilterTabs
-            defaultStartTime={defaultStartTime}
-            defaultEndTime={defaultEndTime}
             onSubmit={() => setOpen(false)}
+            defaultStartTime={startTime}
+            defaultEndTime={endTime}
           />
         </Box>
       )}

@@ -1,16 +1,14 @@
 import { Box } from '@chakra-ui/react';
 
 import { TableTabPopover } from '../TableTabPopover';
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
 import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTriggerText';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
-export function TransactionTypeFilterPopover({
-  defaultTransactionType,
-}: {
-  defaultTransactionType: string[] | undefined;
-}) {
+export function TransactionTypeFilterPopover() {
+  const { transactionType } = useSearchParamsFilters();
   return (
     <TableTabPopover
       id={'transaction-type-filter-popover'}
@@ -20,10 +18,7 @@ export function TransactionTypeFilterPopover({
         sameWidth: true,
       }}
       trigger={(open, setOpen) => (
-        <TransactionTypeFilterTriggerText
-          open={open}
-          defaultTransactionType={defaultTransactionType}
-        />
+        <TransactionTypeFilterTriggerText open={open} transactionType={transactionType} />
       )}
       content={(open, setOpen) => (
         <Box px={1.5} pt={2} pb={3}>
@@ -32,7 +27,7 @@ export function TransactionTypeFilterPopover({
               setOpen(false);
             }}
             open={open}
-            defaultTransactionType={defaultTransactionType}
+            transactionType={transactionType}
           />
         </Box>
       )}

@@ -28,26 +28,25 @@ export default function Error({
   const errorMessage = error.message || 'Something went wrong, please try again later.';
 
   return (
-    <Grid mt="32px" gap="32px" width="100%" gridTemplateColumns={['100%']}>
+    <Grid mt={8} gap={8} width="100%" gridTemplateColumns={['100%']}>
       <PageTitle>Stacks Explorer</PageTitle>
       <Section>
-        <Grid placeItems="center" p="32px" minHeight="350px">
+        <Grid placeItems="center" p={8} minHeight="350px">
           <Box>
             <ErrorMessageLayout
               title={errorName}
               message={errorMessage}
               action={
-                <HStack gap={4}>
-                  <Box>
-                    <DeprecatedButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
-                      Go home
-                    </DeprecatedButtonLink>
-                  </Box>
-                  <Box>
-                    <Button onClick={() => reset()} variant="secondary" mt={6}>
-                      Try again
-                    </Button>
-                  </Box>
+                <HStack gap={4} alignItems="center">
+                  <DeprecatedButtonLink
+                    href={buildUrl('/', network)}
+                    buttonProps={{ size: 'small' }}
+                  >
+                    Go home
+                  </DeprecatedButtonLink>
+                  <Button size="small" onClick={() => reset()} variant="secondary">
+                    Try again
+                  </Button>
                 </HStack>
               }
             />

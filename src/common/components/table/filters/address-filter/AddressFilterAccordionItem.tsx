@@ -4,22 +4,20 @@ import {
   AccordionItemTrigger,
 } from '@/components/ui/accordion';
 
+import { useSearchParamsFilters } from '../search-param-filter-utils';
 import { AddressFilterForm } from './AddressFilterForm';
 import { AddressFilterTriggerText } from './AddressFilterTriggerText';
 
 export const AddressFilterAccordionItem = ({
   id,
-  defaultFromAddress,
-  defaultToAddress,
   open,
   onSubmit,
 }: {
   id: string;
-  defaultFromAddress?: string;
-  defaultToAddress?: string;
   open: boolean;
   onSubmit?: () => void;
 }) => {
+  const { fromAddress, toAddress } = useSearchParamsFilters();
   return (
     <AccordionItem borderBottom={'none'} value={id} aria-label="Address filter options">
       <AccordionItemTrigger
@@ -27,14 +25,10 @@ export const AddressFilterAccordionItem = ({
         bg="surfacePrimary"
         borderTopRadius="redesign.md"
         borderBottomRadius={open ? 'none' : 'redesign.md'}
-        w="full"
+        w="ful l"
         p={3}
       >
-        <AddressFilterTriggerText
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
-          open={open}
-        />
+        <AddressFilterTriggerText fromAddress={fromAddress} toAddress={toAddress} open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -43,8 +37,8 @@ export const AddressFilterAccordionItem = ({
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
         <AddressFilterForm
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
+          defaultFromAddress={fromAddress}
+          defaultToAddress={toAddress}
           onSubmit={onSubmit}
         />
       </AccordionItemContent>

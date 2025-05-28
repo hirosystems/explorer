@@ -1,7 +1,6 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
-import { TxPageFilters } from '@/app/transactions/page';
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
@@ -21,6 +20,7 @@ import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
 import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
+import { useSearchParamsFilters } from '../filters/search-param-filter-utils';
 import {
   AddressLinkCellRenderer,
   FeeCellRenderer,
@@ -224,7 +224,6 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
 };
 
 export interface TxsTableProps {
-  filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<TxTableData>[];
@@ -232,12 +231,12 @@ export interface TxsTableProps {
 }
 
 export function TxsTable({
-  filters,
   initialData,
   disablePagination = false,
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
+  const filters = useSearchParamsFilters(); // TODO: technically this means that the txs can be filtered on the homepage
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,

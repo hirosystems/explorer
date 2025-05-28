@@ -57,11 +57,16 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
       ...(transactionType && { type: transactionType }),
     });
     const fetchUrl = `${apiUrl}/extended/v1/tx/?${params.toString()}`;
+
+    console.log('about to fetch tx data on the server with params', params.toString());
+    const fetchStartTime = Date.now();
     const response = await fetch(fetchUrl, {
       next: {
         revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
       },
     });
+    const fetchEndTime = Date.now();
+    console.log('fetched tx data on the server in', fetchEndTime - fetchStartTime, 'ms');
 
     const data = await response.json();
     const compressedData = {
@@ -89,16 +94,5 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     );
   }
 
-  return (
-    <Page
-      filters={{
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-        transactionType: transactionType ? transactionType.split(',') : undefined,
-      }}
-      initialTxTableData={initialTxTableData}
-    />
-  );
+  return <Page initialTxTableData={initialTxTableData} />;
 }
