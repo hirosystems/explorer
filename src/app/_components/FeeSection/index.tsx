@@ -9,12 +9,10 @@ import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StxThinIcon from '@/ui/icons/StacksThinIcon';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
-import { Info, Lightning } from '@phosphor-icons/react';
+import { Info, Lightning, PlusMinus } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
-
-type MempoolFeeResponseKey = Exclude<keyof MempoolFeePriorities, 'all'>;
 
 function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
@@ -107,9 +105,24 @@ function FeeData({
   );
 }
 
+function getFeeDescription(txType: keyof MempoolFeePriorities) {
+  switch (txType) {
+    case 'all':
+      return 'Current average fee rates for all transaction types.';
+    case 'smart_contract':
+      return 'Current fee rates for smart contract deployments.';
+    case 'token_transfer':
+      return 'Current fee rates for token and NFT transfers.';
+    case 'contract_call':
+      return 'Current fee rates for contract calls (i.e: swapping, minting, or buying tokens and NFTs).';
+    default:
+      return 'Current fee rates for all transaction types.';
+  }
+}
+
 function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { mempoolFee } = useHomePageData();
-  const availableTxTypeFees = Object.keys(mempoolFee || {}) as MempoolFeeResponseKey[];
+  const availableTxTypeFees = Object.keys(mempoolFee) as Array<keyof MempoolFeePriorities>;
   return (
     <TabsRoot variant={'primary'} size={'redesignMd'} defaultValue={'all'} gap="4">
       <Stack gap={4} w="100%">
@@ -117,9 +130,9 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <TabsList flexWrap={'wrap'} rowGap={2}>
             {availableTxTypeFees.map(txType => (
               <TabsTrigger key={txType} value={txType} gap={1}>
-                <TabIcon>{getTxTypeIcon(txType)}</TabIcon>
+                <TabIcon>{txType === 'all' ? <PlusMinus /> : getTxTypeIcon(txType)}</TabIcon>
                 <Text textStyle={'text-medium-sm'} color="textPrimary">
-                  {getTxTypeLabel(txType)}
+                  {txType === 'all' ? 'Average' : getTxTypeLabel(txType)}
                 </Text>
               </TabsTrigger>
             ))}
@@ -127,37 +140,39 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Flex>
             {availableTxTypeFees.map(txType => (
               <TabsContent key={txType} value={txType}>
-                <Flex gap={2} flexWrap={'wrap'}>
-                  <FeeData
-                    title="Low"
-                    ustxValue={mempoolFee?.[txType]?.low_priority}
-                    tokenPrice={tokenPrice}
-                  />
-                  <FeeData
-                    title="Standard"
-                    ustxValue={mempoolFee?.[txType]?.medium_priority}
-                    tokenPrice={tokenPrice}
-                  />
-                  <FeeData
-                    title={
-                      <Flex align={'center'} gap={0.5}>
-                        High{' '}
-                        <Icon w="4" h="4" color="iconTertiary">
-                          <Lightning weight="fill" />
-                        </Icon>
-                      </Flex>
-                    }
-                    ustxValue={mempoolFee?.[txType]?.high_priority}
-                    tokenPrice={tokenPrice}
-                  />
-                </Flex>
+                <Stack gap={4}>
+                  <Flex gap={2} flexWrap={'wrap'}>
+                    <FeeData
+                      title="Low"
+                      ustxValue={mempoolFee?.[txType]?.low_priority}
+                      tokenPrice={tokenPrice}
+                    />
+                    <FeeData
+                      title="Standard"
+                      ustxValue={mempoolFee?.[txType]?.medium_priority}
+                      tokenPrice={tokenPrice}
+                    />
+                    <FeeData
+                      title={
+                        <Flex align={'center'} gap={0.5}>
+                          High{' '}
+                          <Icon w="4" h="4" color="iconTertiary">
+                            <Lightning weight="fill" />
+                          </Icon>
+                        </Flex>
+                      }
+                      ustxValue={mempoolFee?.[txType]?.high_priority}
+                      tokenPrice={tokenPrice}
+                    />
+                  </Flex>
+                  <Text textStyle="text-regular-xs" color="textSecondary">
+                    {getFeeDescription(txType)}
+                  </Text>
+                </Stack>
               </TabsContent>
             ))}
           </Flex>
         </Stack>
-        <Text textStyle="text-regular-xs" color="textSecondary">
-          Current average fee rates for all transaction types.
-        </Text>
       </Stack>
     </TabsRoot>
   );
