@@ -22,7 +22,7 @@ export const TestnetBanner = () => {
           </Text>
         </Flex>
       }
-      bg="var(--stacks-colors-black)"
+      bg="surfaceInvert"
     />
   );
 };
