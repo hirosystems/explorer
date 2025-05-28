@@ -1,4 +1,4 @@
-import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
+import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 
@@ -85,10 +85,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                 aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
-                  useLocalTime: true,
-                  includeSeconds: true,
-                })}
+                {formatTimestampToRelativeTime(burnBlock.burn_block_time)}
               </Text>
             </Stack>
             <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
@@ -213,10 +210,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                     aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
                     suppressHydrationWarning
                   >
-                    {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
-                      useLocalTime: true,
-                      includeSeconds: true,
-                    })}
+                    {formatTimestampToRelativeTime(burnBlock.burn_block_time)}
                   </Text>
                 </Stack>
                 <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfacePrimary'}>

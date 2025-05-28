@@ -1,5 +1,5 @@
 import { UIStxBlock } from '@/app/data';
-import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
+import { formatTimestampTo12HourTime, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
 
@@ -89,10 +89,7 @@ export function StxBlockGroup({
                 lineHeight={'redesign.shorter'}
                 suppressHydrationWarning
               >
-                {formatTimestampTo12HourTime(btcBlockTime, {
-                  useLocalTime: true,
-                  includeSeconds: true,
-                })}
+                {formatTimestampToRelativeTime(btcBlockTime)}
               </Text>
               <Text
                 textStyle={'text-medium-xs'}
@@ -204,10 +201,7 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 aria-label={`Block timestamp: ${stxBlock.burn_block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestampTo12HourTime(stxBlock.burn_block_time, {
-                  useLocalTime: true,
-                  includeSeconds: true,
-                })}
+                {formatTimestampToRelativeTime(stxBlock.burn_block_time)}
               </Text>
               <Text
                 textStyle={'text-medium-xs'}
@@ -303,10 +297,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 align={'center'}
               >
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'} suppressHydrationWarning>
-                  {formatTimestampTo12HourTime(stxBlock.block_time, {
-                    useLocalTime: true,
-                    includeSeconds: true,
-                  })}
+                  {formatTimestampToRelativeTime(stxBlock.block_time)}
                 </Text>
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
                   {stxBlock.tx_count} tx{stxBlock.tx_count > 1 ? 's' : ''}
