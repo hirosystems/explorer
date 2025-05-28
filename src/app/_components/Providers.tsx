@@ -14,6 +14,7 @@ import { removeTrailingSlash } from '../../common/utils/utils';
 import { ColorModeProvider } from '../../components/ui/color-mode';
 import { system } from '../../ui/theme/theme';
 import { AppConfig } from './AppConfig';
+import { ReduxStateInitializer } from '@/common/state/ReduxStateInitializer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,6 +55,10 @@ export const Providers = ({
         >
           <ColorModeProvider>
             <ReduxProvider store={store}>
+              <ReduxStateInitializer
+                // addedCustomNetworksCookie={addedCustomNetworksCookie}
+                // removedCustomNetworksCookie={removedCustomNetworksCookie}
+              >
               <AppConfig // TODO: rename to something else like SessionProvider
                 queryNetworkMode={queryNetworkMode}
                 queryApiUrl={queryApiUrl}
@@ -61,6 +66,7 @@ export const Providers = ({
               >
                 <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
               </AppConfig>
+              </ReduxStateInitializer>
             </ReduxProvider>
           </ColorModeProvider>
         </GlobalContextProvider>
