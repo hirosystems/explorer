@@ -65,7 +65,6 @@ export function StxBlockGroup({
           <Link
             href={buildUrl(`/btcblock/${stxBlocks[0].burn_block_hash}`, network)}
             _hover={{ textDecoration: 'none' }}
-            target={'_blank'}
           >
             <HStack
               separator={
@@ -143,7 +142,6 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
     >
       <Link
         href={buildUrl(`/block/${stxBlock.hash}`, network)}
-        target={'_blank'}
         rel="noreferrer"
         _hover={{ textDecoration: 'none' }}
       >
@@ -246,7 +244,6 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
     >
       <Link
         href={buildUrl(`/block/${stxBlock.hash}`, network)}
-        target={'_blank'}
         rel="noreferrer"
         _hover={{ textDecoration: 'none' }}
       >
