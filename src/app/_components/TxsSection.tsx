@@ -88,13 +88,13 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
   return (
     <Stack gap={6} flex={1} maxWidth={['100%', '100%', '100%', '100%', '50%']}>
       <Flex justifyContent={'space-between'} alignItems={'center'}>
-        <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
+        <Text textStyle="heading-md" color="textPrimary" whiteSpace={'nowrap'}>
           Latest transactions
         </Text>
         <ButtonLink
           href={buildUrl('/transactions', network)}
           buttonLinkSize="big"
-          display={{ base: 'none', sm: 'inline' }}
+          display={{ base: 'none', md: 'inline' }}
           mr={2}
         >
           View all transactions
@@ -110,7 +110,7 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
       <ButtonLink
         href={buildUrl('/transactions', network)}
         buttonLinkSize="big"
-        display={{ base: 'inline', sm: 'none' }}
+        display={{ base: 'inline', md: 'none' }}
       >
         View all transactions
       </ButtonLink>
