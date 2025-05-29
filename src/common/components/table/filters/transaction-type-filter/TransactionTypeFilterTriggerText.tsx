@@ -1,20 +1,24 @@
-import { capitalize } from '@/common/utils/utils';
-import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
+import { getTxTypeLabel } from '@/common/utils/transactions';
 
 import { FilterTriggerText } from '../FilterTriggerText';
 
-export function TransactionTypeFilterTriggerText({ open }: { open: boolean }) {
-  const { activeFilters } = useFilterAndSortState();
-
-  const areFiltersActive = activeFilters.length > 0;
+export function TransactionTypeFilterTriggerText({
+  open,
+  defaultTransactionType,
+}: {
+  open: boolean;
+  defaultTransactionType: string[] | undefined;
+}) {
+  const transactionType = defaultTransactionType || [];
+  const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
-  const firstActiveFilter = activeFilters[0];
-  const firstActiveFilterFormatted = firstActiveFilter ? firstActiveFilter.replace(/_/g, ' ') : '';
-  const otherActiveFilters = activeFilters.slice(1);
+  const firstActiveFilter = transactionType?.[0];
+  const firstActiveFilterFormatted = firstActiveFilter ? getTxTypeLabel(firstActiveFilter) : '';
+  const otherActiveFilters = transactionType?.slice(1);
   const triggerTextSuffix =
-    activeFilters.length > 1
-      ? `${capitalize(firstActiveFilterFormatted)}, +${otherActiveFilters.length}`
-      : capitalize(firstActiveFilterFormatted);
+    transactionType?.length > 1
+      ? `${firstActiveFilterFormatted}, +${otherActiveFilters.length}`
+      : firstActiveFilterFormatted;
 
   return (
     <FilterTriggerText

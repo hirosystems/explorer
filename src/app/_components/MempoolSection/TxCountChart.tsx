@@ -1,5 +1,4 @@
-import { useHomePageData } from '@/app/home-redesign/context';
-import { useMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
+import { useHomePageData } from '@/app/context';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { capitalize, semanticTokenToCssVar } from '@/common/utils/utils';
 import { SkeletonCircle } from '@/components/ui/skeleton';
@@ -18,14 +17,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Cell, Pie, PieChart, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
-const PIE_CHART_WIDTH = 250;
-const PIE_CHART_HEIGHT = 250;
-const INNER_RADIUS = 100;
+const PIE_CHART_WIDTH = 280;
+const PIE_CHART_HEIGHT = 280;
+const INNER_RADIUS = 120;
 const LINE_WIDTH = 7;
 const OUTER_RADIUS = INNER_RADIUS + LINE_WIDTH;
 const LIST_MIN_WIDTH = 239;
-const PERCENTAGE_BOX_WIDTH = 40;
-const PERCENTAGE_BOX_HEIGHT = 20;
 const TOOLTIP_OFFSET_X = 15;
 
 type TransactionTypeData = {
@@ -34,60 +31,6 @@ type TransactionTypeData = {
   label: string;
   color: string;
   percent: number;
-};
-
-const PercentageLabel = ({
-  percent,
-  cx,
-  cy,
-  midAngle,
-  outerRadius,
-}: {
-  percent: number;
-  x: number;
-  y: number;
-  cx: number;
-  cy: number;
-  midAngle: number;
-  outerRadius: number;
-}) => {
-  if (!percent) return null;
-  const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 25;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  const percentText = percent * 100 < 1 ? '<1%' : `${(percent * 100).toFixed(0)}%`;
-
-  return (
-    <g>
-      <rect
-        x={x - PERCENTAGE_BOX_WIDTH / 2}
-        y={y - PERCENTAGE_BOX_HEIGHT / 2}
-        width={PERCENTAGE_BOX_WIDTH}
-        height={PERCENTAGE_BOX_HEIGHT}
-        rx={NEW_BORDER_RADIUS.redesign.xs.value}
-        ry={NEW_BORDER_RADIUS.redesign.xs.value}
-        fill="var(--stacks-colors-surface-primary, #FFFFFF)"
-      />
-      <text
-        x={x}
-        y={y}
-        textAnchor="middle"
-        dominantBaseline="central"
-        style={{
-          fill: 'var(--stacks-colors-text-primary)',
-          fontSize: 'var(--stacks-font-sizes-xs)',
-          fontFamily: 'var(--font-matter-mono)',
-          fontWeight: 'var(--stacks-font-weights-medium)',
-        }}
-        role="img"
-        aria-label={`${(percent * 100).toFixed(0)}%`}
-      >
-        {percentText}
-      </text>
-    </g>
-  );
 };
 
 const TypeTooltip = ({ active, payload }: TooltipProps<number, string>) => {
@@ -227,9 +170,21 @@ const TypeListItem = ({
         {item.label}
       </Text>
     </HStack>
-    <Text textStyle="text-medium-sm" color="textSecondary">
-      {item.value.toLocaleString()} tx{item.value > 1 ? 's' : ''}
-    </Text>
+    <HStack gap={2}>
+      <Text textStyle="text-medium-sm" color="textSecondary">
+        {item.value.toLocaleString()} tx{item.value > 1 ? 's' : ''}
+      </Text>
+      <Text
+        textStyle={'text-mono-xs'}
+        color="textPrimary"
+        bg="surfacePrimary"
+        px={2}
+        py={1}
+        borderRadius={'lg'}
+      >
+        {item.percent * 100 < 1 ? '<1%' : `${(item.percent * 100).toFixed(0)}%`}
+      </Text>
+    </HStack>
   </HStack>
 );
 
@@ -245,7 +200,14 @@ const TypesList = ({
   onItemHover: (item: TransactionTypeData | null) => void;
   className?: string;
 } & StackProps) => (
-  <Stack gap={0} minW={`${LIST_MIN_WIDTH}px`} flexShrink="1" className={className} {...stackProps}>
+  <Stack
+    gap={0}
+    minW={`${LIST_MIN_WIDTH}px`}
+    maxW={['360px', '360px', '360px', 'unset']}
+    flexShrink="1"
+    className={className}
+    {...stackProps}
+  >
     {data.map(item => (
       <TypeListItem
         key={item.name}
@@ -320,7 +282,6 @@ const PieChartComponent = ({
         cx={PIE_CHART_WIDTH / 2}
         cy={PIE_CHART_HEIGHT / 2}
         labelLine={false}
-        label={PercentageLabel}
         innerRadius={INNER_RADIUS}
         outerRadius={OUTER_RADIUS}
         isAnimationActive={false}
@@ -425,7 +386,7 @@ export function TxCountChart() {
 
   return (
     <ClientOnly fallback={<LoadingSkeleton />}>
-      <Flex width="100%">
+      <Flex width="100%" flexGrow="1">
         <Flex
           width="100%"
           justifyContent="space-between"
@@ -433,6 +394,7 @@ export function TxCountChart() {
           gap={4}
           ref={containerRef}
           flexWrap="wrap-reverse"
+          flexGrow="1"
         >
           <TypesList
             data={pieData}
@@ -450,7 +412,7 @@ export function TxCountChart() {
             width={PIE_CHART_WIDTH}
             height={PIE_CHART_HEIGHT}
             position="relative"
-            mx="auto"
+            mx={['auto', 'auto', 'auto', 'unset']}
           >
             <CenterDisplay
               value={centerDisplayValue}

@@ -1,3 +1,9 @@
+import { getTxTypeIcon } from '@/common/components/TxIcon';
+import { TransactionType } from '@/common/constants/constants';
+import { getTransactionStatus } from '@/common/utils/transactions';
+import { getTxTitle } from '@/common/utils/utils';
+import { Tag } from '@/components/ui/tag';
+import { Text } from '@/ui/Text';
 import { Icon, Stack } from '@chakra-ui/react';
 import { Check, CircleNotch, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
@@ -5,11 +11,6 @@ import { ReactNode } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { getTxTypeIcon } from '../../../common/components/TxIcon';
-import { TransactionType } from '../../../common/constants/constants';
-import { getTransactionStatus } from '../../../common/utils/transactions';
-import { getTxTitle } from '../../../common/utils/utils';
-import { Tag } from '../../../components/ui/tag';
 import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { StxBalance } from '../../address/[principal]/StxBalance';
@@ -60,21 +61,23 @@ export const TxPage: React.FC<{
           <>
             <Tag
               startElement={
-                <Icon h={3.5} w={3.5}>
+                <Icon h={3.5} w={3.5} color="iconSecondary">
                   {getTxTypeIcon(tx.tx_type)}
                 </Icon>
               }
+              bg="surfaceFifth"
             >
-              {txTypeNamesMap[tx.tx_type]}
+              <Text color="textSecondary">{txTypeNamesMap[tx.tx_type]}</Text>
             </Tag>
             <Tag
               startElement={
-                <Icon h={3.5} w={3.5}>
+                <Icon h={3.5} w={3.5} color="iconSecondary">
                   {txStatusIconMap[getTransactionStatus(tx)]}
                 </Icon>
               }
+              bg="surfaceFifth"
             >
-              {txStatusLabelMap[getTransactionStatus(tx)]}
+              <Text color="textSecondary">{txStatusLabelMap[getTransactionStatus(tx)]}</Text>
             </Tag>
           </>
         }

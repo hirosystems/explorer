@@ -1,12 +1,13 @@
 'use client';
 
-import { useHomePageData } from '@/app/home-redesign/context';
+import { useHomePageData } from '@/app/context';
+import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
 import { useColorMode } from '@/components/ui/color-mode';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Box, Stack } from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
 import { ChartTooltip } from './ChartTooltip';
 import {
@@ -16,6 +17,16 @@ import {
 } from './NetworkOverviewContextProvider';
 import { SectionHeader } from './SectionHeader';
 
+export type ChartConfig = {
+  dataKey: string;
+  name: string;
+  valueFormatter: (value: number) => string;
+  subtitle: string;
+  color: string;
+  gradientStart: string;
+  gradientEnd: string;
+};
+
 function NetworkOverviewChart() {
   const {
     initialRecentBlocks: { stxBlocksCountPerBtcBlock },
@@ -24,27 +35,37 @@ function NetworkOverviewChart() {
   const { colorMode } = useColorMode();
 
   const chartData = useMemo(() => {
-    return stxBlocksCountPerBtcBlock.map(item => {
-      const date = new Date(Number(item.burn_block_time) * 1000);
+    if (!stxBlocksCountPerBtcBlock.length) return [];
 
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const isPM = hours >= 12 && hours < 24;
-      const displayHour = hours % 12 === 0 ? 12 : hours % 12;
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-      const timeString = `${displayHour}:${formattedMinutes} ${isPM ? 'PM' : 'AM'}`;
+    const sortedBlocks = [...stxBlocksCountPerBtcBlock].sort(
+      (a, b) => Number(a.burn_block_time) - Number(b.burn_block_time)
+    );
 
-      return {
-        time: timeString,
-        date: date,
-        fullDate: date.toISOString(),
-        blocksMined: item.stx_blocks_count,
-        dailyTransactions: item.total_tx_count,
-      };
-    });
+    return sortedBlocks
+      .filter(item => {
+        const lastBurnBlockTime = Number(sortedBlocks[sortedBlocks.length - 1].burn_block_time);
+        const sixHoursBeforeLastBlock = lastBurnBlockTime - 6 * 3600;
+        const burnBlockTime = Number(item.burn_block_time);
+        return burnBlockTime >= sixHoursBeforeLastBlock;
+      })
+      .map(item => {
+        const date = new Date(Number(item.burn_block_time) * 1000);
+        return {
+          time: formatTimestampTo12HourTime(Number(item.burn_block_time), {
+            useLocalTime: true,
+            includeSeconds: false,
+          }),
+          date: date,
+          fullDate: date.toISOString(),
+          blocksMined: item.stx_blocks_count,
+          dailyTransactions: item.total_tx_count,
+          burnBlockHeight: item.burn_block_height,
+          burnBlockHash: item.burn_block_hash,
+        };
+      });
   }, [stxBlocksCountPerBtcBlock]);
 
-  const getChartConfig = (chartType: Chart) => {
+  const getChartConfig = (chartType: Chart): ChartConfig => {
     const commonColors = {
       color:
         colorMode === 'light'
@@ -57,7 +78,7 @@ function NetworkOverviewChart() {
       gradientEnd: colorMode === 'light' ? '#F3EFEC' : '#1C1815',
     };
 
-    const configs = {
+    const configs: Record<Chart, ChartConfig> = {
       [Chart.dailyTransactions]: {
         dataKey: 'dailyTransactions',
         ...commonColors,
@@ -80,16 +101,11 @@ function NetworkOverviewChart() {
   const renderAreaChart = (chartType: Chart) => {
     const config = getChartConfig(chartType);
     const gradientId = 'chartGradient';
-    const lineColor = 'var(--stacks-colors-redesign-border-secondary)';
 
     return (
-      <Box height={48} width="100%">
-        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={200}>
-          <AreaChart
-            data={chartData}
-            key={`area-chart-${chartType}`}
-            margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
-          >
+      <>
+        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={160}>
+          <AreaChart data={chartData} key={`area-chart-${chartType}`}>
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={config.gradientStart} stopOpacity={0.8} />
@@ -100,30 +116,11 @@ function NetworkOverviewChart() {
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
             </defs>
-
             <CartesianGrid
               strokeDasharray="3 3"
               vertical={false}
               horizontal={false}
-              stroke={lineColor}
-            />
-
-            <XAxis
-              dataKey="time"
-              axisLine={{ stroke: lineColor }}
-              tickLine={false}
-              interval="preserveStartEnd"
-              minTickGap={10}
-              tick={{
-                color: 'var(--stacks-colors-text-secondary)',
-                fill: 'var(--stacks-colors-text-secondary)',
-              }}
-              tickCount={6}
-              style={{
-                fontFamily: 'var(--font-matter-mono)',
-                fontSize: 'var(--stacks-font-sizes-xs)',
-              }}
-              scale="point"
+              stroke={'var(--stacks-colors-redesign-border-secondary)'}
             />
             <Tooltip
               content={<ChartTooltip />}
@@ -151,7 +148,41 @@ function NetworkOverviewChart() {
             />
           </AreaChart>
         </ResponsiveContainer>
-      </Box>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          borderTop="1px solid"
+          borderColor="redesignBorderSecondary"
+          pt={4}
+        >
+          {(() => {
+            const firstTimestamp = chartData[0]?.date.getTime();
+            const lastTimestamp = chartData[chartData.length - 1]?.date.getTime();
+            const tickCount = 7;
+
+            const ticks = Array.from({ length: tickCount }, (_, i) => {
+              const ratio = i / (tickCount - 1);
+              return new Date(firstTimestamp + ratio * (lastTimestamp - firstTimestamp));
+            });
+
+            return ticks.map((tick, index) => (
+              <Text
+                key={index}
+                fontSize="xs"
+                color="var(--stacks-colors-text-secondary)"
+                display={{
+                  base: index % 2 === 0 ? 'block' : 'none',
+                  md: 'block',
+                }}
+                textAlign="center"
+                suppressHydrationWarning
+              >
+                {tick.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            ));
+          })()}
+        </Box>
+      </>
     );
   };
 
@@ -190,15 +221,27 @@ function NetworkOverviewChart() {
             >
               {chartType}
             </Text>
-            <Text
-              textStyle={'heading-sm'}
-              color={chartType === selectedChart ? 'textPrimary' : 'textTertiary'}
-              w="100%"
-              textAlign="left"
-              _groupHover={{ color: chartType === selectedChart ? 'textPrimary' : 'textSecondary' }}
-            >
-              {getChartConfig(chartType)?.subtitle}
-            </Text>
+            <Flex width="full" alignItems={'flex-end'} gap={2}>
+              <Text
+                textStyle={'heading-sm'}
+                color={chartType === selectedChart ? 'textPrimary' : 'textTertiary'}
+                textAlign="left"
+                _groupHover={{
+                  color: chartType === selectedChart ? 'textPrimary' : 'textSecondary',
+                }}
+              >
+                {getChartConfig(chartType)?.subtitle}{' '}
+              </Text>
+              <Text
+                fontStyle="text-medium-sm"
+                color={chartType === selectedChart ? 'textSecondary' : 'textTertiary'}
+                textAlign="left"
+                _groupHover={{ color: 'textSecondary' }}
+                lineHeight={'redesign.taller'}
+              >
+                Last 6hs
+              </Text>
+            </Flex>
           </TabsTrigger>
         ))}
       </TabsList>

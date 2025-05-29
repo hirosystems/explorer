@@ -29,7 +29,12 @@ export function TxTag({ type }: { type: 'confirmed' | 'pending' | 'failed' }) {
           <XCircle />
         </Icon>
       )}
-      <Text color={'textPrimary'} fontSize={'xs'} fontWeight={'medium'}>
+      <Text
+        color={'textPrimary'}
+        fontSize={'xs'}
+        fontWeight={'medium'}
+        display={{ base: 'none', md: 'block' }}
+      >
         {capitalize(type)}
       </Text>
     </Flex>

@@ -222,12 +222,13 @@ export async function getTokenInfo(
 
     const cachedTokenInfo = await getCachedTokenInfo(tokenId);
     if (cachedTokenInfo) {
-      console.log('[debug] cache hit');
+      console.log('[debug] token info - cache hit');
       return cachedTokenInfo;
     }
 
     const basicTokenInfo = await getBasicTokenInfoFromStacksApi(tokenId, chain, api);
     if (!basicTokenInfo) {
+      console.error('token not found in Stacks API', tokenId, chain, api);
       return {};
     }
 

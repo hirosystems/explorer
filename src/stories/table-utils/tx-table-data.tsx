@@ -1,8 +1,8 @@
 import {
   TxTableData,
+  defaultColumnDefinitions,
   getAmount,
   getToAddress,
-  columns as txTableTanstackColumns,
 } from '@/common/components/table/table-examples/TxsTable';
 import { TxTableColumns } from '@/common/components/table/table-examples/types';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
@@ -15,7 +15,7 @@ export const getStorybookTxTableTanstackColumns = (
   hasSorting?: boolean,
   pinFirstColumn?: boolean
 ): ColumnDef<TxTableData>[] => {
-  const columns = [...txTableTanstackColumns];
+  const columns = [...defaultColumnDefinitions];
 
   columns.forEach(column => {
     if (column.id === TxTableColumns.ArrowRight) {

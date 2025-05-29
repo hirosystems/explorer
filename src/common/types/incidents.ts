@@ -2,7 +2,7 @@ import { Document } from '@contentful/rich-text-types';
 import { ContentTypeSys, ContentfulCollection } from 'contentful';
 import { IncidentImpact } from 'statuspage.io';
 
-interface ContentType {
+export interface ContentType {
   sys: ContentTypeSys;
   fields: {
     content: Document;

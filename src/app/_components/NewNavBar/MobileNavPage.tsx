@@ -13,7 +13,13 @@ import { primaryPages, secondaryPages } from './consts';
 
 const topOpacityDuration = 0.3;
 
-const MobileContentTop = ({ isSettingsMenuOpen }: { isSettingsMenuOpen: boolean }) => {
+const MobileContentTop = ({
+  isSettingsMenuOpen,
+  onClose,
+}: {
+  isSettingsMenuOpen: boolean;
+  onClose: () => void;
+}) => {
   return (
     <Box position="relative">
       <AnimatePresence>
@@ -33,16 +39,17 @@ const MobileContentTop = ({ isSettingsMenuOpen }: { isSettingsMenuOpen: boolean 
         >
           <Box position="absolute" top={0} left={0} w="full">
             {primaryPages.map(page => (
-              <PrimaryPageLink page={page} />
+              <PrimaryPageLink page={page} onClick={onClose} />
             ))}
           </Box>
         </motion.div>
 
         <motion.div
           key="settings-menu"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0, display: 'none' }}
           animate={{
             opacity: isSettingsMenuOpen ? 1 : 0,
+            display: isSettingsMenuOpen ? 'block' : 'none',
             pointerEvents: isSettingsMenuOpen ? 'auto' : 'none',
           }}
           exit={{
@@ -70,10 +77,12 @@ const MobileContentBottom = ({
   isSettingsMenuOpen,
   toggleSettingsMenu,
   tokenPrices,
+  onClose,
 }: {
   isSettingsMenuOpen: boolean;
   toggleSettingsMenu: () => void;
   tokenPrices: TokenPrice;
+  onClose: () => void;
 }) => {
   return (
     <AnimatePresence mode="wait">
@@ -128,7 +137,7 @@ const MobileContentBottom = ({
             </Stack>
             <Stack gap={3}>
               {secondaryPages.map(page => (
-                <SecondaryPageLink page={page} />
+                <SecondaryPageLink page={page} onClick={onClose} />
               ))}
             </Stack>
           </Stack>
@@ -219,18 +228,19 @@ export const MobileNavPage = ({
       backgroundColor="surfaceTertiary"
       top={0}
       left={0}
-      zIndex={'overlay'}
+      zIndex={'modal'}
       gap={4}
       padding={6}
       overflow="hidden"
     >
       <SharedMobileNavBar onIconClick={onClose} icon={<X />} />
       <Stack justifyContent="space-between" height="full">
-        <MobileContentTop isSettingsMenuOpen={isSettingsMenuOpen} />
+        <MobileContentTop isSettingsMenuOpen={isSettingsMenuOpen} onClose={onClose} />
         <MobileContentBottom
           tokenPrices={tokenPrices}
           isSettingsMenuOpen={isSettingsMenuOpen}
           toggleSettingsMenu={toggleSettingsMenu}
+          onClose={onClose}
         />
       </Stack>
     </Stack>

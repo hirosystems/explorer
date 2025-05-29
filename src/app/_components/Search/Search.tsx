@@ -1,9 +1,21 @@
+import { Contract } from '@/common/types/tx';
 import { useFilterParams } from '@/common/utils/search-param-utils';
-import { Flex, HStack, Icon, Stack, StackProps } from '@chakra-ui/react';
+import {
+  Flex,
+  FlexProps,
+  HStack,
+  Icon,
+  IconButton,
+  Link,
+  Stack,
+  StackProps,
+} from '@chakra-ui/react';
 import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
+
+import { TxSearchResult } from '@stacks/stacks-blockchain-api-types';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
@@ -17,8 +29,10 @@ import {
 } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import {
+  AddressSearchResult,
   BlockSearchResult,
   BnsSearchResult,
+  ContractSearchResult,
   SearchResult,
   SearchResultType,
 } from '../../../common/types/search-results';
@@ -52,9 +66,11 @@ import {
   TenureChangeResultItem,
   TokenTransferResultItem,
 } from './ResultItem';
-import { SearchLink } from './SearchLink';
 
-export function SearchResultsWrapper({ children }: { children: ReactNode }) {
+export function SearchResultsWrapper({
+  children,
+  ...stackProps
+}: { children: ReactNode } & StackProps) {
   return (
     <Stack
       zIndex={-1}
@@ -63,9 +79,10 @@ export function SearchResultsWrapper({ children }: { children: ReactNode }) {
       left={-3}
       right={-3}
       top={-3}
-      borderRadius={'redesign.xxl'}
+      borderRadius={['none', 'none', 'none', 'redesign.xxl']}
       boxShadow={'var(--stacks-shadows-elevation3)'}
       gap={4}
+      {...stackProps}
     >
       {children}
     </Stack>
@@ -96,36 +113,25 @@ function KeywordsPreview() {
   );
 }
 
-function DocsLink() {
+function QuickLinkButton({ children, href }: { children: ReactNode; href: string }) {
   return (
-    <SearchLink
-      width={'fit-content'}
-      lineHeight={'base'}
-      textDecoration={'none'}
-      color={'textSecondary'}
-      fontSize={'xs'}
-      borderBottom={'1px solid'}
-      _hover={{
-        color: 'textInteractiveHover',
-      }}
-    >
-      Learn more about search syntax
-    </SearchLink>
-  );
-}
-
-function QuickLinkButton({ children }: { children: ReactNode }) {
-  return (
-    <Button variant={'redesignTertiary'} size={'small'}>
-      {children}
-      <Icon w={3.5} h={3.5}>
-        <ArrowRight />
-      </Icon>
-    </Button>
+    <Link href={href} variant="noUnderline">
+      <Button variant={'redesignTertiary'} size={'small'} alignItems="center">
+        <Text textStyle="text-medium-xs" color="textSecondary">
+          {children}
+        </Text>
+        <Icon w={3.5} h={3.5}>
+          <ArrowRight />
+        </Icon>
+      </Button>
+    </Link>
   );
 }
 
 function QuickLinks() {
+  const network = useGlobalContext().activeNetwork;
+  const isMainnet = network.mode === 'mainnet';
+
   return (
     <Stack
       backgroundColor={'surfacePrimary'}
@@ -139,25 +145,35 @@ function QuickLinks() {
         Quick links
       </Text>
       <Flex gap={2} flexWrap="wrap">
-        <QuickLinkButton>sBTC</QuickLinkButton>
-        <QuickLinkButton>Blocks</QuickLinkButton>
-        <QuickLinkButton>Mempool</QuickLinkButton>
-        <QuickLinkButton>Stacking</QuickLinkButton>
-        <QuickLinkButton>Transactions</QuickLinkButton>
+        {isMainnet && (
+          <QuickLinkButton href={'/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?cha'}>
+            sBTC
+          </QuickLinkButton>
+        )}
+        <QuickLinkButton href={'/blocks'}>Blocks</QuickLinkButton>
+        <QuickLinkButton href={'/transactions'}>Transactions</QuickLinkButton>
+        <QuickLinkButton href={'/signers'}>Signers</QuickLinkButton>
       </Flex>
     </Stack>
   );
 }
 
-function SearchResults({
+export enum ResultItemsType {
+  SearchResults = 'SearchResults',
+  RecentResults = 'RecentResults',
+}
+
+function ResultItems({
   title,
   recentResults,
   iconType = 'arrow',
+  type,
   ...stackProps
 }: {
   title?: string;
   recentResults: SearchResult[];
   iconType?: 'arrow' | 'enter';
+  type: ResultItemsType;
 } & StackProps) {
   const network = useGlobalContext().activeNetwork;
   if (!recentResults.length) {
@@ -173,6 +189,17 @@ function SearchResults({
       <Stack gap={1}>
         {recentResults.map((recentResultItem, index) => {
           const searchEntityUrl = getSearchEntityUrl(network, recentResultItem) || '#';
+          if (recentResultItem.result.entity_type === SearchResultType.StandardAddress) {
+            const addressResult = recentResultItem.result as AddressSearchResult;
+            return (
+              <ResultItem
+                key={index}
+                value={addressResult.entity_id}
+                iconType={iconType}
+                url={searchEntityUrl}
+              />
+            );
+          }
           if (recentResultItem.result.entity_type === SearchResultType.BnsAddress) {
             const bnsResult = recentResultItem.result as BnsSearchResult;
             return (
@@ -194,6 +221,16 @@ function SearchResults({
                 hash={blockResult.entity_id}
                 url={searchEntityUrl}
                 iconType={iconType}
+              />
+            );
+          }
+          if (recentResultItem.result.entity_type === SearchResultType.ContractAddress) {
+            const contractResult = recentResultItem.result as ContractSearchResult;
+            return (
+              <ContractDeployResultItem
+                key={index}
+                tx={contractResult.metadata}
+                url={searchEntityUrl}
               />
             );
           }
@@ -252,8 +289,19 @@ function SearchResults({
           if (recentResultItem.result.entity_type === SearchResultType.TxList) {
             const searchTerm = recentResultItem.result.entity_id;
             const searchPageUrl = getSearchPageUrl(searchTerm, network);
+            const txsCount = recentResultItem?.result?.metadata?.totalCount || 0;
+            const txsCountFormatted = txsCount > 1000 ? '1000+' : txsCount;
             return (
-              <ResultItem key={index} url={searchPageUrl} value={searchTerm} iconType={iconType} />
+              <ResultItem
+                key={index}
+                url={searchPageUrl}
+                value={
+                  type === ResultItemsType.RecentResults
+                    ? searchTerm
+                    : `${txsCountFormatted} result${txsCount === 1 ? '' : 's'} found`
+                }
+                iconType={iconType}
+              />
             );
           }
           return null;
@@ -265,8 +313,32 @@ function SearchResults({
 
 function HiddenSearchField(props: InputProps) {
   const dispatch = useAppDispatch();
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+  useEffect(() => {
+    if (isSearchFieldFocused) {
+      inputRef.current?.focus();
+    }
+  }, [isSearchFieldFocused]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        dispatch(blur());
+      }
+      if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        dispatch(focus());
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   return (
     <Input
+      ref={inputRef}
       id="search-bar"
       name="search-bar"
       display="block"
@@ -301,9 +373,6 @@ function HiddenSearchField(props: InputProps) {
         boxShadow: 'none',
       }}
       onFocus={() => dispatch(focus())}
-      onBlur={() => {
-        setTimeout(() => dispatch(blur()), 200);
-      }}
       {...props}
     />
   );
@@ -318,6 +387,7 @@ function StartElement() {
       zIndex={1}
       alignItems={'center'}
       justifyContent={'center'}
+      height={'full'}
     >
       <Icon className={'search-icon'} h={4} w={4} color={'iconSecondary'}>
         <MagnifyingGlass />
@@ -342,7 +412,7 @@ function EndElement({ handleSearch }: { handleSearch: () => void }) {
       {isSearchFieldFocused ? (
         !!tempSearchTerm ? (
           <>
-            <Kbd onClick={handleSearch} cursor={'pointer'}>
+            <Kbd onClick={handleSearch} cursor={'pointer'} display={{ base: 'none', md: 'flex' }}>
               <Icon h={3.5} w={3.5} color={'iconSecondary'}>
                 <KeyReturn />
               </Icon>
@@ -352,14 +422,16 @@ function EndElement({ handleSearch }: { handleSearch: () => void }) {
               w={3.5}
               color={'iconSecondary'}
               cursor={'pointer'}
-              onClick={() => dispatch(clearSearchTerm())}
+              onClick={() => {
+                dispatch(clearSearchTerm());
+              }}
             >
               <X />
             </Icon>
           </>
         ) : null
       ) : (
-        <Kbd>
+        <Kbd display={{ base: 'none', md: 'flex' }}>
           <Icon h={3.5} w={3}>
             <Command />
           </Icon>
@@ -415,14 +487,16 @@ function SearchPreview() {
   );
 }
 
-function SearchInput({ searchTermFromQueryParams = '' }) {
+function SearchInput({
+  searchTermFromQueryParams = '',
+  ...flexProps
+}: { searchTermFromQueryParams?: string } & FlexProps) {
   const dispatch = useAppDispatch();
   const tempSearchTerm = useAppSelector(selectTempSearchTerm);
   const searchTerm = useAppSelector(selectSearchTerm);
   const reg = new RegExp(`(${advancedSearchKeywords.join('|')})`, 'gi');
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
   const router = useRouter();
-  const isSearchPage = usePathname() === '/search';
   const network = useGlobalContext().activeNetwork;
   const searchPageUrl = getSearchPageUrl(tempSearchTerm, network);
   const isAdvancedSearch = advancedSearchKeywords.some(term => tempSearchTerm.includes(term));
@@ -436,18 +510,7 @@ function SearchInput({ searchTermFromQueryParams = '' }) {
   }, [searchTermFromQueryParams]);
 
   const handleSearch = useCallback(() => {
-    if (isAdvancedSearch) {
-      updateRecentResultsLocalStorage({
-        found: true,
-        result: {
-          entity_type: SearchResultType.TxList,
-          entity_id: tempSearchTerm,
-          txs: [],
-        },
-      });
-      router.push(searchPageUrl);
-      dispatch(blur());
-    } else if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {
+    if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {
       router.push(searchEntityUrl);
       dispatch(blur());
     } else {
@@ -465,7 +528,7 @@ function SearchInput({ searchTermFromQueryParams = '' }) {
   ]);
 
   return (
-    <DoubleGradientBorderWrapper>
+    <DoubleGradientBorderWrapper {...flexProps}>
       <Flex
         background={'surfaceSecondary'}
         alignItems={'center'}
@@ -504,7 +567,8 @@ function SearchInput({ searchTermFromQueryParams = '' }) {
   );
 }
 
-export function Search() {
+export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
+  const dispatch = useAppDispatch();
   const searchTermFromQueryParams = buildAdvancedSearchQuery(useFilterParams());
   const recentResults = useRecentResultsLocalStorage();
 
@@ -513,34 +577,119 @@ export function Search() {
   const searchResponse = useSearchQuery(searchTerm, true);
   const isLoading = searchResponse.isLoading;
 
+  const Wrapper = useCallback(
+    function Wrapper({ children }: { children: ReactNode }) {
+      if (fullScreen) {
+        return (
+          <Flex
+            position={isSearchFieldFocused ? 'absolute' : undefined}
+            top={4}
+            left={3}
+            right={3}
+            zIndex={2}
+            background={'surfaceTertiary'}
+          >
+            {children}
+            {isSearchFieldFocused && (
+              <IconButton
+                h={12}
+                w={12}
+                color="iconPrimary"
+                onClick={() => {
+                  dispatch(blur());
+                }}
+                bg={'surfacePrimary'}
+                position={'absolute'}
+                top={-1}
+                right={0}
+                zIndex={10000}
+                borderRadius={'redesign.lg'}
+                _hover={{
+                  bg: 'surfaceFifth',
+                }}
+              >
+                <X />
+              </IconButton>
+            )}
+          </Flex>
+        );
+      }
+      return children;
+    },
+    [isSearchFieldFocused, fullScreen]
+  );
+
+  const inputMaxWidthFullscreen =
+    fullScreen && isSearchFieldFocused ? 'calc(100% - var(--stacks-spacing-16))' : 'none';
+
   return (
-    <HStack width="full" position={'relative'} zIndex={1}>
-      <SearchInput searchTermFromQueryParams={searchTermFromQueryParams} />
-      {isSearchFieldFocused && (
-        <SearchResultsWrapper>
-          {isLoading ? null : searchResponse && searchResponse.data ? (
-            <Stack pt={18}>
-              <SearchResults
-                recentResults={[searchResponse.data]}
-                iconType={'enter'}
-                px={3}
-                pb={4}
-              />
-            </Stack>
-          ) : (
-            <>
-              <Stack gap={6}>
-                <Stack px={4} gap={3} pt={16}>
-                  <KeywordsPreview />
-                  <DocsLink />
+    <Wrapper>
+      <HStack width="full" position={'relative'} zIndex={'modal'}>
+        <SearchInput
+          searchTermFromQueryParams={searchTermFromQueryParams}
+          maxW={[inputMaxWidthFullscreen, inputMaxWidthFullscreen, inputMaxWidthFullscreen, 'lg']}
+          position={fullScreen && isSearchFieldFocused ? 'relative' : undefined}
+        />
+        {isSearchFieldFocused && (
+          <SearchResultsWrapper height={fullScreen ? '100vh' : 'auto'}>
+            {isLoading ? null : searchResponse && searchResponse.data ? (
+              !searchResponse.data.found ? (
+                <Flex pt={18} pb={3} px={4}>
+                  <Stack px={4} py={3} bg="surfacePrimary" borderRadius={'redesign.lg'}>
+                    <Text textStyle="text-medium-sm" color="textSecondary">
+                      No results found.
+                    </Text>
+                    <Text textStyle="text-regular-sm" color="textSecondary">
+                      Try searching with an address, BNS name, transaction ID, token ID, contract
+                      ID, Stacks block hash or block height, or a syntax search.
+                    </Text>
+                  </Stack>
+                </Flex>
+              ) : (
+                <Stack pt={18}>
+                  <ResultItems
+                    recentResults={[searchResponse.data]}
+                    iconType={'enter'}
+                    px={3}
+                    pb={4}
+                    type={ResultItemsType.SearchResults}
+                  />
                 </Stack>
-                <SearchResults title={'Recent results'} recentResults={recentResults} />
-              </Stack>
-              <QuickLinks />
-            </>
-          )}
-        </SearchResultsWrapper>
+              )
+            ) : (
+              <>
+                <Stack gap={6}>
+                  <Stack px={4} gap={3} pt={16}>
+                    <KeywordsPreview />
+                  </Stack>
+                  <ResultItems
+                    title={'Recent results'}
+                    recentResults={recentResults}
+                    type={ResultItemsType.RecentResults}
+                  />
+                </Stack>
+                {!fullScreen && <QuickLinks />}
+              </>
+            )}
+          </SearchResultsWrapper>
+        )}
+      </HStack>
+      {isSearchFieldFocused && (
+        <Flex
+          display={fullScreen ? 'none' : 'block'}
+          position={'fixed'}
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          backgroundColor={'blackAlpha.200'}
+          backdropFilter={'blur(4px)'}
+          zIndex={'overlay'}
+          onClick={() => {
+            dispatch(blur());
+          }}
+        />
       )}
-    </HStack>
+    </Wrapper>
   );
 }

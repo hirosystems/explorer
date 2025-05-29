@@ -1,5 +1,8 @@
-import { useHomePageData } from '@/app/home-redesign/context';
+import { useHomePageData } from '@/app/context';
+import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlock';
 import { HStack } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
 
 import { useBurnBlocks } from '../../../common/queries/useBurnBlocksInfinite';
 import { BtcBlock, NewestBtcBlock } from './BtcBlock';
@@ -9,11 +12,19 @@ import { BLOCK_HEIGHT, RECENT_BTC_BLOCKS_COUNT } from './consts';
 
 export function RecentBtcBlocks() {
   const recentBtcBlocks = useHomePageData().initialRecentBlocks.btcBlocks;
+  const queryClient = useQueryClient();
+  const isCacheSetWithInitialData = useRef(false);
+
+  if (isCacheSetWithInitialData.current === false && recentBtcBlocks) {
+    const queryKey = [BURN_BLOCKS_QUERY_KEY, RECENT_BTC_BLOCKS_COUNT];
+    queryClient.setQueryData(queryKey, recentBtcBlocks);
+    isCacheSetWithInitialData.current = true;
+  }
 
   const { data: btcBlocksData, refetch } = useBurnBlocks(RECENT_BTC_BLOCKS_COUNT, undefined, {
-    initialData: recentBtcBlocks,
     manual: true,
   });
+
   const btcBlocks = btcBlocksData?.results || [];
   const newestBtcBlock = btcBlocks[0];
   if (!newestBtcBlock) {

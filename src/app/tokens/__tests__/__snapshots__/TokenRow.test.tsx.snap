@@ -10,7 +10,7 @@ exports[`TokenRow renders correctly 1`] = `
         class="chakra-table__row css-16kmb31"
       >
         <td
-          class="chakra-table__cell css-1bh4pks"
+          class="chakra-table__cell css-dmkp9b"
         >
           <div
             class="css-axw7ok"
@@ -27,7 +27,7 @@ exports[`TokenRow renders correctly 1`] = `
               width="36"
             />
             <a
-              class="link css-zibos"
+              class="link css-1uushrr"
               href="/token/0x5678?chain=mainnet"
             >
               TestToken (TT)
@@ -35,13 +35,13 @@ exports[`TokenRow renders correctly 1`] = `
           </div>
         </td>
         <td
-          class="chakra-table__cell css-t35k1d"
+          class="chakra-table__cell css-1tgiags"
         >
           <span
             class="css-1gy64qm"
           >
             <a
-              class="link css-m05bwu"
+              class="link css-bvh881"
               href="/txid/0x1234?chain=mainnet"
             >
               0x1234

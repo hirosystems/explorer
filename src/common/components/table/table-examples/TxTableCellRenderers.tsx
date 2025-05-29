@@ -4,12 +4,14 @@ import {
   formatStacksAmount,
   getContractName,
   microToStacksFormatted,
+  truncateHex,
   truncateStxAddress,
 } from '@/common/utils/utils';
 import { Text, TextProps } from '@/ui/Text';
+import { Tooltip } from '@/ui/Tooltip';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
-import StxIcon from '@/ui/icons/StxIcon';
+import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
 
@@ -69,7 +71,7 @@ export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
 export const TxLinkCellRenderer = (value: string) => {
   return (
     <TxLink txId={value} variant="tableLink">
-      <EllipsisText>{value}</EllipsisText>
+      <EllipsisText>{truncateHex(value, 4, 5, false)}</EllipsisText>
     </TxLink>
   );
 };
@@ -119,9 +121,9 @@ export const FeeCellRenderer = (value: string) => {
   const microStx = formatStacksAmount(value);
 
   return (
-    <Flex alignItems="center" justifyContent="flex-end" gap={1}>
+    <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        {stx.length > microStx.length ? <MicroStxIcon /> : <StxIcon />}
+        {stx.length > microStx.length ? <MicroStxIcon /> : <StacksIconThin />}
       </Icon>
       <EllipsisText fontSize="sm">
         {stx.length > microStx.length ? `${microStx} µSTX` : `${stx} STX`}
@@ -134,18 +136,17 @@ export const AmountCellRenderer = (value: number) => {
   return (
     <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        <StxIcon />
+        <StacksIconThin />
       </Icon>
       <EllipsisText fontSize="sm">{value} STX</EllipsisText>
     </Flex>
   );
 };
 
-export const TimeStampCellRenderer = (value: string) => {
-  return (
+export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
+  const content = (
     <Flex
       alignItems="center"
-      justifyContent="center"
       bg="surfacePrimary"
       borderRadius="md"
       py={0.5}
@@ -164,6 +165,12 @@ export const TimeStampCellRenderer = (value: string) => {
       </EllipsisText>
     </Flex>
   );
+
+  if (tooltip) {
+    return <Tooltip content={tooltip}>{content}</Tooltip>;
+  }
+
+  return content;
 };
 
 export const IconCellRenderer = (value: React.ReactNode) => {

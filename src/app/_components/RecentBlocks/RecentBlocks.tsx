@@ -1,37 +1,49 @@
 'use client';
 
+import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { HStack, Icon, Stack } from '@chakra-ui/react';
-import { ArrowRight } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Link } from '../../../ui/Link';
 import { TabsContent, TabsLabel, TabsList, TabsRoot, TabsTrigger } from '../../../ui/Tabs';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { RecentBtcBlocks } from './RecentBtcBlocks';
 import { RecentStxBlocks } from './RecentStxBlocks';
 
-export function RecentBlocks() {
+function SectionHeader() {
   const network = useGlobalContext().activeNetwork;
-
   return (
-    <Stack aria-label="Recent blocks" gap={4}>
+    <HStack justify={'space-between'} align={'center'}>
       <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
         Recent blocks
       </Text>
+      <ButtonLink
+        href={buildUrl('/blocks', network)}
+        buttonLinkSize="big"
+        display={{ base: 'none', md: 'inline' }}
+        aria-label="View all blockchain blocks"
+      >
+        View all blocks
+      </ButtonLink>
+    </HStack>
+  );
+}
+
+export function RecentBlocks() {
+  return (
+    <Stack aria-label="Recent blocks" gap={4}>
       <TabsRoot
         variant={'primary'}
         size={'redesignMd'}
         defaultValue={'btc'}
         gap={2}
         lazyMount
-        unmountOnExit
         aria-label="Block view options"
       >
-        <HStack gap={0} pb={3} w={'100%'}>
-          <TabsLabel as="span" id="tab-group-label">
+        <HStack gap={0} pb={4} w={'100%'}>
+          <TabsLabel as="span" id="tab-group-label" whiteSpace={'nowrap'}>
             View by:
           </TabsLabel>
           <TabsList aria-labelledby="tab-group-label">
@@ -48,20 +60,6 @@ export function RecentBlocks() {
               Stacks block
             </TabsTrigger>
           </TabsList>
-          <Link
-            href={buildUrl('/blocks', network)}
-            variant={'buttonLink'}
-            size={'lg'}
-            ml={'auto'}
-            mb={'auto'}
-            display={['none', 'inline']}
-            aria-label="View all blockchain blocks"
-          >
-            View all blocks
-            <Icon w={3.5} h={3.5} aria-hidden="true">
-              <ArrowRight />
-            </Icon>
-          </Link>
         </HStack>
 
         <TabsContent value="btc" aria-label="Bitcoin blocks tab panel" role="tabpanel" tabIndex={0}>
@@ -71,22 +69,25 @@ export function RecentBlocks() {
         <TabsContent value="stx" aria-label="Stacks blocks tab panel" role="tabpanel" tabIndex={0}>
           <RecentStxBlocks />
         </TabsContent>
-
-        <Link
-          href={buildUrl('/blocks', network)}
-          variant={'buttonLink'}
-          size={'lg'}
-          mr={'auto'}
-          display={['inline', 'none']}
-          ml={[0, 3]}
-          aria-label="View all blockchain blocks"
-        >
-          View all blocks
-          <Icon w={3.5} h={3.5} aria-hidden="true">
-            <ArrowRight />
-          </Icon>
-        </Link>
       </TabsRoot>
+    </Stack>
+  );
+}
+
+export function RecentBlocksSection() {
+  const network = useGlobalContext().activeNetwork;
+  return (
+    <Stack aria-label="Recent blocks" gap={6}>
+      <SectionHeader />
+      <RecentBlocks />
+      <ButtonLink
+        href={buildUrl('/blocks', network)}
+        buttonLinkSize="big"
+        display={{ base: 'inline', md: 'none' }}
+        aria-label="View all blockchain blocks"
+      >
+        View all blocks
+      </ButtonLink>
     </Stack>
   );
 }

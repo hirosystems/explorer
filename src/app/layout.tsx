@@ -11,6 +11,7 @@ import {
   matterRegular,
   openSauce,
 } from '../common/fonts';
+import { HYBRID_EXPLORER_BANNER_KEY } from './_components/Banner/HybridExplorerBanner';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getStatusBarContent } from './getStatusBarContent';
@@ -26,9 +27,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const themeCookie = cookieStore.get('stacks-explorer-theme')?.value || 'light';
   const addedCustomNetworksCookie = cookieStore.get('addedCustomNetworks')?.value;
   const removedCustomNetworksCookie = cookieStore.get('removedCustomNetworks')?.value;
+  const hybridExplorerBannerCookie = cookieStore.get(HYBRID_EXPLORER_BANNER_KEY)?.value;
 
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();
+
   return (
     <html
       lang="en"
@@ -44,6 +47,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             tokenPrice={tokenPrice}
             statusBarContent={statusBarContent}
             serverThemeCookie={themeCookie}
+            hybridExplorerBannerCookie={hybridExplorerBannerCookie}
           >
             {children}
           </PageWrapper>
