@@ -1,3 +1,10 @@
+# [1.277.0](https://github.com/hirosystems/explorer/compare/v1.276.1...v1.277.0) (2025-05-29)
+
+
+### Features
+
+* explorer hybrid version ([#2101](https://github.com/hirosystems/explorer/issues/2101)) ([708e393](https://github.com/hirosystems/explorer/commit/708e3938338ef43bcd05038167be09c8f8af5eba))
+
 ## [1.276.1](https://github.com/hirosystems/explorer/compare/v1.276.0...v1.276.1) (2025-05-08)
 
 
