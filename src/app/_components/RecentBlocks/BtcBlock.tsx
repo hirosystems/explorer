@@ -33,7 +33,6 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
     >
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
-        target={'_blank'}
         _hover={{ textDecoration: 'none' }}
         aria-label={`Bitcoin block ${burnBlock.burn_block_height} mined at ${
           burnBlock.burn_block_time
@@ -136,7 +135,6 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
     >
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
-        target={'_blank'}
         rel="noreferrer"
         _hover={{ textDecoration: 'none' }}
         aria-label={`Newest Bitcoin block ${burnBlock.burn_block_height} mined at ${burnBlock.burn_block_time} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
