@@ -1,3 +1,10 @@
+## [1.277.1](https://github.com/hirosystems/explorer/compare/v1.277.0...v1.277.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* recent block links do not open a new tab ([a810611](https://github.com/hirosystems/explorer/commit/a810611db9f7ae4de77a20e245e85e286912c4c4))
+
 # [1.277.0](https://github.com/hirosystems/explorer/compare/v1.276.1...v1.277.0) (2025-05-29)
 
 
