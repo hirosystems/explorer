@@ -1,3 +1,10 @@
+## [1.277.2](https://github.com/hirosystems/explorer/compare/v1.277.1...v1.277.2) (2025-05-30)
+
+
+### Bug Fixes
+
+* change devnet banner text ([06b0cc0](https://github.com/hirosystems/explorer/commit/06b0cc0086b1e8b826f21ddaa02ea375a1c76858))
+
 ## [1.277.1](https://github.com/hirosystems/explorer/compare/v1.277.0...v1.277.1) (2025-05-29)
 
 
