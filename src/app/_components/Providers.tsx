@@ -2,18 +2,15 @@
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
 import { ReactNode } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { Provider as ReduxProvider } from 'react-redux';
 
 import { GlobalContextProvider } from '../../common/context/GlobalContextProvider';
 import { store } from '../../common/state/store';
-import { NetworkModes } from '../../common/types/network';
-import { removeTrailingSlash } from '../../common/utils/utils';
 import { ColorModeProvider } from '../../components/ui/color-mode';
 import { system } from '../../ui/theme/theme';
-import { AppConfig } from './AppConfig';
+import { StacksAuthProvider } from './AppConfig';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,16 +32,6 @@ export const Providers = ({
   addedCustomNetworksCookie: string | undefined;
   removedCustomNetworksCookie: string | undefined;
 }) => {
-  const searchParams = useSearchParams();
-  const chain = searchParams?.get('chain');
-  const api = searchParams?.get('api');
-  const subnet = searchParams?.get('subnet');
-
-  const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
-    NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
-  const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
-
   return (
     <ChakraProvider value={system}>
       <CookiesProvider>
@@ -54,13 +41,9 @@ export const Providers = ({
         >
           <ColorModeProvider>
             <ReduxProvider store={store}>
-              <AppConfig // TODO: rename to something else like SessionProvider
-                queryNetworkMode={queryNetworkMode}
-                queryApiUrl={queryApiUrl}
-                querySubnet={querySubnet}
-              >
+              <StacksAuthProvider>
                 <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-              </AppConfig>
+              </StacksAuthProvider>
             </ReduxProvider>
           </ColorModeProvider>
         </GlobalContextProvider>
