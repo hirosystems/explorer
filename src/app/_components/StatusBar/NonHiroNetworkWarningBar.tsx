@@ -26,8 +26,9 @@ export function NonHiroNetworkWarningBar() {
   const icon = getIncidentImpactIcon(IncidentImpact.Major);
   const content = (
     <Text fontSize={'xs'}>
-      This is not a Hiro network. Please ensure that the source is trustworthy and not malicious, as
-      it could lead to a phishing attack.{' '}
+      Reminder: You are on a local devnet environment. This is not an official public Stacks
+      network. Please ensure that the source is trustworthy and not malicious, as it could lead to a
+      phishing attack.{' '}
       <TextLink href={'https://explorer.hiro.so/?chain=mainnet'} textDecoration={'underline'}>
         Click here
       </TextLink>{' '}
