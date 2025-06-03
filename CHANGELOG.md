@@ -1,3 +1,10 @@
+# [1.278.0](https://github.com/hirosystems/explorer/compare/v1.277.2...v1.278.0) (2025-06-03)
+
+
+### Features
+
+* removed toasts ([89eaa6f](https://github.com/hirosystems/explorer/commit/89eaa6f3ac575fbbb75d6e79717b23588e0f6641))
+
 ## [1.277.2](https://github.com/hirosystems/explorer/compare/v1.277.1...v1.277.2) (2025-05-30)
 
 
