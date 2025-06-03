@@ -1,16 +1,5 @@
-# PRs:
-#   - Builds Explorer
-# Pushes:
-#   - Builds Explorer
-#   - Pushes Docker image to Docker Hub
-#   - Deploys to staging environment
-# Tags:
-#   - Builds Explorer
-#   - Pushes Docker image to Docker Hub
-#   - Deploys to staging environment
-#   - Deploys to prod environment
-
 name: CI/CD
+
 on:
   push:
     branches:
@@ -26,14 +15,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-publish:
+  build-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     permissions:
       contents: write
       issues: write
       pull-requests: write
-    runs-on: ubuntu-latest
     outputs:
-      docker_image_digest: ${{ steps.docker_push.outputs.digest }}
       version: ${{ steps.docker_meta.outputs.version }}
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
     steps:
@@ -63,8 +57,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
-          GIT_AUTHOR_EMAIL: "${{ steps.bot-user-id.outputs.user-id }}+${{ steps.generate_token.outputs.app-slug }}[bot]@users.noreply.github.com"
-          GIT_COMMITTER_EMAIL: "${{ steps.bot-user-id.outputs.user-id }}+${{ steps.generate_token.outputs.app-slug }}[bot]@users.noreply.github.com"
+          GIT_AUTHOR_EMAIL: '${{ steps.bot-user-id.outputs.user-id }}+${{ steps.generate_token.outputs.app-slug }}[bot]@users.noreply.github.com'
+          GIT_COMMITTER_EMAIL: '${{ steps.bot-user-id.outputs.user-id }}+${{ steps.generate_token.outputs.app-slug }}[bot]@users.noreply.github.com'
         with:
           semantic_version: 19
           extra_plugins: |
@@ -100,13 +94,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build/Tag/Push Image
+      - name: Build and push platform image
         id: docker_push
         uses: docker/build-push-action@v3
         with:
           push: true
-          platforms: ${{ github.ref == 'refs/heads/main' && 'linux/amd64,linux/arm64' ||  'linux/amd64'  }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          platforms: ${{ matrix.platform }}
+          tags: ${{ github.repository }}:${{ matrix.platform }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           secrets: |
             "sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}"
@@ -115,13 +109,41 @@ jobs:
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      - name: Deployment Info
-        run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
+  merge-manifest:
+    runs-on: ubuntu-latest
+    needs: build-matrix
+    outputs:
+      docker_image_digest: ${{ steps.inspect.outputs.digest }}
+      version: ${{ needs.build-matrix.outputs.version }}
+      new_release_published: ${{ needs.build-matrix.outputs.new_release_published }}
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker buildx imagetools create \
+            -t ${{ github.repository }}:latest \
+            -t ${{ github.repository }}:${{ needs.build-matrix.outputs.version }} \
+            ${{ github.repository }}:linux/amd64 \
+            ${{ github.repository }}:linux/arm64
+
+      - name: Inspect image
+        id: inspect
+        run: |
+          docker buildx imagetools inspect ${{ github.repository }}:${{ needs.build-matrix.outputs.version }} --raw | tee manifest.json
+          echo "digest=$(jq -r '.manifests[0].digest' manifest.json)" >> $GITHUB_OUTPUT
 
   deploy-dev:
     runs-on: ubuntu-latest
     needs:
-      - build-publish
+      - merge-manifest
     env:
       DEPLOY_ENV: dev
     environment:
@@ -138,15 +160,15 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
+          docker_tag: ${{ needs.merge-manifest.outputs.docker_image_digest }}
           application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
 
   auto-approve-dev:
     runs-on: ubuntu-latest
-    if: needs.build-publish.outputs.new_release_published == 'true'
+    if: needs.merge-manifest.outputs.new_release_published == 'true'
     needs:
-      - build-publish
+      - merge-manifest
     steps:
       - name: Approve pending deployment
         run: |
@@ -159,7 +181,7 @@ jobs:
   deploy-staging:
     runs-on: ubuntu-latest
     needs:
-      - build-publish
+      - merge-manifest
       - deploy-dev
     env:
       DEPLOY_ENV: stg
@@ -177,15 +199,15 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
+          docker_tag: ${{ needs.merge-manifest.outputs.docker_image_digest }}
           application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
 
   auto-approve-staging:
     runs-on: ubuntu-latest
-    if: needs.build-publish.outputs.new_release_published == 'true'
+    if: needs.merge-manifest.outputs.new_release_published == 'true'
     needs:
-      - build-publish
+      - merge-manifest
       - deploy-dev
     steps:
       - name: Approve pending deployment
@@ -198,9 +220,9 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
-    if: needs.build-publish.outputs.new_release_published == 'true'
+    if: needs.merge-manifest.outputs.new_release_published == 'true'
     needs:
-      - build-publish
+      - merge-manifest
       - deploy-staging
     env:
       DEPLOY_ENV: prd
@@ -218,6 +240,6 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
+          docker_tag: ${{ needs.merge-manifest.outputs.docker_image_digest }}
           application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
