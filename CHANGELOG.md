@@ -1,3 +1,10 @@
+# [1.279.0](https://github.com/hirosystems/explorer/compare/v1.278.0...v1.279.0) (2025-06-04)
+
+
+### Features
+
+* remove arm64 ([#2311](https://github.com/hirosystems/explorer/issues/2311)) ([65027d0](https://github.com/hirosystems/explorer/commit/65027d0986064aa6d7f02defb434b23b29036faf))
+
 # [1.278.0](https://github.com/hirosystems/explorer/compare/v1.277.2...v1.278.0) (2025-06-03)
 
 
