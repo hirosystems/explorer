@@ -1,6 +1,5 @@
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
-import { Link } from '@/ui/Link';
 import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
@@ -10,7 +9,6 @@ import { PrimaryPage, SecondaryPage } from './consts';
 
 export const PrimaryPageLink = ({ page, onClick }: { page: PrimaryPage; onClick?: () => void }) => {
   const network = useGlobalContext().activeNetwork;
-
   return (
     <NextLink href={buildUrl(page.href, network)} variant="noUnderline" w="full" onClick={onClick}>
       <Flex
@@ -51,8 +49,9 @@ export const SecondaryPageLink = ({
   page: SecondaryPage;
   onClick?: () => void;
 }) => {
+  const network = useGlobalContext().activeNetwork;
   return (
-    <Link href={page.href} variant="noUnderline" onClick={onClick}>
+    <NextLink href={buildUrl(page.href, network)} variant="noUnderline" onClick={onClick}>
       <Text
         fontSize={{ base: 'md', lg: 'xs' }}
         color="textSecondary"
@@ -63,6 +62,6 @@ export const SecondaryPageLink = ({
       >
         {page.label}
       </Text>
-    </Link>
+    </NextLink>
   );
 };
