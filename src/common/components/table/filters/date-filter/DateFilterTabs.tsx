@@ -13,6 +13,8 @@ interface DateFilterProps {
 export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: DateFilterProps) {
   const defaultStartTimeNumber = defaultStartTime ? parseTimestamp(defaultStartTime) : null;
   const defaultEndTimeNumber = defaultEndTime ? parseTimestamp(defaultEndTime) : null;
+  const defaultMode =
+    defaultStartTime && defaultEndTime ? 'between' : defaultStartTime ? 'after' : 'before';
   const [selectedTab, setSelectedTab] = useState<DatePickerMode>('between');
 
   const tabs = useMemo(
@@ -23,8 +25,8 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: D
         content: (
           <DatePicker
             mode="between"
-            defaultStartTime={defaultStartTimeNumber}
-            defaultEndTime={defaultEndTimeNumber}
+            defaultStartTime={defaultMode === 'between' ? defaultStartTimeNumber : null}
+            defaultEndTime={defaultMode === 'between' ? defaultEndTimeNumber : null}
             onSubmit={onSubmit}
           />
         ),
@@ -33,18 +35,26 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: D
         id: 'before',
         title: 'Before',
         content: (
-          <DatePicker mode="before" defaultEndTime={defaultEndTimeNumber} onSubmit={onSubmit} />
+          <DatePicker
+            mode="before"
+            defaultEndTime={defaultMode === 'before' ? defaultEndTimeNumber : null}
+            onSubmit={onSubmit}
+          />
         ),
       },
       {
         id: 'after',
         title: 'After',
         content: (
-          <DatePicker mode="after" defaultStartTime={defaultStartTimeNumber} onSubmit={onSubmit} />
+          <DatePicker
+            mode="after"
+            defaultStartTime={defaultMode === 'after' ? defaultStartTimeNumber : null}
+            onSubmit={onSubmit}
+          />
         ),
       },
     ],
-    [defaultStartTimeNumber, defaultEndTimeNumber, onSubmit]
+    [defaultStartTimeNumber, defaultEndTimeNumber, onSubmit, defaultMode]
   );
 
   return (

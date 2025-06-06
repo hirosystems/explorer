@@ -1,3 +1,4 @@
+import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import {
   AccordionItem,
   AccordionItemContent,
@@ -9,17 +10,15 @@ import { DateFilterTriggerText } from './DateFilterTriggerText';
 
 export const DateFilterAccordionItem = ({
   id,
-  defaultStartTime,
-  defaultEndTime,
   open,
   onSubmit,
 }: {
   id: string;
-  defaultStartTime?: string;
-  defaultEndTime?: string;
   open: boolean;
-  onSubmit: () => void;
+  onSubmit: (startTime?: number, endTime?: number) => void;
 }) => {
+  const { startTime, endTime } = useTxTableFilters();
+
   return (
     <AccordionItem borderBottom={'none'} value={id}>
       <AccordionItemTrigger
@@ -30,11 +29,7 @@ export const DateFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <DateFilterTriggerText
-          defaultStartTime={defaultStartTime}
-          defaultEndTime={defaultEndTime}
-          open={open}
-        />
+        <DateFilterTriggerText startTime={startTime} endTime={endTime} open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -42,11 +37,7 @@ export const DateFilterAccordionItem = ({
         borderTopRadius={'none'}
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
-        <DateFilterTabs
-          defaultStartTime={defaultStartTime}
-          defaultEndTime={defaultEndTime}
-          onSubmit={onSubmit}
-        />
+        <DateFilterTabs defaultStartTime={startTime} defaultEndTime={endTime} onSubmit={onSubmit} />
       </AccordionItemContent>
     </AccordionItem>
   );

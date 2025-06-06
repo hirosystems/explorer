@@ -4,12 +4,11 @@ import { FilterTriggerText } from '../FilterTriggerText';
 
 export function TransactionTypeFilterTriggerText({
   open,
-  defaultTransactionType,
+  transactionType,
 }: {
   open: boolean;
-  defaultTransactionType: string[] | undefined;
+  transactionType: string[];
 }) {
-  const transactionType = defaultTransactionType || [];
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
   const firstActiveFilter = transactionType?.[0];

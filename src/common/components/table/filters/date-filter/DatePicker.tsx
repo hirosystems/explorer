@@ -6,12 +6,9 @@ import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
 import ReactDatePicker from 'react-datepicker';
 
 export type DatePickerMode = 'after' | 'before' | 'between';
-
-const DATE_PICKER_WIDTH = '240px';
 
 const MONTHS = [
   'January',
@@ -127,18 +124,6 @@ const DatePickerCustomHeader = ({
   </Flex>
 );
 
-interface FormValues {
-  startTime: number | null;
-  endTime: number | null;
-}
-
-export interface DatePickerProps {
-  mode: DatePickerMode;
-  defaultStartTime?: number | null;
-  defaultEndTime?: number | null;
-  onSubmit?: () => void;
-}
-
 const handleDateChange = (
   form: FormikProps<FormValues>,
   mode: DatePickerMode,
@@ -180,71 +165,26 @@ const handleDateChange = (
   }
 };
 
-export const getDateFilterParams = (
-  params: URLSearchParams,
-  startTime: number | null,
-  endTime: number | null
-) => {
-  const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-  const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-  const mode = startTime && endTime ? 'between' : startTime ? 'after' : 'before';
-
-  if (mode === 'before') {
-    if (endTimeTs) {
-      params.set('endTime', endTimeTs);
-    } else {
-      params.delete('endTime');
-    }
-    params.delete('startTime');
-    return params;
-  }
-  if (mode === 'after') {
-    if (startTimeTs) {
-      params.set('startTime', startTimeTs);
-    } else {
-      params.delete('startTime');
-    }
-    params.delete('endTime');
-    return params;
-  }
-  if (mode === 'between') {
-    if (startTimeTs) {
-      params.set('startTime', startTimeTs);
-    } else {
-      params.delete('startTime');
-    }
-    if (endTimeTs) {
-      params.set('endTime', endTimeTs);
-    } else {
-      params.delete('endTime');
-    }
-    return params;
-  }
-  return params;
-};
-
-export const useDateFilterSubmitHandler = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  return async ({ startTime, endTime }: FormValues) => {
-    const params = new URLSearchParams(searchParams);
-    const paramsWithDateFilter = getDateFilterParams(params, startTime, endTime);
-    router.push(`?${paramsWithDateFilter.toString()}`, { scroll: false });
-  };
-};
+interface FormValues {
+  startTime?: number | null;
+  endTime?: number | null;
+}
 
 export function DatePicker({
   mode,
   defaultStartTime = null,
   defaultEndTime = null,
   onSubmit,
-}: DatePickerProps) {
+}: {
+  mode: DatePickerMode;
+  defaultStartTime?: number | null;
+  defaultEndTime?: number | null;
+  onSubmit?: (startTime?: number, endTime?: number) => void;
+}) {
   const initialValues: FormValues = {
     startTime: mode !== 'before' ? defaultStartTime : null,
     endTime: mode !== 'after' ? defaultEndTime : null,
   };
-  const handleSubmit = useDateFilterSubmitHandler();
 
   return (
     <Formik
@@ -252,9 +192,8 @@ export function DatePicker({
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}
-      onSubmit={async (values: FormValues) => {
-        handleSubmit?.(values);
-        onSubmit?.();
+      onSubmit={(values: FormValues) => {
+        onSubmit?.(values.startTime ?? undefined, values.endTime ?? undefined);
       }}
     >
       {() => (
@@ -347,13 +286,9 @@ export function DatePicker({
                         handleDateChange(form, mode, startDate, endDate);
                       }}
                       startDate={
-                        form.values.startTime
-                          ? new UTCDate(form.values.startTime * 1000)
-                          : undefined
+                        form.values.startTime ? new UTCDate(form.values.startTime * 1000) : null
                       }
-                      endDate={
-                        form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
-                      }
+                      endDate={form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null}
                       dateFormat="yyyy-MM-dd"
                       popperProps={{
                         strategy: 'fixed',

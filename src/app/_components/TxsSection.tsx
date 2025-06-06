@@ -101,7 +101,6 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
         </ButtonLink>
       </Flex>
       <TxsTable
-        filters={{}}
         initialData={initialTxTableData}
         disablePagination
         pageSize={TXS_LIST_SIZE}
