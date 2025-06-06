@@ -31,7 +31,7 @@ function ConfirmedTxsListBase({
 }: ConfirmedTxsListProps) {
   const response = useConfirmedTransactionsInfinite(filters);
   const txs = useInfiniteQueryResult<Transaction>(response, limit);
-
+  console.log('txs', txs);
   return (
     <Box pb={6}>
       {!!filters && (
