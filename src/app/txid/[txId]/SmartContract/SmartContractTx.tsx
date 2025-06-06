@@ -20,7 +20,7 @@ export function SmartContractTx({
 }) {
   const txContractId = getTxContractId(tx);
   const { data: contract } = useContractById(txContractId);
-  const source = contract?.source_code;
+  const source = contract?.source_code || (tx as any)?.smart_contract?.source_code;
 
   return (
     <TxPage tx={tx} contractId={txContractId} txDetails={<TxDetails tx={tx} />}>

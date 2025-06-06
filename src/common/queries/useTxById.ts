@@ -9,6 +9,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
+import { mockSponsoredTx } from '../../common/mockData/txsData';
 import { DEFAULT_TX_EVENTS_LIMIT } from '../constants/constants';
 
 export function useTxById(
@@ -42,6 +43,13 @@ export function useSuspenseTxById(
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+      //Return mock if it matches
+      if (txId === mockSponsoredTx.tx_id) {
+        console.log('Returning mockSponsoredTx');
+        return mockSponsoredTx;
+      }
+
+      //Otherwise call real API
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
