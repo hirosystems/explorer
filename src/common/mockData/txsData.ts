@@ -108,7 +108,7 @@ export const mockSponsoredTx = {
   execution_cost_write_count: 0,
   execution_cost_write_length: 0,
   events: [],
-  tx_type: 'smart_contract',
+  tx_type: 'token_transfer',
   token_transfer: {
     recipient_address: 'SP3XXK8BG5X7CRH7W07RRJK3JZJXJ799WX3Y0SMCR',
     amount: '1',
