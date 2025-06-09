@@ -1,3 +1,10 @@
+# [1.280.0](https://github.com/hirosystems/explorer/compare/v1.279.0...v1.280.0) (2025-06-09)
+
+
+### Features
+
+* remove hybrid explorer banner ([#2319](https://github.com/hirosystems/explorer/issues/2319)) ([bf00d3c](https://github.com/hirosystems/explorer/commit/bf00d3c09a1d33134b1737a960a3897a4c075cb3))
+
 # [1.279.0](https://github.com/hirosystems/explorer/compare/v1.278.0...v1.279.0) (2025-06-04)
 
 
