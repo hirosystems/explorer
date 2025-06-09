@@ -8,7 +8,6 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { HybridExplorerBanner } from './Banner/HybridExplorerBanner';
 import { TestnetBanner } from './Banner/TestnetBanner';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
@@ -44,13 +43,11 @@ export function PageWrapper({
   tokenPrice,
   statusBarContent,
   serverThemeCookie,
-  hybridExplorerBannerCookie,
 }: {
   children: ReactNode;
   tokenPrice: TokenPrice;
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
-  hybridExplorerBannerCookie: string | undefined;
 }) {
   return (
     <>
@@ -58,7 +55,6 @@ export function PageWrapper({
         <NonHiroNetworkWarningBar />
         <IncidentsStatusBar />
         <CMSStatusBars statusBarContent={statusBarContent} />
-        <HybridExplorerBanner hybridExplorerBannerCookie={hybridExplorerBannerCookie} />
         <TestnetBanner />
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
