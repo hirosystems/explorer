@@ -27,17 +27,17 @@ export const ReadOnlyField: FC<ReadOnlyProps> = ({
   const stacksNetwork = useStacksNetwork();
 
   const { data } = useCallReadOnlyFunction({
-    contractId: contractId,
-    fn: fn,
-    readOnlyValue: readOnlyValue,
-    stacksNetwork: stacksNetwork,
-    stxAddress: stxAddress,
+    contractId,
+    fn,
+    readOnlyValue,
+    stacksNetwork,
+    stxAddress,
   });
 
   if (!data) return null;
 
   return (
-    <Box p="16px">
+    <Box p={4}>
       {data.okay ? (
         <Section title="Response">
           <CodeEditor code={parseReadOnlyResponse(data)} />
@@ -45,7 +45,7 @@ export const ReadOnlyField: FC<ReadOnlyProps> = ({
       ) : (
         <Box>{data.result}</Box>
       )}
-      <Flex alignItems="center" justifyContent="center" pt="16px">
+      <Flex alignItems="center" justifyContent="center" pt={4}>
         {cancelButton}
       </Flex>
     </Box>

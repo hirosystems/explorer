@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { UseQueryResult } from '@tanstack/react-query';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { StacksNetwork } from '@stacks/network';
-import { ClarityValue, cvToHex } from '@stacks/transactions';
+import { ClarityAbiFunction, ClarityValue, cvToHex } from '@stacks/transactions';
 
 import { HIRO_HEADERS } from '../constants/env';
 import { ReadOnlyResponse } from '../types/ReadOnlyResponse';
@@ -54,11 +53,24 @@ export function useCallReadOnlyFunction(
     readOnlyValue,
     stxAddress,
     stacksNetwork,
-  }: { contractId: string; fn: any; readOnlyValue: any; stxAddress?: string; stacksNetwork: any },
+  }: {
+    contractId: string;
+    fn: ClarityAbiFunction;
+    readOnlyValue: ClarityValue[];
+    stxAddress?: string;
+    stacksNetwork: StacksNetwork;
+  },
   options: any = {}
 ): UseQueryResult<ReadOnlyResponse> {
   return useQuery({
-    queryKey: ['readonly', contractId, fn.name],
+    queryKey: [
+      'readonly',
+      contractId,
+      fn.name,
+      readOnlyValue.map(cvToHex),
+      ...(stxAddress ? [stxAddress] : []),
+      stacksNetwork.chainId,
+    ],
     queryFn: () =>
       callReadOnlyFunction({
         contractName: contractId.split('.')[1],
