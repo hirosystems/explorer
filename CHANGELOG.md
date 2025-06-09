@@ -1,3 +1,10 @@
+## [1.280.1](https://github.com/hirosystems/explorer/compare/v1.280.0...v1.280.1) (2025-06-09)
+
+
+### Bug Fixes
+
+* fixed sandbox link ([0347291](https://github.com/hirosystems/explorer/commit/03472912267aa7d6f6540b403bc2588cf1df921b))
+
 # [1.280.0](https://github.com/hirosystems/explorer/compare/v1.279.0...v1.280.0) (2025-06-09)
 
 
