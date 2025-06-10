@@ -118,7 +118,11 @@ function CycleHeader() {
           fontWeight={['medium', 'regular']}
           whiteSpace={'nowrap'}
         >
-          Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
+          {approximateDaysTilNextCycle < 1
+            ? 'Ends today'
+            : approximateDaysTilNextCycle >= 1 && approximateDaysTilNextCycle < 2
+              ? `Ends in ~${approximateDaysTilNextCycle} day`
+              : `Ends in ~${approximateDaysTilNextCycle} days`}
         </Text>
       </Flex>
     </Flex>
