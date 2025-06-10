@@ -1,4 +1,4 @@
-import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
+import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 
@@ -34,9 +34,9 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         _hover={{ textDecoration: 'none' }}
-        aria-label={`Bitcoin block ${burnBlock.burn_block_height} mined at ${
+        aria-label={`Bitcoin block ${formatTimestampToRelativeTime(burnBlock.burn_block_height)} mined at ${formatTimestampToRelativeTime(
           burnBlock.burn_block_time
-        } with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
       >
@@ -84,10 +84,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                 aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
-                  useLocalTime: true,
-                  includeSeconds: true,
-                })}
+                {formatTimestampToRelativeTime(burnBlock.burn_block_time)}
               </Text>
             </Stack>
             <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
@@ -208,13 +205,10 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   <Text
                     textStyle={'text-medium-xs'}
                     color={'textSecondary'}
-                    aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
+                    aria-label={`Block timestamp: ${formatTimestampToRelativeTime(burnBlock.burn_block_time)}`}
                     suppressHydrationWarning
                   >
-                    {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
-                      useLocalTime: true,
-                      includeSeconds: true,
-                    })}
+                    {formatTimestampToRelativeTime(burnBlock.burn_block_time)}
                   </Text>
                 </Stack>
                 <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfacePrimary'}>
