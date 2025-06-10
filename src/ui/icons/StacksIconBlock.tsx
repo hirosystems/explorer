@@ -3,21 +3,12 @@
 import { IconBase, IconProps, IconWeight } from '@phosphor-icons/react';
 import { ReactElement, forwardRef } from 'react';
 
-type StxIconBlockVariant = 'primary' | 'secondary';
-
-const getWeights = (variant: StxIconBlockVariant = 'primary') =>
+const getWeights = (color?: string) =>
   new Map<IconWeight, ReactElement>([
     [
       'regular',
       <>
-        <rect
-          fill={variant === 'primary' ? '#fc6432' : '#221f20'}
-          y="0"
-          width="16"
-          height="16"
-          rx="4.444"
-          ry="4.444"
-        />
+        <rect fill={color ?? '#fc6432'} height="100%" width="100%" rx="4.444" ry="4.444" />
         <g>
           <path
             fill="#fff"
@@ -33,20 +24,10 @@ const getWeights = (variant: StxIconBlockVariant = 'primary') =>
   ]);
 
 // Block: Enclosed in a square shape to represent a Stacks block
-const StxIconBlock = forwardRef<SVGSVGElement, IconProps & { variant?: StxIconBlockVariant }>(
-  (props, ref) => {
-    const { variant = 'primary', ...rest } = props;
-    return (
-      <IconBase
-        ref={ref}
-        {...rest}
-        weights={getWeights(variant)}
-        viewBox={'0 0 16 16'}
-        fill="none"
-      />
-    );
-  }
-);
+const StxIconBlock = forwardRef<SVGSVGElement, IconProps & { color?: string }>((props, ref) => {
+  const { color, ...rest } = props;
+  return <IconBase ref={ref} {...rest} weights={getWeights(color)} viewBox={'0 0 16 16'} />;
+});
 
 StxIconBlock.displayName = 'StacksIconBlock';
 

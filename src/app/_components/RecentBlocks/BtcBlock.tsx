@@ -1,4 +1,5 @@
 import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 
@@ -88,8 +89,8 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
               </Text>
             </Stack>
             <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
-              <Icon w={4} h={4} color={'iconTertiary'} aria-hidden="true">
-                <StxSquareIcon />
+              <Icon w={4} h={4} aria-hidden="true">
+                <StacksIconBlock color={'var(--stacks-colors-icon-tertiary)'} />
               </Icon>
               <Text
                 textStyle={'text-medium-xs'}
@@ -212,8 +213,8 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   </Text>
                 </Stack>
                 <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfacePrimary'}>
-                  <Icon w={4} h={4} color={'iconTertiary'} aria-hidden="true">
-                    <StxSquareIcon />
+                  <Icon w={4} h={4} aria-hidden="true">
+                    <StacksIconBlock color={'var(--stacks-colors-icon-tertiary)'} />
                   </Icon>
                   <Text
                     textStyle={'text-medium-xs'}

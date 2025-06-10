@@ -1,8 +1,6 @@
 import { UIStxBlock } from '@/app/data';
-import {
-  formatTimestampTo12HourTime,
-  formatTimestampToRelativeTime,
-} from '@/common/utils/time-utils';
+import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
 
@@ -11,7 +9,6 @@ import { buildUrl } from '../../../common/utils/buildUrl';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
-import StxSquareIcon from '../../../ui/icons/StxSquareIcon';
 import { BORDER_WIDTH, BTC_BLOCK_MIN_WIDTH, SMALL_RING_WIDTH } from './consts';
 
 export function StxBlockGroup({
@@ -163,8 +160,8 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 borderRadius={'redesign.sm'}
                 bg={'surfaceSecondary'}
               >
-                <Icon w={4} h={4} color={'accent.stacks-500'}>
-                  <StxSquareIcon />
+                <Icon w={4} h={4}>
+                  <StacksIconBlock />
                 </Icon>
 
                 <Text
@@ -269,8 +266,8 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                   borderRadius={'redesign.sm'}
                   bg={'surfacePrimary'}
                 >
-                  <Icon w={4} h={4} color={'accent.stacks-500'}>
-                    <StxSquareIcon />
+                  <Icon w={4} h={4}>
+                    <StacksIconBlock />
                   </Icon>
                   <Text textStyle={'text-mono-sm'} color={'textPrimary'} className={'block-height'}>
                     #{stxBlock.height}
