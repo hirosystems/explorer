@@ -74,7 +74,24 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
           top={0}
           h="full"
           className="scroll-indicator"
-          aria-hidden="true"
+          aria-hidden="false"
+          tabIndex={0}
+          role="button"
+          aria-label="Scroll to end"
+          cursor="pointer"
+          onClick={() => {
+            if (divRef.current) {
+              divRef.current.scrollLeft = divRef.current.scrollWidth;
+            }
+          }}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              if (divRef.current) {
+                divRef.current.scrollLeft = divRef.current.scrollWidth;
+              }
+            }
+          }}
         >
           <Box w={2} h="full" bg="surfaceTertiary"></Box>
           <Flex
