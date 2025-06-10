@@ -77,7 +77,7 @@ export function getToAddress(tx: Transaction): string {
     return tx.contract_call?.contract_id;
   }
   if (tx.tx_type === 'coinbase') {
-    return tx.coinbase_payload?.alt_recipient ?? '';
+    return '';
   }
   if (tx.tx_type === 'tenure_change') {
     return '';
