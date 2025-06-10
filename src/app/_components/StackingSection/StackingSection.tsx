@@ -10,6 +10,7 @@ import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
 import ProgressDot from '@/ui/icons/ProgressDot';
+import StacksIconThin from '@/ui/icons/StacksIconThin';
 import StxIcon from '@/ui/icons/StxIcon';
 import StxSquareIcon from '@/ui/icons/StxSquareIcon';
 import { Box, BoxProps, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
@@ -133,7 +134,7 @@ function StxStats() {
     <Flex flexWrap={'wrap'}>
       <Flex alignItems={'center'} gap={0.5}>
         <Icon w="4.5" h="4.5">
-          <StxIcon />
+          <StacksIconThin />
         </Icon>
         <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
           {abbreviateNumber(stackedStx, 1)} STX
