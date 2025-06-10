@@ -13,6 +13,9 @@ import { microToStacksFormatted } from '../../../../common/utils/utils';
 
 export const Fees: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => {
   const stxValue = microToStacksFormatted(tx.fee_rate);
+  const sponsorText =
+    tx.sponsored && tx.sponsor_address ? ` (sponsored by ${tx.sponsor_address})` : '';
+  const fullCopyValue = `${stxValue} STX${sponsorText}`;
   return (
     <KeyValueHorizontal
       label={'Fees'}
@@ -22,14 +25,17 @@ export const Fees: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => {
             <Value>{stxValue} STX</Value>
             <StxPriceButton tx={tx} value={Number(tx.fee_rate)} />
           </Flex>
-          {tx.sponsored ? (
-            <Badge ml={4} color={'text'}>
-              Sponsored
-            </Badge>
-          ) : null}
+          {tx.sponsored && (
+            <Flex alignItems={'center'}>
+              <Badge ml={4} color="text" mr={4}>
+                Sponsored By
+              </Badge>
+              <Value>{tx.sponsor_address}</Value>
+            </Flex>
+          )}
         </Flex>
       }
-      copyValue={stxValue.toString()}
+      copyValue={fullCopyValue.toString()}
     />
   );
 };
