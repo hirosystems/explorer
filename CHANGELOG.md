@@ -1,3 +1,10 @@
+## [1.280.2](https://github.com/hirosystems/explorer/compare/v1.280.1...v1.280.2) (2025-06-10)
+
+
+### Bug Fixes
+
+* switched explorerlink to nextlink ([77c3bd8](https://github.com/hirosystems/explorer/commit/77c3bd899aad2516a0e1a174469170dc453bca91))
+
 ## [1.280.1](https://github.com/hirosystems/explorer/compare/v1.280.0...v1.280.1) (2025-06-09)
 
 
