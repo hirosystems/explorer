@@ -1,3 +1,10 @@
+## [1.280.3](https://github.com/hirosystems/explorer/compare/v1.280.2...v1.280.3) (2025-06-10)
+
+
+### Bug Fixes
+
+* fixed function call cache issue ([0e0d365](https://github.com/hirosystems/explorer/commit/0e0d365fb68ef58ac35470369d4dedac79d7e48e))
+
 ## [1.280.2](https://github.com/hirosystems/explorer/compare/v1.280.1...v1.280.2) (2025-06-10)
 
 
