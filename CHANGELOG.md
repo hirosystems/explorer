@@ -1,3 +1,16 @@
+# [1.281.0](https://github.com/hirosystems/explorer/compare/v1.280.3...v1.281.0) (2025-06-10)
+
+
+### Bug Fixes
+
+* switch recent block timestamps to relative time ([c8d6f5d](https://github.com/hirosystems/explorer/commit/c8d6f5db2af4a442ee09411410c6749e7e67b2ad))
+
+
+### Features
+
+* added tooltip tp timestamp col ([c15164b](https://github.com/hirosystems/explorer/commit/c15164ba2c443f3b73070e912214ff50f090fc5b))
+* switch filters to use shallow router for perf ([0311966](https://github.com/hirosystems/explorer/commit/03119661c44488eee7080e60bea4d4065e78e163))
+
 ## [1.280.3](https://github.com/hirosystems/explorer/compare/v1.280.2...v1.280.3) (2025-06-10)
 
 
