@@ -167,6 +167,9 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     enableSorting: false,
+    meta: {
+      tooltip: 'Timestamps are shown in your local timezone',
+    },
   },
 ];
 

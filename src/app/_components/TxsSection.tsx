@@ -79,6 +79,9 @@ export const columnDefinitions: ColumnDef<TxTableData>[] = [
     ),
     enableSorting: false,
     size: 150,
+    meta: {
+      tooltip: 'Timestamps are shown in your local timezone',
+    },
   },
 ];
 
