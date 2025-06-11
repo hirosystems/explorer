@@ -1,4 +1,3 @@
-import { Contract } from '@/common/types/tx';
 import { useFilterParams } from '@/common/utils/search-param-utils';
 import {
   Flex,
@@ -15,15 +14,12 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
 
-import { TxSearchResult } from '@stacks/stacks-blockchain-api-types';
-
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
   advancedSearchKeywords,
   buildAdvancedSearchQuery,
   getSearchPageUrl,
-  updateRecentResultsLocalStorage,
   useRecentResultsLocalStorage,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
@@ -541,7 +537,9 @@ function SearchInput({
         <StartElement />
         <Flex width={'full'} fontFamily="var(--font-instrument-sans)">
           <HiddenSearchField
-            placeholder={isSearchFieldFocused ? '' : 'Explore'}
+            placeholder={
+              isSearchFieldFocused ? '' : 'Search transactions, addresses, domains, and blocks'
+            }
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === 'Enter') {
                 handleSearch();
