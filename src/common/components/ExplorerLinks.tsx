@@ -1,26 +1,24 @@
 'use client';
 
-import { NextLink, NextLinkProps } from '@/ui/NextLink';
-import { LinkProps } from '@chakra-ui/react';
+import { Link, LinkProps } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { useGlobalContext } from '../context/useGlobalContext';
 import { buildUrl } from '../utils/buildUrl';
 
-export const ExplorerLink = forwardRef<
-  HTMLAnchorElement,
-  NextLinkProps & { openInNewTab?: boolean }
->(({ href, openInNewTab, ...rest }, ref) => {
-  const network = useGlobalContext().activeNetwork;
-  return (
-    <NextLink
-      ref={ref}
-      href={buildUrl(href!, network)}
-      {...(openInNewTab && { target: '_blank' })}
-      {...rest}
-    />
-  );
-});
+export const ExplorerLink = forwardRef<HTMLAnchorElement, LinkProps & { openInNewTab?: boolean }>(
+  ({ href, openInNewTab, ...rest }, ref) => {
+    const network = useGlobalContext().activeNetwork;
+    return (
+      <Link
+        ref={ref}
+        href={buildUrl(href!, network)}
+        {...(openInNewTab && { target: '_blank' })}
+        {...rest}
+      />
+    );
+  }
+);
 
 export const TxLink = forwardRef<
   HTMLAnchorElement,
