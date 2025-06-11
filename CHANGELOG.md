@@ -1,3 +1,10 @@
+## [1.281.1](https://github.com/hirosystems/explorer/compare/v1.281.0...v1.281.1) (2025-06-11)
+
+
+### Reverts
+
+* Revert "fix: switched explorerlink to nextlink" (#2334) ([5be2b07](https://github.com/hirosystems/explorer/commit/5be2b076162cc805e42e18e5219c817dbdb066da)), closes [#2334](https://github.com/hirosystems/explorer/issues/2334)
+
 # [1.281.0](https://github.com/hirosystems/explorer/compare/v1.280.3...v1.281.0) (2025-06-10)
 
 
