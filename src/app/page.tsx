@@ -1,4 +1,6 @@
+import { getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { Flex, Stack } from '@chakra-ui/react';
+import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
@@ -9,7 +11,6 @@ import { TxsSection } from './_components/TxsSection';
 import { HomePageDataProvider } from './context';
 import {
   fetchCurrentStackingCycle,
-  fetchMempoolFee,
   fetchRecentBlocks,
   fetchRecentUITxs,
   fetchUIMempoolStats,
@@ -23,22 +24,37 @@ export default async function HomeRedesign(props: {
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
   const tokenPrice = await getTokenPrice();
-  const [stxPrice, recentBlocks, stackingCycle, initialTxTableData, mempoolStats, mempoolFee] =
-    await Promise.all([
-      getCurrentStxPrice(),
-      fetchRecentBlocks(chain, api),
-      fetchCurrentStackingCycle(chain, api),
-      fetchRecentUITxs(chain, api),
-      fetchUIMempoolStats(chain, api),
-      fetchMempoolFee(chain, api),
-    ]);
+  const [
+    stxPrice,
+    recentBlocks,
+    stackingCycle,
+    initialTxTableData,
+    mempoolStats,
+    sampleTxsFeeEstimate,
+  ] = await Promise.all([
+    getCurrentStxPrice(),
+    fetchRecentBlocks(chain, api),
+    fetchCurrentStackingCycle(chain, api),
+    fetchRecentUITxs(chain, api),
+    fetchUIMempoolStats(chain, api),
+    getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
+  ]);
+
+  const { tokenTransferFees, contractCallFees, contractDeployFees, averageFees } =
+    sampleTxsFeeEstimate;
+
   return (
     <HomePageDataProvider
       stxPrice={stxPrice}
       initialRecentBlocks={recentBlocks}
       stackingCycle={stackingCycle}
       mempoolStats={mempoolStats}
-      mempoolFee={mempoolFee}
+      feeEstimates={{
+        tokenTransferFees,
+        contractCallFees,
+        contractDeployFees,
+        averageFees,
+      }}
     >
       <Stack gap={[16, 18, 20, 24]}>
         <RecentBlocksSection />
