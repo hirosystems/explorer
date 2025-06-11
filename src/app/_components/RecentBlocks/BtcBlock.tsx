@@ -40,6 +40,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
+        variant="underlineOnHover"
       >
         <Stack
           position="relative"
