@@ -1,3 +1,10 @@
+## [1.282.1](https://github.com/hirosystems/explorer/compare/v1.282.0...v1.282.1) (2025-06-12)
+
+
+### Bug Fixes
+
+* fixed stacks icons ([0470617](https://github.com/hirosystems/explorer/commit/0470617b80a2a3469a9ef6fbdc21332e47b13b5f))
+
 # [1.282.0](https://github.com/hirosystems/explorer/compare/v1.281.1...v1.282.0) (2025-06-12)
 
 
