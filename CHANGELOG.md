@@ -1,3 +1,10 @@
+# [1.283.0](https://github.com/hirosystems/explorer/compare/v1.282.1...v1.283.0) (2025-06-12)
+
+
+### Features
+
+* removed to col from coinbase txs ([8bf9609](https://github.com/hirosystems/explorer/commit/8bf9609a8781b9ef120e5a6717f67d84d16f9337))
+
 ## [1.282.1](https://github.com/hirosystems/explorer/compare/v1.282.0...v1.282.1) (2025-06-12)
 
 
