@@ -44,20 +44,14 @@ function ProgressBar({ percentage }: { percentage?: number }) {
       w="100%"
       position="relative"
     >
-      <Tooltip
-        variant="redesignPrimary"
-        size="lg"
-        content={`${percentage ? percentage : 0}% completed`}
-      >
-        <Stack
-          bg={'accent.stacks-500'}
-          h={2}
-          borderRadius={'redesign.2xl'}
-          w={`${percentage}%`}
-          position="absolute"
-          boxShadow={'0px 2px 10px 0px rgba(255, 85, 18, 0.50)'}
-        />
-      </Tooltip>
+      <Stack
+        bg={'accent.stacks-500'}
+        h={2}
+        borderRadius={'redesign.2xl'}
+        w={`${percentage}%`}
+        position="absolute"
+        boxShadow={'0px 2px 10px 0px rgba(255, 85, 18, 0.50)'}
+      />
       <ProgressKnob
         diameter={PROGRESS_KNOB_DIAMETER}
         left={`calc(var(--stacks-spacing-${PROGRESS_KNOB_DIAMETER}) / 2)`}
@@ -168,41 +162,47 @@ function CycleProgress() {
     stackingCycle: { approximateStartTimestamp, approximateEndTimestamp, progressPercentage },
   } = useHomePageData();
   return (
-    <Stack gap={4}>
-      <Stack gap={1}>
+    <Tooltip
+      variant="redesignPrimary"
+      size="lg"
+      content={`${progressPercentage ? progressPercentage : 0}% completed`}
+    >
+      <Stack gap={4}>
+        <Stack gap={1}>
+          <HStack justify={'space-between'}>
+            <Text textStyle={'text-medium-sm'} color="textPrimary">
+              Started
+            </Text>
+            <Text textStyle={'text-medium-sm'} color="textPrimary">
+              Ends
+            </Text>
+          </HStack>
+          <ProgressBar percentage={progressPercentage} />
+        </Stack>
         <HStack justify={'space-between'}>
-          <Text textStyle={'text-medium-sm'} color="textPrimary">
-            Started
+          <Text
+            textStyle={'text-medium-xs'}
+            color="textPrimary"
+            borderRadius={'redesign.md'}
+            bg={'surfaceFifth'}
+            px={2}
+            py={1}
+          >
+            ~ {formatDateShort(approximateStartTimestamp)}
           </Text>
-          <Text textStyle={'text-medium-sm'} color="textPrimary">
-            Ends
+          <Text
+            textStyle={'text-medium-xs'}
+            color="textPrimary"
+            borderRadius={'redesign.md'}
+            bg={'surfaceFifth'}
+            px={2}
+            py={0.5}
+          >
+            ~ {formatDateShort(approximateEndTimestamp)}
           </Text>
         </HStack>
-        <ProgressBar percentage={progressPercentage} />
       </Stack>
-      <HStack justify={'space-between'}>
-        <Text
-          textStyle={'text-medium-xs'}
-          color="textPrimary"
-          borderRadius={'redesign.md'}
-          bg={'surfaceFifth'}
-          px={2}
-          py={1}
-        >
-          ~ {formatDateShort(approximateStartTimestamp)}
-        </Text>
-        <Text
-          textStyle={'text-medium-xs'}
-          color="textPrimary"
-          borderRadius={'redesign.md'}
-          bg={'surfaceFifth'}
-          px={2}
-          py={0.5}
-        >
-          ~ {formatDateShort(approximateEndTimestamp)}
-        </Text>
-      </HStack>
-    </Stack>
+    </Tooltip>
   );
 }
 
