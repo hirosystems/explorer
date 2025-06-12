@@ -69,8 +69,11 @@ function FeeData({
   tokenPrice: TokenPrice;
 }) {
   const stxValue =
-    ustxValue !== undefined ? Number((ustxValue / MICROSTACKS_IN_STACKS).toFixed(2)) : undefined;
-  const formattedStxValue = stxValue !== undefined && stxValue < 0.01 ? '<0.01' : stxValue;
+    ustxValue !== undefined ? Number((ustxValue / MICROSTACKS_IN_STACKS).toFixed(4)) : undefined;
+  const formattedStxValue = stxValue !== undefined && stxValue < 0.0001 ? '<0.0001' : stxValue;
+
+  const dollarValue = stxValue !== undefined ? stxValue * tokenPrice.stxPrice : undefined;
+
   return (
     <Stack
       gap={2}
@@ -94,11 +97,11 @@ function FeeData({
           /
         </Text>
         <Text textStyle="text-mono-sm" color="textSecondary">
-          {stxValue === undefined
+          {dollarValue === undefined
             ? 'N/A'
-            : stxValue === 0
+            : dollarValue < 0.01
               ? '<$0.01'
-              : `$${(stxValue * tokenPrice.stxPrice).toFixed(2)}`}
+              : `$${dollarValue.toFixed(2)}`}
         </Text>
       </HStack>
     </Stack>
@@ -120,15 +123,26 @@ function getFeeDescription(txType: keyof MempoolFeePriorities) {
   }
 }
 
+const txTypeFees = ['all', 'smart_contract', 'token_transfer', 'contract_call'] as Array<
+  keyof MempoolFeePriorities | 'all'
+>;
+
 function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { mempoolFee } = useHomePageData();
-  const availableTxTypeFees = Object.keys(mempoolFee) as Array<keyof MempoolFeePriorities>;
+  const { feeEstimates } = useHomePageData();
+
+  const feeEstimatesMap = {
+    all: feeEstimates.averageFees,
+    smart_contract: feeEstimates.contractDeployFees,
+    token_transfer: feeEstimates.tokenTransferFees,
+    contract_call: feeEstimates.contractCallFees,
+  };
+
   return (
     <TabsRoot variant={'primary'} size={'redesignMd'} defaultValue={'all'} gap="4">
       <Stack gap={4} w="100%">
         <Stack gap={3}>
           <TabsList flexWrap={'wrap'} rowGap={2}>
-            {availableTxTypeFees.map(txType => (
+            {txTypeFees.map(txType => (
               <TabsTrigger key={txType} value={txType} gap={1}>
                 <TabIcon>{txType === 'all' ? <PlusMinus /> : getTxTypeIcon(txType)}</TabIcon>
                 <Text textStyle={'text-medium-sm'} color="textPrimary">
@@ -138,18 +152,18 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
             ))}
           </TabsList>
           <Flex>
-            {availableTxTypeFees.map(txType => (
+            {txTypeFees.map(txType => (
               <TabsContent key={txType} value={txType}>
                 <Stack gap={4}>
                   <Flex gap={2} flexWrap={'wrap'}>
                     <FeeData
                       title="Low"
-                      ustxValue={mempoolFee?.[txType]?.low_priority}
+                      ustxValue={feeEstimatesMap[txType]?.low_priority}
                       tokenPrice={tokenPrice}
                     />
                     <FeeData
                       title="Standard"
-                      ustxValue={mempoolFee?.[txType]?.medium_priority}
+                      ustxValue={feeEstimatesMap[txType]?.medium_priority}
                       tokenPrice={tokenPrice}
                     />
                     <FeeData
@@ -161,7 +175,7 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
                           </Icon>
                         </Flex>
                       }
-                      ustxValue={mempoolFee?.[txType]?.high_priority}
+                      ustxValue={feeEstimatesMap[txType]?.high_priority}
                       tokenPrice={tokenPrice}
                     />
                   </Flex>

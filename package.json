@@ -46,6 +46,7 @@
     "@stacks/connect-ui": "6.4.1",
     "@stacks/network": "6.13.0",
     "@stacks/transactions": "6.15.1-pr.0bcf867e.0+0bcf867e",
+    "@stacks/transactions-v7": "npm:@stacks/transactions@7.0.5",
     "@storybook/addon-themes": "8.6.9",
     "@tanstack/react-query": "5.69.0",
     "@tanstack/react-table": "8.21.2",
@@ -86,7 +87,11 @@
     "statuspage.io": "3.2.10",
     "unique-names-generator": "4.7.1",
     "valid-url": "1.0.9",
-    "yup": "1.6.1"
+    "yup": "1.6.1",
+    "@leather.io/query": "2.35.1",
+    "@leather.io/stacks": "1.7.3",
+    "@leather.io/utils": "0.30.0",
+    "@leather.io/models": "0.31.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "3.14.2",
