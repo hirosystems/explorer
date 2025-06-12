@@ -399,6 +399,7 @@ export function TxsTable({
       }
       isLoading={isLoading}
       isFetching={isFetching}
+      isFiltered={isTableFiltered}
     />
   );
 }
