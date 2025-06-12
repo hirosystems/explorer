@@ -1,3 +1,10 @@
+# [1.282.0](https://github.com/hirosystems/explorer/compare/v1.281.1...v1.282.0) (2025-06-12)
+
+
+### Features
+
+* tx fee estimates ([#2338](https://github.com/hirosystems/explorer/issues/2338)) ([5a385cb](https://github.com/hirosystems/explorer/commit/5a385cb5171478dc5f214e66b0ce32642ba97dfb))
+
 ## [1.281.1](https://github.com/hirosystems/explorer/compare/v1.281.0...v1.281.1) (2025-06-11)
 
 
