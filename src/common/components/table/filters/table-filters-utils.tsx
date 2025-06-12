@@ -60,6 +60,25 @@ export const useDateFilterHandler = (useShallow: boolean = true) => {
   };
 };
 
+const removeDateFilterFromSearchParams = (searchParams: URLSearchParams) => {
+  searchParams.delete('startTime');
+  searchParams.delete('endTime');
+  return searchParams;
+};
+
+export const useClearDateFilterHandler = (useShallow: boolean = true) => {
+  const searchParams = useSearchParams();
+  const shallowRouter = useShallowRouter();
+  const router = useRouter();
+  const params = new URLSearchParams(searchParams);
+  const searchParamsWithoutDateFilter = removeDateFilterFromSearchParams(params);
+  if (useShallow) {
+    return () => shallowRouter.replace(null, '', `?${searchParamsWithoutDateFilter.toString()}`);
+  } else {
+    return () => router.replace(`?${searchParamsWithoutDateFilter.toString()}`);
+  }
+};
+
 export const getAddressFilterParams = (
   searchParams: URLSearchParams,
   fromAddress: string,
@@ -78,6 +97,12 @@ export const getAddressFilterParams = (
   return searchParams;
 };
 
+const removeAddressFilterFromSearchParams = (searchParams: URLSearchParams) => {
+  searchParams.delete('fromAddress');
+  searchParams.delete('toAddress');
+  return searchParams;
+};
+
 export function useAddressFilterHandler(useShallow: boolean = true) {
   const searchParams = useSearchParams();
   const shallowRouter = useShallowRouter();
@@ -93,6 +118,21 @@ export function useAddressFilterHandler(useShallow: boolean = true) {
     }
   };
 }
+
+export const useClearAddressFilterHandler = (useShallow: boolean = true) => {
+  const searchParams = useSearchParams();
+  const shallowRouter = useShallowRouter();
+  const router = useRouter();
+
+  const params = new URLSearchParams(searchParams);
+  const searchParamsWithoutAddressFilter = removeAddressFilterFromSearchParams(params);
+
+  if (useShallow) {
+    return () => shallowRouter.replace(null, '', `?${searchParamsWithoutAddressFilter.toString()}`);
+  } else {
+    return () => router.replace(`?${searchParamsWithoutAddressFilter.toString()}`);
+  }
+};
 
 export const getTransactionTypeFilterParams = (
   searchParams: URLSearchParams,
@@ -121,3 +161,23 @@ export function useTransactionTypeFilterHandler(useShallow: boolean = true) {
     }
   };
 }
+
+const removeTransactionTypeFilterFromSearchParams = (searchParams: URLSearchParams) => {
+  searchParams.delete('transactionType');
+  return searchParams;
+};
+
+export const useClearTransactionTypeFilterHandler = (useShallow: boolean = true) => {
+  const searchParams = useSearchParams();
+  const shallowRouter = useShallowRouter();
+  const router = useRouter();
+  const params = new URLSearchParams(searchParams);
+  const searchParamsWithoutTransactionTypeFilter =
+    removeTransactionTypeFilterFromSearchParams(params);
+  if (useShallow) {
+    return () =>
+      shallowRouter.replace(null, '', `?${searchParamsWithoutTransactionTypeFilter.toString()}`);
+  } else {
+    return () => router.replace(`?${searchParamsWithoutTransactionTypeFilter.toString()}`);
+  }
+};

@@ -3,10 +3,13 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 import {
   useAddressFilterHandler,
+  useClearAddressFilterHandler,
+  useClearDateFilterHandler,
+  useClearTransactionTypeFilterHandler,
   useDateFilterHandler,
   useTransactionTypeFilterHandler,
 } from '../filters/table-filters-utils';
-import { useClearTxTableFiltersHandler } from './tx-table-filters-utils';
+import { useClearAllTxTableFiltersHandler } from './tx-table-filters-utils';
 
 export interface TxTableFilters {
   transactionType: string[];
@@ -31,6 +34,9 @@ export const TxTableFiltersContext = createContext<
     dateFilterHandler: (startTime?: number, endTime?: number) => void;
     transactionTypeFilterHandler: (transactionType: string[]) => void;
     clearFiltersHandler: () => void;
+    clearAddressFilterHandler: () => void;
+    clearDateFilterHandler: () => void;
+    clearTransactionTypeFilterHandler: () => void;
   }
 >({
   transactionType: [],
@@ -42,6 +48,9 @@ export const TxTableFiltersContext = createContext<
   dateFilterHandler: (startTime?: number, endTime?: number) => {},
   transactionTypeFilterHandler: (transactionType: string[]) => {},
   clearFiltersHandler: () => {},
+  clearAddressFilterHandler: () => {},
+  clearDateFilterHandler: () => {},
+  clearTransactionTypeFilterHandler: () => {},
 });
 
 export const TxTableFiltersProvider = ({
@@ -104,7 +113,10 @@ export const TxTableFiltersProvider = ({
   const addressFilterHandler = useAddressFilterHandler();
   const dateFilterHandler = useDateFilterHandler();
   const transactionTypeFilterHandler = useTransactionTypeFilterHandler();
-  const clearFiltersHandler = useClearTxTableFiltersHandler();
+  const clearAddressFilterHandler = useClearAddressFilterHandler();
+  const clearDateFilterHandler = useClearDateFilterHandler();
+  const clearTransactionTypeFilterHandler = useClearTransactionTypeFilterHandler();
+  const clearFiltersHandler = useClearAllTxTableFiltersHandler();
 
   return (
     <TxTableFiltersContext.Provider
@@ -118,6 +130,9 @@ export const TxTableFiltersProvider = ({
         dateFilterHandler,
         transactionTypeFilterHandler,
         clearFiltersHandler,
+        clearAddressFilterHandler,
+        clearDateFilterHandler,
+        clearTransactionTypeFilterHandler,
       }}
     >
       {children}

@@ -5,8 +5,7 @@ import {
   TabPopoverTrigger,
 } from '@/common/components/TabPopover';
 import { PopoverRootProps } from '@ark-ui/react';
-import { Box, Flex, Icon, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
-import { CaretDown, CaretUp } from '@phosphor-icons/react';
+import { Box, Flex, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
 interface TableTabPopoverProps {
@@ -44,10 +43,10 @@ export function TableTabPopover({
       }}
       variant="redesignPrimary"
     >
-      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
+      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps} onClick={() => {}}>
         <Flex
           alignItems={'center'}
-          gap={1}
+          // gap={1}
           bgColor={'surfacePrimary'}
           py={1}
           px={3}
@@ -62,15 +61,6 @@ export function TableTabPopover({
           aria-expanded={open}
         >
           {trigger(open, setOpen)}
-
-          <Icon
-            color={open ? 'iconPrimary' : 'iconSecondary'}
-            _groupHover={{ color: 'iconPrimary' }}
-            h={3}
-            w={3}
-          >
-            {open ? <CaretUp /> : <CaretDown />}
-          </Icon>
         </Flex>
       </TabPopoverTrigger>
       <TabPopoverContent
