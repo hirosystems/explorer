@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 
 import { AddressFilterForm } from './AddressFilterForm';
-import { AddressFilterTriggerText } from './AddressFilterTriggerText';
+import { AddressFilterTrigger } from './AddressFilterTrigger';
 
 export const AddressFilterAccordionItem = ({
   id,
@@ -29,7 +29,7 @@ export const AddressFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <AddressFilterTriggerText fromAddress={fromAddress} toAddress={toAddress} open={open} />
+        <AddressFilterTrigger fromAddress={fromAddress} toAddress={toAddress} open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"

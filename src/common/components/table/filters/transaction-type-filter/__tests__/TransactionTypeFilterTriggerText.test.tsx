@@ -2,12 +2,12 @@ import { renderWithChakraProviders } from '@/common/utils/test-utils/render-util
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 
-import { TransactionTypeFilterTriggerText } from '../TransactionTypeFilterTriggerText';
+import { TransactionTypeFilterTrigger } from '../TransactionTypeFilterTriggerText';
 
 describe('TransactionTypeFilterTriggerText', () => {
   test('displays Contract deploy label when smart_contract filter is active', () => {
     renderWithChakraProviders(
-      <TransactionTypeFilterTriggerText open={false} transactionType={['smart_contract']} />
+      <TransactionTypeFilterTrigger open={false} transactionType={['smart_contract']} />
     );
     expect(screen.getByText('Contract deploy')).toBeInTheDocument();
     expect(screen.getByText('Type:')).toBeInTheDocument();

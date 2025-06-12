@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 
 import { DateFilterTabs } from './DateFilterTabs';
-import { DateFilterTriggerText } from './DateFilterTriggerText';
+import { DateFilterTrigger } from './DateFilterTrigger';
 
 export const DateFilterAccordionItem = ({
   id,
@@ -29,7 +29,7 @@ export const DateFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <DateFilterTriggerText startTime={startTime} endTime={endTime} open={open} />
+        <DateFilterTrigger startTime={startTime} endTime={endTime} open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"

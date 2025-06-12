@@ -17,7 +17,7 @@ export function useSearchParamsWithoutTxTableFilters() {
   return paramsWithoutFilters;
 }
 
-export function useClearTxTableFiltersHandler() {
+export function useClearAllTxTableFiltersHandler() {
   const searchParamsWithoutFilters = useSearchParamsWithoutTxTableFilters();
   const shallowRouter = useShallowRouter();
   return () => {

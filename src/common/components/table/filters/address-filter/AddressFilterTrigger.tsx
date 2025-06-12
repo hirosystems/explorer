@@ -1,24 +1,28 @@
 import { truncateMiddle, truncateStxAddress, validateStacksAddress } from '@/common/utils/utils';
 import { Flex } from '@chakra-ui/react';
 
-import { FilterTriggerText } from '../FilterTriggerText';
+import { FilterTrigger } from '../FilterTrigger';
 
 const TRUNCATE_THRESHOLD = 15;
 
-export const AddressFilterTriggerText = ({
+export const AddressFilterTrigger = ({
+  setOpen,
   toAddress,
   fromAddress,
   open,
+  clearFilterHandler,
 }: {
+  setOpen: (open: boolean) => void;
   toAddress?: string;
   fromAddress?: string;
   open: boolean;
+  clearFilterHandler: () => void;
 }) => {
   if (fromAddress || toAddress) {
     return (
       <Flex gap={1.5}>
         {fromAddress && (
-          <FilterTriggerText
+          <FilterTrigger
             prefix="From:"
             value={
               validateStacksAddress(fromAddress)
@@ -28,10 +32,12 @@ export const AddressFilterTriggerText = ({
                   : fromAddress
             }
             open={open}
+            setOpen={setOpen}
+            clearFilterHandler={clearFilterHandler}
           />
         )}
         {toAddress && (
-          <FilterTriggerText
+          <FilterTrigger
             prefix="To:"
             value={
               validateStacksAddress(toAddress)
@@ -41,11 +47,21 @@ export const AddressFilterTriggerText = ({
                   : toAddress
             }
             open={open}
+            setOpen={setOpen}
+            clearFilterHandler={clearFilterHandler}
           />
         )}
       </Flex>
     );
   }
 
-  return <FilterTriggerText prefix="From/To" value="" open={open} />;
+  return (
+    <FilterTrigger
+      prefix="From/To"
+      value=""
+      open={open}
+      setOpen={setOpen}
+      clearFilterHandler={clearFilterHandler}
+    />
+  );
 };

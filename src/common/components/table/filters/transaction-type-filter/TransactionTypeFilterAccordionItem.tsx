@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
-import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTriggerText';
+import { TransactionTypeFilterTrigger } from './TransactionTypeFilterTriggerText';
 
 export const TransactionTypeFilterAccordionItem = ({
   id,
@@ -29,7 +29,7 @@ export const TransactionTypeFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <TransactionTypeFilterTriggerText open={open} transactionType={transactionType} />
+        <TransactionTypeFilterTrigger open={open} transactionType={transactionType} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
