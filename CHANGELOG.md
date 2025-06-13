@@ -1,3 +1,10 @@
+# [1.284.0](https://github.com/hirosystems/explorer/compare/v1.283.0...v1.284.0) (2025-06-13)
+
+
+### Features
+
+* redeploy ([#2350](https://github.com/hirosystems/explorer/issues/2350)) ([7bb9990](https://github.com/hirosystems/explorer/commit/7bb9990d20af25ed0daffc2e91f5f727541e6f7b))
+
 # [1.283.0](https://github.com/hirosystems/explorer/compare/v1.282.1...v1.283.0) (2025-06-12)
 
 
