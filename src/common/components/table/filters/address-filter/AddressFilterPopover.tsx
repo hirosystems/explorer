@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
-import { TableTabPopover } from '../TableTabPopover';
+import { FilterTabPopover, getFilterTabPopoverContainerProps } from '../FilterTabPopover';
 import { AddressFilterForm } from './AddressFilterForm';
 import { AddressFilterTrigger } from './AddressFilterTrigger';
 
@@ -20,7 +20,7 @@ export function AddressFilterPopover({
   clearFilterHandler: () => void;
 }) {
   return (
-    <TableTabPopover
+    <FilterTabPopover
       id={`address-filter-popover${idExtension ? `-${idExtension}` : ''}`}
       positioning={{
         placement: 'bottom-start',
@@ -34,6 +34,7 @@ export function AddressFilterPopover({
           fromAddress={defaultFromAddress}
           toAddress={defaultToAddress}
           clearFilterHandler={clearFilterHandler}
+          filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
       content={(open, setOpen) => (

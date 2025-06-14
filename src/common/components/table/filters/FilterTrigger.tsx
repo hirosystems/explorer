@@ -1,6 +1,8 @@
 import { Text } from '@/ui/Text';
-import { Flex, Icon } from '@chakra-ui/react';
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { CaretDown, CaretUp, X } from '@phosphor-icons/react';
+
+export type FilterTriggerContainerProps = FlexProps | ((open: boolean) => FlexProps);
 
 export const FilterTrigger = ({
   prefix,
@@ -8,17 +10,46 @@ export const FilterTrigger = ({
   open,
   setOpen,
   clearFilterHandler,
+  containerProps,
 }: {
   prefix: string;
   value: string;
   open: boolean;
   setOpen: (open: boolean) => void;
   clearFilterHandler: () => void;
+  containerProps?: FilterTriggerContainerProps;
 }) => {
+  const cp = typeof containerProps === 'function' ? containerProps(open) : containerProps;
+
   return (
-    <Flex aria-live="polite" aria-atomic="true" alignItems="center">
-      <Flex gap={2}>
-        <Flex gap={1} alignItems="center">
+    <Flex
+      className="filter-trigger"
+      aria-live="polite"
+      aria-atomic="true"
+      alignItems="center"
+      role="button"
+      aria-haspopup="dialog"
+      aria-expanded={open}
+      {...cp}
+      px={0}
+      py={0}
+    >
+      <Flex
+        className="open-close-trigger-area group"
+        gap={1}
+        justifyContent="space-between"
+        alignItems="center"
+        onClick={e => {
+          e.stopPropagation();
+          setOpen(!open);
+        }}
+        pl={cp?.px ?? 0}
+        pr={value ? 2 : (cp?.px ?? 0)}
+        py={cp?.py ?? 0}
+        cursor="pointer"
+        w="full"
+      >
+        <Flex gap={1}>
           <Text
             textStyle="text-medium-sm"
             color={open ? 'textPrimary' : 'textSecondary'}
@@ -31,44 +62,44 @@ export const FilterTrigger = ({
               {value}
             </Text>
           )}
+        </Flex>
+        <Icon
+          color={open ? 'iconPrimary' : 'iconSecondary'}
+          _groupHover={{ color: 'iconPrimary' }}
+          h={3}
+          w={3}
+        >
+          {open ? <CaretUp /> : <CaretDown />}
+        </Icon>
+      </Flex>
+      {value && (
+        <Flex
+          pr={cp?.px ?? 0}
+          py={cp?.py ?? 0}
+          alignItems="center"
+          className="clear-trigger-area group"
+          onClick={e => {
+            e.stopPropagation();
+            clearFilterHandler();
+          }}
+          cursor="pointer"
+        >
+          <Text textStyle="text-medium-sm" color="textTertiary">
+            |
+          </Text>
           <Icon
-            color={open ? 'iconPrimary' : 'iconSecondary'}
-            _groupHover={{ color: 'iconPrimary' }}
+            pl={2}
             h={3}
             w={3}
+            boxSizing={'content-box'}
+            color="iconTertiary"
+            _groupHover={{ color: 'iconPrimary' }}
+            onClick={clearFilterHandler}
           >
-            {open ? <CaretUp /> : <CaretDown />}
+            <X />
           </Icon>
         </Flex>
-        {value && (
-          <Flex
-            gap={2}
-            alignItems="center"
-            className="group"
-            onClick={e => {
-              e.stopPropagation();
-              clearFilterHandler();
-            }}
-          >
-            <Text
-              textStyle="text-medium-sm"
-              color="textTertiary"
-              _groupHover={{ color: 'textPrimary' }}
-            >
-              |
-            </Text>
-            <Icon
-              h={3}
-              w={3}
-              color="iconTertiary"
-              _groupHover={{ color: 'iconPrimary' }}
-              onClick={clearFilterHandler}
-            >
-              <X />
-            </Icon>
-          </Flex>
-        )}
-      </Flex>
+      )}
     </Flex>
   );
 };

@@ -1,7 +1,7 @@
 import { formatDate, parseUTCDate } from '@/common/utils/time-utils';
 import { useMemo } from 'react';
 
-import { FilterTrigger } from '../FilterTrigger';
+import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
 
 export const DateFilterTrigger = ({
   open,
@@ -9,12 +9,14 @@ export const DateFilterTrigger = ({
   endTime,
   setOpen,
   clearFilterHandler,
+  filterContainerProps,
 }: {
   open: boolean;
   startTime: string;
   endTime: string;
   setOpen: (open: boolean) => void;
   clearFilterHandler: () => void;
+  filterContainerProps: FilterTriggerContainerProps;
 }) => {
   const parsedStartTime = parseUTCDate(startTime);
   const parsedEndTime = parseUTCDate(endTime);
@@ -53,6 +55,7 @@ export const DateFilterTrigger = ({
       open={open}
       setOpen={setOpen}
       clearFilterHandler={clearFilterHandler}
+      containerProps={filterContainerProps}
     />
   );
 };

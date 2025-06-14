@@ -33,7 +33,7 @@ export const TxTableFiltersContext = createContext<
     addressFilterHandler: (fromAddress: string, toAddress: string) => void;
     dateFilterHandler: (startTime?: number, endTime?: number) => void;
     transactionTypeFilterHandler: (transactionType: string[]) => void;
-    clearFiltersHandler: () => void;
+    clearAllFiltersHandler: () => void;
     clearAddressFilterHandler: () => void;
     clearDateFilterHandler: () => void;
     clearTransactionTypeFilterHandler: () => void;
@@ -47,7 +47,7 @@ export const TxTableFiltersContext = createContext<
   addressFilterHandler: (fromAddress: string, toAddress: string) => {},
   dateFilterHandler: (startTime?: number, endTime?: number) => {},
   transactionTypeFilterHandler: (transactionType: string[]) => {},
-  clearFiltersHandler: () => {},
+  clearAllFiltersHandler: () => {},
   clearAddressFilterHandler: () => {},
   clearDateFilterHandler: () => {},
   clearTransactionTypeFilterHandler: () => {},
@@ -116,7 +116,7 @@ export const TxTableFiltersProvider = ({
   const clearAddressFilterHandler = useClearAddressFilterHandler();
   const clearDateFilterHandler = useClearDateFilterHandler();
   const clearTransactionTypeFilterHandler = useClearTransactionTypeFilterHandler();
-  const clearFiltersHandler = useClearAllTxTableFiltersHandler();
+  const clearAllFiltersHandler = useClearAllTxTableFiltersHandler();
 
   return (
     <TxTableFiltersContext.Provider
@@ -129,7 +129,7 @@ export const TxTableFiltersProvider = ({
         addressFilterHandler,
         dateFilterHandler,
         transactionTypeFilterHandler,
-        clearFiltersHandler,
+        clearAllFiltersHandler,
         clearAddressFilterHandler,
         clearDateFilterHandler,
         clearTransactionTypeFilterHandler,

@@ -5,10 +5,10 @@ import {
   TabPopoverTrigger,
 } from '@/common/components/TabPopover';
 import { PopoverRootProps } from '@ark-ui/react';
-import { Box, Flex, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
+import { Box, FlexProps, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
-interface TableTabPopoverProps {
+interface FilterTabPopoverProps {
   id: string;
   positioning?: PopoverRootProps['positioning'];
   trigger: (open: boolean, setOpen: (open: boolean) => void) => ReactNode;
@@ -23,45 +23,30 @@ const DEFAULT_POSITIONING: PopoverRootProps['positioning'] = {
   sameWidth: true,
 };
 
-export function TableTabPopover({
+export const getFilterTabPopoverContainerProps = (open: boolean): FlexProps => ({
+  px: 3,
+  py: 1,
+  bgColor: 'surfacePrimary',
+  borderRadius: 'redesign.lg',
+  borderTopRadius: 'redesign.lg',
+  borderBottomRadius: open ? 'none' : 'redesign.lg',
+  w: 'fit-content',
+});
+
+export function FilterTabPopover({
   id,
   positioning = DEFAULT_POSITIONING,
   trigger,
   content,
   triggerProps,
   contentProps,
-}: TableTabPopoverProps) {
+}: FilterTabPopoverProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <TabPopoverRoot
-      id={id}
-      positioning={positioning}
-      open={open}
-      onOpenChange={e => {
-        setOpen(e.open);
-      }}
-      variant="redesignPrimary"
-    >
-      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps} onClick={() => {}}>
-        <Flex
-          alignItems={'center'}
-          // gap={1}
-          bgColor={'surfacePrimary'}
-          py={1}
-          px={3}
-          borderRadius="redesign.lg"
-          borderTopRadius="redesign.lg"
-          borderBottomRadius={open ? 'none' : 'redesign.lg'}
-          className="group"
-          cursor="pointer"
-          w="fit-content"
-          role="button"
-          aria-haspopup="dialog"
-          aria-expanded={open}
-        >
-          {trigger(open, setOpen)}
-        </Flex>
+    <TabPopoverRoot id={id} positioning={positioning} open={open} variant="redesignPrimary">
+      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
+        {trigger(open, setOpen)}
       </TabPopoverTrigger>
       <TabPopoverContent
         bgColor={'surfacePrimary'}
