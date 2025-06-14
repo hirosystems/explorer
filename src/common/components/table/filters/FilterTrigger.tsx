@@ -15,7 +15,7 @@ export const FilterTrigger = ({
   prefix: string;
   value: string;
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen?: (open: boolean) => void;
   clearFilterHandler: () => void;
   containerProps?: FilterTriggerContainerProps;
 }) => {
@@ -40,8 +40,7 @@ export const FilterTrigger = ({
         justifyContent="space-between"
         alignItems="center"
         onClick={e => {
-          e.stopPropagation();
-          setOpen(!open);
+          setOpen?.(!open);
         }}
         pl={cp?.px ?? 0}
         pr={value ? 2 : (cp?.px ?? 0)}

@@ -28,7 +28,6 @@ export function TransactionTypeFilterPopover({
       trigger={(open, setOpen) => (
         <TransactionTypeFilterTrigger
           open={open}
-          setOpen={setOpen}
           transactionType={defaultTransactionType}
           clearFilterHandler={clearFilterHandler}
           filterContainerProps={getFilterTabPopoverContainerProps}
