@@ -44,7 +44,15 @@ export function FilterTabPopover({
   const [open, setOpen] = useState(false);
 
   return (
-    <TabPopoverRoot id={id} positioning={positioning} open={open} variant="redesignPrimary">
+    <TabPopoverRoot
+      id={id}
+      positioning={positioning}
+      open={open}
+      variant="redesignPrimary"
+      onOpenChange={e => {
+        setOpen(e.open);
+      }}
+    >
       <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
         {trigger(open, setOpen)}
       </TabPopoverTrigger>

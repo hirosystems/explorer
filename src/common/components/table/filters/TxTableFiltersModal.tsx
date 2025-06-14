@@ -9,7 +9,7 @@ import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { areAnyTxTableFiltersActive } from '../tx-table/tx-table-filters-utils';
 import { AddressFilterAccordionItem } from './address-filter/AddressFilterAccordionItem';
@@ -39,21 +39,8 @@ const TxTableFiltersModalBody = () => {
     clearTransactionTypeFilterHandler,
   } = useTxTableFilters();
 
-  useEffect(() => {
-    console.log({ accordions });
-  }, [accordions]);
-
   return (
-    <AccordionRoot
-      multiple
-      mt={0}
-      defaultValue={undefined}
-      value={accordions}
-      onValueChange={({ value }) => {
-        console.log('onValueChange', value);
-        // setAccordions(value as AccordionItem[]);
-      }}
-    >
+    <AccordionRoot multiple mt={0} defaultValue={undefined} value={accordions}>
       <Stack gap={4}>
         <TransactionTypeFilterAccordionItem
           id="transaction-type-filter-accordion-item"

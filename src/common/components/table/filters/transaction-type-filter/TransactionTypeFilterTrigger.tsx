@@ -10,7 +10,7 @@ export function TransactionTypeFilterTrigger({
   filterContainerProps,
 }: {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen?: (open: boolean) => void;
   transactionType: string[];
   clearFilterHandler: () => void;
   filterContainerProps: FilterTriggerContainerProps;
