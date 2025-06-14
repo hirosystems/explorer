@@ -2,6 +2,8 @@ import { AddressFilterPopover } from '@/common/components/table/filters/address-
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import {
   useAddressFilterHandler,
+  useClearAddressFilterHandler,
+  useClearDateFilterHandler,
   useDateFilterHandler,
 } from '@/common/components/table/filters/table-filters-utils';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
@@ -55,6 +57,8 @@ export function ClearFiltersButton({ filters }: FilterProps) {
 export function FiltersWithWrapper({ filters }: FilterProps) {
   const addressFilterHandler = useAddressFilterHandler(false);
   const dateFilterHandler = useDateFilterHandler(false);
+  const clearDateFilterHandler = useClearDateFilterHandler(false);
+  const clearAddressFilterHandler = useClearAddressFilterHandler(false);
 
   return (
     <Stack
@@ -83,11 +87,13 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
           defaultFromAddress={filters.fromAddress}
           defaultToAddress={filters.toAddress}
           onSubmit={addressFilterHandler}
+          clearFilterHandler={clearAddressFilterHandler}
         />
         <DateFilterPopover
           defaultStartTime={filters.startTime}
           defaultEndTime={filters.endTime}
           onSubmit={dateFilterHandler}
+          clearFilterHandler={clearDateFilterHandler}
         />
       </Flex>
     </Stack>

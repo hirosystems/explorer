@@ -1,17 +1,19 @@
 import { getTxTypeLabel } from '@/common/utils/transactions';
 
-import { FilterTrigger } from '../FilterTrigger';
+import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
 
 export function TransactionTypeFilterTrigger({
   open,
   setOpen,
   transactionType,
   clearFilterHandler,
+  filterContainerProps,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
   transactionType: string[];
   clearFilterHandler: () => void;
+  filterContainerProps: FilterTriggerContainerProps;
 }) {
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
@@ -30,6 +32,7 @@ export function TransactionTypeFilterTrigger({
       value={areFiltersActive ? triggerTextSuffix : ''}
       open={open}
       clearFilterHandler={clearFilterHandler}
+      containerProps={filterContainerProps}
     />
   );
 }

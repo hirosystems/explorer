@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 
-import { TableTabPopover } from '../TableTabPopover';
+import { FilterTabPopover, getFilterTabPopoverContainerProps } from '../FilterTabPopover';
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
-import { TransactionTypeFilterTrigger } from './TransactionTypeFilterTriggerText';
+import { TransactionTypeFilterTrigger } from './TransactionTypeFilterTrigger';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
@@ -18,7 +18,7 @@ export function TransactionTypeFilterPopover({
   onSubmit: (transactionType: string[]) => void;
 }) {
   return (
-    <TableTabPopover
+    <FilterTabPopover
       id={`transaction-type-filter-popover${idExtension ? `-${idExtension}` : ''}`}
       positioning={{
         placement: 'bottom-start',
@@ -31,6 +31,7 @@ export function TransactionTypeFilterPopover({
           setOpen={setOpen}
           transactionType={defaultTransactionType}
           clearFilterHandler={clearFilterHandler}
+          filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
       content={(open, setOpen) => (

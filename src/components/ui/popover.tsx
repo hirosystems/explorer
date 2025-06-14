@@ -49,6 +49,13 @@ export const PopoverCloseTrigger = React.forwardRef<
   );
 });
 
+export const PopoverTriggerWithClear = React.forwardRef<
+  HTMLButtonElement,
+  ChakraPopover.TriggerProps
+>(function PopoverTriggerWithClear(props, ref) {
+  return <ChakraPopover.Trigger {...props} ref={ref} />;
+});
+
 export const PopoverTitle = ChakraPopover.Title;
 export const PopoverDescription = ChakraPopover.Description;
 export const PopoverFooter = ChakraPopover.Footer;
