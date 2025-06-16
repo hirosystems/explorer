@@ -11,7 +11,7 @@ import { NewBlockPlaceholder } from './NewBlockPlaceholder';
 import { BLOCK_HEIGHT, RECENT_BTC_BLOCKS_COUNT } from './consts';
 
 export function RecentBtcBlocks() {
-  const recentBtcBlocks = useHomePageData().initialRecentBlocks.btcBlocks;
+  const recentBtcBlocks = useHomePageData().initialRecentBlocks?.btcBlocks;
   const queryClient = useQueryClient();
   const isCacheSetWithInitialData = useRef(false);
 

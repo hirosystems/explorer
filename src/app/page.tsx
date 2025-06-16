@@ -15,7 +15,7 @@ import {
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
-import { getCurrentStxPrice, getTokenPrice } from './getTokenPriceInfo';
+import { getTokenPrice } from './getTokenPriceInfo';
 
 export default async function HomeRedesign(props: {
   searchParams: Promise<Record<string, string>>;
@@ -23,38 +23,46 @@ export default async function HomeRedesign(props: {
   const searchParams = await props.searchParams;
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
-  const tokenPrice = await getTokenPrice();
-  const [
-    stxPrice,
-    recentBlocks,
-    stackingCycle,
-    initialTxTableData,
-    mempoolStats,
-    sampleTxsFeeEstimate,
-  ] = await Promise.all([
-    getCurrentStxPrice(),
-    fetchRecentBlocks(chain, api),
-    fetchCurrentStackingCycle(chain, api),
-    fetchRecentUITxs(chain, api),
-    fetchUIMempoolStats(chain, api),
-    getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
+  const isSSRDisabled = searchParams?.ssr === 'false';
+
+  const nonStacksRequests = [getTokenPrice()] as const;
+
+  const stacksAPIRequests = isSSRDisabled
+    ? []
+    : ([
+        fetchRecentBlocks(chain, api),
+        fetchCurrentStackingCycle(chain, api),
+        fetchRecentUITxs(chain, api),
+        fetchUIMempoolStats(chain, api),
+        getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
+      ] as const);
+
+  const [tokenPrice, ...stacksAPIResults] = await Promise.all([
+    ...nonStacksRequests,
+    ...stacksAPIRequests,
   ]);
 
-  const { tokenTransferFees, contractCallFees, contractDeployFees, averageFees } =
-    sampleTxsFeeEstimate;
+  const [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
+    isSSRDisabled
+      ? ([undefined, undefined, undefined, undefined, undefined] as const)
+      : stacksAPIResults;
 
+  const feeEstimates = sampleTxsFeeEstimate
+    ? {
+        tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
+        contractCallFees: sampleTxsFeeEstimate.contractCallFees,
+        contractDeployFees: sampleTxsFeeEstimate.contractDeployFees,
+        averageFees: sampleTxsFeeEstimate.averageFees,
+      }
+    : undefined;
   return (
     <HomePageDataProvider
-      stxPrice={stxPrice}
+      stxPrice={tokenPrice.stxPrice}
       initialRecentBlocks={recentBlocks}
       stackingCycle={stackingCycle}
       mempoolStats={mempoolStats}
-      feeEstimates={{
-        tokenTransferFees,
-        contractCallFees,
-        contractDeployFees,
-        averageFees,
-      }}
+      feeEstimates={feeEstimates}
+      isSSRDisabled={isSSRDisabled}
     >
       <Stack gap={[16, 18, 20, 24]}>
         <RecentBlocksSection />
