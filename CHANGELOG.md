@@ -1,3 +1,11 @@
+# [1.285.0](https://github.com/hirosystems/explorer/compare/v1.284.0...v1.285.0) (2025-06-16)
+
+
+### Features
+
+* added a scroll right functionality to the scroll indicator ([d830ffc](https://github.com/hirosystems/explorer/commit/d830ffcdbb7b78401c4cdc3471706866d1ef8e1a))
+* improved stacking section text clarity ([9fa5d95](https://github.com/hirosystems/explorer/commit/9fa5d95d58b87192d6c9c970e49a31ed00ef275a))
+
 # [1.284.0](https://github.com/hirosystems/explorer/compare/v1.283.0...v1.284.0) (2025-06-13)
 
 
