@@ -1,5 +1,6 @@
 import { formatBlockTime, getAmount, getToAddress } from '@/app/transactions/utils';
 import { CopyButton } from '@/common/components/CopyButton';
+import { BlockHeightBadge, SimpleBadge } from '@/ui/Badge';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
@@ -10,6 +11,7 @@ import {
   TokenTransferTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { TransactionStatusTimeline } from './TransactionStatusTimeline';
 
 function TabTriggerComponent({
   label,
@@ -92,7 +94,12 @@ function getTabsTriggersByTransactionType(
 
 function TabsContentContainer({ children }: { children: React.ReactNode }) {
   return (
-    <Stack borderRadius="redesign.xl" border="1px solid" borderColor="borderSecondary" p={3}>
+    <Stack
+      borderRadius="redesign.xl"
+      border="1px solid"
+      borderColor="redesignBorderSecondary"
+      p={3}
+    >
       {children}
     </Stack>
   );
@@ -101,10 +108,12 @@ function TabsContentContainer({ children }: { children: React.ReactNode }) {
 function OverviewKeyValueItem({
   label,
   value,
+  valueRenderer,
   copyable,
 }: {
   label: string;
   value: string;
+  valueRenderer?: (value: string) => React.ReactNode;
   copyable?: boolean;
 }) {
   return (
@@ -112,21 +121,15 @@ function OverviewKeyValueItem({
       <Text minWidth={50} textStyle="text-medium-sm" color="textSecondary">
         {label}
       </Text>
-      <Text textStyle="text-regular-sm" color="textPrimary">
-        {value}
-      </Text>
+      {valueRenderer ? (
+        valueRenderer(value)
+      ) : (
+        <Text textStyle="text-regular-sm" color="textPrimary">
+          {value}
+        </Text>
+      )}
       {copyable && (
-        <CopyButton
-          initialValue={value}
-          aria-label={`copy ${label} value`}
-          h={3.5}
-          w={3.5}
-          // css={{
-          //   opacity: isSignerKeyHovered ? 1 : 0,
-          //   position: 'relative',
-          //   transition: 'opacity 0.4s ease-in-out',
-          // }}
-        />
+        <CopyButton initialValue={value} aria-label={`copy ${label} value`} h={3.5} w={3.5} />
       )}
     </Flex>
   );
@@ -137,15 +140,29 @@ function TokenTransferOverviewContent({ tx }: { tx: TokenTransferTransaction }) 
     <Stack>
       <OverviewKeyValueItem label="ID" value={tx.tx_id} copyable />
       <OverviewKeyValueItem label="Amount" value={getAmount(tx).toString()} />
-      <OverviewKeyValueItem label="From" value={tx.sender_address} />
-      <OverviewKeyValueItem label="To" value={getToAddress(tx)} />
-      <OverviewKeyValueItem label="Timestamp" value={formatBlockTime(tx.block_time)} />
+      <OverviewKeyValueItem label="From" value={tx.sender_address} copyable />
+      <OverviewKeyValueItem label="To" value={getToAddress(tx)} copyable />
+      <OverviewKeyValueItem
+        label="Timestamp"
+        value={formatBlockTime(tx.block_time)}
+        valueRenderer={value => <SimpleBadge label={value} />}
+      />
       <OverviewKeyValueItem label="Fee" value={tx.fee_rate} />
       {/* <OverviewKeyValueItem label="Memo" value={tx.} /> */}
       <OverviewKeyValueItem label="Nonce" value={tx.nonce?.toString() || ''} />
-      <OverviewKeyValueItem label="Block height" value={tx.block_height?.toString() || ''} />
+      <OverviewKeyValueItem
+        label="Block height"
+        value={tx.block_height?.toString() || ''}
+        copyable
+        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+      />
       {/* <OverviewKeyValueItem label="Tenure height" value={tx.} /> */}
-      <OverviewKeyValueItem label="Bitcoin Anchor" value={tx.burn_block_height?.toString() || ''} />
+      <OverviewKeyValueItem
+        label="Bitcoin Anchor"
+        value={tx.burn_block_height?.toString() || ''}
+        copyable
+        valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+      />
     </Stack>
   );
 }
@@ -155,9 +172,12 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     return (
       <>
         <TabsContent key="overview" value="overview" w="100%">
-          <TabsContentContainer>
-            <TokenTransferOverviewContent tx={tx as TokenTransferTransaction} />
-          </TabsContentContainer>
+          <Flex gap={2}>
+            <TabsContentContainer>
+              <TokenTransferOverviewContent tx={tx as TokenTransferTransaction} />
+            </TabsContentContainer>
+            <TransactionStatusTimeline tx={tx} />
+          </Flex>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
           <TabsContentContainer>Events</TabsContentContainer>
