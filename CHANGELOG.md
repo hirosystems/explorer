@@ -1,3 +1,10 @@
+## [1.286.1](https://github.com/hirosystems/explorer/compare/v1.286.0...v1.286.1) (2025-06-17)
+
+
+### Bug Fixes
+
+* remove legacy design font styles ([#2304](https://github.com/hirosystems/explorer/issues/2304)) ([4eb8596](https://github.com/hirosystems/explorer/commit/4eb8596ee3db90faf1099e1d344a99bfd06a6296))
+
 # [1.286.0](https://github.com/hirosystems/explorer/compare/v1.285.0...v1.286.0) (2025-06-17)
 
 
