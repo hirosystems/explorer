@@ -1,3 +1,10 @@
+# [1.286.0](https://github.com/hirosystems/explorer/compare/v1.285.0...v1.286.0) (2025-06-17)
+
+
+### Features
+
+* update README.md ([#2303](https://github.com/hirosystems/explorer/issues/2303)) ([6ab950d](https://github.com/hirosystems/explorer/commit/6ab950d8eafa0f5a8dac3f495c554936b8715655))
+
 # [1.285.0](https://github.com/hirosystems/explorer/compare/v1.284.0...v1.285.0) (2025-06-16)
 
 
