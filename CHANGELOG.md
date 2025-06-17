@@ -1,3 +1,10 @@
+## [1.286.2](https://github.com/hirosystems/explorer/compare/v1.286.1...v1.286.2) (2025-06-17)
+
+
+### Bug Fixes
+
+* remove duplicated border in pagination control ([#2306](https://github.com/hirosystems/explorer/issues/2306)) ([5a1e0b5](https://github.com/hirosystems/explorer/commit/5a1e0b5e70455c0f341440425f44b89b320e1042))
+
 ## [1.286.1](https://github.com/hirosystems/explorer/compare/v1.286.0...v1.286.1) (2025-06-17)
 
 
