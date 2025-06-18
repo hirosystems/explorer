@@ -1,6 +1,7 @@
 import {
   CoinbaseTransaction,
   ContractCallTransaction,
+  MempoolTransaction,
   SmartContractTransaction,
   TenureChangeTransaction,
   TokenTransferTransaction,
@@ -82,7 +83,7 @@ export function compressTransactions(transactions: Transaction[]): CompressedTxT
   });
 }
 
-export function getToAddress(tx: Transaction): string {
+export function getToAddress(tx: Transaction | MempoolTransaction): string {
   if (tx.tx_type === 'token_transfer') {
     return tx.token_transfer?.recipient_address;
   }

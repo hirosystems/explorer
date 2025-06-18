@@ -4,8 +4,7 @@ import { defineRecipe } from '@chakra-ui/react';
 
 export const badgeRecipe = defineRecipe({
   base: {
-    p: 1.5,
-    borderRadius: 'redesign.sm',
+    borderRadius: 'redesign.md',
   },
   variants: {
     variant: {
@@ -15,7 +14,17 @@ export const badgeRecipe = defineRecipe({
       outline: {
         bg: 'surfaceSecondary',
         border: '1px solid',
-        borderColor: 'redesignBorderPrimary',
+        borderColor: 'redesignBorderSecondary',
+      },
+    },
+    content: {
+      iconAndLabel: {
+        pl: 1,
+        pr: 1.5,
+        py: 1,
+      },
+      iconOnly: {
+        p: 1,
       },
     },
     size: {},

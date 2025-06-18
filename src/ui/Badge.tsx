@@ -2,9 +2,17 @@
 
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
-import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
+import {
+  getTxStatusBgColor,
+  getTxStatusIcon,
+  getTxStatusIconColor,
+  getTxStatusLabel,
+  getTxTypeColor,
+  getTxTypeIcon,
+  getTxTypeLabel,
+} from '@/common/utils/transactions';
 import { NextLink } from '@/ui/NextLink';
-import { Text } from '@/ui/Text';
+import { Text, TextProps } from '@/ui/Text';
 import {
   Badge as CUIBadge,
   BadgeProps as CUIBadgeProps,
@@ -15,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-import { Transaction } from '@stacks/blockchain-api-client';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import BitcoinCircleIcon from './icons/BitcoinCircleIcon';
 import StacksIconBlock from './icons/StacksIconBlock';
@@ -25,9 +33,9 @@ type BadgeVariantProps = RecipeVariantProps<typeof badgeRecipe>;
 export type BadgeProps = CUIBadgeProps & BadgeVariantProps;
 
 export const BadgeBase = forwardRef<HTMLDivElement, BadgeProps>(
-  ({ children, variant = 'solid', ...rest }, ref) => {
+  ({ children, variant, content, ...rest }, ref) => {
     return (
-      <CUIBadge ref={ref} variant={variant} {...rest}>
+      <CUIBadge ref={ref} variant={variant} content={content} {...rest}>
         {children}
       </CUIBadge>
     );
@@ -43,11 +51,12 @@ export const BlockHeightBadge = forwardRef<
   const network = useGlobalContext().activeNetwork;
 
   return (
-    <Badge ref={ref} {...rest} variant="solid">
+    <Badge ref={ref} {...rest} variant="solid" content="iconAndLabel">
       <Flex alignItems="center" gap={1.5}>
-        <Icon h={3} w={3} color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}>
-          {blockType === 'stx' ? <StacksIconBlock /> : <BitcoinCircleIcon />}
-        </Icon>
+        <DefaultBadgeIcon
+          icon={blockType === 'stx' ? <StacksIconBlock /> : <BitcoinCircleIcon />}
+          color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}
+        />
         <NextLink
           href={buildUrl(`${blockType === 'stx' ? '/block/' : '/btcblock'}${blockHeight}`, network)}
           color="textPrimary"
@@ -62,50 +71,72 @@ export const BlockHeightBadge = forwardRef<
 
 export const TransactionTypeBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { txType: Transaction['tx_type']; withLabel?: boolean }
->(({ children, txType, withLabel, ...rest }, ref) => {
+  BadgeProps & { tx: Transaction | MempoolTransaction; withoutLabel?: boolean }
+>(({ children, tx, withoutLabel, ...rest }, ref) => {
   return (
-    <Badge ref={ref} {...rest} variant="outline">
+    <Badge
+      ref={ref}
+      {...rest}
+      variant="outline"
+      content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
+    >
       <Flex alignItems="center" gap={1.5}>
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          p={1}
-          borderRadius="redesign.sm"
-          bg={getTxTypeColor(txType)}
-        >
-          <Icon h={3} w={3} color="iconPrimary">
-            {getTxTypeIcon(txType)}
-          </Icon>
-        </Flex>
-        {withLabel && (
-          <Text textStyle="text-medium-xs" color="textPrimary" whiteSpace="nowrap">
-            {getTxTypeLabel(txType)}
-          </Text>
-        )}
+        <DefaultBadgeIcon
+          icon={getTxTypeIcon(tx.tx_type)}
+          color="iconPrimary"
+          bg={getTxTypeColor(tx.tx_type)}
+        />
+        {withoutLabel ? null : <DefaultBadgeLabel label={getTxTypeLabel(tx.tx_type)} />}
       </Flex>
     </Badge>
   );
 });
 
-export const SimpleBadge = forwardRef<
+export const TransactionStatusBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { icon?: React.ReactNode; label?: string }
->(({ children, icon, label, ...rest }, ref) => {
+  BadgeProps & { tx: Transaction | MempoolTransaction; withoutLabel?: boolean }
+>(({ children, tx, withoutLabel, ...rest }, ref) => {
   return (
-    <Badge ref={ref} {...rest} variant="solid">
+    <Badge
+      ref={ref}
+      {...rest}
+      bg={getTxStatusBgColor(tx)}
+      content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
+    >
       <Flex alignItems="center" gap={1.5}>
-        {icon && (
-          <Icon h={3} w={3} color="iconPrimary">
-            {icon}
-          </Icon>
-        )}
-        {label && (
-          <Text textStyle="text-medium-xs" color="textPrimary" whiteSpace="nowrap">
-            {label}
-          </Text>
-        )}
+        <DefaultBadgeIcon icon={getTxStatusIcon(tx)} color={getTxStatusIconColor(tx)} />
+        {withoutLabel ? null : <DefaultBadgeLabel label={getTxStatusLabel(tx)} />}
       </Flex>
     </Badge>
   );
 });
+
+export const DefaultBadgeIcon = ({
+  icon,
+  color = 'iconPrimary',
+  bg,
+}: {
+  icon: React.ReactNode;
+  color?: string;
+  bg?: string;
+}) => {
+  return bg ? (
+    <Flex alignItems="center" justifyContent="center" p={0.5} borderRadius="redesign.sm" bg={bg}>
+      <Icon h={3} w={3} color={color}>
+        {icon}
+      </Icon>
+    </Flex>
+  ) : (
+    <Icon h={4} w={4} color={color}>
+      {icon}
+    </Icon>
+  );
+};
+
+export const DefaultBadgeLabel = ({ label, ...rest }: { label: string } & TextProps) => {
+  return (
+    <Text textStyle="text-medium-xs" color={'textPrimary'} whiteSpace="nowrap" {...rest}>
+      {label}
+    </Text>
+  );
+};

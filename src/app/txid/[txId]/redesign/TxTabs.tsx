@@ -1,6 +1,6 @@
 import { formatBlockTime, getAmount, getToAddress } from '@/app/transactions/utils';
 import { CopyButton } from '@/common/components/CopyButton';
-import { BlockHeightBadge, SimpleBadge } from '@/ui/Badge';
+import { Badge, BlockHeightBadge, DefaultBadgeLabel } from '@/ui/Badge';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
@@ -11,7 +11,6 @@ import {
   TokenTransferTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { TransactionStatusTimeline } from './TransactionStatusTimeline';
 
 function TabTriggerComponent({
   label,
@@ -145,7 +144,11 @@ function TokenTransferOverviewContent({ tx }: { tx: TokenTransferTransaction }) 
       <OverviewKeyValueItem
         label="Timestamp"
         value={formatBlockTime(tx.block_time)}
-        valueRenderer={value => <SimpleBadge label={value} />}
+        valueRenderer={value => (
+          <Badge variant="solid">
+            <DefaultBadgeLabel label={value} />
+          </Badge>
+        )}
       />
       <OverviewKeyValueItem label="Fee" value={tx.fee_rate} />
       {/* <OverviewKeyValueItem label="Memo" value={tx.} /> */}
@@ -172,12 +175,9 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     return (
       <>
         <TabsContent key="overview" value="overview" w="100%">
-          <Flex gap={2}>
-            <TabsContentContainer>
-              <TokenTransferOverviewContent tx={tx as TokenTransferTransaction} />
-            </TabsContentContainer>
-            <TransactionStatusTimeline tx={tx} />
-          </Flex>
+          <TabsContentContainer>
+            <TokenTransferOverviewContent tx={tx as TokenTransferTransaction} />
+          </TabsContentContainer>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
           <TabsContentContainer>Events</TabsContentContainer>
@@ -210,7 +210,6 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       defaultValue={'overview'}
       //   onValueChange={e => setSelectedChart(e.value as Chart)}
       gap={2}
-      p={4}
       borderRadius="redesign.xl"
     >
       <TabsList flexWrap={'wrap'}>

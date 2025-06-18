@@ -1,25 +1,28 @@
+import { TowColLayout } from '@/app/_components/TwoColLayout';
+import { StxBalance } from '@/app/address/[principal]/StxBalance';
+import { TokenBalanceCard } from '@/app/address/[principal]/TokenBalanceCard';
 import { getTxTypeIcon } from '@/common/components/TxIcon';
 import { TransactionType } from '@/common/constants/constants';
+import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { getTransactionStatus } from '@/common/utils/transactions';
 import { getTxTitle } from '@/common/utils/utils';
 import { Tag } from '@/components/ui/tag';
 import { Text } from '@/ui/Text';
-import { Icon, Stack } from '@chakra-ui/react';
+import { Box, Grid, Icon, Stack } from '@chakra-ui/react';
 import { Check, CircleNotch, WarningCircle } from '@phosphor-icons/react';
+import { motion } from 'motion/react';
 import * as React from 'react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { PageTitleWithTags } from '../../_components/PageTitle';
-import { TowColLayout } from '../../_components/TwoColLayout';
-import { StxBalance } from '../../address/[principal]/StxBalance';
-import { TokenBalanceCard } from '../../address/[principal]/TokenBalanceCard';
 import { ContractDetailsCard } from './Cards/ContractDetailsCard';
 import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
-import { TxHeader } from './redesign/TxHeader';
+import { TransactionStatusTimeline } from './redesign/TransactionStatusTimeline';
+import { TxHeader, TxHeaderMinimized } from './redesign/TxHeader';
 import { TxTabs } from './redesign/TxTabs';
 
 export const txTypeNamesMap = {
@@ -56,9 +59,12 @@ export const TxPage: React.FC<{
   txDetails: ReactNode;
   children?: ReactNode;
 }> = ({ tx, contractId, txDetails, children }) => {
+  const txHeaderRef = useRef<HTMLDivElement>(null);
+  const isHeaderInView = useIsInViewport(txHeaderRef);
+
   return (
     <>
-      <PageTitleWithTags
+      {/* <PageTitleWithTags
         tags={
           <>
             <Tag
@@ -85,10 +91,36 @@ export const TxPage: React.FC<{
         }
       >
         {getTxTitle(tx)}
-      </PageTitleWithTags>
-      <TxHeader tx={tx} />
-      <TxTabs tx={tx} />
-      <TowColLayout>
+      </PageTitleWithTags> */}
+
+      <TxHeader tx={tx} ref={txHeaderRef} />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
+          opacity: isHeaderInView ? 0 : 1,
+          y: isHeaderInView ? -20 : 0,
+          pointerEvents: isHeaderInView ? 'none' : 'auto',
+        }}
+        transition={{ duration: 0.3 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 'var(--stacks-z-index-docked)',
+        }}
+      >
+        <Box borderRadius="redesign.xl" pt={3} px={6} bg="transparent">
+          <TxHeaderMinimized tx={tx} />
+        </Box>
+      </motion.div>
+
+      <Grid gap={7} gridTemplateColumns={['100%', '100%', 'minmax(0, 1fr) 320px']}>
+        <TxTabs tx={tx} />
+        <TransactionStatusTimeline tx={tx} />
+      </Grid>
+
+      {/* <TowColLayout>
         <Stack gap={7}>
           <TxAlerts tx={tx} />
           {txDetails}
@@ -105,7 +137,7 @@ export const TxPage: React.FC<{
             </>
           )}
         </Stack>
-      </TowColLayout>
+      </TowColLayout> */}
     </>
   );
 };
