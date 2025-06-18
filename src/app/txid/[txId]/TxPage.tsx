@@ -1,27 +1,12 @@
-import { TowColLayout } from '@/app/_components/TwoColLayout';
-import { StxBalance } from '@/app/address/[principal]/StxBalance';
-import { TokenBalanceCard } from '@/app/address/[principal]/TokenBalanceCard';
-import { getTxTypeIcon } from '@/common/components/TxIcon';
 import { TransactionType } from '@/common/constants/constants';
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
-import { getTransactionStatus } from '@/common/utils/transactions';
-import { getTxTitle } from '@/common/utils/utils';
-import { Tag } from '@/components/ui/tag';
-import { Text } from '@/ui/Text';
-import { Box, Grid, Icon, Stack } from '@chakra-ui/react';
-import { Check, CircleNotch, WarningCircle } from '@phosphor-icons/react';
+import { Box } from '@chakra-ui/react';
 import { motion } from 'motion/react';
 import * as React from 'react';
-import { ReactNode, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { PageTitleWithTags } from '../../_components/PageTitle';
-import { ContractDetailsCard } from './Cards/ContractDetailsCard';
-import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
-import { Events } from './Events';
-import { TxAlerts } from './TxAlerts';
-import { TransactionStatusTimeline } from './redesign/TransactionStatusTimeline';
 import { TxHeader, TxHeaderMinimized } from './redesign/TxHeader';
 import { TxTabs } from './redesign/TxTabs';
 
@@ -34,31 +19,28 @@ export const txTypeNamesMap = {
   tenure_change: 'Tenure change',
 };
 
-const txStatusIconMap: Record<string, React.ReactNode> = {
-  pending: <CircleNotch />,
-  success: <Check />,
-  success_anchor_block: <Check />,
-  non_canonical: <WarningCircle />,
-  failed: <WarningCircle />,
-  dropped: <WarningCircle />,
-};
+// const txStatusIconMap: Record<string, React.ReactNode> = {
+//   pending: <CircleNotch />,
+//   success: <Check />,
+//   success_anchor_block: <Check />,
+//   non_canonical: <WarningCircle />,
+//   failed: <WarningCircle />,
+//   dropped: <WarningCircle />,
+// };
 
-const txStatusLabelMap = {
-  pending: 'In mempool',
-  success: 'Confirmed',
-  success_anchor_block: 'Confirmed in block',
-  success_microblock: 'Included in microblock',
-  non_canonical: 'Non-canonical (orphaned)',
-  failed: 'Failed',
-  dropped: 'Dropped',
-};
+// const txStatusLabelMap = {
+//   pending: 'In mempool',
+//   success: 'Confirmed',
+//   success_anchor_block: 'Confirmed in block',
+//   success_microblock: 'Included in microblock',
+//   non_canonical: 'Non-canonical (orphaned)',
+//   failed: 'Failed',
+//   dropped: 'Dropped',
+// };
 
 export const TxPage: React.FC<{
   tx: Transaction | MempoolTransaction;
-  contractId?: string;
-  txDetails: ReactNode;
-  children?: ReactNode;
-}> = ({ tx, contractId, txDetails, children }) => {
+}> = ({ tx }) => {
   const txHeaderRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useIsInViewport(txHeaderRef);
 
@@ -115,10 +97,7 @@ export const TxPage: React.FC<{
         </Box>
       </motion.div>
 
-      <Grid gap={7} gridTemplateColumns={['100%', '100%', 'minmax(0, 1fr) 320px']}>
-        <TxTabs tx={tx} />
-        <TransactionStatusTimeline tx={tx} />
-      </Grid>
+      <TxTabs tx={tx} />
 
       {/* <TowColLayout>
         <Stack gap={7}>
