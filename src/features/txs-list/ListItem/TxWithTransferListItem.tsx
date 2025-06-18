@@ -170,6 +170,7 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
             ml={'auto'}
             p={0}
             justifyContent={'center'}
+            indicatorPlacement="end"
           />
         ) : null}
       </Flex>
