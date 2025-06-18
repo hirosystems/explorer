@@ -2,7 +2,7 @@
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { TxPageFilters } from '@/app/transactions/page';
-import { CompressedTxTableData } from '@/app/transactions/utils';
+import { CompressedTxTableData, getAmount, getToAddress } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
