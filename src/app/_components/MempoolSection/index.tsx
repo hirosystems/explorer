@@ -1,11 +1,13 @@
 'use client';
 
+import { useHomePageData } from '@/app/context';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Flex, HStack, Stack } from '@chakra-ui/react';
 
+import { SSRDisabledMessage } from '../SSRDisabledMessage';
 import { TxCountChart } from './TxCountChart';
 
 function SectionHeader() {
@@ -49,10 +51,11 @@ function TxCountSection() {
 
 export function MempoolSection() {
   const network = useGlobalContext().activeNetwork;
+  const { isSSRDisabled } = useHomePageData();
   return (
     <Stack gap={6} flex={1} height="100%">
       <SectionHeader />
-      <TxCountSection />
+      {isSSRDisabled ? <SSRDisabledMessage /> : <TxCountSection />}
       <ButtonLink
         href={buildUrl('/mempool', network)}
         buttonLinkSize="big"

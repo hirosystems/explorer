@@ -14,6 +14,8 @@ import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
+import { SSRDisabledMessage } from '../SSRDisabledMessage';
+
 function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
@@ -130,6 +132,10 @@ const txTypeFees = ['all', 'smart_contract', 'token_transfer', 'contract_call'] 
 function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { feeEstimates } = useHomePageData();
 
+  if (!feeEstimates) {
+    return null;
+  }
+
   const feeEstimatesMap = {
     all: feeEstimates.averageFees,
     smart_contract: feeEstimates.contractDeployFees,
@@ -193,10 +199,11 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
 }
 
 export function FeeSection({ tokenPrice }: { tokenPrice: TokenPrice }) {
+  const { isSSRDisabled } = useHomePageData();
   return (
     <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
       <SectionHeader tokenPrice={tokenPrice} />
-      <FeeTabs tokenPrice={tokenPrice} />
+      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs tokenPrice={tokenPrice} />}
     </Stack>
   );
 }

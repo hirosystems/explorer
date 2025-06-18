@@ -9,6 +9,7 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
+import { SSRDisabledMessage } from '../SSRDisabledMessage';
 import { ChartTooltip } from './ChartTooltip';
 import {
   Chart,
@@ -28,9 +29,13 @@ export type ChartConfig = {
 };
 
 function NetworkOverviewChart() {
-  const {
-    initialRecentBlocks: { stxBlocksCountPerBtcBlock },
-  } = useHomePageData();
+  const { initialRecentBlocks } = useHomePageData();
+
+  if (!initialRecentBlocks) {
+    return null;
+  }
+
+  const { stxBlocksCountPerBtcBlock } = initialRecentBlocks;
   const { selectedChart, setSelectedChart } = useNetworkOverviewContext();
   const { colorMode } = useColorMode();
 
@@ -255,11 +260,12 @@ function NetworkOverviewChart() {
 }
 
 export function NetworkOverview() {
+  const { isSSRDisabled } = useHomePageData();
   return (
     <NetworkOverviewContextProvider>
       <Stack gap={4} flex={1}>
         <SectionHeader />
-        <NetworkOverviewChart />
+        {isSSRDisabled ? <SSRDisabledMessage /> : <NetworkOverviewChart />}
       </Stack>
     </NetworkOverviewContextProvider>
   );

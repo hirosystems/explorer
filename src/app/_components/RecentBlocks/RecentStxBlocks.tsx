@@ -1,8 +1,9 @@
 import { useHomePageData } from '@/app/context';
 import { UIStxBlock } from '@/app/data';
-import { useBlockList } from '@/common/queries/useBlockListInfinite';
+import { BLOCK_LIST_QUERY_KEY, useBlockList } from '@/common/queries/useBlockListInfinite';
 import { HStack } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMemo, useRef } from 'react';
 
 import { FadingOverlay } from './FadingOverlay';
 import { NewBlockPlaceholder } from './NewBlockPlaceholder';
@@ -10,11 +11,19 @@ import { StxBlockGroup } from './StxBlock';
 import { BLOCK_HEIGHT, RECENT_STX_BLOCKS_COUNT } from './consts';
 
 export function RecentStxBlocks() {
-  const recentStxBlocks = useHomePageData().initialRecentBlocks.stxBlocks;
-  const recentBtcBlocks = useHomePageData().initialRecentBlocks.btcBlocks;
+  const { initialRecentBlocks } = useHomePageData();
+  const recentStxBlocks = initialRecentBlocks?.stxBlocks;
+  const recentBtcBlocks = initialRecentBlocks?.btcBlocks;
+  const queryClient = useQueryClient();
+  const isCacheSetWithInitialData = useRef(false);
+
+  if (isCacheSetWithInitialData.current === false && recentStxBlocks) {
+    const queryKey = [BLOCK_LIST_QUERY_KEY, RECENT_STX_BLOCKS_COUNT];
+    queryClient.setQueryData(queryKey, recentStxBlocks);
+    isCacheSetWithInitialData.current = true;
+  }
 
   const { data: stxBlocksData, refetch } = useBlockList(RECENT_STX_BLOCKS_COUNT, {
-    initialData: recentStxBlocks,
     manual: true,
   });
   const stxBlocks = stxBlocksData?.results || [];
