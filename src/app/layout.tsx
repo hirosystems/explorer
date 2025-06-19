@@ -11,11 +11,18 @@ import {
   matterRegular,
   openSauce,
 } from '../common/fonts';
+import { initServerProfiling } from '../common/utils/profiler-utils';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getStatusBarContent } from './getStatusBarContent';
 import { getTokenPrice } from './getTokenPriceInfo';
 import './global.css';
+
+let profilingInitialized = false;
+if (!profilingInitialized) {
+  initServerProfiling();
+  profilingInitialized = true;
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve(meta);

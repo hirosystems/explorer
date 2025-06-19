@@ -1,3 +1,4 @@
+import { initServerProfiling } from '@/common/utils/profiler-utils';
 import * as Sentry from '@sentry/nextjs';
 
 export function register() {
