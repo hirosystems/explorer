@@ -15,7 +15,7 @@ export function AddressFilterPopover({
   idExtension?: string;
   defaultFromAddress?: string;
   defaultToAddress?: string;
-  addressFilterHandler: (fromAddress: string, toAddress: string) => void;
+  addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
 }) {
   return (
     <FilterTabPopover

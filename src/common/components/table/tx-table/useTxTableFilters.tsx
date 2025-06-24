@@ -27,7 +27,7 @@ export const TX_TABLE_FILTER_KEYS: Array<TxTableFilterKeys> = [
 
 export const TxTableFiltersContext = createContext<
   TxTableFilters & {
-    addressFilterHandler: (fromAddress: string, toAddress: string) => void;
+    addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
     dateFilterHandler: (startTime?: number, endTime?: number) => void;
     transactionTypeFilterHandler: (transactionType?: string[]) => void;
     clearAllFiltersHandler: () => void;
@@ -38,7 +38,7 @@ export const TxTableFiltersContext = createContext<
   toAddress: '',
   startTime: '',
   endTime: '',
-  addressFilterHandler: (fromAddress: string, toAddress: string) => {},
+  addressFilterHandler: (fromAddress?: string, toAddress?: string) => {},
   dateFilterHandler: (startTime?: number, endTime?: number) => {},
   transactionTypeFilterHandler: (transactionType?: string[]) => {},
   clearAllFiltersHandler: () => {},
