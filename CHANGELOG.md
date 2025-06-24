@@ -1,3 +1,10 @@
+# [1.287.0](https://github.com/hirosystems/explorer/compare/v1.286.3...v1.287.0) (2025-06-24)
+
+
+### Features
+
+* disable ssr query param ([#2352](https://github.com/hirosystems/explorer/issues/2352)) ([00ea6ac](https://github.com/hirosystems/explorer/commit/00ea6ac352efd4f0b643d8148980358e342125bf))
+
 ## [1.286.3](https://github.com/hirosystems/explorer/compare/v1.286.2...v1.286.3) (2025-06-24)
 
 
