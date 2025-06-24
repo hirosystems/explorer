@@ -331,7 +331,7 @@ function HiddenSearchField(props: InputProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [dispatch]);
   return (
     <Input
       ref={inputRef}
@@ -513,15 +513,7 @@ function SearchInput({
       dispatch(focus());
       dispatch(setSearchTerm(tempSearchTerm));
     }
-  }, [
-    dispatch,
-    isAdvancedSearch,
-    quickNavUrl,
-    router,
-    searchEntityUrl,
-    searchPageUrl,
-    tempSearchTerm,
-  ]);
+  }, [dispatch, quickNavUrl, router, searchEntityUrl, tempSearchTerm]);
 
   return (
     <DoubleGradientBorderWrapper {...flexProps}>
@@ -614,7 +606,7 @@ export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
       }
       return children;
     },
-    [isSearchFieldFocused, fullScreen]
+    [isSearchFieldFocused, fullScreen, dispatch]
   );
 
   const inputMaxWidthFullscreen =

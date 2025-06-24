@@ -31,16 +31,12 @@ export type ChartConfig = {
 function NetworkOverviewChart() {
   const { initialRecentBlocks } = useHomePageData();
 
-  if (!initialRecentBlocks) {
-    return null;
-  }
-
-  const { stxBlocksCountPerBtcBlock } = initialRecentBlocks;
+  const { stxBlocksCountPerBtcBlock } = initialRecentBlocks || {};
   const { selectedChart, setSelectedChart } = useNetworkOverviewContext();
   const { colorMode } = useColorMode();
 
   const chartData = useMemo(() => {
-    if (!stxBlocksCountPerBtcBlock.length) return [];
+    if (!stxBlocksCountPerBtcBlock?.length) return [];
 
     const sortedBlocks = [...stxBlocksCountPerBtcBlock].sort(
       (a, b) => Number(a.burn_block_time) - Number(b.burn_block_time)
@@ -190,6 +186,10 @@ function NetworkOverviewChart() {
       </>
     );
   };
+
+  if (!initialRecentBlocks) {
+    return null;
+  }
 
   return (
     <TabsRoot

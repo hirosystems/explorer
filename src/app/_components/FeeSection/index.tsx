@@ -125,7 +125,7 @@ function getFeeDescription(txType: keyof MempoolFeePriorities) {
   }
 }
 
-const txTypeFees = ['all', 'smart_contract', 'token_transfer', 'contract_call'] as Array<
+const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as Array<
   keyof MempoolFeePriorities | 'all'
 >;
 
@@ -138,9 +138,9 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   const feeEstimatesMap = {
     all: feeEstimates.averageFees,
-    smart_contract: feeEstimates.contractDeployFees,
     token_transfer: feeEstimates.tokenTransferFees,
     contract_call: feeEstimates.contractCallFees,
+    smart_contract: feeEstimates.contractDeployFees,
   };
 
   return (

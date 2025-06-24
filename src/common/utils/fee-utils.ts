@@ -100,6 +100,7 @@ async function getStacksFeeEstimate(unsignedTx: StacksTransactionWire, chain: st
   });
 
   return {
+    no_priority: 0,
     low_priority: stxToMicroStx(convertAmountToBaseUnit(processedFees.estimates[0].fee)).toNumber(),
     medium_priority: stxToMicroStx(
       convertAmountToBaseUnit(processedFees.estimates[1].fee)
@@ -119,6 +120,7 @@ export async function getSampleTxsFeeEstimate(chain: StacksNetworkName, api: str
   ]);
 
   const averageFees = {
+    no_priority: 0,
     low_priority: Math.round(
       (tokenTransferFees.low_priority +
         contractCallFees.low_priority +

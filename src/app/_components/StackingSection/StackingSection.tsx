@@ -67,10 +67,11 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 }
 
 function CycleHeader() {
-  if (!useHomePageData().stackingCycle) {
+  const homePageData = useHomePageData();
+  if (!homePageData.stackingCycle) {
     return null;
   }
-  const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
+  const { approximateDaysTilNextCycle, cycleId } = homePageData.stackingCycle;
   return (
     <Flex
       gap="2"
