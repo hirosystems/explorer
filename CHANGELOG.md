@@ -1,3 +1,10 @@
+## [1.286.3](https://github.com/hirosystems/explorer/compare/v1.286.2...v1.286.3) (2025-06-24)
+
+
+### Bug Fixes
+
+* fixed tx table update banner + changed banner txt alignment ([cdfdc77](https://github.com/hirosystems/explorer/commit/cdfdc77f5c7ff5d5ae1f2970a1db75b0c38099c5))
+
 ## [1.286.2](https://github.com/hirosystems/explorer/compare/v1.286.1...v1.286.2) (2025-06-17)
 
 
