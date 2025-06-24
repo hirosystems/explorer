@@ -1,5 +1,5 @@
 import { formatDate, parseUTCDate } from '@/common/utils/time-utils';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
 
@@ -8,14 +8,14 @@ export const DateFilterTrigger = ({
   startTime,
   endTime,
   setOpen,
-  clearFilterHandler,
+  dateFilterHandler,
   filterContainerProps,
 }: {
   open: boolean;
   startTime: string;
   endTime: string;
   setOpen: (open: boolean) => void;
-  clearFilterHandler: () => void;
+  dateFilterHandler: (startTime?: number, endTime?: number) => void;
   filterContainerProps: FilterTriggerContainerProps;
 }) => {
   const parsedStartTime = parseUTCDate(startTime);
@@ -48,13 +48,18 @@ export const DateFilterTrigger = ({
     return '';
   }, [parsedStartTime, parsedEndTime]);
 
+  const handleClearFilter = useCallback(() => {
+    dateFilterHandler(undefined, undefined);
+    setOpen?.(false);
+  }, [dateFilterHandler, setOpen]);
+
   return (
     <FilterTrigger
       prefix={triggerTextPrefix}
       value={isDateSet ? triggerTextSuffix : ''}
       open={open}
       setOpen={setOpen}
-      clearFilterHandler={clearFilterHandler}
+      clearFilterHandler={handleClearFilter}
       containerProps={filterContainerProps}
     />
   );

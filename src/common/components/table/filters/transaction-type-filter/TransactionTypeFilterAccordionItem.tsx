@@ -9,13 +9,13 @@ export const TransactionTypeFilterAccordionItem = ({
   open,
   setOpen,
   onSubmit,
-  clearFilterHandler,
+  transactionTypeFilterHandler,
 }: {
   id: string;
   open: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (transactionType: string[]) => void;
-  clearFilterHandler: () => void;
+  transactionTypeFilterHandler: (transactionType: string[]) => void;
 }) => {
   const { transactionType } = useTxTableFilters();
 
@@ -27,7 +27,7 @@ export const TransactionTypeFilterAccordionItem = ({
           open={open}
           setOpen={setOpen}
           transactionType={transactionType}
-          clearFilterHandler={clearFilterHandler}
+          transactionTypeFilterHandler={transactionTypeFilterHandler}
           filterContainerProps={getFilterAccordionItemContainerProps}
         />
       }
@@ -40,36 +40,4 @@ export const TransactionTypeFilterAccordionItem = ({
       }
     />
   );
-  // return (
-  //   <AccordionItem borderBottom={'none'} value={id}>
-  //     <AccordionItemTrigger
-  //       alignItems="center"
-  //       bg="surfacePrimary"
-  //       borderTopRadius="redesign.md"
-  //       borderBottomRadius={open ? 'none' : 'redesign.md'}
-  //       w="full"
-  //       p={3}
-  //     >
-  //       <TransactionTypeFilterTrigger
-  //         open={open}
-  //         transactionType={transactionType}
-  //         setOpen={setOpen}
-  //         clearFilterHandler={clearFilterHandler}
-  //         filterContainerProps={FILTER_CONTAINER_PROPS}
-  //       />
-  //     </AccordionItemTrigger>
-  //     <AccordionItemContent
-  //       bg="surfacePrimary"
-  //       borderBottomRadius="redesign.md"
-  //       borderTopRadius={'none'}
-  //       p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
-  //     >
-  //       <TransactionTypeFilterForm
-  //         open={open}
-  //         onSubmit={onSubmit}
-  //         defaultTransactionType={transactionType}
-  //       />
-  //     </AccordionItemContent>
-  //   </AccordionItem>
-  // );
 };

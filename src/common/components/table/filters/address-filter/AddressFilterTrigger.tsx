@@ -1,5 +1,6 @@
 import { truncateMiddle, truncateStxAddress, validateStacksAddress } from '@/common/utils/utils';
 import { Flex } from '@chakra-ui/react';
+import { useCallback } from 'react';
 
 import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
 
@@ -10,16 +11,21 @@ export const AddressFilterTrigger = ({
   toAddress,
   fromAddress,
   open,
-  clearFilterHandler,
+  addressFilterHandler,
   filterContainerProps,
 }: {
   setOpen: (open: boolean) => void;
   toAddress?: string;
   fromAddress?: string;
   open: boolean;
-  clearFilterHandler: () => void;
+  addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
   filterContainerProps: FilterTriggerContainerProps;
 }) => {
+  const handleClearFilter = useCallback(() => {
+    addressFilterHandler(undefined, undefined);
+    setOpen?.(false);
+  }, [addressFilterHandler, setOpen]);
+
   if (fromAddress || toAddress) {
     return (
       <Flex gap={1.5} w="full">
@@ -35,7 +41,7 @@ export const AddressFilterTrigger = ({
             }
             open={open}
             setOpen={setOpen}
-            clearFilterHandler={clearFilterHandler}
+            clearFilterHandler={handleClearFilter}
             containerProps={filterContainerProps}
           />
         )}
@@ -51,7 +57,7 @@ export const AddressFilterTrigger = ({
             }
             open={open}
             setOpen={setOpen}
-            clearFilterHandler={clearFilterHandler}
+            clearFilterHandler={handleClearFilter}
             containerProps={filterContainerProps}
           />
         )}
@@ -65,7 +71,7 @@ export const AddressFilterTrigger = ({
       value=""
       open={open}
       setOpen={setOpen}
-      clearFilterHandler={clearFilterHandler}
+      clearFilterHandler={handleClearFilter}
       containerProps={filterContainerProps}
     />
   );

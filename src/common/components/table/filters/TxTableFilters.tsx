@@ -50,9 +50,6 @@ export const TxTableFilters = () => {
     addressFilterHandler,
     dateFilterHandler,
     transactionTypeFilterHandler,
-    clearAddressFilterHandler,
-    clearDateFilterHandler,
-    clearTransactionTypeFilterHandler,
   } = useTxTableFilters();
 
   return (
@@ -65,20 +62,17 @@ export const TxTableFilters = () => {
         <Flex gap={3} h={7}>
           <TransactionTypeFilterPopover
             defaultTransactionType={transactionType}
-            clearFilterHandler={clearTransactionTypeFilterHandler}
-            onSubmit={transactionTypeFilterHandler}
+            transactionTypeFilterHandler={transactionTypeFilterHandler}
           />
           <DateFilterPopover
             defaultStartTime={startTime}
             defaultEndTime={endTime}
-            clearFilterHandler={clearDateFilterHandler}
-            onSubmit={dateFilterHandler}
+            dateFilterHandler={dateFilterHandler}
           />
           <AddressFilterPopover
             defaultFromAddress={fromAddress}
             defaultToAddress={toAddress}
-            clearFilterHandler={clearAddressFilterHandler}
-            onSubmit={addressFilterHandler}
+            addressFilterHandler={addressFilterHandler}
           />
           <ClearTxTableFiltersButton />
         </Flex>

@@ -2,14 +2,11 @@ import { useSearchParams } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import {
-  useAddressFilterHandler,
-  useClearAddressFilterHandler,
-  useClearDateFilterHandler,
-  useClearTransactionTypeFilterHandler,
-  useDateFilterHandler,
-  useTransactionTypeFilterHandler,
+  addressFilterMutator,
+  dateFilterMutator,
+  transactionTypeFilterMutator,
+  useQueryUpdater,
 } from '../filters/table-filters-utils';
-import { useClearAllTxTableFiltersHandler } from './tx-table-filters-utils';
 
 export interface TxTableFilters {
   transactionType: string[];
@@ -32,11 +29,8 @@ export const TxTableFiltersContext = createContext<
   TxTableFilters & {
     addressFilterHandler: (fromAddress: string, toAddress: string) => void;
     dateFilterHandler: (startTime?: number, endTime?: number) => void;
-    transactionTypeFilterHandler: (transactionType: string[]) => void;
+    transactionTypeFilterHandler: (transactionType?: string[]) => void;
     clearAllFiltersHandler: () => void;
-    clearAddressFilterHandler: () => void;
-    clearDateFilterHandler: () => void;
-    clearTransactionTypeFilterHandler: () => void;
   }
 >({
   transactionType: [],
@@ -46,11 +40,8 @@ export const TxTableFiltersContext = createContext<
   endTime: '',
   addressFilterHandler: (fromAddress: string, toAddress: string) => {},
   dateFilterHandler: (startTime?: number, endTime?: number) => {},
-  transactionTypeFilterHandler: (transactionType: string[]) => {},
+  transactionTypeFilterHandler: (transactionType?: string[]) => {},
   clearAllFiltersHandler: () => {},
-  clearAddressFilterHandler: () => {},
-  clearDateFilterHandler: () => {},
-  clearTransactionTypeFilterHandler: () => {},
 });
 
 export const TxTableFiltersProvider = ({
@@ -110,13 +101,15 @@ export const TxTableFiltersProvider = ({
     });
   }, [searchParams]);
 
-  const addressFilterHandler = useAddressFilterHandler();
-  const dateFilterHandler = useDateFilterHandler();
-  const transactionTypeFilterHandler = useTransactionTypeFilterHandler();
-  const clearAddressFilterHandler = useClearAddressFilterHandler();
-  const clearDateFilterHandler = useClearDateFilterHandler();
-  const clearTransactionTypeFilterHandler = useClearTransactionTypeFilterHandler();
-  const clearAllFiltersHandler = useClearAllTxTableFiltersHandler();
+  const dateFilterHandler = useQueryUpdater(dateFilterMutator);
+  const addressFilterHandler = useQueryUpdater(addressFilterMutator);
+  const transactionTypeFilterHandler = useQueryUpdater(transactionTypeFilterMutator);
+  const clearAllFiltersHandler = useQueryUpdater((params: URLSearchParams) => {
+    dateFilterMutator(params, undefined, undefined);
+    addressFilterMutator(params, undefined, undefined);
+    transactionTypeFilterMutator(params, undefined);
+    return params;
+  });
 
   return (
     <TxTableFiltersContext.Provider
@@ -130,9 +123,6 @@ export const TxTableFiltersProvider = ({
         dateFilterHandler,
         transactionTypeFilterHandler,
         clearAllFiltersHandler,
-        clearAddressFilterHandler,
-        clearDateFilterHandler,
-        clearTransactionTypeFilterHandler,
       }}
     >
       {children}
