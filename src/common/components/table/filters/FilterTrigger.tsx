@@ -91,11 +91,11 @@ export const FilterTrigger = ({
             h={3}
             w={3}
             boxSizing={'content-box'}
-            color="iconTertiary"
+            color="iconSecondary"
             _groupHover={{ color: 'iconPrimary' }}
             onClick={clearFilterHandler}
           >
-            <X />
+            <X weight="bold" />
           </Icon>
         </Flex>
       )}
