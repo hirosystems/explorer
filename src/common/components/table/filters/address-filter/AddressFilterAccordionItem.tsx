@@ -14,7 +14,7 @@ export const AddressFilterAccordionItem = ({
   id: string;
   open: boolean;
   setOpen: (open: boolean) => void;
-  addressFilterHandler: (fromAddress: string, toAddress: string) => void;
+  addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
   onSubmit?: (fromAddress: string, toAddress: string) => void;
 }) => {
   const { fromAddress, toAddress } = useTxTableFilters();

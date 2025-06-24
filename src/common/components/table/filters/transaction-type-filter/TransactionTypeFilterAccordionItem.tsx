@@ -15,7 +15,7 @@ export const TransactionTypeFilterAccordionItem = ({
   open: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (transactionType: string[]) => void;
-  transactionTypeFilterHandler: (transactionType: string[]) => void;
+  transactionTypeFilterHandler: (transactionType?: string[]) => void;
 }) => {
   const { transactionType } = useTxTableFilters();
 
