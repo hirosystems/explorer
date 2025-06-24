@@ -15,6 +15,8 @@ import StxIcon from '@/ui/icons/StxIcon';
 import StxSquareIcon from '@/ui/icons/StxSquareIcon';
 import { Box, BoxProps, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 
+import { SSRDisabledMessage } from '../SSRDisabledMessage';
+
 function ProgressKnob({ diameter, ...boxProps }: { diameter: number } & BoxProps) {
   return (
     <Box
@@ -65,6 +67,9 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 }
 
 function CycleHeader() {
+  if (!useHomePageData().stackingCycle) {
+    return null;
+  }
   const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
     <Flex
@@ -124,10 +129,11 @@ function CycleHeader() {
 }
 
 function StxStats() {
-  const {
-    stackingCycle: { stackedStx },
-    stxPrice,
-  } = useHomePageData();
+  const { stackingCycle, stxPrice } = useHomePageData();
+  if (!stackingCycle) {
+    return null;
+  }
+  const { stackedStx } = stackingCycle;
   return (
     <Flex flexWrap={'wrap'}>
       <Flex alignItems={'center'} gap={0.5}>
@@ -158,9 +164,11 @@ function StxStats() {
 }
 
 function CycleProgress() {
-  const {
-    stackingCycle: { approximateStartTimestamp, approximateEndTimestamp, progressPercentage },
-  } = useHomePageData();
+  const { stackingCycle } = useHomePageData();
+  if (!stackingCycle) {
+    return null;
+  }
+  const { approximateStartTimestamp, approximateEndTimestamp, progressPercentage } = stackingCycle;
   return (
     <Tooltip
       variant="redesignPrimary"
@@ -259,15 +267,17 @@ function BlockInfo({
 }
 
 function BlocksSection() {
+  const { stackingCycle } = useHomePageData();
+  if (!stackingCycle) {
+    return null;
+  }
   const {
-    stackingCycle: {
-      startBurnBlockHeight,
-      startBurnBlockHash,
-      startStacksBlockHeight,
-      startStacksBlockHash,
-      endBurnBlockHeight,
-    },
-  } = useHomePageData();
+    startBurnBlockHeight,
+    startBurnBlockHash,
+    startStacksBlockHeight,
+    startStacksBlockHash,
+    endBurnBlockHeight,
+  } = stackingCycle;
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
@@ -282,21 +292,26 @@ function BlocksSection() {
 }
 
 export function StackingSection() {
+  const { isSSRDisabled } = useHomePageData();
   return (
     <Stack gap={4} flex={1}>
       <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
         Stacking
       </Text>
-      <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
-        <Stack gap={2.5}>
-          <CycleHeader />
-          <StxStats />
+      {isSSRDisabled ? (
+        <SSRDisabledMessage />
+      ) : (
+        <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
+          <Stack gap={2.5}>
+            <CycleHeader />
+            <StxStats />
+          </Stack>
+          <Stack gap={3}>
+            <CycleProgress />
+            <BlocksSection />
+          </Stack>
         </Stack>
-        <Stack gap={3}>
-          <CycleProgress />
-          <BlocksSection />
-        </Stack>
-      </Stack>
+      )}
     </Stack>
   );
 }
