@@ -34,9 +34,6 @@ const TxTableFiltersModalBody = () => {
     dateFilterHandler,
     addressFilterHandler,
     clearAllFiltersHandler,
-    clearDateFilterHandler,
-    clearAddressFilterHandler,
-    clearTransactionTypeFilterHandler,
   } = useTxTableFilters();
 
   return (
@@ -51,7 +48,7 @@ const TxTableFiltersModalBody = () => {
               accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
             );
           }}
-          clearFilterHandler={clearTransactionTypeFilterHandler}
+          transactionTypeFilterHandler={transactionTypeFilterHandler}
           setOpen={open => {
             if (open) {
               setAccordions(accordions => [
@@ -79,7 +76,7 @@ const TxTableFiltersModalBody = () => {
               );
             }
           }}
-          clearFilterHandler={clearDateFilterHandler}
+          dateFilterHandler={dateFilterHandler}
           onSubmit={(startTime?: number, endTime?: number) => {
             dateFilterHandler(startTime, endTime);
             setAccordions(
@@ -99,7 +96,7 @@ const TxTableFiltersModalBody = () => {
               );
             }
           }}
-          clearFilterHandler={clearAddressFilterHandler}
+          addressFilterHandler={addressFilterHandler}
           onSubmit={(fromAddress: string, toAddress: string) => {
             addressFilterHandler(fromAddress, toAddress);
             setAccordions(

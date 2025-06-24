@@ -10,14 +10,12 @@ export function AddressFilterPopover({
   idExtension = '',
   defaultFromAddress = '',
   defaultToAddress = '',
-  onSubmit,
-  clearFilterHandler,
+  addressFilterHandler,
 }: {
   idExtension?: string;
   defaultFromAddress?: string;
   defaultToAddress?: string;
-  onSubmit: (fromAddress: string, toAddress: string) => void;
-  clearFilterHandler: () => void;
+  addressFilterHandler: (fromAddress: string, toAddress: string) => void;
 }) {
   return (
     <FilterTabPopover
@@ -33,7 +31,7 @@ export function AddressFilterPopover({
           open={open}
           fromAddress={defaultFromAddress}
           toAddress={defaultToAddress}
-          clearFilterHandler={clearFilterHandler}
+          addressFilterHandler={addressFilterHandler}
           filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
@@ -41,7 +39,7 @@ export function AddressFilterPopover({
         <Box p={3}>
           <AddressFilterForm
             onSubmit={(fromAddress: string, toAddress: string) => {
-              onSubmit(fromAddress, toAddress);
+              addressFilterHandler(fromAddress, toAddress);
               setOpen(false);
             }}
             defaultFromAddress={defaultFromAddress}

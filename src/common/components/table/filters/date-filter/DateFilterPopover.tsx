@@ -10,14 +10,12 @@ export function DateFilterPopover({
   idExtension = '',
   defaultStartTime = '',
   defaultEndTime = '',
-  clearFilterHandler,
-  onSubmit,
+  dateFilterHandler,
 }: {
   idExtension?: string;
   defaultStartTime?: string;
   defaultEndTime?: string;
-  clearFilterHandler: () => void;
-  onSubmit: (startTime?: number, endTime?: number) => void;
+  dateFilterHandler: (startTime?: number, endTime?: number) => void;
 }) {
   return (
     <FilterTabPopover
@@ -33,7 +31,7 @@ export function DateFilterPopover({
           setOpen={setOpen}
           startTime={defaultStartTime}
           endTime={defaultEndTime}
-          clearFilterHandler={clearFilterHandler}
+          dateFilterHandler={dateFilterHandler}
           filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
@@ -41,7 +39,7 @@ export function DateFilterPopover({
         <Box p={3}>
           <DateFilterTabs
             onSubmit={(startTime?: number, endTime?: number) => {
-              onSubmit(startTime, endTime);
+              dateFilterHandler(startTime, endTime);
               setOpen(false);
             }}
             defaultStartTime={defaultStartTime}

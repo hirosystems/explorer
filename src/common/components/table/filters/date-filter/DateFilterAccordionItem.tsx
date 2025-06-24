@@ -8,16 +8,16 @@ export const DateFilterAccordionItem = ({
   id,
   open,
   setOpen,
-  clearFilterHandler,
+  dateFilterHandler,
   onSubmit,
 }: {
   id: string;
   open: boolean;
   setOpen: (open: boolean) => void;
-  clearFilterHandler: () => void;
+  dateFilterHandler: (startTime?: number, endTime?: number) => void;
   onSubmit: (startTime?: number, endTime?: number) => void;
 }) => {
-  const { startTime, endTime, clearDateFilterHandler } = useTxTableFilters();
+  const { startTime, endTime } = useTxTableFilters();
 
   return (
     <FilterAccordionItem
@@ -28,7 +28,7 @@ export const DateFilterAccordionItem = ({
           endTime={endTime}
           open={open}
           setOpen={setOpen}
-          clearFilterHandler={clearDateFilterHandler}
+          dateFilterHandler={dateFilterHandler}
           filterContainerProps={getFilterAccordionItemContainerProps}
         />
       }
@@ -37,36 +37,4 @@ export const DateFilterAccordionItem = ({
       }
     />
   );
-
-  // return (
-  //   <AccordionItem borderBottom={'none'} value={id} onClick={e => {
-  //     console.log('dont do anything')
-  //     e.stopPropagation();
-  //   }}>
-  //     <AccordionItemTrigger
-  //       alignItems="center"
-  //       bg="surfacePrimary"
-  //       borderTopRadius="redesign.md"
-  //       borderBottomRadius={open ? 'none' : 'redesign.md'}
-  //       w="full"
-  //       p={3}
-  //     >
-  //       <DateFilterTrigger
-  //         startTime={startTime}
-  //         endTime={endTime}
-  //         open={open}
-  //         setOpen={setOpen}
-  //         clearFilterHandler={clearDateFilterHandler}
-  //       />
-  //     </AccordionItemTrigger>
-  //     <AccordionItemContent
-  //       bg="surfacePrimary"
-  //       borderBottomRadius="redesign.md"
-  //       borderTopRadius={'none'}
-  //       p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
-  //     >
-  //       <DateFilterTabs defaultStartTime={startTime} defaultEndTime={endTime} onSubmit={onSubmit} />
-  //     </AccordionItemContent>
-  //   </AccordionItem>
-  // );
 };

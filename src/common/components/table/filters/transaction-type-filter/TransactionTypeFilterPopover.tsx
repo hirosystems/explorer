@@ -9,13 +9,11 @@ const TAB_HEIGHT_ADJUSTMENT = 4;
 export function TransactionTypeFilterPopover({
   idExtension = '',
   defaultTransactionType = [],
-  clearFilterHandler,
-  onSubmit,
+  transactionTypeFilterHandler,
 }: {
   idExtension?: string;
   defaultTransactionType?: string[];
-  clearFilterHandler: () => void;
-  onSubmit: (transactionType: string[]) => void;
+  transactionTypeFilterHandler: (transactionType?: string[]) => void;
 }) {
   return (
     <FilterTabPopover
@@ -29,7 +27,7 @@ export function TransactionTypeFilterPopover({
         <TransactionTypeFilterTrigger
           open={open}
           transactionType={defaultTransactionType}
-          clearFilterHandler={clearFilterHandler}
+          transactionTypeFilterHandler={transactionTypeFilterHandler}
           filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
@@ -38,7 +36,7 @@ export function TransactionTypeFilterPopover({
           <TransactionTypeFilterForm
             onSubmit={(transactionType: string[]) => {
               setOpen(false);
-              onSubmit(transactionType);
+              transactionTypeFilterHandler(transactionType);
             }}
             open={open}
             defaultTransactionType={defaultTransactionType}
