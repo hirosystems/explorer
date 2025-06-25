@@ -1,3 +1,10 @@
+# [1.289.0](https://github.com/hirosystems/explorer/compare/v1.288.0...v1.289.0) (2025-06-25)
+
+
+### Features
+
+* enable sentry profiling ([#2369](https://github.com/hirosystems/explorer/issues/2369)) ([915d328](https://github.com/hirosystems/explorer/commit/915d328d611ca0ae266ad388179b5d1f2ec971b4))
+
 # [1.287.0](https://github.com/hirosystems/explorer/compare/v1.286.3...v1.287.0) (2025-06-24)
 
 
