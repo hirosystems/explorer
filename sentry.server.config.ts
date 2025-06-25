@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/nextjs';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 
 Sentry.init({
+  enable: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   integrations: [nodeProfilingIntegration()],
 
