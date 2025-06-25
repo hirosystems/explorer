@@ -32,12 +32,6 @@ export const linkRecipe = defineRecipe({
           textDecoration: 'underline',
         },
       },
-      underlineOnHover: {
-        textDecoration: 'none',
-        _hover: {
-          textDecoration: 'underline',
-        },
-      },
       tableLink: {
         textDecoration: 'underline',
         _hover: {

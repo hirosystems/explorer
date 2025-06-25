@@ -111,7 +111,6 @@ export type TableProps<T> = {
   onSort?: (columnId: string, sortDirection: 'asc' | 'desc' | undefined) => Promise<T[]>;
   isLoading?: boolean;
   isFetching?: boolean;
-  isFiltered?: boolean;
   suspenseWrapper?: (table: JSX.Element) => JSX.Element;
   tableContainerWrapper?: (table: JSX.Element) => JSX.Element;
   scrollIndicatorWrapper?: (table: JSX.Element) => JSX.Element;
@@ -152,7 +151,7 @@ const EmptyFilteredTable = () => {
           No results found
         </Text>
         <Text fontSize="md" color="textSecondary">
-          Try adjusting your filters or search terms.
+          Try modifying filters applied.
         </Text>
       </Stack>
     </Stack>
@@ -161,12 +160,9 @@ const EmptyFilteredTable = () => {
 
 const EmptyTable = ({ message }: { message?: string }) => {
   return (
-    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1} gap={6}>
-      <Icon h={16} w={16}>
-        <StacksFrowneyIcon />
-      </Icon>
-      <Text fontSize="2xl" fontWeight="medium" color="textPrimary">
-        No results found
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1}>
+      <Text fontSize="2xl" color="textPrimary">
+        {message ?? 'No results found'}
       </Text>
     </Stack>
   );
@@ -205,7 +201,6 @@ export function Table<T>({
   onSort,
   isLoading,
   isFetching,
-  isFiltered,
   suspenseWrapper = (table: JSX.Element) => table,
   tableContainerWrapper = (table: JSX.Element) => table,
   scrollIndicatorWrapper = (table: JSX.Element) => table,
@@ -278,15 +273,13 @@ export function Table<T>({
   }
 
   if (!isLoading && !isFetching && tableData.length === 0) {
-    if (isFiltered) {
-      return tableContainerWrapper(<EmptyFilteredTable />);
-    }
     return tableContainerWrapper(<EmptyTable />);
   }
 
   let content: React.ReactNode = (
     <ChakraTable.Root
       width="full"
+      // tableLayout="fixed"
       css={{
         '& td': {
           borderBottom: 'none',

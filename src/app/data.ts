@@ -143,6 +143,18 @@ export async function fetchMempoolStats(chain: string, api?: string) {
   return response;
 }
 
+export async function fetchMempoolFee(chain: string, api?: string): Promise<MempoolFeePriorities> {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v2/mempool/fees`, {
+    cache: 'default',
+    next: {
+      revalidate: 10, // 10 seconds
+      tags: ['mempool-fee'],
+    },
+  });
+  return response.json();
+}
+
 export async function fetchCurrentStackingCycle(
   chain: string,
   api?: string
@@ -283,29 +295,4 @@ export async function fetchUIMempoolStats(chain: string, api?: string): Promise<
   return {
     tx_type_counts: mempoolStats.tx_type_counts,
   };
-}
-
-export async function fetchTxFeeEstimation(
-  transactionPayload: string,
-  estimatedLen: number | null,
-  chain: string,
-  api?: string
-) {
-  const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/v2/fees/transaction`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      estimated_len: estimatedLen,
-      transaction_payload: transactionPayload,
-    }),
-    cache: 'default',
-    next: {
-      revalidate: 10, // 10 seconds
-      tags: ['fee-estimation'],
-    },
-  });
-  return response.json();
 }

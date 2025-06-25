@@ -10,12 +10,9 @@ import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
 import ProgressDot from '@/ui/icons/ProgressDot';
-import StacksIconThin from '@/ui/icons/StacksIconThin';
 import StxIcon from '@/ui/icons/StxIcon';
 import StxSquareIcon from '@/ui/icons/StxSquareIcon';
 import { Box, BoxProps, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
-
-import { SSRDisabledMessage } from '../SSRDisabledMessage';
 
 function ProgressKnob({ diameter, ...boxProps }: { diameter: number } & BoxProps) {
   return (
@@ -46,14 +43,20 @@ function ProgressBar({ percentage }: { percentage?: number }) {
       w="100%"
       position="relative"
     >
-      <Stack
-        bg={'accent.stacks-500'}
-        h={2}
-        borderRadius={'redesign.2xl'}
-        w={`${percentage}%`}
-        position="absolute"
-        boxShadow={'0px 2px 10px 0px rgba(255, 85, 18, 0.50)'}
-      />
+      <Tooltip
+        variant="redesignPrimary"
+        size="lg"
+        content={`${percentage ? percentage : 0}% completed`}
+      >
+        <Stack
+          bg={'accent.stacks-500'}
+          h={2}
+          borderRadius={'redesign.2xl'}
+          w={`${percentage}%`}
+          position="absolute"
+          boxShadow={'0px 2px 10px 0px rgba(255, 85, 18, 0.50)'}
+        />
+      </Tooltip>
       <ProgressKnob
         diameter={PROGRESS_KNOB_DIAMETER}
         left={`calc(var(--stacks-spacing-${PROGRESS_KNOB_DIAMETER}) / 2)`}
@@ -67,11 +70,7 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 }
 
 function CycleHeader() {
-  const homePageData = useHomePageData();
-  if (!homePageData.stackingCycle) {
-    return null;
-  }
-  const { approximateDaysTilNextCycle, cycleId } = homePageData.stackingCycle;
+  const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
     <Flex
       gap="2"
@@ -118,11 +117,7 @@ function CycleHeader() {
           fontWeight={['medium', 'regular']}
           whiteSpace={'nowrap'}
         >
-          {approximateDaysTilNextCycle < 1
-            ? 'Ends today'
-            : approximateDaysTilNextCycle >= 1 && approximateDaysTilNextCycle < 2
-              ? `Ends in ~${approximateDaysTilNextCycle} day`
-              : `Ends in ~${approximateDaysTilNextCycle} days`}
+          Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
         </Text>
       </Flex>
     </Flex>
@@ -130,16 +125,15 @@ function CycleHeader() {
 }
 
 function StxStats() {
-  const { stackingCycle, stxPrice } = useHomePageData();
-  if (!stackingCycle) {
-    return null;
-  }
-  const { stackedStx } = stackingCycle;
+  const {
+    stackingCycle: { stackedStx },
+    stxPrice,
+  } = useHomePageData();
   return (
     <Flex flexWrap={'wrap'}>
       <Flex alignItems={'center'} gap={0.5}>
         <Icon w="4.5" h="4.5">
-          <StacksIconThin />
+          <StxIcon />
         </Icon>
         <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
           {abbreviateNumber(stackedStx, 1)} STX
@@ -165,53 +159,45 @@ function StxStats() {
 }
 
 function CycleProgress() {
-  const { stackingCycle } = useHomePageData();
-  if (!stackingCycle) {
-    return null;
-  }
-  const { approximateStartTimestamp, approximateEndTimestamp, progressPercentage } = stackingCycle;
+  const {
+    stackingCycle: { approximateStartTimestamp, approximateEndTimestamp, progressPercentage },
+  } = useHomePageData();
   return (
-    <Tooltip
-      variant="redesignPrimary"
-      size="lg"
-      content={`${progressPercentage ? progressPercentage : 0}% completed`}
-    >
-      <Stack gap={4}>
-        <Stack gap={1}>
-          <HStack justify={'space-between'}>
-            <Text textStyle={'text-medium-sm'} color="textPrimary">
-              Started
-            </Text>
-            <Text textStyle={'text-medium-sm'} color="textPrimary">
-              Ends
-            </Text>
-          </HStack>
-          <ProgressBar percentage={progressPercentage} />
-        </Stack>
+    <Stack gap={4}>
+      <Stack gap={1}>
         <HStack justify={'space-between'}>
-          <Text
-            textStyle={'text-medium-xs'}
-            color="textPrimary"
-            borderRadius={'redesign.md'}
-            bg={'surfaceFifth'}
-            px={2}
-            py={1}
-          >
-            ~ {formatDateShort(approximateStartTimestamp)}
+          <Text textStyle={'text-medium-sm'} color="textPrimary">
+            Started
           </Text>
-          <Text
-            textStyle={'text-medium-xs'}
-            color="textPrimary"
-            borderRadius={'redesign.md'}
-            bg={'surfaceFifth'}
-            px={2}
-            py={0.5}
-          >
-            ~ {formatDateShort(approximateEndTimestamp)}
+          <Text textStyle={'text-medium-sm'} color="textPrimary">
+            Ends
           </Text>
         </HStack>
+        <ProgressBar percentage={progressPercentage} />
       </Stack>
-    </Tooltip>
+      <HStack justify={'space-between'}>
+        <Text
+          textStyle={'text-medium-xs'}
+          color="textPrimary"
+          borderRadius={'redesign.md'}
+          bg={'surfaceFifth'}
+          px={2}
+          py={1}
+        >
+          ~ {formatDateShort(approximateStartTimestamp)}
+        </Text>
+        <Text
+          textStyle={'text-medium-xs'}
+          color="textPrimary"
+          borderRadius={'redesign.md'}
+          bg={'surfaceFifth'}
+          px={2}
+          py={0.5}
+        >
+          ~ {formatDateShort(approximateEndTimestamp)}
+        </Text>
+      </HStack>
+    </Stack>
   );
 }
 
@@ -268,17 +254,15 @@ function BlockInfo({
 }
 
 function BlocksSection() {
-  const { stackingCycle } = useHomePageData();
-  if (!stackingCycle) {
-    return null;
-  }
   const {
-    startBurnBlockHeight,
-    startBurnBlockHash,
-    startStacksBlockHeight,
-    startStacksBlockHash,
-    endBurnBlockHeight,
-  } = stackingCycle;
+    stackingCycle: {
+      startBurnBlockHeight,
+      startBurnBlockHash,
+      startStacksBlockHeight,
+      startStacksBlockHash,
+      endBurnBlockHeight,
+    },
+  } = useHomePageData();
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
@@ -293,26 +277,21 @@ function BlocksSection() {
 }
 
 export function StackingSection() {
-  const { isSSRDisabled } = useHomePageData();
   return (
     <Stack gap={4} flex={1}>
       <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
         Stacking
       </Text>
-      {isSSRDisabled ? (
-        <SSRDisabledMessage />
-      ) : (
-        <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
-          <Stack gap={2.5}>
-            <CycleHeader />
-            <StxStats />
-          </Stack>
-          <Stack gap={3}>
-            <CycleProgress />
-            <BlocksSection />
-          </Stack>
+      <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
+        <Stack gap={2.5}>
+          <CycleHeader />
+          <StxStats />
         </Stack>
-      )}
+        <Stack gap={3}>
+          <CycleProgress />
+          <BlocksSection />
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

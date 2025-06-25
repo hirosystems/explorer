@@ -9,7 +9,6 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
-import { SSRDisabledMessage } from '../SSRDisabledMessage';
 import { ChartTooltip } from './ChartTooltip';
 import {
   Chart,
@@ -29,14 +28,14 @@ export type ChartConfig = {
 };
 
 function NetworkOverviewChart() {
-  const { initialRecentBlocks } = useHomePageData();
-
-  const { stxBlocksCountPerBtcBlock } = initialRecentBlocks || {};
+  const {
+    initialRecentBlocks: { stxBlocksCountPerBtcBlock },
+  } = useHomePageData();
   const { selectedChart, setSelectedChart } = useNetworkOverviewContext();
   const { colorMode } = useColorMode();
 
   const chartData = useMemo(() => {
-    if (!stxBlocksCountPerBtcBlock?.length) return [];
+    if (!stxBlocksCountPerBtcBlock.length) return [];
 
     const sortedBlocks = [...stxBlocksCountPerBtcBlock].sort(
       (a, b) => Number(a.burn_block_time) - Number(b.burn_block_time)
@@ -187,10 +186,6 @@ function NetworkOverviewChart() {
     );
   };
 
-  if (!initialRecentBlocks) {
-    return null;
-  }
-
   return (
     <TabsRoot
       variant="primary"
@@ -260,12 +255,11 @@ function NetworkOverviewChart() {
 }
 
 export function NetworkOverview() {
-  const { isSSRDisabled } = useHomePageData();
   return (
     <NetworkOverviewContextProvider>
       <Stack gap={4} flex={1}>
         <SectionHeader />
-        {isSSRDisabled ? <SSRDisabledMessage /> : <NetworkOverviewChart />}
+        <NetworkOverviewChart />
       </Stack>
     </NetworkOverviewContextProvider>
   );

@@ -1,6 +1,6 @@
 import { Box, BoxProps, Flex, Icon, VisuallyHidden } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 export function TableScrollIndicator({ children, ...rest }: BoxProps & { children: ReactNode }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
@@ -50,12 +50,6 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
     };
   }, []);
 
-  const scrollToEnd = useCallback(() => {
-    if (divRef.current) {
-      divRef.current.scrollLeft = divRef.current.scrollWidth;
-    }
-  }, []);
-
   return (
     <Box position="relative" className="scroll-indicator-positioner" w="full">
       <Box
@@ -80,12 +74,7 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
           top={0}
           h="full"
           className="scroll-indicator"
-          aria-hidden="false"
-          tabIndex={0}
-          role="button"
-          aria-label="Scroll to end"
-          cursor="pointer"
-          onClick={scrollToEnd}
+          aria-hidden="true"
         >
           <Box w={2} h="full" bg="surfaceTertiary"></Box>
           <Flex

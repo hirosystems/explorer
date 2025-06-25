@@ -16,7 +16,6 @@ import { TokenPrice } from '../../common/types/tokenPrice';
 import { MICROSTACKS_IN_STACKS, getUsdValue } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
-import { FeeEstimates } from '../context';
 import {
   TransactionTypeFilterMenu,
   TransactionTypeFilterTypes,
@@ -184,7 +183,7 @@ function MempoolFeePriorityCard({
       mb={1}
       style={{ fontVariantNumeric: 'tabular-nums' }}
     >
-      {(mempoolFeeAll / MICROSTACKS_IN_STACKS).toFixed(4)} STX
+      {mempoolFeeAll / MICROSTACKS_IN_STACKS} STX
     </Text>
   );
 
@@ -198,21 +197,21 @@ function MempoolFeePriorityCard({
     <>
       <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
         icon={getTxTypeIcon('token_transfer')}
-        fee={`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(4))} STX`}
+        fee={`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))} STX`}
         tooltipContent={`Token transfer tx fee: ${
           mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
         } STX`}
       />
       <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
         icon={getTxTypeIcon('contract_call')}
-        fee={`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(4))} STX`}
+        fee={`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))} STX`}
         tooltipContent={`Contract call tx fee: ${
           mempoolFeeContractCall / MICROSTACKS_IN_STACKS
         } STX`}
       />
       <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
         icon={getTxTypeIcon('smart_contract')}
-        fee={`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(4))} STX`}
+        fee={`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))} STX`}
         tooltipContent={`Smart contract tx fee: ${
           mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
         } STX`}
@@ -322,59 +321,50 @@ export function MempoolFeePriorityCardsLayout({
 
 export function MempoolFeePriorityCardsSectionBase({
   tokenPrice,
-  feeEstimates,
   transactionType,
   setTransactionType,
 }: {
   tokenPrice: TokenPrice;
-  feeEstimates: FeeEstimates;
   transactionType: TransactionTypeFilterTypes;
   setTransactionType: (transactionType: TransactionTypeFilterTypes) => void;
 }) {
-  const mappedFeeEstimates = useMemo(() => {
-    return {
-      all: feeEstimates.averageFees,
-      token_transfer: feeEstimates.tokenTransferFees,
-      contract_call: feeEstimates.contractCallFees,
-      smart_contract: feeEstimates.contractDeployFees,
-    };
-  }, [feeEstimates]);
+  const mempoolFeeResponse = useSuspenseMempoolFee().data as MempoolFeePriorities;
 
   const mappedTxType = mapTransactionTypeToFilterValue(transactionType);
 
   const filteredMempoolFeeResponse = useMemo(() => {
-    const filteredMempoolFeeResponse = { ...mappedFeeEstimates };
+    const filteredMempoolFeeResponse = { ...mempoolFeeResponse };
     Object.keys(filteredMempoolFeeResponse).forEach(key => {
       if (mappedTxType !== 'all' && key !== mappedTxType) {
         delete filteredMempoolFeeResponse[key as keyof typeof filteredMempoolFeeResponse];
       }
     });
     return filteredMempoolFeeResponse;
-  }, [mappedTxType, mappedFeeEstimates]);
+  }, [mappedTxType, mempoolFeeResponse]);
 
   return (
-    <MempoolFeePriorityCardsLayout
-      transactionType={transactionType}
-      setTransactionType={setTransactionType}
-      mempoolFeePriorityCards={
-        <MempoolFeePriorityCards
-          tokenPrice={tokenPrice}
-          filteredMempoolFeeResponse={filteredMempoolFeeResponse}
-          transactionType={transactionType}
-        />
-      }
-    />
+    <Suspense fallback={<MempoolFeePriorityCardsSectionSkeleton />}>
+      <MempoolFeePriorityCardsLayout
+        transactionType={transactionType}
+        setTransactionType={setTransactionType}
+        mempoolFeePriorityCards={
+          <MempoolFeePriorityCards
+            tokenPrice={tokenPrice}
+            filteredMempoolFeeResponse={filteredMempoolFeeResponse}
+            transactionType={transactionType}
+          />
+        }
+      />
+    </Suspense>
   );
 }
 
 export function MempoolFeePriorityCardsSection({
   tokenPrice,
-  feeEstimates,
   transactionType,
   setTransactionType,
 }: {
   tokenPrice: TokenPrice;
-  feeEstimates: FeeEstimates;
   transactionType: TransactionTypeFilterTypes;
   setTransactionType: (transactionType: TransactionTypeFilterTypes) => void;
 }) {
@@ -382,7 +372,6 @@ export function MempoolFeePriorityCardsSection({
     <Suspense fallback={<MempoolFeePriorityCardsSectionSkeleton />}>
       <MempoolFeePriorityCardsSectionBase
         tokenPrice={tokenPrice}
-        feeEstimates={feeEstimates}
         transactionType={transactionType}
         setTransactionType={setTransactionType}
       />

@@ -8,7 +8,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { TabsContent, TabsLabel, TabsList, TabsRoot, TabsTrigger } from '../../../ui/Tabs';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
-import StacksIconThin from '../../../ui/icons/StacksIconThin';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { RecentBtcBlocks } from './RecentBtcBlocks';
 import { RecentStxBlocks } from './RecentStxBlocks';
 
@@ -55,7 +55,7 @@ export function RecentBlocks() {
             </TabsTrigger>
             <TabsTrigger value="stx" gap={1.5} aria-label="View Stacks blocks">
               <Icon aria-hidden="true">
-                <StacksIconThin />
+                <StxIcon />
               </Icon>
               Stacks block
             </TabsTrigger>

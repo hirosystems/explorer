@@ -19,7 +19,7 @@ function getTransactionTypeFilterLabel(transactionType: TransactionTypeFilterTyp
     return 'Average for token transfers';
   }
   if (transactionType === TransactionTypeFilterTypes.AverageForFunctionCalls) {
-    return 'Average for contract calls';
+    return 'Average for function calls';
   }
   if (transactionType === TransactionTypeFilterTypes.AverageForContractDeploys) {
     return 'Average for contract deploys';

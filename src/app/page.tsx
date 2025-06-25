@@ -1,6 +1,4 @@
-import { getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { Flex, Stack } from '@chakra-ui/react';
-import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
@@ -11,11 +9,12 @@ import { TxsSection } from './_components/TxsSection';
 import { HomePageDataProvider } from './context';
 import {
   fetchCurrentStackingCycle,
+  fetchMempoolFee,
   fetchRecentBlocks,
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
-import { getTokenPrice } from './getTokenPriceInfo';
+import { getCurrentStxPrice, getTokenPrice } from './getTokenPriceInfo';
 
 export default async function HomeRedesign(props: {
   searchParams: Promise<Record<string, string>>;
@@ -23,46 +22,23 @@ export default async function HomeRedesign(props: {
   const searchParams = await props.searchParams;
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
-  const isSSRDisabled = searchParams?.ssr === 'false';
-
-  const nonStacksRequests = [getTokenPrice()] as const;
-
-  const stacksAPIRequests = isSSRDisabled
-    ? []
-    : ([
-        fetchRecentBlocks(chain, api),
-        fetchCurrentStackingCycle(chain, api),
-        fetchRecentUITxs(chain, api),
-        fetchUIMempoolStats(chain, api),
-        getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
-      ] as const);
-
-  const [tokenPrice, ...stacksAPIResults] = await Promise.all([
-    ...nonStacksRequests,
-    ...stacksAPIRequests,
-  ]);
-
-  const [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
-    isSSRDisabled
-      ? ([undefined, undefined, undefined, undefined, undefined] as const)
-      : stacksAPIResults;
-
-  const feeEstimates = sampleTxsFeeEstimate
-    ? {
-        tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
-        contractCallFees: sampleTxsFeeEstimate.contractCallFees,
-        contractDeployFees: sampleTxsFeeEstimate.contractDeployFees,
-        averageFees: sampleTxsFeeEstimate.averageFees,
-      }
-    : undefined;
+  const tokenPrice = await getTokenPrice();
+  const [stxPrice, recentBlocks, stackingCycle, initialTxTableData, mempoolStats, mempoolFee] =
+    await Promise.all([
+      getCurrentStxPrice(),
+      fetchRecentBlocks(chain, api),
+      fetchCurrentStackingCycle(chain, api),
+      fetchRecentUITxs(chain, api),
+      fetchUIMempoolStats(chain, api),
+      fetchMempoolFee(chain, api),
+    ]);
   return (
     <HomePageDataProvider
-      stxPrice={tokenPrice.stxPrice}
+      stxPrice={stxPrice}
       initialRecentBlocks={recentBlocks}
       stackingCycle={stackingCycle}
       mempoolStats={mempoolStats}
-      feeEstimates={feeEstimates}
-      isSSRDisabled={isSSRDisabled}
+      mempoolFee={mempoolFee}
     >
       <Stack gap={[16, 18, 20, 24]}>
         <RecentBlocksSection />

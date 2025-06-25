@@ -62,17 +62,17 @@ export const TxTableFilters = () => {
         <Flex gap={3} h={7}>
           <TransactionTypeFilterPopover
             defaultTransactionType={transactionType}
-            onSubmit={transactionTypeFilterHandler}
+            transactionTypeFilterHandler={transactionTypeFilterHandler}
           />
           <DateFilterPopover
             defaultStartTime={startTime}
             defaultEndTime={endTime}
-            onSubmit={dateFilterHandler}
+            dateFilterHandler={dateFilterHandler}
           />
           <AddressFilterPopover
             defaultFromAddress={fromAddress}
             defaultToAddress={toAddress}
-            onSubmit={addressFilterHandler}
+            addressFilterHandler={addressFilterHandler}
           />
           <ClearTxTableFiltersButton />
         </Flex>

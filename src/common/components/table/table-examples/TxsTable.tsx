@@ -77,7 +77,7 @@ export function getToAddress(tx: Transaction): string {
     return tx.contract_call?.contract_id;
   }
   if (tx.tx_type === 'coinbase') {
-    return '';
+    return tx.coinbase_payload?.alt_recipient ?? '';
   }
   if (tx.tx_type === 'tenure_change') {
     return '';
@@ -196,13 +196,12 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
       <ChakraTable.Cell colSpan={numColumns} py={2} px={1}>
         <Flex
           alignItems="center"
-          justifyContent={{ base: 'flex-start', md: 'center' }}
+          justifyContent="center"
           gap={1.5}
           boxShadow="0px 4px 4px 0px rgba(252, 100, 50, 0.25), 0px 4px 4px 0px rgba(255, 85, 18, 0.25)"
           border="1px dashed var(--stacks-colors-accent-stacks-500)"
           borderRadius="redesign.lg"
           h={12}
-          px={4}
         >
           <Box display="inline-flex">
             <Text fontSize="sm" fontWeight="medium" color="textSecondary">
@@ -310,14 +309,10 @@ export function TxsTable({
   }, [filters]);
 
   const { total, results: txs = [] } = data || {};
-  const isTableFiltered = Object.values(filters).some(
-    filterValue => filterValue != null && filterValue !== '' && filterValue?.length !== 0
-  );
+  const isTableFiltered = Object.values(filters).some(v => v != null && v !== '');
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
-
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
-
   useSubscribeTxs(isSubscriptionActive, tx => {
     // Waiting 5 seconds to let the API catch up to the websocket
     setTimeout(() => {
@@ -404,7 +399,6 @@ export function TxsTable({
       }
       isLoading={isLoading}
       isFetching={isFetching}
-      isFiltered={isTableFiltered}
     />
   );
 }

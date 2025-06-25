@@ -118,6 +118,7 @@ export function TablePaginationControls({
         h="auto"
         alignSelf="stretch"
         borderColor="redesignBorderSecondary"
+        borderWidth="1px"
       />
 
       <Flex gap={4} px={4} py={{ base: 3, lg: 2 }} alignItems="center" justifyContent="center">

@@ -7,8 +7,6 @@ import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { PageTitle } from '../_components/PageTitle';
-import { SSRDisabledMessage } from '../_components/SSRDisabledMessage';
-import { FeeEstimates } from '../context';
 import { MempoolFeeStatsSkeleton } from './skeleton';
 
 const MempoolFeeStatsDynamic = dynamic(
@@ -19,24 +17,13 @@ const MempoolFeeStatsDynamic = dynamic(
   }
 );
 
-export default function ({
-  tokenPrice,
-  feeEstimates,
-}: {
-  tokenPrice: TokenPrice;
-  feeEstimates?: FeeEstimates;
-}) {
+export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
         <PageTitle>Mempool</PageTitle>
       </Flex>
-      {feeEstimates ? (
-        <MempoolFeeStatsDynamic tokenPrice={tokenPrice} feeEstimates={feeEstimates} />
-      ) : (
-        <SSRDisabledMessage sectionName="Mempool fee statistics" />
-      )}
-
+      <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
       <Section>
         <MempoolTxsList />
       </Section>

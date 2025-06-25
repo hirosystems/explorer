@@ -1,15 +1,18 @@
 # Stacks Explorer
 
 
+![An image of the Stacks Explorer](/explorer-image.png 'Stacks Explorer')
+
 
 ![CI/CD](https://github.com/blockstack/explorer/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/gh/hirosystems/explorer/branch/main/graph/badge.svg?token=03EGMFTMO0)](https://app.codecov.io/gh/hirosystems/explorer)
+[![codecov](https://codecov.io/gh/hirosystems/explorer/branch/main/graph/badge.svg?token=03EGMFTMO0)](https://codecov.io/gh/hirosystems/explorer)
 
 | Environment | Status                                                                                                                                                         |
 |-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Prod        | ![Prod App Status](https://argo-cd.hiro.tools/api/badge?name=explorer&revision=true)          |
 | Staging     | ![Staging App Status](https://argo-cd.stg.hiro.tools/api/badge?name=explorer&revision=true) |
 | Dev         | ![Dev App Status](https://argo-cd.dev.hiro.tools/api/badge?name=explorer&revision=true)    |
+
 
 # Stacks Explorer
 

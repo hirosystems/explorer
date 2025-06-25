@@ -1,3 +1,4 @@
+import { Contract } from '@/common/types/tx';
 import { useFilterParams } from '@/common/utils/search-param-utils';
 import {
   Flex,
@@ -14,12 +15,15 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
 
+import { TxSearchResult } from '@stacks/stacks-blockchain-api-types';
+
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
   advancedSearchKeywords,
   buildAdvancedSearchQuery,
   getSearchPageUrl,
+  updateRecentResultsLocalStorage,
   useRecentResultsLocalStorage,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
@@ -331,7 +335,7 @@ function HiddenSearchField(props: InputProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dispatch]);
+  }, []);
   return (
     <Input
       ref={inputRef}
@@ -513,7 +517,15 @@ function SearchInput({
       dispatch(focus());
       dispatch(setSearchTerm(tempSearchTerm));
     }
-  }, [dispatch, quickNavUrl, router, searchEntityUrl, tempSearchTerm]);
+  }, [
+    dispatch,
+    isAdvancedSearch,
+    quickNavUrl,
+    router,
+    searchEntityUrl,
+    searchPageUrl,
+    tempSearchTerm,
+  ]);
 
   return (
     <DoubleGradientBorderWrapper {...flexProps}>
@@ -529,9 +541,7 @@ function SearchInput({
         <StartElement />
         <Flex width={'full'} fontFamily="var(--font-instrument-sans)">
           <HiddenSearchField
-            placeholder={
-              isSearchFieldFocused ? '' : 'Search transactions, addresses, domains, and blocks'
-            }
+            placeholder={isSearchFieldFocused ? '' : 'Explore'}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === 'Enter') {
                 handleSearch();
@@ -606,7 +616,7 @@ export function Search({ fullScreen = false }: { fullScreen?: boolean }) {
       }
       return children;
     },
-    [isSearchFieldFocused, fullScreen, dispatch]
+    [isSearchFieldFocused, fullScreen]
   );
 
   const inputMaxWidthFullscreen =
