@@ -16,3 +16,11 @@ export function register() {
     debug: false,
   });
 }
+
+export async function onRequestError(
+  err: unknown,
+  request: Request,
+  context: { routerKind: string; routePath: string }
+) {
+  await Sentry.captureRequestError(err, request, context);
+}
