@@ -8,7 +8,6 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { TxHeader, TxHeaderMinimized } from './TxHeader';
 import { TxTabs } from './TxTabs';
-import { TenureAlert } from './Alert';
 
 export const TokenTransferPage: React.FC<{
   tx: Transaction | MempoolTransaction;
@@ -20,7 +19,7 @@ export const TokenTransferPage: React.FC<{
     <>
       <Stack gap={3}>
         <TxHeader tx={tx} ref={txHeaderRef} />
-        <TenureAlert />
+        {/* TODO: alerts go here */}
       </Stack>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
