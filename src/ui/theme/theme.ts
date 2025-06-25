@@ -11,6 +11,7 @@ import { FONT_WEIGHTS } from './fontWeights';
 import { FONTS } from './fonts';
 import { LETTER_SPACINGS } from './letterSpacings';
 import { LINEHEIGHTS } from './lineHeights';
+import { alertSlotRecipe } from './recipes/AlertRecipe';
 import { badgeRecipe } from './recipes/BadgeRecipe';
 import { buttonRecipe } from './recipes/ButtonRecipe';
 import { checkboxSlotRecipe } from './recipes/CheckboxRecipe';
@@ -58,6 +59,7 @@ const themeConfig = {
       tooltip: tooltipSlotRecipe,
       dialog: dialogSlotRecipe,
       popover: popoverSlotRecipe,
+      alert: alertSlotRecipe,
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },

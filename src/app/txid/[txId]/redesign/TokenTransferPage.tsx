@@ -1,5 +1,5 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
-import { Box } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import { motion } from 'motion/react';
 import * as React from 'react';
 import { useRef } from 'react';
@@ -8,6 +8,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { TxHeader, TxHeaderMinimized } from './TxHeader';
 import { TxTabs } from './TxTabs';
+import { TenureAlert } from './Alert';
 
 export const TokenTransferPage: React.FC<{
   tx: Transaction | MempoolTransaction;
@@ -17,7 +18,10 @@ export const TokenTransferPage: React.FC<{
 
   return (
     <>
-      <TxHeader tx={tx} ref={txHeaderRef} />
+      <Stack gap={3}>
+        <TxHeader tx={tx} ref={txHeaderRef} />
+        <TenureAlert />
+      </Stack>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{
