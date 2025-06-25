@@ -1,15 +1,3 @@
-# [1.288.0](https://github.com/hirosystems/explorer/compare/v1.287.0...v1.288.0) (2025-06-25)
-
-
-### Features
-
-* addressed pr feedback ([5c64f59](https://github.com/hirosystems/explorer/commit/5c64f59591ca8a4c5569068985696ff10cd862f8))
-* for desktop added button to remove individ filters ([fab2098](https://github.com/hirosystems/explorer/commit/fab209849948fa8358ece7dcf93381c57b8ccd52))
-* wp ([3e99820](https://github.com/hirosystems/explorer/commit/3e99820a705355bdb76c85afee323524dc4287c1))
-* wp ([c6532d7](https://github.com/hirosystems/explorer/commit/c6532d751be195811f0bdaa68f7dbf907dd1747e))
-* wp ([100e338](https://github.com/hirosystems/explorer/commit/100e3385411e499efe2af3b28cdcfcd7489b37da))
-* wp ([be91d2f](https://github.com/hirosystems/explorer/commit/be91d2fb2f775df22f9c2b40a8e64824a9222ea7))
-
 # [1.287.0](https://github.com/hirosystems/explorer/compare/v1.286.3...v1.287.0) (2025-06-24)
 
 

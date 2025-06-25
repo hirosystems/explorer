@@ -8,7 +8,7 @@ interface AccordionItemTriggerProps extends Accordion.ItemTriggerProps {
 
 export const AccordionItemTrigger = React.forwardRef<HTMLButtonElement, AccordionItemTriggerProps>(
   function AccordionItemTrigger(props, ref) {
-    const { children, indicatorPlacement, ...rest } = props;
+    const { children, indicatorPlacement = 'end', ...rest } = props;
     return (
       <Accordion.ItemTrigger {...rest} ref={ref}>
         {indicatorPlacement === 'start' && (

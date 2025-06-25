@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 
-import { FilterTabPopover, getFilterTabPopoverContainerProps } from '../FilterTabPopover';
+import { TableTabPopover } from '../TableTabPopover';
 import { AddressFilterForm } from './AddressFilterForm';
-import { AddressFilterTrigger } from './AddressFilterTrigger';
+import { AddressFilterTriggerText } from './AddressFilterTriggerText';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
@@ -10,15 +10,15 @@ export function AddressFilterPopover({
   idExtension = '',
   defaultFromAddress = '',
   defaultToAddress = '',
-  addressFilterHandler,
+  onSubmit,
 }: {
   idExtension?: string;
   defaultFromAddress?: string;
   defaultToAddress?: string;
-  addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
+  onSubmit: (fromAddress: string, toAddress: string) => void;
 }) {
   return (
-    <FilterTabPopover
+    <TableTabPopover
       id={`address-filter-popover${idExtension ? `-${idExtension}` : ''}`}
       positioning={{
         placement: 'bottom-start',
@@ -26,20 +26,17 @@ export function AddressFilterPopover({
         sameWidth: true,
       }}
       trigger={(open, setOpen) => (
-        <AddressFilterTrigger
-          setOpen={setOpen}
+        <AddressFilterTriggerText
           open={open}
           fromAddress={defaultFromAddress}
           toAddress={defaultToAddress}
-          addressFilterHandler={addressFilterHandler}
-          filterContainerProps={getFilterTabPopoverContainerProps}
         />
       )}
       content={(open, setOpen) => (
         <Box p={3}>
           <AddressFilterForm
             onSubmit={(fromAddress: string, toAddress: string) => {
-              addressFilterHandler(fromAddress, toAddress);
+              onSubmit(fromAddress, toAddress);
               setOpen(false);
             }}
             defaultFromAddress={defaultFromAddress}

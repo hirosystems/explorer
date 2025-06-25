@@ -4,14 +4,11 @@ import { useOpenedModal } from '@/common/components/modals/modal-slice';
 import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import { MODALS } from '@/common/constants/constants';
 import { AccordionRoot } from '@/components/ui/accordion';
-import { Button } from '@/ui/Button';
 import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
-import { Flex, Icon, Stack } from '@chakra-ui/react';
-import { X } from '@phosphor-icons/react';
+import { Stack } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 
-import { areAnyTxTableFiltersActive } from '../tx-table/tx-table-filters-utils';
 import { AddressFilterAccordionItem } from './address-filter/AddressFilterAccordionItem';
 import { DateFilterAccordionItem } from './date-filter/DateFilterAccordionItem';
 import { TransactionTypeFilterAccordionItem } from './transaction-type-filter/TransactionTypeFilterAccordionItem';
@@ -23,7 +20,6 @@ type AccordionItem =
 
 const TxTableFiltersModalBody = () => {
   const [accordions, setAccordions] = useState<AccordionItem[]>([]);
-
   const {
     transactionType,
     startTime,
@@ -33,11 +29,18 @@ const TxTableFiltersModalBody = () => {
     transactionTypeFilterHandler,
     dateFilterHandler,
     addressFilterHandler,
-    clearAllFiltersHandler,
   } = useTxTableFilters();
 
   return (
-    <AccordionRoot multiple mt={0} defaultValue={undefined} value={accordions}>
+    <AccordionRoot
+      multiple
+      mt={0}
+      defaultValue={undefined}
+      value={accordions}
+      onValueChange={({ value }) => {
+        setAccordions(value as AccordionItem[]);
+      }}
+    >
       <Stack gap={4}>
         <TransactionTypeFilterAccordionItem
           id="transaction-type-filter-accordion-item"
@@ -48,35 +51,10 @@ const TxTableFiltersModalBody = () => {
               accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
             );
           }}
-          transactionTypeFilterHandler={transactionTypeFilterHandler}
-          setOpen={open => {
-            if (open) {
-              setAccordions(accordions => [
-                ...accordions,
-                'transaction-type-filter-accordion-item',
-              ]);
-            } else {
-              setAccordions(
-                accordions.filter(
-                  accordion => accordion !== 'transaction-type-filter-accordion-item'
-                )
-              );
-            }
-          }}
         />
         <DateFilterAccordionItem
           id="date-filter-accordion-item"
           open={accordions.includes('date-filter-accordion-item')}
-          setOpen={open => {
-            if (open) {
-              setAccordions(accordions => [...accordions, 'date-filter-accordion-item']);
-            } else {
-              setAccordions(
-                accordions.filter(accordion => accordion !== 'date-filter-accordion-item')
-              );
-            }
-          }}
-          dateFilterHandler={dateFilterHandler}
           onSubmit={(startTime?: number, endTime?: number) => {
             dateFilterHandler(startTime, endTime);
             setAccordions(
@@ -87,16 +65,6 @@ const TxTableFiltersModalBody = () => {
         <AddressFilterAccordionItem
           id="address-filter-accordion-item"
           open={accordions.includes('address-filter-accordion-item')}
-          setOpen={open => {
-            if (open) {
-              setAccordions(accordions => [...accordions, 'address-filter-accordion-item']);
-            } else {
-              setAccordions(
-                accordions.filter(accordion => accordion !== 'address-filter-accordion-item')
-              );
-            }
-          }}
-          addressFilterHandler={addressFilterHandler}
           onSubmit={(fromAddress: string, toAddress: string) => {
             addressFilterHandler(fromAddress, toAddress);
             setAccordions(
@@ -104,30 +72,6 @@ const TxTableFiltersModalBody = () => {
             );
           }}
         />
-
-        {areAnyTxTableFiltersActive({
-          transactionType,
-          fromAddress,
-          toAddress,
-          startTime,
-          endTime,
-        }) && (
-          <Button
-            variant="redesignTertiary"
-            size="big"
-            onClick={clearAllFiltersHandler}
-            alignItems="center"
-          >
-            <Flex alignItems="center" gap={1.5}>
-              <Text textStyle="text-medium-sm" color="textSecondary">
-                Clear all filters
-              </Text>
-              <Icon h={3.5} w={3.5} color="iconSecondary">
-                <X />
-              </Icon>
-            </Flex>
-          </Button>
-        )}
       </Stack>
     </AccordionRoot>
   );

@@ -1,9 +1,8 @@
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import {
-  addressFilterMutator,
-  dateFilterMutator,
-  useQueryUpdater,
+  useAddressFilterHandler,
+  useDateFilterHandler,
 } from '@/common/components/table/filters/table-filters-utils';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
@@ -54,8 +53,8 @@ export function ClearFiltersButton({ filters }: FilterProps) {
 }
 
 export function FiltersWithWrapper({ filters }: FilterProps) {
-  const addressFilterHandler = useQueryUpdater(addressFilterMutator, false);
-  const dateFilterHandler = useQueryUpdater(dateFilterMutator, false);
+  const addressFilterHandler = useAddressFilterHandler(false);
+  const dateFilterHandler = useDateFilterHandler(false);
 
   return (
     <Stack
@@ -83,12 +82,12 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
         <AddressFilterPopover
           defaultFromAddress={filters.fromAddress}
           defaultToAddress={filters.toAddress}
-          addressFilterHandler={addressFilterHandler}
+          onSubmit={addressFilterHandler}
         />
         <DateFilterPopover
           defaultStartTime={filters.startTime}
           defaultEndTime={filters.endTime}
-          dateFilterHandler={dateFilterHandler}
+          onSubmit={dateFilterHandler}
         />
       </Flex>
     </Stack>
