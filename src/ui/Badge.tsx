@@ -140,3 +140,17 @@ export const DefaultBadgeLabel = ({ label, ...rest }: { label: string } & TextPr
     </Text>
   );
 };
+
+export const DefaultBadge = forwardRef<
+  HTMLDivElement,
+  BadgeProps & { icon: DefaultBadgeIcon; label: DefaultBadgeLabel }
+>(({ children, icon, label, ...rest }, ref) => {
+  return (
+    <Badge ref={ref} {...rest} variant="outline" content={label ? 'iconAndLabel' : 'iconOnly'}>
+      <Flex alignItems="center" gap={1.5}>
+        {icon}
+        {label}
+      </Flex>
+    </Badge>
+  );
+});

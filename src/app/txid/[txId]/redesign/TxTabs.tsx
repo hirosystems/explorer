@@ -10,6 +10,7 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { Events } from './Events';
 import { TokenTransferTxSummary } from './TxSummary';
 
 function TabTriggerComponent({
@@ -116,7 +117,9 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
-          <TabsContentContainer>Events</TabsContentContainer>
+          <TabsContentContainer>
+            <Events tx={tx} />
+          </TabsContentContainer>
         </TabsContent>
       </>
     );
