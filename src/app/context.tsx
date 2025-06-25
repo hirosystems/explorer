@@ -8,9 +8,17 @@ import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 import { RecentBlocks, UIMempoolStats, UIStackingCycle } from './data';
 
 interface Fee {
+  no_priority: number;
   low_priority: number;
   medium_priority: number;
   high_priority: number;
+}
+
+export interface FeeEstimates {
+  tokenTransferFees: Fee;
+  contractCallFees: Fee;
+  contractDeployFees: Fee;
+  averageFees: Fee;
 }
 
 interface HomePageDataContextType {
@@ -18,12 +26,7 @@ interface HomePageDataContextType {
   initialRecentBlocks?: RecentBlocks;
   stackingCycle?: UIStackingCycle;
   mempoolStats?: UIMempoolStats;
-  feeEstimates?: {
-    tokenTransferFees: Fee;
-    contractCallFees: Fee;
-    contractDeployFees: Fee;
-    averageFees: Fee;
-  };
+  feeEstimates?: FeeEstimates;
   isSSRDisabled: boolean;
 }
 
