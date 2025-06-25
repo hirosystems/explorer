@@ -2,7 +2,7 @@ import { useAppSelector } from '@/common/state/hooks';
 import { Text } from '@/ui/Text';
 import { useCallback } from 'react';
 
-import { TableTabPopover } from '../TableTabPopover';
+import { FilterTabPopover } from '../FilterTabPopover';
 import { ValueBasisFilterForm, getActiveTransactionValueFilterLabel } from './ValueBasisFilterForm';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
@@ -20,7 +20,7 @@ export function ValueBasisFilterPopover() {
   const filterLabelValue = typeof filterLabel === 'function' ? filterLabel?.() : filterLabel;
 
   return (
-    <TableTabPopover
+    <FilterTabPopover
       id={'value-basis-filter-popover'}
       positioning={{ placement: 'bottom-end', offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT } }}
       trigger={(open, setOpen) => (

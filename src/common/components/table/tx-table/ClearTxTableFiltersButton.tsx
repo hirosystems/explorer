@@ -7,7 +7,7 @@ import { X } from '@phosphor-icons/react';
 import { areAnyTxTableFiltersActive } from './tx-table-filters-utils';
 
 export function ClearTxTableFiltersButton() {
-  const { transactionType, fromAddress, toAddress, startTime, endTime, clearFiltersHandler } =
+  const { transactionType, fromAddress, toAddress, startTime, endTime, clearAllFiltersHandler } =
     useTxTableFilters();
 
   if (
@@ -27,7 +27,7 @@ export function ClearTxTableFiltersButton() {
       borderRadius="redesign.lg"
       py={1}
       px={3}
-      onClick={clearFiltersHandler}
+      onClick={clearAllFiltersHandler}
       variant="redesignTertiary"
       size="small"
       boxSizing="border-box"
