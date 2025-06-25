@@ -14,6 +14,10 @@ const nextConfig = {
             key: 'X-Frame-Options',
             value: 'DENY',
           },
+          {
+            key: 'Document-Policy',
+            value: 'js-profiling',
+          },
         ],
       },
     ];
@@ -75,19 +79,5 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
 
   experimental: {
     instrumentationHook: true,
-  },
-
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Document-Policy',
-            value: 'js-profiling',
-          },
-        ],
-      },
-    ];
   },
 });
