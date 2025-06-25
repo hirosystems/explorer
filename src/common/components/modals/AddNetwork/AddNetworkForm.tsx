@@ -200,7 +200,7 @@ export const AddNetworkForm: FC = () => {
           >
             <AccordionItem borderBottom={'none'} value="btc-explorer-urls">
               <Stack gap={4}>
-                <AccordionItemTrigger paddingLeft={0} gap={2} indicatorPlacement="end">
+                <AccordionItemTrigger paddingLeft={0} gap={2}>
                   <Icon h={3} w={3}>
                     {isBtcExplorerUrlsAccordionExpanded ? <CaretDown /> : <CaretRight />}
                   </Icon>

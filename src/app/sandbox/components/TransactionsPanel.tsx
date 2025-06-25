@@ -263,7 +263,6 @@ export function TransactionsPanel() {
               ml={'auto'}
               p={0}
               justifyContent={'center'}
-              indicatorPlacement="end"
             />
           </Flex>
           <AccordionItemContent borderTopWidth="1px">

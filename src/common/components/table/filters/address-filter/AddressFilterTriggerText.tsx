@@ -1,36 +1,24 @@
 import { truncateMiddle, truncateStxAddress, validateStacksAddress } from '@/common/utils/utils';
 import { Flex } from '@chakra-ui/react';
-import { useCallback } from 'react';
 
-import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
+import { FilterTriggerText } from '../FilterTriggerText';
 
 const TRUNCATE_THRESHOLD = 15;
 
-export const AddressFilterTrigger = ({
-  setOpen,
+export const AddressFilterTriggerText = ({
   toAddress,
   fromAddress,
   open,
-  addressFilterHandler,
-  filterContainerProps,
 }: {
-  setOpen: (open: boolean) => void;
   toAddress?: string;
   fromAddress?: string;
   open: boolean;
-  addressFilterHandler: (fromAddress?: string, toAddress?: string) => void;
-  filterContainerProps: FilterTriggerContainerProps;
 }) => {
-  const handleClearFilter = useCallback(() => {
-    addressFilterHandler(undefined, undefined);
-    setOpen?.(false);
-  }, [addressFilterHandler, setOpen]);
-
   if (fromAddress || toAddress) {
     return (
-      <Flex gap={1.5} w="full">
+      <Flex gap={1.5}>
         {fromAddress && (
-          <FilterTrigger
+          <FilterTriggerText
             prefix="From:"
             value={
               validateStacksAddress(fromAddress)
@@ -40,13 +28,10 @@ export const AddressFilterTrigger = ({
                   : fromAddress
             }
             open={open}
-            setOpen={setOpen}
-            clearFilterHandler={handleClearFilter}
-            containerProps={filterContainerProps}
           />
         )}
         {toAddress && (
-          <FilterTrigger
+          <FilterTriggerText
             prefix="To:"
             value={
               validateStacksAddress(toAddress)
@@ -56,23 +41,11 @@ export const AddressFilterTrigger = ({
                   : toAddress
             }
             open={open}
-            setOpen={setOpen}
-            clearFilterHandler={handleClearFilter}
-            containerProps={filterContainerProps}
           />
         )}
       </Flex>
     );
   }
 
-  return (
-    <FilterTrigger
-      prefix="From/To"
-      value=""
-      open={open}
-      setOpen={setOpen}
-      clearFilterHandler={handleClearFilter}
-      containerProps={filterContainerProps}
-    />
-  );
+  return <FilterTriggerText prefix="From/To" value="" open={open} />;
 };

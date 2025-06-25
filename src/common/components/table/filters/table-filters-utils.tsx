@@ -1,60 +1,123 @@
 import { useShallowRouter } from '@/common/hooks/useShallowRouter';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-type ParamMutator<Args extends any[]> = (params: URLSearchParams, ...args: Args) => URLSearchParams;
+export const getDateFilterParams = (
+  params: URLSearchParams,
+  startTime?: number,
+  endTime?: number
+) => {
+  const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
+  const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
+  const mode = startTime && endTime ? 'between' : startTime ? 'after' : 'before';
 
-export enum FilterQueryKey {
-  StartTime = 'startTime',
-  EndTime = 'endTime',
-  FromAddress = 'fromAddress',
-  ToAddress = 'toAddress',
-  TransactionType = 'transactionType',
-}
+  if (mode === 'before') {
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    params.delete('startTime');
+    return params;
+  }
+  if (mode === 'after') {
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    params.delete('endTime');
+    return params;
+  }
+  if (mode === 'between') {
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    return params;
+  }
+  return params;
+};
 
-export function useQueryUpdater<Args extends any[]>(
-  mutateParams: ParamMutator<Args>,
-  useShallow: boolean = true
-) {
+export const useDateFilterHandler = (useShallow: boolean = true) => {
   const searchParams = useSearchParams();
   const shallowRouter = useShallowRouter();
   const router = useRouter();
 
-  return (...args: Args) => {
+  return (startTime?: number, endTime?: number) => {
     const params = new URLSearchParams(searchParams);
-    const newParams = mutateParams(params, ...args);
+    const paramsWithDateFilter = getDateFilterParams(params, startTime, endTime);
     if (useShallow) {
-      shallowRouter.replace(null, '', `?${newParams.toString()}`);
+      shallowRouter.replace(null, '', `?${paramsWithDateFilter.toString()}`);
     } else {
-      router.replace(`?${newParams.toString()}`);
+      router.replace(`?${paramsWithDateFilter.toString()}`);
+    }
+  };
+};
+
+export const getAddressFilterParams = (
+  searchParams: URLSearchParams,
+  fromAddress: string,
+  toAddress: string
+) => {
+  if (!fromAddress) {
+    searchParams.delete('fromAddress');
+  } else {
+    searchParams.set('fromAddress', fromAddress);
+  }
+  if (!toAddress) {
+    searchParams.delete('toAddress');
+  } else {
+    searchParams.set('toAddress', toAddress);
+  }
+  return searchParams;
+};
+
+export function useAddressFilterHandler(useShallow: boolean = true) {
+  const searchParams = useSearchParams();
+  const shallowRouter = useShallowRouter();
+  const router = useRouter();
+
+  return (fromAddress: string, toAddress: string) => {
+    const params = new URLSearchParams(searchParams);
+    const paramsWithAddressFilter = getAddressFilterParams(params, fromAddress, toAddress);
+    if (useShallow) {
+      shallowRouter.replace(null, '', `?${paramsWithAddressFilter.toString()}`);
+    } else {
+      router.replace(`?${paramsWithAddressFilter.toString()}`);
     }
   };
 }
 
-export function dateFilterMutator(params: URLSearchParams, startTime?: number, endTime?: number) {
-  if (startTime) params.set(FilterQueryKey.StartTime, startTime.toString());
-  else params.delete(FilterQueryKey.StartTime);
-  if (endTime) params.set(FilterQueryKey.EndTime, endTime.toString());
-  else params.delete(FilterQueryKey.EndTime);
-  return params;
-}
-
-export function addressFilterMutator(
-  params: URLSearchParams,
-  fromAddress?: string,
-  toAddress?: string
-) {
-  if (fromAddress) params.set(FilterQueryKey.FromAddress, fromAddress);
-  else params.delete(FilterQueryKey.FromAddress);
-  if (toAddress) params.set(FilterQueryKey.ToAddress, toAddress);
-  else params.delete(FilterQueryKey.ToAddress);
-  return params;
-}
-
-export function transactionTypeFilterMutator(params: URLSearchParams, transactionType?: string[]) {
-  if (transactionType) {
-    params.set(FilterQueryKey.TransactionType, transactionType.join(','));
+export const getTransactionTypeFilterParams = (
+  searchParams: URLSearchParams,
+  transactionType: string[]
+) => {
+  if (!transactionType || transactionType.length === 0) {
+    searchParams.delete('transactionType');
   } else {
-    params.delete(FilterQueryKey.TransactionType);
+    searchParams.set('transactionType', transactionType.join(','));
   }
-  return params;
+  return searchParams;
+};
+
+export function useTransactionTypeFilterHandler(useShallow: boolean = true) {
+  const searchParams = useSearchParams();
+  const shallowRouter = useShallowRouter();
+  const router = useRouter();
+
+  return (transactionType: string[]) => {
+    const params = new URLSearchParams(searchParams);
+    const paramsWithTransactionTypeFilter = getTransactionTypeFilterParams(params, transactionType);
+    if (useShallow) {
+      shallowRouter.replace(null, '', `?${paramsWithTransactionTypeFilter.toString()}`);
+    } else {
+      router.replace(`?${paramsWithTransactionTypeFilter.toString()}`);
+    }
+  };
 }
