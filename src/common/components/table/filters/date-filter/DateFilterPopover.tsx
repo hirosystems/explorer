@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 
-import { TableTabPopover } from '../TableTabPopover';
+import { FilterTabPopover, getFilterTabPopoverContainerProps } from '../FilterTabPopover';
 import { DateFilterTabs } from './DateFilterTabs';
-import { DateFilterTriggerText } from './DateFilterTriggerText';
+import { DateFilterTrigger } from './DateFilterTrigger';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
@@ -10,15 +10,15 @@ export function DateFilterPopover({
   idExtension = '',
   defaultStartTime = '',
   defaultEndTime = '',
-  onSubmit,
+  dateFilterHandler,
 }: {
   idExtension?: string;
   defaultStartTime?: string;
   defaultEndTime?: string;
-  onSubmit: (startTime?: number, endTime?: number) => void;
+  dateFilterHandler: (startTime?: number, endTime?: number) => void;
 }) {
   return (
-    <TableTabPopover
+    <FilterTabPopover
       id={`date-filter-popover${idExtension ? `-${idExtension}` : ''}`}
       positioning={{
         placement: 'bottom-start',
@@ -26,13 +26,20 @@ export function DateFilterPopover({
         sameWidth: true,
       }}
       trigger={(open, setOpen) => (
-        <DateFilterTriggerText open={open} startTime={defaultStartTime} endTime={defaultEndTime} />
+        <DateFilterTrigger
+          open={open}
+          setOpen={setOpen}
+          startTime={defaultStartTime}
+          endTime={defaultEndTime}
+          dateFilterHandler={dateFilterHandler}
+          filterContainerProps={getFilterTabPopoverContainerProps}
+        />
       )}
       content={(open, setOpen) => (
         <Box p={3}>
           <DateFilterTabs
             onSubmit={(startTime?: number, endTime?: number) => {
-              onSubmit(startTime, endTime);
+              dateFilterHandler(startTime, endTime);
               setOpen(false);
             }}
             defaultStartTime={defaultStartTime}

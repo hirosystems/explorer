@@ -1,13 +1,20 @@
 import { getTxTypeLabel } from '@/common/utils/transactions';
+import { useCallback } from 'react';
 
-import { FilterTriggerText } from '../FilterTriggerText';
+import { FilterTrigger, FilterTriggerContainerProps } from '../FilterTrigger';
 
-export function TransactionTypeFilterTriggerText({
+export function TransactionTypeFilterTrigger({
   open,
+  setOpen,
   transactionType,
+  transactionTypeFilterHandler,
+  filterContainerProps,
 }: {
   open: boolean;
+  setOpen?: (open: boolean) => void;
   transactionType: string[];
+  transactionTypeFilterHandler: (transactionType?: string[]) => void;
+  filterContainerProps: FilterTriggerContainerProps;
 }) {
   const areFiltersActive = transactionType.length > 0;
   const triggerTextPrefix = areFiltersActive ? 'Type:' : 'Type';
@@ -19,11 +26,19 @@ export function TransactionTypeFilterTriggerText({
       ? `${firstActiveFilterFormatted}, +${otherActiveFilters.length}`
       : firstActiveFilterFormatted;
 
+  const handleClearFilter = useCallback(() => {
+    transactionTypeFilterHandler(undefined);
+    setOpen?.(false);
+  }, [transactionTypeFilterHandler, setOpen]);
+
   return (
-    <FilterTriggerText
+    <FilterTrigger
+      setOpen={setOpen}
       prefix={triggerTextPrefix}
       value={areFiltersActive ? triggerTextSuffix : ''}
       open={open}
+      clearFilterHandler={handleClearFilter}
+      containerProps={filterContainerProps}
     />
   );
 }
