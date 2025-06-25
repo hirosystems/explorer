@@ -26,17 +26,13 @@
   "version": "1.0.0",
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
   "dependencies": {
-    "@ark-ui/react": "5.15.1",
+    "@ark-ui/react": "5.3.1",
     "@chakra-ui/react": "3.14.2",
     "@contentful/rich-text-react-renderer": "16.0.1",
     "@contentful/rich-text-types": "17.0.0",
     "@date-fns/utc": "2.1.0",
     "@emotion/styled": "11.14.0",
     "@hirosystems/token-metadata-api-client": "1.2.0",
-    "@leather.io/models": "0.31.0",
-    "@leather.io/query": "2.35.1",
-    "@leather.io/stacks": "1.7.3",
-    "@leather.io/utils": "0.30.0",
     "@monaco-editor/react": "4.7.0",
     "@next/third-parties": "15.2.4",
     "@phosphor-icons/react": "2.1.7",
@@ -92,7 +88,11 @@
     "statuspage.io": "3.2.10",
     "unique-names-generator": "4.7.1",
     "valid-url": "1.0.9",
-    "yup": "1.6.1"
+    "yup": "1.6.1",
+    "@leather.io/query": "2.35.1",
+    "@leather.io/stacks": "1.7.3",
+    "@leather.io/utils": "0.30.0",
+    "@leather.io/models": "0.31.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "3.14.2",
