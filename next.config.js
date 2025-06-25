@@ -35,15 +35,18 @@ const nextConfig = {
   },
 };
 
-module.exports = withSentryConfig(module.exports, {
+module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
   // For all available options, see:
-  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+  // https://github.com/getsentry/sentry-webpack-plugin#options
 
   org: 'hirosystems',
   project: 'explorer',
 
+  uploadSourceMaps: true,
+
   // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
+  // silent: !process.env.CI,
+  silent: false,
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -51,11 +54,15 @@ module.exports = withSentryConfig(module.exports, {
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
 
-  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+  // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
   // This can increase your server load as well as your hosting bill.
   // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
   // side errors will fail.
-  // tunnelRoute: '/monitoring',
+  // tunnelRoute: "/monitoring",
+
+  // Hides source maps from generated client bundles
+  // Does NOT prevent source maps from being generated or uploaded to Sentry.
+  hideSourceMaps: false,
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
@@ -64,9 +71,12 @@ module.exports = withSentryConfig(module.exports, {
   // See the following for more information:
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true,
+  // automaticVercelMonitors: true,
 
-  // Enable the Sentry browser profiling feature.
+  experimental: {
+    instrumentationHook: true,
+  },
+
   async headers() {
     return [
       {
