@@ -12,7 +12,7 @@ import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { Section } from '../../../common/components/Section';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
-import { useTxEventsByIdInfinite } from '../../../common/queries/useTxEventsByIdInfinite';
+import { useTxEventsByIdInfinite } from '../../../common/queries/useTxEventsById';
 import {
   addSepBetweenStrings,
   capitalize,
@@ -182,7 +182,7 @@ const getName = (event: TransactionEvent) => {
   }
 };
 
-const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
+export const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);

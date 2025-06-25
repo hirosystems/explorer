@@ -33,6 +33,8 @@ import {
 import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
 
+
+
 export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
   [TxTableColumns.TxId]: string;
