@@ -1,4 +1,4 @@
-// import { alertAnatomy } from '@ark-ui/react';
+// import { alertAnatomy } from '@ark-ui/react'; // not exported
 import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const alertSlotRecipe = defineSlotRecipe({
@@ -12,15 +12,19 @@ export const alertSlotRecipe = defineSlotRecipe({
       display: 'flex',
       alignItems: 'flex-start',
       position: 'relative',
-      borderRadius: 'l3',
-      px: '4',
-      py: '3',
+      borderRadius: 'var(--stacks-radii-redesign-md)',
+      px: 4,
+      py: 3,
+      bg: 'transparent', // override default bg
     },
     title: {
-      fontWeight: 'medium',
+      fontStyle: 'text-medium-sm',
+      color: 'textPrimary',
     },
     description: {
       display: 'inline',
+      fontStyle: 'text-regular-xs',
+      color: 'textPrimary',
     },
     indicator: {
       display: 'inline-flex',
@@ -40,127 +44,30 @@ export const alertSlotRecipe = defineSlotRecipe({
 
   variants: {
     status: {
-      info: {
-        root: { colorPalette: 'neutral.sand-150' },
-      },
       warning: {
-        root: { colorPalette: 'orange' },
-      },
-      success: {
-        root: { colorPalette: 'green' },
+        root: {
+          backgroundColor: 'transactionStatus.pending',
+        },
+        indicator: {
+          color: 'var(--stacks-colors-feedback-bronze-600)',
+        },
       },
       error: {
-        root: { colorPalette: 'red' },
+        root: {
+          backgroundColor: 'var(--stacks-colors-feedback-red-150)',
+        },
+        indicator: {
+          color: 'iconError',
+        },
       },
       neutral: {
-        // root: { colorPalette: 'var(--stacks-colors-neutral-sand-150)' },
         root: {
           backgroundColor: 'var(--stacks-colors-neutral-sand-150)',
-          bg: 'var(--stacks-colors-neutral-sand-150)',
-          borderRadius: 'var(--stacks-radii-redesign-md)',
-          border: '1px solid red',
+        },
+        indicator: {
+          color: 'iconTertiary',
         },
       },
     },
-
-    inline: {
-      true: {
-        content: {
-          display: 'inline-flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-        },
-      },
-      false: {
-        content: {
-          display: 'flex',
-          flexDirection: 'column',
-        },
-      },
-    },
-
-    // variant: {
-    //   subtle: {
-    //     root: {
-    //       bg: 'colorPalette.subtle',
-    //       color: 'colorPalette.fg',
-    //     },
-    //   },
-
-    //   surface: {
-    //     root: {
-    //       bg: 'colorPalette.subtle',
-    //       color: 'colorPalette.fg',
-    //       shadow: 'inset 0 0 0px 1px var(--shadow-color)',
-    //       shadowColor: 'colorPalette.muted',
-    //     },
-    //     indicator: {
-    //       color: 'colorPalette.fg',
-    //     },
-    //   },
-
-    //   outline: {
-    //     root: {
-    //       color: 'colorPalette.fg',
-    //       shadow: 'inset 0 0 0px 1px var(--shadow-color)',
-    //       shadowColor: 'colorPalette.muted',
-    //     },
-    //     indicator: {
-    //       color: 'colorPalette.fg',
-    //     },
-    //   },
-
-    //   solid: {
-    //     root: {
-    //       bg: 'colorPalette.solid',
-    //       color: 'colorPalette.contrast',
-    //     },
-    //     indicator: {
-    //       color: 'colorPalette.contrast',
-    //     },
-    //   },
-    // },
-
-    //     size: {
-    //       sm: {
-    //         root: {
-    //           gap: '2',
-    //           px: '3',
-    //           py: '3',
-    //           textStyle: 'xs',
-    //         },
-    //         indicator: {
-    //           textStyle: 'lg',
-    //         },
-    //       },
-    //       md: {
-    //         root: {
-    //           gap: '3',
-    //           px: '4',
-    //           py: '4',
-    //           textStyle: 'sm',
-    //         },
-    //         indicator: {
-    //           textStyle: 'xl',
-    //         },
-    //       },
-    //       lg: {
-    //         root: {
-    //           gap: '3',
-    //           px: '4',
-    //           py: '4',
-    //           textStyle: 'md',
-    //         },
-    //         indicator: {
-    //           textStyle: '2xl',
-    //         },
-    //       },
-    //     },
   },
-
-  // defaultVariants: {
-  //   status: 'info',
-  //   // variant: 'subtle',
-  //   inline: false,
-  // },
 });
