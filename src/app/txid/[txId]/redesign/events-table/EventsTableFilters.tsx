@@ -1,10 +1,4 @@
-'use client';
-
 import { openModal } from '@/common/components/modals/modal-slice';
-import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
-import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
-import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
-import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/ui/Button';
@@ -12,9 +6,10 @@ import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
-import { ClearTxTableFiltersButton } from '../tx-table/ClearTxTableFiltersButton';
+import { EventTypeFilterPopover } from './filters/EventTypeFilterPopover';
 
 const MobileOpenFilterModalButton = () => {
+  // TODO: lots in common with TxTableFilters MobileOpenFilterModalButton
   const dispatch = useAppDispatch();
 
   return (
@@ -40,18 +35,7 @@ const MobileOpenFilterModalButton = () => {
   );
 };
 
-export const TxTableFilters = () => {
-  const {
-    transactionType,
-    fromAddress,
-    toAddress,
-    startTime,
-    endTime,
-    addressFilterHandler,
-    dateFilterHandler,
-    transactionTypeFilterHandler,
-  } = useTxTableFilters();
-
+export const EventsTableFilters = () => {
   return (
     <Flex flexWrap={'wrap'} gap={4}>
       <MobileOpenFilterModalButton />
@@ -60,15 +44,7 @@ export const TxTableFilters = () => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover
-            defaultTransactionType={transactionType}
-            onSubmit={transactionTypeFilterHandler}
-          />
-          <DateFilterPopover
-            defaultStartTime={startTime}
-            defaultEndTime={endTime}
-            onSubmit={dateFilterHandler}
-          />
+          <EventTypeFilterPopover defaultEventTypes={[]} onSubmit={() => {}} />
           <AddressFilterPopover
             defaultFromAddress={fromAddress}
             defaultToAddress={toAddress}
