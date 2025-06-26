@@ -1,3 +1,10 @@
+# [1.299.0](https://github.com/hirosystems/explorer/compare/v1.298.0...v1.299.0) (2025-06-26)
+
+
+### Features
+
+* update sentry config ([65b5dd5](https://github.com/hirosystems/explorer/commit/65b5dd5a721456584b607b1e7ca5bc29c6423195))
+
 # [1.298.0](https://github.com/hirosystems/explorer/compare/v1.297.0...v1.298.0) (2025-06-25)
 
 
