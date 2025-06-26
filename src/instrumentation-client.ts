@@ -20,7 +20,7 @@ Sentry.init({
   tracePropagationTargets: ['localhost', /^https:\/\/explorer\.hiro\.so/],
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: true,
+  debug: false,
 });
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
