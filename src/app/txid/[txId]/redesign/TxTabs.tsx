@@ -67,6 +67,7 @@ function getTabsTriggersByTransactionType(
   selectedTab: string,
   setSelectedTab: (tab: string) => void
 ) {
+  const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
   if (tx.tx_type === 'token_transfer') {
 <<<<<<< HEAD
 =======
@@ -83,7 +84,7 @@ function getTabsTriggersByTransactionType(
         />
         <TabTriggerComponent
           key="events"
-          label="Events"
+          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
           value="events"
           isActive={selectedTab === 'events'}
           onClick={() => setSelectedTab('events')}
