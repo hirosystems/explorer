@@ -1,4 +1,6 @@
 import { openModal } from '@/common/components/modals/modal-slice';
+import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
+import { ClearTxTableFiltersButton } from '@/common/components/table/tx-table/ClearTxTableFiltersButton';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/ui/Button';
@@ -45,11 +47,7 @@ export const EventsTableFilters = () => {
         </Text>
         <Flex gap={3} h={7}>
           <EventTypeFilterPopover defaultEventTypes={[]} onSubmit={() => {}} />
-          <AddressFilterPopover
-            defaultFromAddress={fromAddress}
-            defaultToAddress={toAddress}
-            onSubmit={addressFilterHandler}
-          />
+          <AddressFilterPopover defaultFromAddress={''} defaultToAddress={''} onSubmit={() => {}} />
           <ClearTxTableFiltersButton />
         </Flex>
       </Flex>
