@@ -1,3 +1,10 @@
+## [1.303.1](https://github.com/hirosystems/explorer/compare/v1.303.0...v1.303.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* added btn to rmv individ filters ([b55c9cc](https://github.com/hirosystems/explorer/commit/b55c9cc3dcff1b3a23f28eea26708d0d834aecae))
+
 # [1.303.0](https://github.com/hirosystems/explorer/compare/v1.302.0...v1.303.0) (2025-06-26)
 
 
