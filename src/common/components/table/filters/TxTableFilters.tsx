@@ -1,5 +1,6 @@
 'use client';
 
+import { openModal } from '@/common/components/modals/modal-slice';
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
@@ -11,7 +12,6 @@ import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
-import { openModal } from '../../modals/modal-slice';
 import { ClearTxTableFiltersButton } from '../tx-table/ClearTxTableFiltersButton';
 
 const MobileOpenFilterModalButton = () => {
