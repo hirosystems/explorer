@@ -1,27 +1,13 @@
-import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 
-import { areAnyTxTableFiltersActive } from './tx-table-filters-utils';
-
-export function ClearTxTableFiltersButton() {
-  const { transactionType, fromAddress, toAddress, startTime, endTime, clearAllFiltersHandler } =
-    useTxTableFilters();
-
-  if (
-    !areAnyTxTableFiltersActive({
-      transactionType,
-      fromAddress,
-      toAddress,
-      startTime,
-      endTime,
-    })
-  ) {
-    return null;
-  }
-
+export function ClearFiltersButton({
+  clearAllFiltersHandler,
+}: {
+  clearAllFiltersHandler: () => void;
+}) {
   return (
     <Button
       borderRadius="redesign.lg"

@@ -6,7 +6,11 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 
-import { Transaction, TransactionEvent } from '@stacks/stacks-blockchain-api-types';
+import {
+  Transaction,
+  TransactionEvent,
+  TransactionEventType,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
@@ -19,7 +23,7 @@ export function getTxEventsByIdQueryKey(
   limit: number,
   offset: number,
   txId: string,
-  filters: { address?: string; type?: string[] } = {}
+  filters: TxEventsQueryFilters = {}
 ) {
   return [
     TX_EVENTS_BY_ID_QUERY_KEY,
@@ -59,18 +63,9 @@ export function useTxEventsByIdInfinite(
   });
 }
 
-type EventType =
-  | 'smart_contract_log'
-  | 'stx_lock'
-  | 'stx_asset'
-  | 'fungible_token_asset'
-  | 'non_fungible_token_asset';
-
 export type TxEventsQueryFilters = {
-  fromAddress?: string;
-  toAddress?: string;
   address?: string;
-  type?: EventType[];
+  type?: TransactionEventType[];
 };
 
 export function useTxEventsById(

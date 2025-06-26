@@ -6,7 +6,7 @@ import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { Fire, Sparkle } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useRef } from 'react';
 
-import { TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
+import { TransactionEventType } from '@stacks/stacks-blockchain-api-types';
 
 export const CheckboxItem = ({
   // TODO: shared with TransactionTypeFilterForm CheckboxItem
@@ -55,15 +55,15 @@ export const CheckboxItem = ({
   );
 };
 
-export function EventTypeFilterForm({
+export function EventAssetTypeFilterForm({
   // TODO: shared with TransactionTypeFilterForm
   onSubmit,
   open,
-  defaultEventTypes,
+  defaultEventAssetTypes,
 }: {
-  onSubmit?: (eventTypes: TransactionEventAssetType[]) => void;
+  onSubmit?: (eventTypes: TransactionEventType[]) => void;
   open: boolean;
-  defaultEventTypes: TransactionEventAssetType[];
+  defaultEventAssetTypes: TransactionEventType[];
 }) {
   const prevOpenRef = useRef(open);
   const {
@@ -75,38 +75,52 @@ export function EventTypeFilterForm({
 
   // Syncs the selected filters with the defaultTransactionType prop
   useEffect(() => {
-    setSelectedFilters(defaultEventTypes || []);
-  }, [defaultEventTypes, setSelectedFilters]);
+    setSelectedFilters(defaultEventAssetTypes || []);
+  }, [defaultEventAssetTypes, setSelectedFilters]);
 
   // Resets the selected filters when the form is closed
   useEffect(() => {
     if (prevOpenRef.current && !open) {
-      setSelectedFilters(defaultEventTypes || []);
+      setSelectedFilters(defaultEventAssetTypes || []);
     }
     prevOpenRef.current = open;
-  }, [open, setSelectedFilters, defaultEventTypes]);
+  }, [open, setSelectedFilters, defaultEventAssetTypes]);
 
   return (
     <Stack gap={1.5}>
       <CheckboxItem
-        label={'Transfer'}
+        label={'Smart Contract Log'}
         icon={<DiagonalArrowsIcon />}
-        value={'token_transfer'}
-        checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
+        value={'smart_contract_log'}
+        checkboxProps={getCheckboxProps({ value: 'smart_contract_log' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'Mint'}
+        label={'STX Lock'}
         icon={<Sparkle />}
-        value={'mint'}
-        checkboxProps={getCheckboxProps({ value: 'mint' })}
+        value={'stx_lock'}
+        checkboxProps={getCheckboxProps({ value: 'stx_lock' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'Burn'}
+        label={'STX Asset'}
         icon={<Fire />}
-        value={'burn'}
-        checkboxProps={getCheckboxProps({ value: 'burn' })}
+        value={'stx_asset'}
+        checkboxProps={getCheckboxProps({ value: 'stx_asset' })}
+        toggleSelectedFilter={toggleSelectedFilter}
+      />
+      <CheckboxItem
+        label={'Fungible Token Asset'}
+        icon={<Fire />}
+        value={'fungible_token_asset'}
+        checkboxProps={getCheckboxProps({ value: 'fungible_token_asset' })}
+        toggleSelectedFilter={toggleSelectedFilter}
+      />
+      <CheckboxItem
+        label={'Non-Fungible Token Asset'}
+        icon={<Fire />}
+        value={'non_fungible_token_asset'}
+        checkboxProps={getCheckboxProps({ value: 'non_fungible_token_asset' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
 
@@ -116,7 +130,7 @@ export function EventTypeFilterForm({
           variant="redesignSecondary"
           size="small"
           onClick={() => {
-            onSubmit?.(selectedFilters as TransactionEventAssetType[]);
+            onSubmit?.(selectedFilters as TransactionEventType[]);
           }}
         >
           Apply
