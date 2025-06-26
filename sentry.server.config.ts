@@ -8,7 +8,9 @@ console.log(
   'Initializing Sentry for Node.js Runtime',
   process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
   process.env.NODE_ENV,
-  process.env.NEXT_PUBLIC_SENTRY_DSN
+  process.env.NEXT_PUBLIC_SENTRY_DSN,
+  process.env.SENTRY_DSN,
+  process.env
 );
 Sentry.init({
   enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
