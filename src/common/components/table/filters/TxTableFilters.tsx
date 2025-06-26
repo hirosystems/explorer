@@ -11,8 +11,10 @@ import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
+import { useMemo } from 'react';
 
-import { ClearTxTableFiltersButton } from '../tx-table/ClearTxTableFiltersButton';
+import { areAnyTxTableFiltersActive } from '../tx-table/tx-table-filters-utils';
+import { ClearFiltersButton } from './ClearFiltersButton';
 
 const MobileOpenFilterModalButton = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +52,20 @@ export const TxTableFilters = () => {
     addressFilterHandler,
     dateFilterHandler,
     transactionTypeFilterHandler,
+    clearAllFiltersHandler,
   } = useTxTableFilters();
+
+  const areAnyFiltersActive = useMemo(
+    () =>
+      !areAnyTxTableFiltersActive({
+        transactionType,
+        fromAddress,
+        toAddress,
+        startTime,
+        endTime,
+      }),
+    [transactionType, fromAddress, toAddress, startTime, endTime]
+  );
 
   return (
     <Flex flexWrap={'wrap'} gap={4}>
@@ -74,7 +89,9 @@ export const TxTableFilters = () => {
             defaultToAddress={toAddress}
             addressFilterHandler={addressFilterHandler}
           />
-          <ClearTxTableFiltersButton />
+          {areAnyFiltersActive && (
+            <ClearFiltersButton clearAllFiltersHandler={clearAllFiltersHandler} />
+          )}
         </Flex>
       </Flex>
     </Flex>

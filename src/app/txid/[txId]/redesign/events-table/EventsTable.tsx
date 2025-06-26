@@ -5,11 +5,7 @@ import { TableContainer } from '@/common/components/table/TableContainer';
 import { TableScrollIndicator } from '@/common/components/table/TableScrollIndicatorWrapper';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
-import {
-  TxEventsQueryFilters,
-  getTxEventsByIdQueryKey,
-  useTxEventsById,
-} from '@/common/queries/useTxEventsById';
+import { getTxEventsByIdQueryKey, useTxEventsById } from '@/common/queries/useTxEventsById';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -24,6 +20,7 @@ import {
   IndexCellRenderer,
 } from './EventsTableCellRenderers';
 import { EVENTS_TABLE_PAGE_SIZE } from './consts';
+import { EventsTableFilters } from './filters/useEventsTableFilters';
 import { EventsTableColumns } from './types';
 import {
   getAmount,
@@ -134,12 +131,12 @@ export interface EventsTableProps {
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<EventsTableData>[];
   pageSize?: number;
-  filters?: TxEventsQueryFilters;
+  filters?: EventsTableFilters;
 }
 
-const DEFAULT_FILTERS: TxEventsQueryFilters = {
+const DEFAULT_FILTERS: EventsTableFilters = {
   address: '',
-  type: [],
+  eventAssetTypes: [],
 };
 
 export function EventsTable({
@@ -150,6 +147,7 @@ export function EventsTable({
   columnDefinitions,
   pageSize = EVENTS_TABLE_PAGE_SIZE,
 }: EventsTableProps) {
+  console.log('EventsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -178,7 +176,7 @@ export function EventsTable({
       pagination.pageSize,
       pagination.pageIndex * pagination.pageSize,
       txId,
-      { ...filters }
+      { address: filters.address, type: filters.eventAssetTypes } // TODO: currently we are only listening to the from address even though users can set a to address
     );
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
@@ -189,7 +187,7 @@ export function EventsTable({
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
     txId,
-    { ...filters },
+    { address: filters.address, type: filters.eventAssetTypes }, // TODO: currently we are only listening to the from address even though users can set a to address
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
@@ -216,7 +214,6 @@ export function EventsTable({
         const asset = getAsset(event);
         const assetEventType = getAssetEventType(event);
         const eventType = getEventType(event);
-        console.log({ from, to });
 
         return {
           [EventsTableColumns.Index]: index + 1,

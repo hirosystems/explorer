@@ -1,14 +1,16 @@
 import { openModal } from '@/common/components/modals/modal-slice';
-import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
-import { ClearTxTableFiltersButton } from '@/common/components/table/tx-table/ClearTxTableFiltersButton';
+import { ClearFiltersButton } from '@/common/components/table/filters/ClearFiltersButton';
+import { SingleAddressFilterPopover } from '@/common/components/table/filters/single-address-filter.tsx/SingleAddressFilterPopover';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
+import { useMemo } from 'react';
 
-import { EventTypeFilterPopover } from './filters/EventTypeFilterPopover';
+import { EventAssetTypeFilterPopover } from './filters/EventAssetTypeFilterPopover';
+import { useEventsTableFilters } from './filters/useEventsTableFilters';
 
 const MobileOpenFilterModalButton = () => {
   // TODO: lots in common with TxTableFilters MobileOpenFilterModalButton
@@ -38,6 +40,19 @@ const MobileOpenFilterModalButton = () => {
 };
 
 export const EventsTableFilters = () => {
+  const {
+    eventAssetTypes,
+    address,
+    eventAssetTypeFilterHandler,
+    addressFilterHandler,
+    clearAllFiltersHandler,
+  } = useEventsTableFilters();
+
+  const areAnyFiltersActive = useMemo(() => {
+    // TODO: put this util function somewhere else
+    return eventAssetTypes.length > 0 || address !== '';
+  }, [eventAssetTypes, address]);
+
   return (
     <Flex flexWrap={'wrap'} gap={4}>
       <MobileOpenFilterModalButton />
@@ -46,9 +61,17 @@ export const EventsTableFilters = () => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <EventTypeFilterPopover defaultEventTypes={[]} onSubmit={() => {}} />
-          <AddressFilterPopover defaultFromAddress={''} defaultToAddress={''} onSubmit={() => {}} />
-          <ClearTxTableFiltersButton />
+          <EventAssetTypeFilterPopover
+            defaultEventAssetTypes={eventAssetTypes}
+            eventAssetTypeFilterHandler={eventAssetTypeFilterHandler}
+          />
+          <SingleAddressFilterPopover
+            defaultAddress={address}
+            addressFilterHandler={addressFilterHandler}
+          />
+          {areAnyFiltersActive && (
+            <ClearFiltersButton clearAllFiltersHandler={clearAllFiltersHandler} />
+          )}
         </Flex>
       </Flex>
     </Flex>

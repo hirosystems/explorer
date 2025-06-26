@@ -1,6 +1,8 @@
 import { useShallowRouter } from '@/common/hooks/useShallowRouter';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { TransactionEventType } from '@stacks/stacks-blockchain-api-types';
+
 type ParamMutator<Args extends any[]> = (params: URLSearchParams, ...args: Args) => URLSearchParams;
 
 export enum FilterQueryKey {
@@ -9,6 +11,8 @@ export enum FilterQueryKey {
   FromAddress = 'fromAddress',
   ToAddress = 'toAddress',
   TransactionType = 'transactionType',
+  EventAssetType = 'eventAssetTypes',
+  Address = 'address',
 }
 
 export function useQueryUpdater<Args extends any[]>(
@@ -30,6 +34,7 @@ export function useQueryUpdater<Args extends any[]>(
   };
 }
 
+//TODO: we can probably abstract this out to a generic filter mutator
 export function dateFilterMutator(params: URLSearchParams, startTime?: number, endTime?: number) {
   if (startTime) params.set(FilterQueryKey.StartTime, startTime.toString());
   else params.delete(FilterQueryKey.StartTime);
@@ -50,11 +55,30 @@ export function addressFilterMutator(
   return params;
 }
 
+export function singleAddressFilterMutator(params: URLSearchParams, address?: string) {
+  if (address) params.set(FilterQueryKey.Address, address);
+  else params.delete(FilterQueryKey.Address);
+  return params;
+}
+
 export function transactionTypeFilterMutator(params: URLSearchParams, transactionType?: string[]) {
   if (transactionType) {
     params.set(FilterQueryKey.TransactionType, transactionType.join(','));
   } else {
     params.delete(FilterQueryKey.TransactionType);
+  }
+  return params;
+}
+
+export function eventAssetTypeFilterMutator(
+  params: URLSearchParams,
+  eventAssetType?: TransactionEventType[]
+) {
+  if (eventAssetType) {
+    console.log('eventAssetTypeFilterMutator', { eventAssetType });
+    params.set(FilterQueryKey.EventAssetType, eventAssetType.join(','));
+  } else {
+    params.delete(FilterQueryKey.EventAssetType);
   }
   return params;
 }
