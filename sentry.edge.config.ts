@@ -4,6 +4,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 import * as Sentry from '@sentry/nextjs';
 
+console.log('Initializing Sentry for Edge Runtime');
 Sentry.init({
   enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -12,5 +13,5 @@ Sentry.init({
   tracesSampleRate: 1,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: true,
+  debug: false,
 });
