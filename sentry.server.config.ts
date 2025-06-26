@@ -4,17 +4,10 @@
 import * as Sentry from '@sentry/nextjs';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 
-console.log(
-  'Initializing Sentry for Node.js Runtime',
-  process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
-  process.env.NODE_ENV,
-  process.env.NEXT_PUBLIC_SENTRY_DSN,
-  process.env.SENTRY_DSN,
-  process.env
-);
+console.log('Initializing Sentry for Node.js Runtime', process.env.NODE_ENV === 'production');
 Sentry.init({
-  enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  dsn: 'https://e1dce4791416146de03ff1642ed719d5@o204651.ingest.us.sentry.io/4507788896239616',
+  enabled: process.env.NODE_ENV === 'production',
   integrations: [nodeProfilingIntegration()],
 
   // Set sampling rate for profiling - this is evaluated only once per SDK.init call

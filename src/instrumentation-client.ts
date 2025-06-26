@@ -5,8 +5,8 @@ import * as Sentry from '@sentry/nextjs';
 
 console.log('Initializing Sentry for Browser Runtime');
 Sentry.init({
-  enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  enabled: process.env.NODE_ENV === 'production',
+  dsn: 'https://e1dce4791416146de03ff1642ed719d5@o204651.ingest.us.sentry.io/4507788896239616',
 
   integrations: [Sentry.browserTracingIntegration(), Sentry.browserProfilingIntegration()],
 
