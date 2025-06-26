@@ -143,7 +143,10 @@ export const DefaultBadgeLabel = ({ label, ...rest }: { label: string } & TextPr
 
 export const DefaultBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { icon: DefaultBadgeIcon; label: DefaultBadgeLabel }
+  BadgeProps & {
+    icon: React.ReactElement<typeof DefaultBadgeIcon>;
+    label: React.ReactElement<typeof DefaultBadgeLabel>;
+  }
 >(({ children, icon, label, ...rest }, ref) => {
   return (
     <Badge ref={ref} {...rest} variant="outline" content={label ? 'iconAndLabel' : 'iconOnly'}>
