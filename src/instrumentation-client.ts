@@ -3,6 +3,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 import * as Sentry from '@sentry/nextjs';
 
+console.log('Initializing Sentry for Browser Runtime');
 Sentry.init({
   enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
