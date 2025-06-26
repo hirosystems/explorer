@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.js",
-    "src/stories/OptionPicker.stories.tsx"
+    "src/stories/OptionPicker.stories.tsx",
+    "src/app/txid/[txId]/redesign/events-table/utils.tsx"
   ],
   "exclude": ["node_modules", "next.config.js"]
 }

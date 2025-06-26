@@ -441,12 +441,13 @@ export function Table<T>({
   );
 
   content = tableContainerWrapper(scrollIndicatorWrapper(suspenseWrapper(content)));
+  const pageCount = pagination ? Math.ceil(pagination.totalRows / pagination.pageSize) : 0;
 
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
       <Stack gap={0} alignItems="center" w="full" className="table-content-container">
         {content}
-        {pagination && (
+        {pagination && pageCount > 1 && (
           <TablePaginationControls
             pageIndex={pagination.pageIndex}
             pageSize={pagination.pageSize}

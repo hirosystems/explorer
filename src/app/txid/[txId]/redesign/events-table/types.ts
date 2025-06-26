@@ -1,8 +1,8 @@
 export enum EventsTableColumns {
   Index = 'index',
-  EventType = 'type',
+  AssetEventType = 'asset-event-type',
   Asset = 'asset',
-  AssetType = 'asset-type',
+  EventType = 'event-type',
   Amount = 'amount',
   From = 'from',
   ArrowRight = 'arrow-right',
