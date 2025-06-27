@@ -1,3 +1,10 @@
+## [1.304.1](https://github.com/hirosystems/explorer/compare/v1.304.0...v1.304.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* redeploy ([fa5d7fa](https://github.com/hirosystems/explorer/commit/fa5d7fa6ec74f7633292704c90336698af66d3da))
+
 # [1.304.0](https://github.com/hirosystems/explorer/compare/v1.303.1...v1.304.0) (2025-06-26)
 
 
