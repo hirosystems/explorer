@@ -15,6 +15,12 @@ const createMockBlock = (index: number) => ({
   tx_count: 0,
 });
 
+// Get the mocked function for reuse
+const getMockUseSubscribeBlocks = () => {
+  const { useSubscribeBlocks } = require('../useSubscribeBlocks');
+  return useSubscribeBlocks;
+};
+
 describe('useBlockListWebSocket', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,9 +29,9 @@ describe('useBlockListWebSocket', () => {
   it('limits the number of blocks in memory to MAX_BLOCKS_IN_MEMORY (100)', () => {
     let capturedHandleBlock: ((block: any) => void) | undefined;
 
-    // Capture the handleBlock callback passed to useSubscribeBlocks
-    const { useSubscribeBlocks } = require('../useSubscribeBlocks');
-    useSubscribeBlocks.mockImplementation(
+    // Setup mock implementation
+    const mockUseSubscribeBlocks = getMockUseSubscribeBlocks();
+    mockUseSubscribeBlocks.mockImplementation(
       (liveUpdates: boolean, handleBlock: (block: any) => void) => {
         capturedHandleBlock = handleBlock;
       }
@@ -52,8 +58,8 @@ describe('useBlockListWebSocket', () => {
   it('does not add duplicate blocks', () => {
     let capturedHandleBlock: ((block: any) => void) | undefined;
 
-    const { useSubscribeBlocks } = require('../useSubscribeBlocks');
-    useSubscribeBlocks.mockImplementation(
+    const mockUseSubscribeBlocks = getMockUseSubscribeBlocks();
+    mockUseSubscribeBlocks.mockImplementation(
       (liveUpdates: boolean, handleBlock: (block: any) => void) => {
         capturedHandleBlock = handleBlock;
       }
@@ -83,8 +89,8 @@ describe('useBlockListWebSocket', () => {
   it('clears all blocks when clearLatestStxBlocks is called', () => {
     let capturedHandleBlock: ((block: any) => void) | undefined;
 
-    const { useSubscribeBlocks } = require('../useSubscribeBlocks');
-    useSubscribeBlocks.mockImplementation(
+    const mockUseSubscribeBlocks = getMockUseSubscribeBlocks();
+    mockUseSubscribeBlocks.mockImplementation(
       (liveUpdates: boolean, handleBlock: (block: any) => void) => {
         capturedHandleBlock = handleBlock;
       }

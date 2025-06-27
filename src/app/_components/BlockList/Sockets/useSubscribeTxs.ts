@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { MempoolTransaction, StacksApiSocketClient } from '@stacks/blockchain-api-client';
 
@@ -17,6 +17,14 @@ export function useSubscribeTxs(
   const { stacksApiSocketClientInfo } = useGlobalContext();
   const { connect, disconnect } = stacksApiSocketClientInfo || {};
 
+  const handleDisconnect = useCallback(() => {
+    if (subscription.current) {
+      subscription.current.unsubscribe();
+      subscription.current = undefined;
+    }
+    disconnect?.();
+  }, [disconnect]);
+
   useEffect(() => {
     const subscribe = async (client: StacksApiSocketClient) => {
       subscription.current = client?.subscribeMempool(tx => {
@@ -30,16 +38,10 @@ export function useSubscribeTxs(
       connect?.(client => subscribe(client), handleError);
     }
     if (!isSubscriptionActive) {
-      disconnect?.();
+      handleDisconnect();
     }
-    return () => {
-      if (subscription.current) {
-        subscription.current.unsubscribe();
-        subscription.current = undefined;
-      }
-      disconnect?.();
-    };
-  }, [handleTransaction, connect, isSubscriptionActive, disconnect, handleError]);
+    return handleDisconnect;
+  }, [handleTransaction, connect, isSubscriptionActive, handleDisconnect, handleError]);
 
   return subscription;
 }
