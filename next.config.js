@@ -39,30 +39,29 @@ const nextConfig = {
   },
 };
 
-module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
+// Sentry configuration with more explicit options
+const sentryWebpackPluginOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
-
   org: 'hirosystems',
   project: 'explorer',
 
+  // Enable sourcemap uploads
   uploadSourceMaps: true,
 
-  // Only print logs for uploading source maps in CI
-  // silent: !process.env.CI,
-  silent: false,
+  // Include source content in sourcemaps
+  include: '.next',
+  ignore: ['node_modules', 'next.config.js'],
 
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  // Ensure Debug IDs are properly injected
+  injectClientSideDebugIds: true,
+
+  // Only print logs for uploading source maps in CI
+  silent: false,
+  debug: false,
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
-
-  // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-  // This can increase your server load as well as your hosting bill.
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
-  // tunnelRoute: "/monitoring",
 
   // Hides source maps from generated client bundles
   // Does NOT prevent source maps from being generated or uploaded to Sentry.
@@ -76,8 +75,27 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   // automaticVercelMonitors: true,
-
   experimental: {
     instrumentationHook: true,
   },
-});
+
+  // Tells Sentry to automatically associate your sourcemaps with the correct Git commit information.
+  setCommits: {
+    auto: true,
+  },
+
+  // Ensure sourcemaps are uploaded with the correct release
+  deploy: {
+    env: process.env.NODE_ENV || 'production',
+  },
+
+  release: {
+    // Defines the release identifier that Sentry will use to match errors with the correct sourcemaps.
+    name: process.env.NEXT_PUBLIC_RELEASE_TAG_NAME || `dev-${Date.now()}`,
+    // Automatically injects the release name into your Sentry configuration at build time.
+    inject: true,
+  },
+};
+
+// Apply Sentry configuration
+module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), sentryWebpackPluginOptions);
