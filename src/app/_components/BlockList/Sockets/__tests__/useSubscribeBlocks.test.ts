@@ -2,37 +2,32 @@ import { renderHook } from '@testing-library/react';
 
 import { useSubscribeBlocks } from '../useSubscribeBlocks';
 
-// Mock the global context
-jest.mock('../../../../../common/context/useGlobalContext', () => ({
-  useGlobalContext: jest.fn(),
-}));
-
 const mockUnsubscribe = jest.fn();
 const mockDisconnect = jest.fn();
 const mockConnect = jest.fn();
 
+// Mock the global context to return our test client
+const mockSubscription = {
+  unsubscribe: mockUnsubscribe,
+};
+
+jest.mock('../../../../../common/context/useGlobalContext', () => ({
+  useGlobalContext: jest.fn(() => ({
+    stacksApiSocketClientInfo: {
+      connect: mockConnect.mockImplementation(handleConnect => {
+        const mockClient = {
+          subscribeBlocks: jest.fn(() => mockSubscription),
+        };
+        handleConnect(mockClient);
+      }),
+      disconnect: mockDisconnect,
+    },
+  })),
+}));
+
 describe('useSubscribeBlocks', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    // Setup mock subscription
-    const mockSubscription = {
-      unsubscribe: mockUnsubscribe,
-    };
-
-    // Mock the global context to return our test client
-    const { useGlobalContext } = require('../../../../../common/context/useGlobalContext');
-    useGlobalContext.mockReturnValue({
-      stacksApiSocketClientInfo: {
-        connect: mockConnect.mockImplementation(callback => {
-          const mockClient = {
-            subscribeBlocks: jest.fn(() => mockSubscription),
-          };
-          callback(mockClient);
-        }),
-        disconnect: mockDisconnect,
-      },
-    });
   });
 
   it('calls unsubscribe and clears subscription on cleanup', () => {
@@ -40,8 +35,8 @@ describe('useSubscribeBlocks', () => {
 
     const { unmount } = renderHook(() => useSubscribeBlocks(true, handleBlock));
 
-    // Verify subscription was created
-    expect(mockConnect).toHaveBeenCalled();
+    // Verify subscription was created only once
+    expect(mockConnect).toHaveBeenCalledTimes(1);
 
     // Unmount the hook
     unmount();
