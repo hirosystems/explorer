@@ -66,7 +66,7 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
 
   // Hides source maps from generated client bundles
   // Does NOT prevent source maps from being generated or uploaded to Sentry.
-  hideSourceMaps: false,
+  hideSourceMaps: true,
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
