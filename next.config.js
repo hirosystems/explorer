@@ -37,6 +37,13 @@ const nextConfig = {
   images: {
     domains: ['assets.hiro.so'],
   },
+  webpack: (config, { isServer }) => {
+    // Ensure sourcemaps include source content
+    if (!isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  },
 };
 
 module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
@@ -66,7 +73,8 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
 
   // Hides source maps from generated client bundles
   // Does NOT prevent source maps from being generated or uploaded to Sentry.
-  hideSourceMaps: true,
+  // While this hides sourcemaps from client bundles, it can sometimes interfere with proper sourcemap generation for Sentry.
+  hideSourceMaps: false,
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
@@ -80,4 +88,7 @@ module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
   experimental: {
     instrumentationHook: true,
   },
+
+  // Ensure Debug IDs are properly injected
+  injectClientSideDebugIds: true,
 });
