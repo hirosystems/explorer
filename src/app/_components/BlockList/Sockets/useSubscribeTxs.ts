@@ -33,6 +33,10 @@ export function useSubscribeTxs(
       disconnect?.();
     }
     return () => {
+      if (subscription.current) {
+        subscription.current.unsubscribe();
+        subscription.current = undefined;
+      }
       disconnect?.();
     };
   }, [handleTransaction, connect, isSubscriptionActive, disconnect, handleError]);

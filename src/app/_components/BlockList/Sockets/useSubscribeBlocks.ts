@@ -35,6 +35,10 @@ export function useSubscribeBlocks(
       disconnect?.();
     }
     return () => {
+      if (subscription.current) {
+        subscription.current.unsubscribe();
+        subscription.current = undefined;
+      }
       disconnect?.();
     };
   }, [handleBlock, connect, liveUpdates, disconnect, handleError]);
