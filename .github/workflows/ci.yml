@@ -113,8 +113,7 @@ jobs:
           build-args: |
             RELEASE_TAG_NAME=${{ steps.semantic.outputs.new_release_version }}
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-
+      # SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
 

@@ -16,7 +16,9 @@ COPY . .
 RUN npm install -g pnpm@8.11.0
 RUN pnpm i
 RUN pnpm chakra typegen src/ui/theme/theme.ts
-RUN pnpm build
+# RUN pnpm build
+RUN --mount=type=secret,id=sentry_auth_token \
+    SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry_auth_token) pnpm build
 
 # This stage creates the final Docker image that will be used in production. It only contains the necessary runtime environment and the built application files from the first stage.
 FROM node:18-alpine
