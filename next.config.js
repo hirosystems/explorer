@@ -165,7 +165,6 @@ const sentryWebpackPluginOptions = {
     env: process.env.NODE_ENV || 'production',
   },
 
-  authToken: process.env.SENTRY_AUTH_TOKEN,
   release: {
     name: process.env.NEXT_PUBLIC_RELEASE_TAG_NAME || 'local-dev',
     inject: true
