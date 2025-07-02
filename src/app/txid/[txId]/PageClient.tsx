@@ -12,6 +12,7 @@ import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
+import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
