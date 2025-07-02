@@ -12,6 +12,7 @@ import { SmartContractTx } from './SmartContract/SmartContractTx';
 import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
+import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
@@ -28,6 +29,7 @@ function Tx({ txId }: { txId: string }) {
 
   if (tx.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
+  if (tx.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
   if (tx.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
   return null;

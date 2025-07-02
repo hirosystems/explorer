@@ -49,7 +49,7 @@ function TabTriggerComponent({
   );
 }
 
-function TabsContentContainer({ children }: { children: React.ReactNode }) {
+export function TabsContentContainer({ children }: { children: React.ReactNode }) {
   return (
     <Stack
       borderRadius="redesign.xl"
@@ -69,7 +69,6 @@ function getTabsTriggersByTransactionType(
 ) {
   const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
   if (tx.tx_type === 'token_transfer') {
-    // TODO: get the # of events and add that to the events label
     return (
       <>
         <TabTriggerComponent
