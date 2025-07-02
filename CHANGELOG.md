@@ -1,3 +1,10 @@
+## [1.304.2](https://github.com/hirosystems/explorer/compare/v1.304.1...v1.304.2) (2025-07-02)
+
+
+### Bug Fixes
+
+* fixed sourcemaps ([c65fd98](https://github.com/hirosystems/explorer/commit/c65fd98f046c15ccbc37e162966e9140d2c40f62))
+
 ## [1.304.1](https://github.com/hirosystems/explorer/compare/v1.304.0...v1.304.1) (2025-06-27)
 
 
