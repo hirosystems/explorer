@@ -9,6 +9,7 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { Events } from './Events';
 import { TokenTransferTxSummary } from './TxSummary';
 
 function TabTriggerComponent({
@@ -66,7 +67,12 @@ function getTabsTriggersByTransactionType(
   selectedTab: string,
   setSelectedTab: (tab: string) => void
 ) {
+  const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
   if (tx.tx_type === 'token_transfer') {
+<<<<<<< HEAD
+=======
+    // TODO: get the # of events and add that to the events label
+>>>>>>> d30c5ecb (feat: first draft of the token transfer id page)
     return (
       <>
         <TabTriggerComponent
@@ -78,7 +84,7 @@ function getTabsTriggersByTransactionType(
         />
         <TabTriggerComponent
           key="events"
-          label="Events"
+          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
           value="events"
           isActive={selectedTab === 'events'}
           onClick={() => setSelectedTab('events')}
@@ -111,7 +117,9 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
-          <TabsContentContainer>Events</TabsContentContainer>
+          <TabsContentContainer>
+            <Events tx={tx} />
+          </TabsContentContainer>
         </TabsContent>
       </>
     );

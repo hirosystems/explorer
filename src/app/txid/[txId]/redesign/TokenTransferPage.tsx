@@ -1,5 +1,5 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
-import { Box } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import { motion } from 'motion/react';
 import * as React from 'react';
 import { useRef } from 'react';
@@ -17,7 +17,10 @@ export const TokenTransferPage: React.FC<{
 
   return (
     <>
-      <TxHeader tx={tx} ref={txHeaderRef} />
+      <Stack gap={3}>
+        <TxHeader tx={tx} ref={txHeaderRef} />
+        {/* TODO: alerts go here */}
+      </Stack>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{
