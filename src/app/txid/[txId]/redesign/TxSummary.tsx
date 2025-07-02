@@ -4,7 +4,8 @@ import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Flex, FlexProps, GridProps, Icon, Stack } from '@chakra-ui/react';
+import { Box, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
+import React from 'react';
 
 import {
   MempoolTenureChangeTransaction,
@@ -25,11 +26,37 @@ function SummaryItemLabel({ label }: { label: string }) {
   );
 }
 
-function SummaryItemValue({ value }: { value: string }) {
-  return (
+function SummaryItemValue({
+  value,
+  valueRenderer,
+  label,
+  copyable,
+}: {
+  value: string;
+  valueRenderer?: (value: string) => React.ReactNode;
+  label: string;
+  copyable?: boolean;
+}) {
+  const content = valueRenderer ? (
+    valueRenderer(value)
+  ) : (
     <Text textStyle="text-regular-sm" color="textPrimary" wordBreak="break-all">
       {value}
     </Text>
+  );
+  return (
+    <Flex gap={2} alignItems="center">
+      {content}
+      {copyable && (
+        <CopyButtonNew
+          initialValue={value}
+          aria-label={`copy ${label} value`}
+          height={3.5}
+          width={3.5}
+          color="iconSecondary"
+        />
+      )}
+    </Flex>
   );
 }
 
@@ -67,7 +94,7 @@ function PriceSummaryItemValue({ value }: { value: string }) {
   );
 }
 
-function SummaryItem({
+export function SummaryItem({
   label,
   value,
   valueRenderer,
@@ -79,157 +106,38 @@ function SummaryItem({
   copyable?: boolean;
 }) {
   return (
-    <Flex alignItems={['flex-start', 'center']} p={3} gap={2.5} flexDirection={['column', 'row']}>
-      <Flex minW={30}>
+    <>
+      <Stack hideFrom="md" gap={1.5} className="summary-item-mobile">
         <SummaryItemLabel label={label} />
-      </Flex>
-      <Flex gap={2} alignItems="center">
-        {valueRenderer ? valueRenderer(value) : <SummaryItemValue value={value} />}
-        {copyable && (
-          <CopyButtonNew
-            initialValue={value}
-            aria-label={`copy ${label} value`}
-            height={3.5}
-            width={3.5}
-            color="iconSecondary"
-          />
-        )}
-      </Flex>
-    </Flex>
-  );
-}
-
-export function SummaryItem2({
-  label,
-  value,
-  valueRenderer,
-  copyable,
-}: {
-  label: string;
-  value: string;
-  valueRenderer?: (value: string) => React.ReactNode;
-  copyable?: boolean;
-} & GridProps) {
-  return (
-    <>
-      <DesktopSummaryItem
-        hideBelow="sm"
-        label={label}
-        value={value}
-        valueRenderer={valueRenderer}
-        copyable={copyable}
-      />
-      <MobileSummaryItem
-        hideFrom="sm"
-        label={label}
-        value={value}
-        valueRenderer={valueRenderer}
-        copyable={copyable}
-      />
-    </>
-  );
-}
-
-function DesktopSummaryItem({
-  label,
-  value,
-  valueRenderer,
-  copyable,
-}: {
-  label: string;
-  value: string;
-  valueRenderer?: (value: string) => React.ReactNode;
-  copyable?: boolean;
-}) {
-  return (
-    <>
-      <SummaryItemLabel label={label} />
-      <Flex gap={2} alignItems="center">
-        {valueRenderer ? valueRenderer(value) : <SummaryItemValue value={value} />}
-        {copyable && (
-          <CopyButtonNew
-            initialValue={value}
-            aria-label={`copy ${label} value`}
-            height={3.5}
-            width={3.5}
-            color="iconSecondary"
-          />
-        )}
-      </Flex>
-    </>
-  );
-}
-
-function DesktopSummaryItems({
-  label,
-  value,
-  valueRenderer,
-  copyable,
-}: {
-  label: string;
-  value: string;
-  valueRenderer?: (value: string) => React.ReactNode;
-  copyable?: boolean;
-}) {
-  return (
-    <>
-      <SummaryItemLabel label={label} />
-      <Flex gap={2} alignItems="center">
-        {valueRenderer ? valueRenderer(value) : <SummaryItemValue value={value} />}
-        {copyable && (
-          <CopyButtonNew
-            initialValue={value}
-            aria-label={`copy ${label} value`}
-            height={3.5}
-            width={3.5}
-            color="iconSecondary"
-          />
-        )}
-      </Flex>
-    </>
-  );
-}
-
-function MobileSummaryItem({
-  label,
-  value,
-  valueRenderer,
-  copyable,
-  ...flexProps
-}: {
-  label: string;
-  value: string;
-  valueRenderer?: (value: string) => React.ReactNode;
-  copyable?: boolean;
-} & FlexProps) {
-  return (
-    <Flex alignItems="flex-start" p={3} gap={2.5} flexDirection="column" {...flexProps}>
-      <Flex minW={30}>
+        <SummaryItemValue
+          value={value}
+          label={label}
+          valueRenderer={valueRenderer}
+          copyable={copyable}
+        />
+      </Stack>
+      <Box hideBelow="md" className="summary-item-desktop">
         <SummaryItemLabel label={label} />
-      </Flex>
-      <Flex gap={2} alignItems="center">
-        {valueRenderer ? valueRenderer(value) : <SummaryItemValue value={value} />}
-        {copyable && (
-          <CopyButtonNew
-            initialValue={value}
-            aria-label={`copy ${label} value`}
-            height={3.5}
-            width={3.5}
-            color="iconSecondary"
-          />
-        )}
-      </Flex>
-    </Flex>
+      </Box>
+      <Box hideBelow="md" className="summary-item-desktop">
+        <SummaryItemValue
+          value={value}
+          label={label}
+          valueRenderer={valueRenderer}
+          copyable={copyable}
+        />
+      </Box>
+    </>
   );
 }
 
-export function TokenTransferTxSummary({
+export function TokenTransferTxSummaryItems({
   tx,
 }: {
   tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
 }) {
   return (
-    <Stack>
+    <>
       <SummaryItem label="ID" value={tx.tx_id} copyable />
       <SummaryItem
         label="Status"
@@ -290,25 +198,25 @@ export function TokenTransferTxSummary({
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
       />
-    </Stack>
+    </>
   );
 }
 
-export const TenureChangeTxSummary = ({
+export const TenureChangeTxSummaryItems = ({
   tx,
 }: {
   tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
 }) => {
   return (
-    <Stack>
-      <SummaryItem2 label="ID" value={tx.tx_id} copyable />
-      <SummaryItem2
+    <>
+      <SummaryItem label="ID" value={tx.tx_id} copyable />
+      <SummaryItem
         label="Status"
         value={tx.tx_status}
         valueRenderer={value => <TransactionStatusBadge tx={tx} />}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
@@ -318,7 +226,7 @@ export const TenureChangeTxSummary = ({
         )}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Timestamp"
         value={formatBlockTime(tx.block_time)}
         valueRenderer={value => (
@@ -328,19 +236,19 @@ export const TenureChangeTxSummary = ({
         )}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Fee"
         value={tx.fee_rate}
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
-      <SummaryItem2 label="Nonce" value={tx.nonce?.toString() || ''} copyable />
-      <SummaryItem2
+      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
+      <SummaryItem
         label="Block height"
         value={tx.block_height?.toString() || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
       />
-      <SummaryItem2
+      <SummaryItem
         label="Block hash"
         value={tx.block_hash?.toString() || ''}
         copyable
@@ -350,57 +258,67 @@ export const TenureChangeTxSummary = ({
           </BlockLink>
         )}
       />
-      {/* <SummaryItem2
+      {/* <SummaryItem
         label="Tenure height"
         value={tx.tenure_change_payload?.previous_tenure_end || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
       /> */}
-      <SummaryItem2
+      <SummaryItem
         label="Bitcoin Anchor"
         value={tx.burn_block_height?.toString() || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
       />
-      <SummaryItem2
+      <SummaryItem
         label="Tenure consensus hash"
         value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Burn view consensus hash"
         value={tx.tenure_change_payload?.burn_view_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure consensus hash"
         value={tx.tenure_change_payload?.prev_tenure_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure end"
         value={tx.tenure_change_payload?.previous_tenure_end || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure blocks"
         value={tx.tenure_change_payload?.previous_tenure_blocks?.toString() || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Pubkey hash"
         value={tx.tenure_change_payload?.pubkey_hash || ''}
         copyable
       />
-    </Stack>
+    </>
   );
 };
 
 export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
-  if (tx.tx_type === 'coinbase') return null;
-  if (tx.tx_type === 'token_transfer') return <TokenTransferTxSummary tx={tx} />;
-  if (tx.tx_type === 'contract_call') return null;
-  if (tx.tx_type === 'smart_contract') return null;
-  if (tx.tx_type === 'tenure_change') return <TenureChangeTxSummary tx={tx} />;
-  return null;
+  let summary;
+  if (tx.tx_type === 'coinbase') summary = null;
+  if (tx.tx_type === 'token_transfer') summary = <TokenTransferTxSummaryItems tx={tx} />;
+  if (tx.tx_type === 'contract_call') summary = null;
+  if (tx.tx_type === 'smart_contract') summary = null;
+  if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
+
+  return (
+    <Grid
+      templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
+      gap={6}
+      columnGap={6}
+    >
+      {summary}
+    </Grid>
+  );
 }

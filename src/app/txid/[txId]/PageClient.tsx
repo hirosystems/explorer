@@ -29,6 +29,7 @@ function Tx({ txId }: { txId: string }) {
 
   if (tx.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
+  if (tx.tx_type === 'tenure_change') return <TenureChangePageRedesign tx={tx} />;
   if (tx.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
   if (tx.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
