@@ -1,13 +1,16 @@
-'use client';
+import { getTokenPrice } from '@/app/getTokenPriceInfo';
 
-import dynamic from 'next/dynamic';
-import * as React from 'react';
+import TransactionIdPage from './PageClient';
+import { TxIdPageDataProvider } from './TxIdPageContext';
 
-import Skeleton from './skeleton';
+export default async function Page(props: { params: Promise<{ txId: string }> }) {
+  const params = await props.params;
+  const { txId } = params;
+  const tokenPrice = await getTokenPrice();
 
-const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
-export default Page;
+  return (
+    <TxIdPageDataProvider stxPrice={tokenPrice.stxPrice}>
+      <TransactionIdPage txId={txId} />
+    </TxIdPageDataProvider>
+  );
+}
