@@ -401,21 +401,21 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   );
 }
 
-export const TenureChangeTxSummary = ({
+export const TenureChangeTxSummaryItems = ({
   tx,
 }: {
   tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
 }) => {
   return (
-    <Stack>
-      <SummaryItem2 label="ID" value={tx.tx_id} copyable />
-      <SummaryItem2
+    <>
+      <SummaryItem label="ID" value={tx.tx_id} copyable />
+      <SummaryItem
         label="Status"
         value={tx.tx_status}
         valueRenderer={value => <TransactionStatusBadge tx={tx} />}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
@@ -425,7 +425,7 @@ export const TenureChangeTxSummary = ({
         )}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Timestamp"
         value={formatBlockTime(tx.block_time)}
         valueRenderer={value => (
@@ -435,19 +435,19 @@ export const TenureChangeTxSummary = ({
         )}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Fee"
         value={tx.fee_rate}
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
-      <SummaryItem2 label="Nonce" value={tx.nonce?.toString() || ''} copyable />
-      <SummaryItem2
+      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
+      <SummaryItem
         label="Block height"
         value={tx.block_height?.toString() || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
       />
-      <SummaryItem2
+      <SummaryItem
         label="Block hash"
         value={tx.block_hash?.toString() || ''}
         copyable
@@ -457,57 +457,67 @@ export const TenureChangeTxSummary = ({
           </BlockLink>
         )}
       />
-      {/* <SummaryItem2
+      {/* <SummaryItem
         label="Tenure height"
         value={tx.tenure_change_payload?.previous_tenure_end || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
       /> */}
-      <SummaryItem2
+      <SummaryItem
         label="Bitcoin Anchor"
         value={tx.burn_block_height?.toString() || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
       />
-      <SummaryItem2
+      <SummaryItem
         label="Tenure consensus hash"
         value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Burn view consensus hash"
         value={tx.tenure_change_payload?.burn_view_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure consensus hash"
         value={tx.tenure_change_payload?.prev_tenure_consensus_hash || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure end"
         value={tx.tenure_change_payload?.previous_tenure_end || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Previous tenure blocks"
         value={tx.tenure_change_payload?.previous_tenure_blocks?.toString() || ''}
         copyable
       />
-      <SummaryItem2
+      <SummaryItem
         label="Pubkey hash"
         value={tx.tenure_change_payload?.pubkey_hash || ''}
         copyable
       />
-    </Stack>
+    </>
   );
 };
 
 export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
-  if (tx.tx_type === 'coinbase') return null;
-  if (tx.tx_type === 'token_transfer') return <TokenTransferTxSummary tx={tx} />;
-  if (tx.tx_type === 'contract_call') return null;
-  if (tx.tx_type === 'smart_contract') return null;
-  if (tx.tx_type === 'tenure_change') return <TenureChangeTxSummary tx={tx} />;
-  return null;
+  let summary;
+  if (tx.tx_type === 'coinbase') summary = null;
+  if (tx.tx_type === 'token_transfer') summary = <TokenTransferTxSummaryItems tx={tx} />;
+  if (tx.tx_type === 'contract_call') summary = null;
+  if (tx.tx_type === 'smart_contract') summary = null;
+  if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
+
+  return (
+    <Grid
+      templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
+      gap={6}
+      columnGap={6}
+    >
+      {summary}
+    </Grid>
+  );
 }
