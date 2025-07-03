@@ -12,6 +12,41 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 const BORDER_WIDTH = 1;
 
+const Badge = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md" alignItems="center">
+      <Text textStyle="text-medium-md" whiteSpace="nowrap">
+        {children}
+      </Text>
+    </Flex>
+  );
+};
+
+const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+  return <Badge>{truncateHex(tx.tx_id, 4, 5, false)}</Badge>;
+};
+
+const AddressBadge = ({ address }: { address: string }) => {
+  return address ? <Badge>{truncateStxAddress(address)}</Badge> : null;
+};
+
+const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+  const toAddress = getToAddress(tx);
+  return (
+    <Flex gap={1} alignItems="center">
+      <AddressBadge address={tx.sender_address} />
+      {toAddress ? (
+        <>
+          <Icon h={6} w={3.5} color="iconTertiary">
+            <ArrowRight />
+          </Icon>
+          <AddressBadge address={toAddress} />
+        </>
+      ) : null}
+    </Flex>
+  );
+};
+
 export const TxHeaderUnminimized = forwardRef<
   HTMLDivElement,
   { tx: Transaction | MempoolTransaction }
@@ -34,26 +69,8 @@ export const TxHeaderUnminimized = forwardRef<
         <Flex gap={4} flexWrap="wrap">
           <Text textStyle="heading-sm">{getTxTitle(tx)}</Text>
           <Flex gap={2} flexWrap="wrap">
-            <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-              <Text textStyle="text-medium-md" whiteSpace="nowrap">
-                {truncateHex(tx.tx_id, 4, 5, false)}
-              </Text>
-            </Flex>
-            <Flex gap={1} alignItems="center">
-              <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-                <Text textStyle="text-medium-md" whiteSpace="nowrap">
-                  {truncateStxAddress(tx.sender_address)}
-                </Text>
-              </Flex>
-              <Icon h={6} w={3.5} color="iconTertiary">
-                <ArrowRight />
-              </Icon>
-              <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-                <Text textStyle="text-medium-md" whiteSpace="nowrap">
-                  {truncateStxAddress(getToAddress(tx))}
-                </Text>
-              </Flex>
-            </Flex>
+            <TxIdBadge tx={tx} />
+            <FromToBadges tx={tx} />
           </Flex>
         </Flex>
       </Stack>
@@ -86,20 +103,8 @@ export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction
         <Flex gap={3}>
           <Text textStyle="text-medium-md">{getTxTitle(tx)}</Text>
           <Flex alignItems="center" gap={2}>
-            <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-              <Text textStyle="text-medium-sm">{truncateHex(tx.tx_id, 4, 5, false)}</Text>
-            </Flex>
-            <Flex gap={1} alignItems="center">
-              <Flex px={2} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-                <Text textStyle="text-medium-sm">{truncateStxAddress(tx.sender_address)}</Text>
-              </Flex>
-              <Icon h={5} w={3} color="iconTertiary">
-                <ArrowRight />
-              </Icon>
-              <Flex px={2} py={1} bg="surfacePrimary" borderRadius="redesign.md">
-                <Text textStyle="text-medium-sm">{truncateStxAddress(getToAddress(tx))}</Text>
-              </Flex>
-            </Flex>
+            <TxIdBadge tx={tx} />
+            <FromToBadges tx={tx} />
           </Flex>
         </Flex>
       </Flex>
