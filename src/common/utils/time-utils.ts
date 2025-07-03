@@ -1,3 +1,5 @@
+"use client";
+
 import { UTCDate } from '@date-fns/utc';
 import { format, formatDistanceToNow } from 'date-fns';
 
@@ -61,6 +63,8 @@ export function formatTimestamp(
 ): string {
   const date = new Date(timestampInSeconds * 1000);
   const formatted = format(date, formatString);
+  // const formattedUTC = format(date, formatString, { useUTC: true });
+  // console.log({ timestampInSeconds, date, formatted, timezone: date.get });
   return formatted;
 }
 

@@ -90,6 +90,8 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     );
   }
 
+  console.log('server', { initialTxTableData });
+
   return (
     <Page
       filters={{
