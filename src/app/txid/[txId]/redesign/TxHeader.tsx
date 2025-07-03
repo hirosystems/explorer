@@ -39,9 +39,7 @@ const Badge = ({
         borderRadius="redesign.md"
         alignItems="center"
         cursor="pointer"
-        onClick={() => {
-          copy();
-        }}
+        onClick={() => copy()}
       >
         <Text textStyle="text-medium-md" whiteSpace="nowrap">
           {valueFormatter ? valueFormatter(value) : value}
