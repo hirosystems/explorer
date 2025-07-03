@@ -46,7 +46,7 @@ export const alertSlotRecipe = defineSlotRecipe({
     status: {
       warning: {
         root: {
-          backgroundColor: 'transactionStatus.pending',
+          backgroundColor: { base: 'var(--stacks-colors-transactionStatus-pending)', _dark: 'var(--stacks-colors-feedback-bronze-900)' },
         },
         indicator: {
           color: 'var(--stacks-colors-feedback-bronze-600)',
@@ -54,7 +54,7 @@ export const alertSlotRecipe = defineSlotRecipe({
       },
       error: {
         root: {
-          backgroundColor: 'var(--stacks-colors-feedback-red-150)',
+          backgroundColor: { base: 'var(--stacks-colors-feedback-red-150)', _dark: 'var(--stacks-colors-transaction-status-failed)' },
         },
         indicator: {
           color: 'iconError',
@@ -62,7 +62,7 @@ export const alertSlotRecipe = defineSlotRecipe({
       },
       neutral: {
         root: {
-          backgroundColor: 'var(--stacks-colors-neutral-sand-150)',
+          backgroundColor: { base: 'var(--stacks-colors-neutral-sand-150)', _dark: 'var(--stacks-colors-neutral-sand-700)' },
         },
         indicator: {
           color: 'iconTertiary',

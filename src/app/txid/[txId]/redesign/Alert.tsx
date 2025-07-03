@@ -78,7 +78,7 @@ export function TenureAlert() {
           <Link
             href="https://www.hiro.so/blog/understanding-nakamotos-fast-blocks-on-stacks"
             target="_blank"
-            textDecorationColor="borderPrimary"
+            textDecorationColor="textPrimary"
           >
             Learn more
           </Link>
