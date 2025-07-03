@@ -28,7 +28,7 @@ const Badge = ({
   });
 
   return (
-    <Tooltip content={copied ? copiedText : 'Copied!'}>
+    <Tooltip content={copiedText || 'Copied!'} open={copied}>
       <Flex
         px={3}
         py={1}
@@ -143,7 +143,7 @@ export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction
         </Flex>
         <Flex gap={3}>
           <Text textStyle="text-medium-md">{getTxTitle(tx)}</Text>
-          <Flex alignItems="center" gap={2}>
+          <Flex alignItems="center" gap={2} hideBelow="md">
             <TxIdBadge tx={tx} />
             <FromToBadges tx={tx} />
           </Flex>

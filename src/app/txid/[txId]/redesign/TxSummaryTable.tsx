@@ -1,11 +1,11 @@
 import { formatBlockTime, getAmount, getToAddress } from '@/app/transactions/utils';
-import { CopyButtonNew } from '@/common/components/CopyButton';
+import { CopyButton2 } from '@/common/components/CopyButton';
 import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
 import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Box, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
 import React from 'react';
 
 import {
@@ -49,12 +49,16 @@ function SummaryItemValue({
     <Flex gap={2} alignItems="center">
       {content}
       {copyable && (
-        <CopyButtonNew
+        <CopyButton2
           initialValue={value}
           aria-label={`copy ${label} value`}
-          height={3.5}
-          width={3.5}
-          color="iconSecondary"
+          iconProps={{
+            height: 3.5,
+            width: 3.5,
+          }}
+          buttonProps={{
+            p: 1.5,
+          }}
         />
       )}
     </Flex>
@@ -71,12 +75,16 @@ function PriceSummaryItemValue({ value }: { value: string }) {
         <StacksIconThin />
       </Icon>
       {value} STX
-      <CopyButtonNew
+      <CopyButton2
         initialValue={value}
         aria-label={`copy stx price`}
-        height={3.5}
-        width={3.5}
-        color="iconSecondary"
+        iconProps={{
+          height: 3.5,
+          width: 3.5,
+        }}
+        buttonProps={{
+          p: 1.5,
+        }}
       />
       <Text textStyle="text-regular-sm" color="textSecondary">
         /
@@ -84,12 +92,16 @@ function PriceSummaryItemValue({ value }: { value: string }) {
       <Text textStyle="text-regular-sm" color="textSecondary">
         ${usdValue}
       </Text>
-      <CopyButtonNew
+      <CopyButton2
         initialValue={usdValue.toString()}
         aria-label={`copy usd price`}
-        height={3.5}
-        width={3.5}
-        color="iconSecondary"
+        iconProps={{
+          height: 3.5,
+          width: 3.5,
+        }}
+        buttonProps={{
+          p: 1.5,
+        }}
       />
     </Flex>
   );
@@ -108,26 +120,75 @@ export function SummaryItem({
 }) {
   return (
     <>
-      <Stack hideFrom="md" gap={1.5} className="summary-item-mobile">
-        <SummaryItemLabel label={label} />
-        <SummaryItemValue
-          value={value}
-          label={label}
-          valueRenderer={valueRenderer}
-          copyable={copyable}
-        />
-      </Stack>
-      <Box hideBelow="md" className="summary-item-label-desktop" p={3}>
-        <SummaryItemLabel label={label} />
-      </Box>
-      <Box hideBelow="md" className="summary-item-value-desktop" p={3}>
-        <SummaryItemValue
-          value={value}
-          label={label}
-          valueRenderer={valueRenderer}
-          copyable={copyable}
-        />
-      </Box>
+      <Table.Row
+        hideBelow="md"
+        className="group"
+        bg="transparent"
+        css={{
+          '& > td:first-of-type': {
+            borderTopLeftRadius: 'redesign.md',
+            borderBottomLeftRadius: 'redesign.md',
+          },
+          '& > td:last-of-type': {
+            borderTopRightRadius: 'redesign.md',
+            borderBottomRightRadius: 'redesign.md',
+          },
+        }}
+      >
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <SummaryItemLabel label={label} />
+        </Table.Cell>
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <SummaryItemValue
+            value={value}
+            label={label}
+            valueRenderer={valueRenderer}
+            copyable={copyable}
+          />
+        </Table.Cell>
+      </Table.Row>
+      <Table.Row
+        hideFrom="md"
+        className="group"
+        bg="transparent"
+        css={{
+          '& > td:first-of-type': {
+            borderTopLeftRadius: 'redesign.md',
+            borderBottomLeftRadius: 'redesign.md',
+          },
+          '& > td:last-of-type': {
+            borderTopRightRadius: 'redesign.md',
+            borderBottomRightRadius: 'redesign.md',
+          },
+        }}
+      >
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <Stack gap={1.5}>
+            <SummaryItemLabel label={label} />
+            <SummaryItemValue
+              value={value}
+              label={label}
+              valueRenderer={valueRenderer}
+              copyable={copyable}
+            />
+          </Stack>
+        </Table.Cell>
+      </Table.Row>
     </>
   );
 }
@@ -157,7 +218,7 @@ export function TokenTransferTxSummaryItems({
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
             {value}
           </AddressLink>
         )}
@@ -167,7 +228,7 @@ export function TokenTransferTxSummaryItems({
         label="To"
         value={getToAddress(tx)}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
             {value}
           </AddressLink>
         )}
@@ -229,7 +290,7 @@ export const TenureChangeTxSummaryItems = ({
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
             {value}
           </AddressLink>
         )}
@@ -322,23 +383,19 @@ export const TenureChangeTxSummaryItems = ({
   );
 };
 
-export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
-  let summary;
-  if (tx.tx_type === 'coinbase') summary = null;
-  if (tx.tx_type === 'token_transfer') summary = <TokenTransferTxSummaryItems tx={tx} />;
-  if (tx.tx_type === 'contract_call') summary = null;
-  if (tx.tx_type === 'smart_contract') summary = null;
-  if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
+export function TxSummaryTable({ tx }: { tx: Transaction | MempoolTransaction }) {
+  let summaryContent;
+  if (tx.tx_type === 'coinbase') summaryContent = null;
+  if (tx.tx_type === 'token_transfer') summaryContent = <TokenTransferTxSummaryItems tx={tx} />;
+  if (tx.tx_type === 'contract_call') summaryContent = null;
+  if (tx.tx_type === 'smart_contract') summaryContent = null;
+  if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Flex borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
-      <Grid
-        templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
-        gap={{ base: 6, md: 0 }}
-        // columnGap={6}
-      >
-        {summary}
-      </Grid>
-    </Flex>
+    <Box borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
+      <Table.Root w="full">
+        <Table.Body>{summaryContent}</Table.Body>
+      </Table.Root>
+    </Box>
   );
 }

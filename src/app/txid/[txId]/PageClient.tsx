@@ -11,8 +11,8 @@ import { SmartContract } from './SmartContract/SmartContract';
 import { SmartContractTx } from './SmartContract/SmartContractTx';
 import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
-import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
+import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);

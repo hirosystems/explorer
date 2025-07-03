@@ -5,9 +5,10 @@ import {
   TenureChangeTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { TenureAlert, PendingAlert, TransactionDroppedAlert } from './Alert';
+import { TenureAlert } from './Alert';
 import { TxHeader } from './TxHeader';
 import { TxSummary } from './TxSummary';
+import { TxSummaryTable } from './TxSummaryTable';
 
 export const TenureChangePage = ({
   tx,
@@ -20,7 +21,8 @@ export const TenureChangePage = ({
         <TxHeader tx={tx} />
         <TenureAlert />
       </Stack>
-      <TxSummary tx={tx} />
+      <TxSummaryTable tx={tx} />
+      {/* <TxSummary tx={tx} /> */}
     </>
   );
 };
