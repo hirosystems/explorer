@@ -6,7 +6,7 @@ import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
-import { formatTimestamp } from '@/common/utils/time-utils';
+import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
@@ -163,7 +163,10 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.BlockTime,
     cell: info => (
       <Flex alignItems="center" justifyContent="flex-end" w="full">
-        {TimeStampCellRenderer(formatTimestamp(info.getValue() as number))}
+        {TimeStampCellRenderer(
+          formatTimestampToRelativeTime(info.getValue() as number),
+          formatTimestamp(info.getValue() as number, 'HH:mm:ss', true)
+        )}
       </Flex>
     ),
     enableSorting: false,
