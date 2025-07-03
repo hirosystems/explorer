@@ -163,7 +163,7 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     accessorKey: TxTableColumns.BlockTime,
     cell: info => (
       <Flex alignItems="center" justifyContent="flex-end" w="full">
-        {TimeStampCellRenderer(formatTimestamp(info.getValue() as number))}
+        {TimeStampCellRenderer(info.getValue() as string)}
       </Flex>
     ),
     enableSorting: false,

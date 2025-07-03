@@ -22,6 +22,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
+import { useFormatTimestamp } from '@/common/utils/time-utils';
 
 const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
   return (
@@ -144,6 +145,8 @@ export const AmountCellRenderer = (value: number) => {
 };
 
 export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
+  const formatTimestamp = useFormatTimestamp();
+
   const content = (
     <Flex
       alignItems="center"
@@ -161,7 +164,7 @@ export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
         fontFamily="var(--font-matter-mono)"
         suppressHydrationWarning={true}
       >
-        {value}
+        {formatTimestamp(Number(value))}
       </EllipsisText>
     </Flex>
   );

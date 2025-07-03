@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { UTCDate } from '@date-fns/utc';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -66,6 +66,14 @@ export function formatTimestamp(
   // const formattedUTC = format(date, formatString, { useUTC: true });
   // console.log({ timestampInSeconds, date, formatted, timezone: date.get });
   return formatted;
+}
+
+export function useFormatTimestamp(): (timeStampInSecond: number, formatString?: string) => string {
+  return (timestampInSeconds: number, formatString: string = 'yyyy-MM-dd HH:mm:ss') => {
+    const date = new Date(timestampInSeconds * 1000);
+    const formatted = format(date, formatString);
+    return formatted;
+  };
 }
 
 export function formatTimestampToRelativeTime(timestampInSeconds: number): string {
