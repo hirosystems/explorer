@@ -5,7 +5,7 @@ import {
   TenureChangeTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { TenureAlert } from './Alert';
+import { TenureAlert, PendingAlert, TransactionDroppedAlert } from './Alert';
 import { TxHeader } from './TxHeader';
 import { TxSummary } from './TxSummary';
 
