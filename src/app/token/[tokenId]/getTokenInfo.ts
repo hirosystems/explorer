@@ -4,7 +4,6 @@ import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { getIsSBTC } from '../../../app/tokens/utils';
 import { LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
 import { LunarCrushCoin } from '../../../common/types/lunarCrush';
-import { getCacheClient } from '../../../common/utils/cache-client';
 import { getApiUrl } from '../../../common/utils/network-utils';
 import { getFtDecimalAdjustedBalance } from '../../../common/utils/utils';
 import { HolderResponseType } from './Tabs/data/useHolders';
@@ -14,22 +13,13 @@ async function getTokenInfoFromLunarCrush(tokenId: string): Promise<LunarCrushCo
   try {
     return await (
       await fetch(`https://lunarcrush.com/api4/public/coins/${tokenId}/v1`, {
+        cache: 'default',
+        next: { revalidate: 60 * 10 }, // Revalidate every 10 minutes
         headers: {
           Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
         },
       })
     ).json();
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function getCachedTokenInfo(tokenId: string) {
-  try {
-    const cachedTokenInfo = await getCacheClient().get(tokenId);
-    if (cachedTokenInfo) {
-      return JSON.parse(cachedTokenInfo);
-    }
   } catch (error) {
     console.error(error);
   }
@@ -197,8 +187,6 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
       },
     };
 
-    await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
-
     return tokenInfo;
   } catch (error) {
     console.error(error);
@@ -220,11 +208,7 @@ export async function getTokenInfo(
       throw new Error('cannot fetch token info for this request');
     }
 
-    const cachedTokenInfo = await getCachedTokenInfo(tokenId);
-    if (cachedTokenInfo) {
-      console.log('[debug] token info - cache hit');
-      return cachedTokenInfo;
-    }
+    console.log('[debug] fetching token info');
 
     const basicTokenInfo = await getBasicTokenInfoFromStacksApi(tokenId, chain, api);
     if (!basicTokenInfo) {

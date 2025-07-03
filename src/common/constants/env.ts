@@ -25,7 +25,6 @@ export const TESTNET_BTC_ADDRESS_BASE_URL =
 
 export const LUNAR_CRUSH_API_KEY = process.env.LUNAR_CRUSH_API_KEY || '';
 export const CMS_URL = process.env.CMS_URL ?? '';
-export const REDIS_URL = process.env.REDIS_URL || '';
 
 export const NODE_ENV = process.env.NODE_ENV || '';
 

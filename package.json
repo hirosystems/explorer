@@ -65,7 +65,6 @@
     "formik": "2.4.6",
     "http-status-codes": "2.3.0",
     "husky": "9.1.7",
-    "ioredis": "5.6.0",
     "leaflet": "1.9.4",
     "monaco-editor": "0.52.2",
     "monaco-editor-textmate": "4.0.0",
