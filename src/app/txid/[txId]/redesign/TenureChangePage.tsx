@@ -1,11 +1,13 @@
+import { Stack } from '@chakra-ui/react';
+
 import {
   MempoolTenureChangeTransaction,
   TenureChangeTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { TenureAlert } from './Alert';
 import { TxHeader } from './TxHeader';
 import { TxSummary } from './TxSummary';
-import { TabsContentContainer as TxSummaryContainer } from './TxTabs';
 
 export const TenureChangePage = ({
   tx,
@@ -14,10 +16,11 @@ export const TenureChangePage = ({
 }) => {
   return (
     <>
-      <TxHeader tx={tx} />
-      <TxSummaryContainer>
-        <TxSummary tx={tx} />
-      </TxSummaryContainer>
+      <Stack gap={3}>
+        <TxHeader tx={tx} />
+        <TenureAlert />
+      </Stack>
+      <TxSummary tx={tx} />
     </>
   );
 };

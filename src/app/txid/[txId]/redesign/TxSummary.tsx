@@ -1,6 +1,7 @@
 import { formatBlockTime, getAmount, getToAddress } from '@/app/transactions/utils';
 import { CopyButtonNew } from '@/common/components/CopyButton';
 import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
+import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
@@ -116,10 +117,10 @@ export function SummaryItem({
           copyable={copyable}
         />
       </Stack>
-      <Box hideBelow="md" className="summary-item-desktop">
+      <Box hideBelow="md" className="summary-item-label-desktop">
         <SummaryItemLabel label={label} />
       </Box>
-      <Box hideBelow="md" className="summary-item-desktop">
+      <Box hideBelow="md" className="summary-item-value-desktop">
         <SummaryItemValue
           value={value}
           label={label}
@@ -145,11 +146,13 @@ export function TokenTransferTxSummaryItems({
         valueRenderer={value => <TransactionStatusBadge tx={tx} />}
         copyable
       />
-      <SummaryItem
-        label="Amount"
-        value={getAmount(tx).toString()}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
-      />
+      {'amount' in tx && tx.amount && (
+        <SummaryItem
+          label="Amount"
+          value={getAmount(tx).toString()}
+          valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        />
+      )}
       <SummaryItem
         label="From"
         value={tx.sender_address}
@@ -170,34 +173,40 @@ export function TokenTransferTxSummaryItems({
         )}
         copyable
       />
-      <SummaryItem
-        label="Timestamp"
-        value={formatBlockTime(tx.block_time)}
-        valueRenderer={value => (
-          <Badge variant="solid">
-            <DefaultBadgeLabel label={value} />
-          </Badge>
-        )}
-        copyable
-      />
+      {'block_time' in tx && tx.block_time && (
+        <SummaryItem
+          label="Timestamp"
+          value={formatBlockTime(tx.block_time)}
+          valueRenderer={value => (
+            <Badge variant="solid">
+              <DefaultBadgeLabel label={value} />
+            </Badge>
+          )}
+          copyable
+        />
+      )}
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
-      <SummaryItem
-        label="Block height"
-        value={tx.block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
-      />
-      <SummaryItem
-        label="Bitcoin Anchor"
-        value={tx.burn_block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
-      />
+      {'block_height' in tx && tx.block_height && (
+        <SummaryItem
+          label="Block height"
+          value={tx.block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        />
+      )}
+      {'burn_block_height' in tx && tx.burn_block_height && (
+        <SummaryItem
+          label="Bitcoin Anchor"
+          value={tx.burn_block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        />
+      )}
     </>
   );
 }
@@ -226,50 +235,59 @@ export const TenureChangeTxSummaryItems = ({
         )}
         copyable
       />
-      <SummaryItem
-        label="Timestamp"
-        value={formatBlockTime(tx.block_time)}
-        valueRenderer={value => (
-          <Badge variant="solid">
-            <DefaultBadgeLabel label={value} />
-          </Badge>
-        )}
-        copyable
-      />
+      {'block_time' in tx && tx.block_time && (
+        <SummaryItem
+          label="Timestamp"
+          value={formatBlockTime(tx.block_time)}
+          valueRenderer={value => (
+            <Badge variant="solid">
+              <DefaultBadgeLabel label={value} />
+            </Badge>
+          )}
+          copyable
+        />
+      )}
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
-      <SummaryItem
-        label="Block height"
-        value={tx.block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
-      />
-      <SummaryItem
-        label="Block hash"
-        value={tx.block_hash?.toString() || ''}
-        copyable
-        valueRenderer={value => (
-          <BlockLink hash={value} wordBreak="break-all">
-            {value}
-          </BlockLink>
-        )}
-      />
+      <SummaryItem label="Cause" value={capitalize(tx.tenure_change_payload?.cause || '')} />
+      {'block_height' in tx && tx.block_height && (
+        <SummaryItem
+          label="Block height"
+          value={tx.block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        />
+      )}
+      {'block_hash' in tx && tx.block_hash && (
+        <SummaryItem
+          label="Block hash"
+          value={tx.block_hash?.toString() || ''}
+          copyable
+          valueRenderer={value => (
+            <BlockLink hash={value} wordBreak="break-all">
+              {value}
+            </BlockLink>
+          )}
+        />
+      )}
       {/* <SummaryItem
         label="Tenure height"
         value={tx.tenure_change_payload?.previous_tenure_end || ''}
         copyable
         valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
       /> */}
-      <SummaryItem
-        label="Bitcoin Anchor"
-        value={tx.burn_block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
-      />
+      {'burn_block_height' in tx && tx.burn_block_height && (
+        <SummaryItem
+          label="Bitcoin Anchor"
+          value={tx.burn_block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        />
+      )}
       <SummaryItem
         label="Tenure consensus hash"
         value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
@@ -313,12 +331,14 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Grid
-      templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
-      gap={6}
-      columnGap={6}
-    >
-      {summary}
-    </Grid>
+    <Flex borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={6}>
+      <Grid
+        templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
+        gap={6}
+        columnGap={6}
+      >
+        {summary}
+      </Grid>
+    </Flex>
   );
 }
