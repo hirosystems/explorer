@@ -157,6 +157,7 @@ export const buttonRecipe = defineRecipe({
           },
         },
       },
+      unstyled: {},
     },
     size: {
       small: {
