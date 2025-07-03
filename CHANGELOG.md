@@ -1,3 +1,10 @@
+## [1.304.3](https://github.com/hirosystems/explorer/compare/v1.304.2...v1.304.3) (2025-07-03)
+
+
+### Bug Fixes
+
+* fixed tx page table timestamps ([22b8fee](https://github.com/hirosystems/explorer/commit/22b8fee067ff3c4a65c254dc70666318cada5a07))
+
 ## [1.304.2](https://github.com/hirosystems/explorer/compare/v1.304.1...v1.304.2) (2025-07-02)
 
 
