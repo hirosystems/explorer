@@ -6,7 +6,7 @@ import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
+import { Flex, Grid, Icon, Stack, Table } from '@chakra-ui/react';
 import React from 'react';
 
 import {
@@ -291,7 +291,7 @@ export const TenureChangeTxSummaryItems = ({
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
+          <AddressLink principal={value} wordBreak="break-all">
             {value}
           </AddressLink>
         )}
@@ -385,125 +385,6 @@ export const TenureChangeTxSummaryItems = ({
 };
 
 export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
-  let summaryContent;
-  if (tx.tx_type === 'coinbase') summaryContent = null;
-  if (tx.tx_type === 'token_transfer') summaryContent = <TokenTransferTxSummaryItems tx={tx} />;
-  if (tx.tx_type === 'contract_call') summaryContent = null;
-  if (tx.tx_type === 'smart_contract') summaryContent = null;
-  if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
-
-  return (
-    <Box borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
-      <Table.Root w="full">
-        <Table.Body>{summaryContent}</Table.Body>
-      </Table.Root>
-    </Box>
-  );
-}
-
-export const TenureChangeTxSummaryItems = ({
-  tx,
-}: {
-  tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
-}) => {
-  return (
-    <>
-      <SummaryItem label="ID" value={tx.tx_id} copyable />
-      <SummaryItem
-        label="Status"
-        value={tx.tx_status}
-        valueRenderer={value => <TransactionStatusBadge tx={tx} />}
-        copyable
-      />
-      <SummaryItem
-        label="From"
-        value={tx.sender_address}
-        valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
-            {value}
-          </AddressLink>
-        )}
-        copyable
-      />
-      <SummaryItem
-        label="Timestamp"
-        value={formatBlockTime(tx.block_time)}
-        valueRenderer={value => (
-          <Badge variant="solid">
-            <DefaultBadgeLabel label={value} />
-          </Badge>
-        )}
-        copyable
-      />
-      <SummaryItem
-        label="Fee"
-        value={tx.fee_rate}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
-      />
-      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
-      <SummaryItem
-        label="Block height"
-        value={tx.block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
-      />
-      <SummaryItem
-        label="Block hash"
-        value={tx.block_hash?.toString() || ''}
-        copyable
-        valueRenderer={value => (
-          <BlockLink hash={value} wordBreak="break-all">
-            {value}
-          </BlockLink>
-        )}
-      />
-      {/* <SummaryItem
-        label="Tenure height"
-        value={tx.tenure_change_payload?.previous_tenure_end || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
-      /> */}
-      <SummaryItem
-        label="Bitcoin Anchor"
-        value={tx.burn_block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
-      />
-      <SummaryItem
-        label="Tenure consensus hash"
-        value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
-        copyable
-      />
-      <SummaryItem
-        label="Burn view consensus hash"
-        value={tx.tenure_change_payload?.burn_view_consensus_hash || ''}
-        copyable
-      />
-      <SummaryItem
-        label="Previous tenure consensus hash"
-        value={tx.tenure_change_payload?.prev_tenure_consensus_hash || ''}
-        copyable
-      />
-      <SummaryItem
-        label="Previous tenure end"
-        value={tx.tenure_change_payload?.previous_tenure_end || ''}
-        copyable
-      />
-      <SummaryItem
-        label="Previous tenure blocks"
-        value={tx.tenure_change_payload?.previous_tenure_blocks?.toString() || ''}
-        copyable
-      />
-      <SummaryItem
-        label="Pubkey hash"
-        value={tx.tenure_change_payload?.pubkey_hash || ''}
-        copyable
-      />
-    </>
-  );
-};
-
-export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   let summary;
   if (tx.tx_type === 'coinbase') summary = null;
   if (tx.tx_type === 'token_transfer') summary = <TokenTransferTxSummaryItems tx={tx} />;
@@ -512,12 +393,14 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Grid
-      templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
-      gap={6}
-      columnGap={6}
-    >
-      {summary}
-    </Grid>
+    <Flex borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={6}>
+      <Grid
+        templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
+        gap={6}
+        columnGap={6}
+      >
+        {summary}
+      </Grid>
+    </Flex>
   );
 }
