@@ -106,6 +106,7 @@ export function SummaryItem({
   valueRenderer?: (value: string) => React.ReactNode;
   copyable?: boolean;
 }) {
+
   return (
     <>
       <Stack hideFrom="md" gap={1.5} className="summary-item-mobile">
@@ -117,10 +118,10 @@ export function SummaryItem({
           copyable={copyable}
         />
       </Stack>
-      <Box hideBelow="md" className="summary-item-label-desktop">
+      <Box hideBelow="md" className="summary-item-label-desktop" p={3}>
         <SummaryItemLabel label={label} />
       </Box>
-      <Box hideBelow="md" className="summary-item-value-desktop">
+      <Box hideBelow="md" className="summary-item-value-desktop" p={3}>
         <SummaryItemValue
           value={value}
           label={label}
@@ -331,11 +332,11 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'tenure_change') summary = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Flex borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={6}>
+    <Flex borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
       <Grid
         templateColumns={{ base: '1fr', md: 'minmax(auto, max-content) 1fr' }}
-        gap={6}
-        columnGap={6}
+        gap={{ base: 6, md: 0 }}
+        // columnGap={6}
       >
         {summary}
       </Grid>

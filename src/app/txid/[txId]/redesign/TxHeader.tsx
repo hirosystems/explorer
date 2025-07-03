@@ -1,8 +1,10 @@
 import { getToAddress } from '@/app/transactions/utils';
+import { useClipboard } from '@/common/hooks/useClipboard';
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { getTxTitle, truncateHex, truncateStxAddress } from '@/common/utils/utils';
 import { TransactionStatusBadge, TransactionTypeBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
+import { Tooltip } from '@/ui/Tooltip';
 import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
@@ -12,22 +14,61 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 const BORDER_WIDTH = 1;
 
-const Badge = ({ children }: { children: React.ReactNode }) => {
+const Badge = ({
+  value,
+  valueFormatter,
+  copiedText,
+}: {
+  value: string;
+  valueFormatter?: (value: string) => string;
+  copiedText: string;
+}) => {
+  const { setValue, copied } = useClipboard({
+    initialValue: value,
+  });
+
   return (
-    <Flex px={3} py={1} bg="surfacePrimary" borderRadius="redesign.md" alignItems="center">
-      <Text textStyle="text-medium-md" whiteSpace="nowrap">
-        {children}
-      </Text>
-    </Flex>
+    <Tooltip content={copied ? copiedText : 'Copied!'}>
+      <Flex
+        px={3}
+        py={1}
+        bg="surfacePrimary"
+        _hover={{
+          bg: 'surfaceFifth',
+        }}
+        borderRadius="redesign.md"
+        alignItems="center"
+        cursor="pointer"
+        onClick={() => {
+          setValue(value);
+        }}
+      >
+        <Text textStyle="text-medium-md" whiteSpace="nowrap">
+          {valueFormatter ? valueFormatter(value) : value}
+        </Text>
+      </Flex>
+    </Tooltip>
   );
 };
 
 const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
-  return <Badge>{truncateHex(tx.tx_id, 4, 5, false)}</Badge>;
+  return (
+    <Badge
+      value={tx.tx_id}
+      valueFormatter={value => truncateHex(value, 4, 5, false)}
+      copiedText="Transaction ID copied to clipboard"
+    />
+  );
 };
 
 const AddressBadge = ({ address }: { address: string }) => {
-  return address ? <Badge>{truncateStxAddress(address)}</Badge> : null;
+  return address ? (
+    <Badge
+      value={address}
+      valueFormatter={truncateStxAddress}
+      copiedText={`Address copied to clipboard`}
+    />
+  ) : null;
 };
 
 const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
