@@ -9,18 +9,20 @@ import {
 
 export type TooltipProps = SnippetTooltipProps;
 // Having two files named Tooltip and tooltip could cause issues with the build
-export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({ children, ...rest }, ref) => {
-  return (
-    <SnippetTooltip
-      positioning={{ placement: 'top' }}
-      showArrow
-      openDelay={0}
-      closeDelay={0}
-      ref={ref}
-      closeOnClick={false} // This is broken in chakra-ui
-      {...rest}
-    >
-      {children}
-    </SnippetTooltip>
-  );
-});
+export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
+  ({ children, closeOnClick = false, ...rest }, ref) => {
+    return (
+      <SnippetTooltip
+        positioning={{ placement: 'top' }}
+        showArrow
+        openDelay={0}
+        closeDelay={0}
+        ref={ref}
+        closeOnClick={closeOnClick}
+        {...rest}
+      >
+        {children}
+      </SnippetTooltip>
+    );
+  }
+);
