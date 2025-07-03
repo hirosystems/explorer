@@ -1,4 +1,5 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
+import { TimeFormatter } from '@/common/components/TimeFormatter';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import {
   formatStacksAmount,
@@ -145,8 +146,6 @@ export const AmountCellRenderer = (value: number) => {
 };
 
 export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
-  const formatTimestamp = useFormatTimestamp();
-
   const content = (
     <Flex
       alignItems="center"
@@ -162,9 +161,8 @@ export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
       <EllipsisText
         fontSize="xs"
         fontFamily="var(--font-matter-mono)"
-        suppressHydrationWarning={true}
       >
-        {formatTimestamp(Number(value))}
+        <TimeFormatter timestamp={Number(value)} />
       </EllipsisText>
     </Flex>
   );
