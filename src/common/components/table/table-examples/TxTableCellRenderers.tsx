@@ -1,5 +1,5 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
-import { TimeFormatter } from '@/common/components/TimeFormatter';
+import { useFormatTimestamp } from '@/common/utils/time-utils';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import {
   formatStacksAmount,
@@ -13,7 +13,7 @@ import { Tooltip } from '@/ui/Tooltip';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Flex, Icon } from '@chakra-ui/react';
+import { ClientOnly, Flex, Icon } from '@chakra-ui/react';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
 
 import {
@@ -23,7 +23,6 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
-import { useFormatTimestamp } from '@/common/utils/time-utils';
 
 const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
   return (
@@ -146,25 +145,30 @@ export const AmountCellRenderer = (value: number) => {
 };
 
 export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
+  const formatTimestamp = useFormatTimestamp();
+
   const content = (
-    <Flex
-      alignItems="center"
-      bg="surfacePrimary"
-      borderRadius="md"
-      py={0.5}
-      px={1}
-      w="fit-content"
-      _groupHover={{
-        bg: 'surfaceTertiary',
-      }}
-    >
-      <EllipsisText
-        fontSize="xs"
-        fontFamily="var(--font-matter-mono)"
+    <ClientOnly>
+      <Flex
+        alignItems="center"
+        bg="surfacePrimary"
+        borderRadius="md"
+        py={0.5}
+        px={1}
+        w="fit-content"
+        _groupHover={{
+          bg: 'surfaceTertiary',
+        }}
       >
-        <TimeFormatter timestamp={Number(value)} />
-      </EllipsisText>
-    </Flex>
+        <EllipsisText
+          fontSize="xs"
+          fontFamily="var(--font-matter-mono)"
+          suppressHydrationWarning={true}
+        >
+          {formatTimestamp(Number(value))}
+        </EllipsisText>
+      </Flex>
+    </ClientOnly>
   );
 
   if (tooltip) {
