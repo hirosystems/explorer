@@ -57,11 +57,19 @@ export function formatTimestampTo12HourTime(
 
 export function formatTimestamp(
   timestampInSeconds: number,
-  formatString: string = 'yyyy-MM-dd HH:mm:ss'
+  formatString: string = 'yyyy-MM-dd HH:mm:ss',
+  includeTimezone: boolean = false
 ): string {
   const date = new Date(timestampInSeconds * 1000);
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZoneName: 'short',
+  });
+  const parts = formatter.formatToParts(date);
+  const tzPart = parts.find(part => part.type === 'timeZoneName');
+
   const formatted = format(date, formatString);
-  return formatted;
+  return includeTimezone ? `${formatted} ${tzPart?.value}` : formatted;
 }
 
 export function formatTimestampToRelativeTime(timestampInSeconds: number): string {

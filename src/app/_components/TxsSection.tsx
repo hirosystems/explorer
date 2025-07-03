@@ -73,7 +73,7 @@ export const columnDefinitions: ColumnDef<TxTableData>[] = [
       <Flex alignItems="center" justifyContent="flex-end" w="full">
         {TimeStampCellRenderer(
           formatTimestampToRelativeTime(info.getValue() as number),
-          formatTimestamp(info.getValue() as number, 'HH:mm:ss')
+          formatTimestamp(info.getValue() as number, 'HH:mm:ss', true)
         )}
       </Flex>
     ),
