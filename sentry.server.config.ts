@@ -10,14 +10,20 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   integrations: [nodeProfilingIntegration()],
 
-  // Set sampling rate for profiling - this is evaluated only once per SDK.init call
-  profileSessionSampleRate: 1.0,
+  profileSessionSampleRate: 0.1,
 
   // Trace lifecycle automatically enables profiling during active traces
   profileLifecycle: 'trace',
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+  tracesSampleRate: 0.1,
+
+  beforeSendTransaction(event) {
+    // Skip static assets
+    if (event.transaction?.includes('/_next/') || event.transaction?.includes('/favicon')) {
+      return null;
+    }
+    return event;
+  },
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
