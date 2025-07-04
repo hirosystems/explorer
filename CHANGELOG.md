@@ -1,3 +1,10 @@
+# [1.305.0](https://github.com/hirosystems/explorer/compare/v1.304.3...v1.305.0) (2025-07-04)
+
+
+### Features
+
+* replace redis with nextjs cache ([#2388](https://github.com/hirosystems/explorer/issues/2388)) ([96df4cf](https://github.com/hirosystems/explorer/commit/96df4cf87c6a009aceed679481a09480cf0dfa33))
+
 ## [1.304.3](https://github.com/hirosystems/explorer/compare/v1.304.2...v1.304.3) (2025-07-03)
 
 
