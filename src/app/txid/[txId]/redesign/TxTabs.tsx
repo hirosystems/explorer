@@ -1,6 +1,7 @@
+import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Stack } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import {
@@ -139,13 +140,18 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       variant="primary"
       size="redesignMd"
       defaultValue={'overview'}
-      //   onValueChange={e => setSelectedChart(e.value as Chart)}
       gap={2}
       borderRadius="redesign.xl"
     >
-      <TabsList flexWrap={'wrap'}>
-        {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
-      </TabsList>
+      <Flex justifyContent={'space-between'} w="full">
+        <TabsList flexWrap={'wrap'}>
+          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
+        </TabsList>
+        <Flex alignItems={'center'} gap={2}>
+          <Text textStyle="text-regular-sm">Show:</Text>
+          <ValueBasisFilterPopover />
+        </Flex>
+      </Flex>
       {getTabsContentByTransactionType(tx)}
     </TabsRoot>
   );

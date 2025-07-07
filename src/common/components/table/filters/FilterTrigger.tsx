@@ -16,7 +16,7 @@ export const FilterTrigger = ({
   value: string;
   open: boolean;
   setOpen?: (open: boolean) => void;
-  clearFilterHandler: () => void;
+  clearFilterHandler?: () => void;
   containerProps?: FilterTriggerContainerProps;
 }) => {
   const cp = typeof containerProps === 'function' ? containerProps(open) : containerProps;
@@ -71,7 +71,7 @@ export const FilterTrigger = ({
           {open ? <CaretUp /> : <CaretDown />}
         </Icon>
       </Flex>
-      {value && (
+      {value && clearFilterHandler && (
         <Flex
           pr={cp?.px ?? 0}
           py={cp?.py ?? 0}

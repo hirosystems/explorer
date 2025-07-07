@@ -10,6 +10,7 @@ import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { TokenTransferTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useTxIdPageData } from '../TxIdPageContext';
+import { useTxValueBasisAdjustedStxPrice } from './useValueBasisAdjustedPrice';
 
 function SummaryItemLabel({ label }: { label: string }) {
   return (
@@ -27,18 +28,26 @@ function SummaryItemValue({ value }: { value: string }) {
   );
 }
 
-function PriceSummaryItemValue({ value }: { value: string }) {
+function PriceSummaryItemValue({
+  tx,
+  tokenAmount,
+}: {
+  tx: TokenTransferTransaction;
+  tokenAmount: string;
+}) {
   const { stxPrice } = useTxIdPageData();
-  const usdValue = stxPrice * Number(value);
+  const valueBasisAdjustedUsdValue = useTxValueBasisAdjustedStxPrice(tx, Number(tokenAmount));
+  const currentUsdValue = `$${stxPrice * Number(tokenAmount)}`;
+  const usdValue = valueBasisAdjustedUsdValue || currentUsdValue;
 
   return (
     <Flex gap={1.5} alignItems="center">
       <Icon h={3.5} w={3.5} color="iconPrimary">
         <StacksIconThin />
       </Icon>
-      {value} STX
+      {tokenAmount} STX
       <CopyButtonRedesign
-        initialValue={value}
+        initialValue={tokenAmount}
         aria-label={`copy stx price`}
         height={3.5}
         width={3.5}
@@ -48,7 +57,7 @@ function PriceSummaryItemValue({ value }: { value: string }) {
         /
       </Text>
       <Text textStyle="text-regular-sm" color="textSecondary">
-        ${usdValue}
+        {usdValue}
       </Text>
       <CopyButtonRedesign
         initialValue={usdValue.toString()}
@@ -106,7 +115,7 @@ export function TokenTransferTxSummary({ tx }: { tx: TokenTransferTransaction })
       <SummaryItem
         label="Amount"
         value={getAmount(tx).toString()}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        valueRenderer={value => <PriceSummaryItemValue tx={tx} tokenAmount={value} />}
       />
       <SummaryItem
         label="From"
@@ -141,7 +150,7 @@ export function TokenTransferTxSummary({ tx }: { tx: TokenTransferTransaction })
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        valueRenderer={value => <PriceSummaryItemValue tx={tx} tokenAmount={value} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
       <SummaryItem

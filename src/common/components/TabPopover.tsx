@@ -94,6 +94,12 @@ export const TabPopoverContent = React.forwardRef<
           boxShadow="none"
           bg="surfacePrimary"
           width="auto"
+          minWidth={'fit-content'}
+          marginRight={
+            props.positioning?.placement === 'bottom-start' ? -(CURVED_CORNER_SIZE + 1) : 0
+          }
+          marginLeft={props.positioning?.placement === 'bottom-end' ? -(CURVED_CORNER_SIZE + 1) : 0}
+          bgColor={'surfacePrimary'}
         >
           {props.children}
         </ChakraPopover.Content>
