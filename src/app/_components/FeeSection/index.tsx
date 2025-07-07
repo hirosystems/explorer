@@ -1,6 +1,5 @@
 'use client';
 
-import { useHomePageData } from '@/app/context';
 import { TokenPrice } from '@/common/types/tokenPrice';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
@@ -14,7 +13,25 @@ import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
-import { SSRDisabledMessage } from '../SSRDisabledMessage';
+interface Fee {
+  no_priority: number;
+  low_priority: number;
+  medium_priority: number;
+  high_priority: number;
+}
+
+interface FeeEstimates {
+  tokenTransferFees: Fee;
+  contractCallFees: Fee;
+  contractDeployFees: Fee;
+  averageFees: Fee;
+}
+
+interface FeeSectionProps {
+  tokenPrice: TokenPrice;
+  feeEstimates?: FeeEstimates;
+  isSSRDisabled?: boolean;
+}
 
 function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
@@ -23,11 +40,7 @@ function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <Text textStyle="heading-sm" color="textPrimary">
           Current transaction fees
         </Text>
-        <Tooltip
-          variant="redesignPrimary"
-          size="lg"
-          content="Higher fees increase the chances of a transaction being confirmed faster than others."
-        >
+        <Tooltip content="Higher fees increase the chances of a transaction being confirmed faster than others.">
           <Icon color="iconSecondary" h={3.5} w={3.5}>
             <Info />
           </Icon>
@@ -110,7 +123,7 @@ function FeeData({
   );
 }
 
-function getFeeDescription(txType: keyof MempoolFeePriorities) {
+function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 'smart_contract') {
   switch (txType) {
     case 'all':
       return 'Current average fee rates for all transaction types.';
@@ -125,15 +138,21 @@ function getFeeDescription(txType: keyof MempoolFeePriorities) {
   }
 }
 
-const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as Array<
-  keyof MempoolFeePriorities | 'all'
->;
+const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as const;
 
-function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { feeEstimates } = useHomePageData();
-
+function FeeTabs({
+  tokenPrice,
+  feeEstimates,
+}: {
+  tokenPrice: TokenPrice;
+  feeEstimates?: FeeEstimates;
+}) {
   if (!feeEstimates) {
-    return null;
+    return (
+      <Text textStyle="text-regular-sm" color="textSecondary">
+        Loading fee estimates...
+      </Text>
+    );
   }
 
   const feeEstimatesMap = {
@@ -198,12 +217,27 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
   );
 }
 
-export function FeeSection({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { isSSRDisabled } = useHomePageData();
+export function FeeSection({ tokenPrice, feeEstimates, isSSRDisabled = false }: FeeSectionProps) {
   return (
-    <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
+    <Stack
+      align="space-between"
+      bg="surfaceSecondary"
+      borderRadius={'xl'}
+      p="6"
+      gap="4"
+      flex="1"
+      width="100%"
+      height="100%"
+      justifyContent="center"
+    >
       <SectionHeader tokenPrice={tokenPrice} />
-      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs tokenPrice={tokenPrice} />}
+      {isSSRDisabled ? (
+        <Text textStyle="text-regular-sm" color="textSecondary">
+          Loading fee data...
+        </Text>
+      ) : (
+        <FeeTabs tokenPrice={tokenPrice} feeEstimates={feeEstimates} />
+      )}
     </Stack>
   );
 }
