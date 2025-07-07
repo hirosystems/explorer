@@ -1,5 +1,4 @@
 import {
-  CURVED_CORNER_SIZE,
   TabPopoverContent,
   TabPopoverRoot,
   TabPopoverTrigger,
@@ -35,14 +34,13 @@ export const getFilterTabPopoverContainerProps = (open: boolean): FlexProps => (
 
 export function FilterTabPopover({
   id,
-  positioning = DEFAULT_POSITIONING,
+  positioning,
   trigger,
   content,
   triggerProps,
   contentProps,
 }: FilterTabPopoverProps) {
   const [open, setOpen] = useState(false);
-
   return (
     <TabPopoverRoot
       id={id}
@@ -57,10 +55,11 @@ export function FilterTabPopover({
         {trigger(open, setOpen)}
       </TabPopoverTrigger>
       <TabPopoverContent
-        bgColor={'surfacePrimary'}
-        minWidth={'fit-content'}
-        marginRight={-(CURVED_CORNER_SIZE + 1)}
-        positioning={positioning ?? DEFAULT_POSITIONING}
+        // bgColor={'surfacePrimary'}
+        // minWidth={'fit-content'}
+        // marginRight={positioning?.placement === 'bottom-start' ? -(CURVED_CORNER_SIZE + 1) : 0}
+        // marginLeft={positioning?.placement === 'bottom-end' ? -(CURVED_CORNER_SIZE + 1) : 0}
+        positioning={positioning}
         {...contentProps}
       >
         <>
