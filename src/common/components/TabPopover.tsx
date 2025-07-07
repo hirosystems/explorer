@@ -96,6 +96,7 @@ export const TabPopoverContent = React.forwardRef<
           width="auto"
           minWidth={'fit-content'}
           marginRight={
+            // The mr and ml is to account for the curved corner and align the content with the curved corner
             props.positioning?.placement === 'bottom-start' ? -(CURVED_CORNER_SIZE + 1) : 0
           }
           marginLeft={props.positioning?.placement === 'bottom-end' ? -(CURVED_CORNER_SIZE + 1) : 0}

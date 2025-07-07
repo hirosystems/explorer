@@ -1,4 +1,4 @@
-import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisPopover';
+import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
