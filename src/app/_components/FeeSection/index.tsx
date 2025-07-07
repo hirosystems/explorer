@@ -14,7 +14,19 @@ import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
-import { SSRDisabledMessage } from '../SSRDisabledMessage';
+interface Fee {
+  no_priority: number;
+  low_priority: number;
+  medium_priority: number;
+  high_priority: number;
+}
+
+interface FeeEstimates {
+  tokenTransferFees: Fee;
+  contractCallFees: Fee;
+  contractDeployFees: Fee;
+  averageFees: Fee;
+}
 
 function SectionHeader() {
   const { tokenPrice } = useGlobalContext();
@@ -25,11 +37,7 @@ function SectionHeader() {
         <Text textStyle="heading-sm" color="textPrimary">
           Current transaction fees
         </Text>
-        <Tooltip
-          variant="redesignPrimary"
-          size="lg"
-          content="Higher fees increase the chances of a transaction being confirmed faster than others."
-        >
+        <Tooltip content="Higher fees increase the chances of a transaction being confirmed faster than others.">
           <Icon color="iconSecondary" h={3.5} w={3.5}>
             <Info />
           </Icon>
@@ -106,7 +114,7 @@ function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue?: number })
   );
 }
 
-function getFeeDescription(txType: keyof MempoolFeePriorities) {
+function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 'smart_contract') {
   switch (txType) {
     case 'all':
       return 'Current average fee rates for all transaction types.';
@@ -121,15 +129,19 @@ function getFeeDescription(txType: keyof MempoolFeePriorities) {
   }
 }
 
+
 const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as Array<
   keyof MempoolFeePriorities | 'all'
 >;
 
 function FeeTabs() {
   const { feeEstimates } = useHomePageData();
-
   if (!feeEstimates) {
-    return null;
+    return (
+      <Text textStyle="text-regular-sm" color="textSecondary">
+        Loading fee estimates...
+      </Text>
+    );
   }
 
   const feeEstimatesMap = {
@@ -191,9 +203,26 @@ function FeeTabs() {
 export function FeeSection() {
   const { isSSRDisabled } = useHomePageData();
   return (
-    <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
+    <Stack
+      align="space-between"
+      bg="surfaceSecondary"
+      borderRadius={'xl'}
+      p="6"
+      gap="4"
+      flex="1"
+      width="100%"
+      height="100%"
+      justifyContent="center"
+    >
       <SectionHeader />
-      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs />}
+      {isSSRDisabled ? (
+        <Text textStyle="text-regular-sm" color="textSecondary">
+          Loading fee data...
+        </Text>
+      ) : (
+        <FeeTabs />
+      )}
+
     </Stack>
   );
 }
