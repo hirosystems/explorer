@@ -1,12 +1,12 @@
 import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
-import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
 import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
-import { Fire, Sparkle } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useRef } from 'react';
 
 import { TransactionEventType } from '@stacks/stacks-blockchain-api-types';
+
+import { EventAssetTypeFilterLabel } from './useEventsTableFilters';
 
 export const CheckboxItem = ({
   // TODO: shared with TransactionTypeFilterForm CheckboxItem
@@ -17,7 +17,7 @@ export const CheckboxItem = ({
   toggleSelectedFilter,
 }: {
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   value: string;
   checkboxProps: CheckboxProps;
   toggleSelectedFilter: (value: string) => void;
@@ -35,14 +35,16 @@ export const CheckboxItem = ({
       autoFocus={false}
     >
       <Checkbox checked={checkboxProps.checked} variant="redesignPrimary" autoFocus={false} />
-      <Icon
-        h={4}
-        w={4}
-        color={checkboxProps.checked ? 'iconPrimary' : 'iconSecondary'}
-        _groupHover={{ color: 'iconPrimary' }}
-      >
-        {icon}
-      </Icon>
+      {icon && (
+        <Icon
+          h={4}
+          w={4}
+          color={checkboxProps.checked ? 'iconPrimary' : 'iconSecondary'}
+          _groupHover={{ color: 'iconPrimary' }}
+        >
+          {icon}
+        </Icon>
+      )}
       <Text
         textStyle="text-medium-sm"
         color={checkboxProps.checked ? 'textPrimary' : 'textSecondary'}
@@ -73,7 +75,7 @@ export function EventAssetTypeFilterForm({
     setValue: setSelectedFilters,
   } = useCheckboxGroup();
 
-  // Syncs the selected filters with the defaultTransactionType prop
+  // Syncs the selected filters with the default value prop
   useEffect(() => {
     setSelectedFilters(defaultEventAssetTypes || []);
   }, [defaultEventAssetTypes, setSelectedFilters]);
@@ -89,36 +91,31 @@ export function EventAssetTypeFilterForm({
   return (
     <Stack gap={1.5}>
       <CheckboxItem
-        label={'Smart Contract Log'}
-        icon={<DiagonalArrowsIcon />}
+        label={EventAssetTypeFilterLabel['smart_contract_log']}
         value={'smart_contract_log'}
         checkboxProps={getCheckboxProps({ value: 'smart_contract_log' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'STX Lock'}
-        icon={<Sparkle />}
+        label={EventAssetTypeFilterLabel['stx_lock']}
         value={'stx_lock'}
         checkboxProps={getCheckboxProps({ value: 'stx_lock' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'STX Asset'}
-        icon={<Fire />}
+        label={EventAssetTypeFilterLabel['stx_asset']}
         value={'stx_asset'}
         checkboxProps={getCheckboxProps({ value: 'stx_asset' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'Fungible Token Asset'}
-        icon={<Fire />}
+        label={EventAssetTypeFilterLabel['fungible_token_asset']}
         value={'fungible_token_asset'}
         checkboxProps={getCheckboxProps({ value: 'fungible_token_asset' })}
         toggleSelectedFilter={toggleSelectedFilter}
       />
       <CheckboxItem
-        label={'Non-Fungible Token Asset'}
-        icon={<Fire />}
+        label={EventAssetTypeFilterLabel['non_fungible_token_asset']}
         value={'non_fungible_token_asset'}
         checkboxProps={getCheckboxProps({ value: 'non_fungible_token_asset' })}
         toggleSelectedFilter={toggleSelectedFilter}
