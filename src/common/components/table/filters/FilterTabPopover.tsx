@@ -54,14 +54,7 @@ export function FilterTabPopover({
       <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
         {trigger(open, setOpen)}
       </TabPopoverTrigger>
-      <TabPopoverContent
-        // bgColor={'surfacePrimary'}
-        // minWidth={'fit-content'}
-        // marginRight={positioning?.placement === 'bottom-start' ? -(CURVED_CORNER_SIZE + 1) : 0}
-        // marginLeft={positioning?.placement === 'bottom-end' ? -(CURVED_CORNER_SIZE + 1) : 0}
-        positioning={positioning}
-        {...contentProps}
-      >
+      <TabPopoverContent positioning={positioning} {...contentProps}>
         <>
           <Box tabIndex={0} h={0} w={0} outline="none" />
           {/* This div is used to steal the focus from the content when the popover is opened */}
