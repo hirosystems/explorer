@@ -6,11 +6,11 @@ export type AlertStatus = 'neutral' | 'warning' | 'error';
 export function getAlertIcon(status: AlertStatus) {
   switch (status) {
     case 'error':
-      return <XCircle />;
+      return <XCircle weight="bold" />;
     case 'warning':
-      return <Clock />;
+      return <Clock weight="bold" />;
     case 'neutral':
-      return <Question />;
+      return <Question weight="bold" />;
   }
 }
 
