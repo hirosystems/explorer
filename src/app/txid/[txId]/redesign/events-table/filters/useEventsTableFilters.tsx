@@ -20,6 +20,14 @@ export const EVENTS_TABLE_FILTER_KEYS: Array<EventsTableFilterKeys> = [
   'address',
 ];
 
+export enum EventAssetTypeFilterLabel {
+  'smart_contract_log' = 'Contract log',
+  'stx_lock' = 'STX lock',
+  'stx_asset' = 'STX token',
+  'fungible_token_asset' = 'Fungible token',
+  'non_fungible_token_asset' = 'Non fungible token',
+}
+
 export const EventsTableFiltersContext = createContext<
   EventsTableFilters & {
     addressFilterHandler: (address?: string) => void;
@@ -79,8 +87,6 @@ export const EventsTableFiltersProvider = ({
     eventAssetTypeFilterMutator(params, undefined);
     return params;
   });
-
-  console.log('EventsTableFiltersProvider', { eventAssetTypes, address });
 
   return (
     <EventsTableFiltersContext.Provider
