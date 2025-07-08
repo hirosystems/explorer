@@ -22,7 +22,6 @@ export const TenureChangePage = ({
         <TenureAlert />
       </Stack>
       <TxSummaryTable tx={tx} />
-      {/* <TxSummary tx={tx} /> */}
     </>
   );
 };

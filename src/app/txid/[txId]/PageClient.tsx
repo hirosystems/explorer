@@ -12,11 +12,13 @@ import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
+import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
   const isRedesign = useIsRedesignUrl();
 
+  if (tx.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
   if (tx.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
   if (tx.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
@@ -28,7 +30,6 @@ function Tx({ txId }: { txId: string }) {
 
   if (tx.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
-  if (tx.tx_type === 'tenure_change') return <TenureChangePageRedesign tx={tx} />;
   if (tx.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
   if (tx.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
