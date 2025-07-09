@@ -8,14 +8,14 @@ import {
 
 import { DetailsCard } from './DetailsCard';
 import { TxHeader } from './TxHeader';
-import { TxSummaryTable } from './TxSummaryTable';
+import { TxSummary } from './TxSummary';
 
 export const CoinbasePage = ({ tx }: { tx: CoinbaseTransaction | MempoolCoinbaseTransaction }) => {
   return (
     <>
       <TxHeader tx={tx} />
       <Grid templateColumns={{ base: '1fr', md: '1fr auto' }} gap={2}>
-        <TxSummaryTable tx={tx} />
+        <TxSummary tx={tx} />
         <DetailsCard tx={tx as Transaction} />
       </Grid>
     </>

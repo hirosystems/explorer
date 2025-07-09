@@ -10,9 +10,9 @@ import { SmartContract } from './SmartContract/SmartContract';
 import { SmartContractTx } from './SmartContract/SmartContractTx';
 import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
+import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
-import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
