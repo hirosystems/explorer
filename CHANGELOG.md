@@ -1,3 +1,10 @@
+# [1.307.0](https://github.com/hirosystems/explorer/compare/v1.306.0...v1.307.0) (2025-07-09)
+
+
+### Features
+
+* increase cms revalidate time ([#2390](https://github.com/hirosystems/explorer/issues/2390)) ([9e2472c](https://github.com/hirosystems/explorer/commit/9e2472c249d271492f71d20f7c33856925569795))
+
 # [1.306.0](https://github.com/hirosystems/explorer/compare/v1.305.0...v1.306.0) (2025-07-04)
 
 
