@@ -1,3 +1,10 @@
+## [1.307.1](https://github.com/hirosystems/explorer/compare/v1.307.0...v1.307.1) (2025-07-09)
+
+
+### Bug Fixes
+
+* fixed the stx block times in recent blocks ([54fdeea](https://github.com/hirosystems/explorer/commit/54fdeea57a51849d2d4250d64d3265ebb07ecfaf))
+
 # [1.307.0](https://github.com/hirosystems/explorer/compare/v1.306.0...v1.307.0) (2025-07-09)
 
 
