@@ -31,7 +31,6 @@ export const CopyButtonRedesign = ({
   return (
     <Button
       onClick={() => copy()}
-      variant="unstyled"
       {...buttonProps}
       bg={copied ? 'surfaceInvert' : 'transparent'}
       _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
