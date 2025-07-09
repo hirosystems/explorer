@@ -43,7 +43,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                 <ChakraTooltip.Arrow>
                   <ChakraTooltip.ArrowTip />
                 </ChakraTooltip.Arrow>
-              )}
+              )}{' '}
               {content}
             </ChakraTooltip.Content>
           </ChakraTooltip.Positioner>

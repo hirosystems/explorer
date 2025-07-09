@@ -10,6 +10,7 @@ import { SmartContract } from './SmartContract/SmartContract';
 import { SmartContractTx } from './SmartContract/SmartContractTx';
 import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
+import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 
@@ -17,6 +18,7 @@ function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
   const isRedesign = useIsRedesignUrl();
 
+  if (tx.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
   if (tx.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
   if (tx.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
