@@ -1,5 +1,5 @@
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { ArrowsClockwise, Fire, Question, Sparkle } from '@phosphor-icons/react';
+import { Fire, Question, Sparkle } from '@phosphor-icons/react';
 
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 
@@ -80,9 +80,6 @@ export function getAssetEventTypeLabel(assetEventType: TransactionEventAssetType
   if (assetEventType === 'mint') {
     return 'Mint';
   }
-  // if (assetEventType === 'print') { // TODO: does this even exist?
-  //   return 'Print';
-  // }
   if (assetEventType === 'burn') {
     return 'Burn';
   }
