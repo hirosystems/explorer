@@ -6,7 +6,7 @@ import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Flex, Icon, Stack, Table } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
 
 import {
   CoinbaseTransaction,
