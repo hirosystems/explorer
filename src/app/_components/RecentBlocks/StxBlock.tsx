@@ -196,10 +196,10 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
               <Text
                 textStyle={'text-medium-xs'}
                 color={'textSecondary'}
-                aria-label={`Block timestamp: ${stxBlock.burn_block_time}`}
+                aria-label={`Block timestamp: ${stxBlock.block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestampToRelativeTime(stxBlock.burn_block_time)}
+                {formatTimestampToRelativeTime(stxBlock.block_time)}
               </Text>
               <Text
                 textStyle={'text-medium-xs'}
