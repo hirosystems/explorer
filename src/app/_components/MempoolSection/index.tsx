@@ -15,6 +15,8 @@ interface MempoolSectionProps {
   chartWidth?: number;
   chartHeight?: number;
   chartInnerRadius?: number;
+  reverseOrder?: boolean;
+  maxWidth?: number;
 }
 
 function SectionHeader() {
@@ -41,11 +43,15 @@ function TxCountSection({
   chartWidth,
   chartHeight,
   chartInnerRadius,
+  reverseOrder,
+  maxWidth = 800,
 }: {
   mempoolStats?: any;
   chartWidth?: number;
   chartHeight?: number;
   chartInnerRadius?: number;
+  reverseOrder?: boolean;
+  maxWidth?: number;
 }) {
   return (
     <HStack
@@ -59,12 +65,13 @@ function TxCountSection({
       alignSelf="stretch"
       justifyContent={'center'}
     >
-      <Flex maxW={'800px'} flexGrow="1">
+      <Flex maxW={`${maxWidth}px`} flexGrow="1">
         <TxCountChart
           mempoolStats={mempoolStats}
           width={chartWidth}
           height={chartHeight}
           innerRadius={chartInnerRadius}
+          reverseOrder={reverseOrder}
         />
       </Flex>
     </HStack>
@@ -78,6 +85,8 @@ export function MempoolSection({
   chartWidth,
   chartHeight,
   chartInnerRadius,
+  reverseOrder = false,
+  maxWidth = 800,
 }: MempoolSectionProps) {
   const network = useGlobalContext().activeNetwork;
 
@@ -92,6 +101,8 @@ export function MempoolSection({
           chartWidth={chartWidth}
           chartHeight={chartHeight}
           chartInnerRadius={chartInnerRadius}
+          reverseOrder={reverseOrder}
+          maxWidth={maxWidth}
         />
       )}
       {showHeader && (

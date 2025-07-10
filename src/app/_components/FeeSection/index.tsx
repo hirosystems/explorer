@@ -8,36 +8,21 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StxThinIcon from '@/ui/icons/StacksThinIcon';
-import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { Info, Lightning, PlusMinus } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
-interface Fee {
-  no_priority: number;
-  low_priority: number;
-  medium_priority: number;
-  high_priority: number;
-}
-
-interface FeeEstimates {
-  tokenTransferFees: Fee;
-  contractCallFees: Fee;
-  contractDeployFees: Fee;
-  averageFees: Fee;
-}
-
 function SectionHeader() {
   const { tokenPrice } = useGlobalContext();
-
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
       <HStack align="center" gap={2}>
         <Text textStyle="heading-sm" color="textPrimary">
-          Current transaction fees
+        Estimated transaction fees
         </Text>
-        <Tooltip content="Higher fees increase the chances of a transaction being confirmed faster than others.">
+        <Tooltip content={<Box maxW={'400px'}>This chart shows current estimated fees for low, medium, and high priority transactions. Users can manually select a priority level in their wallets, with  higher fees increasing the chances of faster confirmation.</Box>}>
           <Icon color="iconSecondary" h={3.5} w={3.5}>
             <Info />
           </Icon>
@@ -114,7 +99,7 @@ function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue?: number })
   );
 }
 
-function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 'smart_contract') {
+function getFeeDescription(txType: keyof MempoolFeePriorities) {
   switch (txType) {
     case 'all':
       return 'Current average fee rates for all transaction types.';
@@ -129,10 +114,12 @@ function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 
   }
 }
 
-
-const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as Array<
-  keyof MempoolFeePriorities | 'all'
->;
+const txTypeFees: (keyof MempoolFeePriorities)[] = [
+  'all',
+  'token_transfer',
+  'contract_call',
+  'smart_contract',
+];
 
 function FeeTabs() {
   const { feeEstimates } = useHomePageData();

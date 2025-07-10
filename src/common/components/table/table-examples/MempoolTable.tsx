@@ -6,6 +6,7 @@ import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { useMempoolTransactionsInfinite } from '@/common/queries/useMempoolTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
@@ -185,30 +186,6 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-function getToAddress(tx: MempoolTransaction): string {
-  switch (tx.tx_type) {
-    case 'contract_call':
-      return tx.contract_call?.contract_id || '';
-    case 'token_transfer':
-      return tx.token_transfer?.recipient_address || '';
-    case 'smart_contract':
-      return tx.smart_contract?.contract_id || '';
-    default:
-      return '';
-  }
-}
-
-function getAmount(tx: MempoolTransaction): number {
-  switch (tx.tx_type) {
-    case 'token_transfer':
-      return parseInt(tx.token_transfer?.amount || '0');
-    case 'contract_call':
-      return 0;
-    default:
-      return 0;
-  }
-}
-
 export function MempoolTable({
   columnDefinitions,
   disablePagination = false,
@@ -235,7 +212,7 @@ export function MempoolTable({
   const { fromAddress, toAddress, transactionType } = filters || {};
 
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = ['mempoolTransactionsInfinite', sort, order];
+    const queryKey = ['mempoolTransactionsInfinite', sort, order, fromAddress, toAddress];
     queryClient.setQueryData(queryKey, {
       pageParams: [0],
       pages: [initialData],
@@ -243,7 +220,10 @@ export function MempoolTable({
     isCacheSetWithInitialData.current = true;
   }
 
-  const response = useMempoolTransactionsInfinite(sort, order);
+  const response = useMempoolTransactionsInfinite(sort, order, {
+    fromAddress,
+    toAddress,
+  });
   const txs = useInfiniteQueryResult<MempoolTransaction>(
     response,
     disablePagination ? undefined : TX_TABLE_PAGE_SIZE
@@ -257,10 +237,9 @@ export function MempoolTable({
   }, []);
 
   const isTableFiltered =
-    filters &&
-    Object.values(filters).some(
-      filterValue => filterValue != null && filterValue !== '' && filterValue?.length !== 0
-    );
+    (filters?.fromAddress && filters.fromAddress !== '') ||
+    (filters?.toAddress && filters.toAddress !== '') ||
+    (filters?.transactionType && filters.transactionType.length > 0);
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -282,32 +261,9 @@ export function MempoolTable({
   const rowData: MempoolTableData[] = useMemo(() => {
     let filteredTxs = txs;
 
-    if (filters) {
-      filteredTxs = txs.filter(tx => {
-        if (
-          filters.transactionType &&
-          filters.transactionType.length > 0 &&
-          !filters.transactionType.includes(tx.tx_type)
-        ) {
-          return false;
-        }
-
-        if (
-          filters.fromAddress &&
-          !tx.sender_address.toLowerCase().includes(filters.fromAddress.toLowerCase())
-        ) {
-          return false;
-        }
-
-        if (filters.toAddress) {
-          const toAddress = getToAddress(tx).toLowerCase();
-          if (!toAddress.includes(filters.toAddress.toLowerCase())) {
-            return false;
-          }
-        }
-
-        return true;
-      });
+    // Only filter by transaction type client-side since server-side filtering handles addresses
+    if (filters?.transactionType && filters.transactionType.length > 0) {
+      filteredTxs = txs.filter(tx => filters.transactionType!.includes(tx.tx_type));
     }
 
     return filteredTxs.map(tx => {
@@ -344,18 +300,7 @@ export function MempoolTable({
         [TxTableColumns.BlockTime]: tx.receipt_time,
       };
     });
-  }, [txs, filters]);
-
-  const isQueryLoading = response.isLoading && !initialData;
-
-  const hasData = txs.length > 0 || !!initialData || !!response.data;
-  const [isInitialLoad, setIsInitialLoad] = useState(!hasData);
-
-  useEffect(() => {
-    if (hasData) {
-      setIsInitialLoad(false);
-    }
-  }, [hasData]);
+  }, [txs, filters?.transactionType]);
 
   return (
     <Table
@@ -384,7 +329,7 @@ export function MempoolTable({
           />
         ) : null
       }
-      isLoading={isQueryLoading || isInitialLoad}
+      isLoading={response.isLoading}
       isFetching={response.isFetching}
     />
   );

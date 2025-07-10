@@ -17,7 +17,7 @@ export default function MempoolTransactionsTable({
   searchParams,
 }: MempoolTransactionsTableProps) {
   return (
-    <Stack gap={5}>
+    <Stack gap={5} mt={{ base: 0, '2xl': 12 }}>
       <Text textStyle="heading-md" color="textPrimary">
         Pending transactions
       </Text>

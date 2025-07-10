@@ -1,6 +1,7 @@
 'use client';
 
 import { CompressedMempoolTxTableData } from '@/app/transactions/utils';
+import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters';
 import { MempoolTable } from '@/common/components/table/table-examples/MempoolTable';
 import {
   TxTableFiltersProvider,
@@ -8,8 +9,6 @@ import {
 } from '@/common/components/table/tx-table/useTxTableFilters';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { Stack } from '@chakra-ui/react';
-
-import { MempoolTableFilters } from './MempoolTableFilters';
 
 interface MempoolTableWithFiltersContentProps {
   initialData?: GenericResponseType<CompressedMempoolTxTableData>;
@@ -20,7 +19,7 @@ function MempoolTableWithFiltersContent({ initialData }: MempoolTableWithFilters
 
   return (
     <Stack gap={4}>
-      <MempoolTableFilters />
+      <TxTableFilters showDateFilter={false} />
       <MempoolTable
         filters={{
           fromAddress,

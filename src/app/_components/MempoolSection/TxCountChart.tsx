@@ -356,11 +356,13 @@ export function TxCountChart({
   width = DEFAULT_PIE_CHART_WIDTH,
   height = DEFAULT_PIE_CHART_HEIGHT,
   innerRadius = INNER_RADIUS,
+  reverseOrder = false,
 }: {
   mempoolStats?: { tx_type_counts: Record<string, number> };
   width?: number;
   height?: number;
   innerRadius?: number;
+  reverseOrder?: boolean;
 }) {
   const outerRadius = innerRadius + LINE_WIDTH;
   const { totalTxCount, pieData } = useTransactionData(mempoolStats);
@@ -413,10 +415,11 @@ export function TxCountChart({
           width="100%"
           justifyContent="space-between"
           alignItems="center"
-          gap={4}
+          gap={6}
           ref={containerRef}
           flexWrap="wrap-reverse"
           flexGrow="1"
+          flexDirection={reverseOrder ? 'row-reverse' : 'row'}
         >
           <TypesList
             data={pieData}
@@ -427,6 +430,8 @@ export function TxCountChart({
             flexGrow="1"
             flexBasis="fit-content"
             mb={4}
+            alignSelf="center"
+            mx="auto"
           />
 
           <Stack

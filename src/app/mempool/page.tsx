@@ -7,19 +7,22 @@ import { SSRDisabledMessage } from '../_components/SSRDisabledMessage';
 import { fetchUIMempoolStats } from '../data';
 import MempoolTransactionsTable from './MempoolTransactionsTable';
 import { fetchUIMempoolTransactions } from './data';
+import { PageTitle } from '../_components/PageTitle';
 
 
 export default async function (props: { searchParams: Promise<Record<string, string>> }) {
   const searchParams = await props.searchParams;
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
+  const fromAddress = searchParams?.fromAddress;
+  const toAddress = searchParams?.toAddress;
   const isSSRDisabled = searchParams?.ssr === 'false';
 
   const stacksAPIRequests = isSSRDisabled
     ? []
     : ([
         fetchUIMempoolStats(chain, api),
-        fetchUIMempoolTransactions(chain, api),
+        fetchUIMempoolTransactions(chain, api, fromAddress, toAddress),
         getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
       ] as const);
 
@@ -40,8 +43,9 @@ export default async function (props: { searchParams: Promise<Record<string, str
     : undefined;
 
   return (
-    <Stack gap={14} mt={[0, 0, 0, 0, 12]}>
-      <Flex gap={[6]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
+    <Stack gap={5} mt={{ base: 0, '2xl': 12 }}>
+      <PageTitle>Mempool</PageTitle>
+      <Flex gap={6} flexDirection={{ base: 'column', '2xl': 'row' }}>
         <Flex flex="1">
           {mempoolStats ? (
             <MempoolSection
@@ -51,6 +55,8 @@ export default async function (props: { searchParams: Promise<Record<string, str
               chartWidth={220}
               chartHeight={220}
               chartInnerRadius={90}
+              reverseOrder={true}
+              maxWidth={600}
             />
           ) : (
             <SSRDisabledMessage sectionName="Mempool statistics" />
