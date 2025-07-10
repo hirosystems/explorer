@@ -7,6 +7,7 @@ import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
@@ -64,32 +65,6 @@ export interface TxTableTransactionColumnData {
 export interface TxTableAddressColumnData {
   address: string;
   isContract: boolean;
-}
-
-export function getToAddress(tx: Transaction): string {
-  if (tx.tx_type === 'token_transfer') {
-    return tx.token_transfer?.recipient_address;
-  }
-  if (tx.tx_type === 'smart_contract') {
-    return tx.smart_contract?.contract_id;
-  }
-  if (tx.tx_type === 'contract_call') {
-    return tx.contract_call?.contract_id;
-  }
-  if (tx.tx_type === 'coinbase') {
-    return '';
-  }
-  if (tx.tx_type === 'tenure_change') {
-    return '';
-  }
-  return '';
-}
-
-export function getAmount(tx: Transaction): number {
-  if (tx.tx_type === 'token_transfer') {
-    return Number(tx.token_transfer?.amount);
-  }
-  return 0;
 }
 
 export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [

@@ -15,6 +15,8 @@ export default async function (props: { searchParams: Promise<Record<string, str
   const searchParams = await props.searchParams;
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
+  const fromAddress = searchParams?.fromAddress;
+  const toAddress = searchParams?.toAddress;
   const isSSRDisabled = searchParams?.ssr === 'false';
 
   const nonStacksRequests = [getTokenPrice()] as const;
@@ -23,7 +25,7 @@ export default async function (props: { searchParams: Promise<Record<string, str
     ? []
     : ([
         fetchUIMempoolStats(chain, api),
-        fetchUIMempoolTransactions(chain, api),
+        fetchUIMempoolTransactions(chain, api, fromAddress, toAddress),
         getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
       ] as const);
 
@@ -46,8 +48,8 @@ export default async function (props: { searchParams: Promise<Record<string, str
     : undefined;
 
   return (
-    <Stack gap={14} mt={[0, 0, 0, 0, 12]}>
-      <Flex gap={[6]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
+    <Stack gap={14} mt={{ base: 0, '2xl': 12 }}>
+      <Flex gap={6} flexDirection={{ base: 'column', '2xl': 'row' }}>
         <Flex flex="1">
           {mempoolStats ? (
             <MempoolSection

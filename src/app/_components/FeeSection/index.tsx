@@ -1,5 +1,6 @@
 'use client';
 
+import { FeeEstimates } from '@/app/context';
 import { TokenPrice } from '@/common/types/tokenPrice';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
@@ -12,20 +13,6 @@ import { Info, Lightning, PlusMinus } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
-
-interface Fee {
-  no_priority: number;
-  low_priority: number;
-  medium_priority: number;
-  high_priority: number;
-}
-
-interface FeeEstimates {
-  tokenTransferFees: Fee;
-  contractCallFees: Fee;
-  contractDeployFees: Fee;
-  averageFees: Fee;
-}
 
 interface FeeSectionProps {
   tokenPrice: TokenPrice;
@@ -123,7 +110,7 @@ function FeeData({
   );
 }
 
-function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 'smart_contract') {
+function getFeeDescription(txType: keyof MempoolFeePriorities) {
   switch (txType) {
     case 'all':
       return 'Current average fee rates for all transaction types.';
@@ -138,7 +125,12 @@ function getFeeDescription(txType: 'all' | 'token_transfer' | 'contract_call' | 
   }
 }
 
-const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as const;
+const txTypeFees: (keyof MempoolFeePriorities)[] = [
+  'all',
+  'token_transfer',
+  'contract_call',
+  'smart_contract',
+];
 
 function FeeTabs({
   tokenPrice,
