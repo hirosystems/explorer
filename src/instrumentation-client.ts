@@ -8,16 +8,8 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   dsn: 'https://e1dce4791416146de03ff1642ed719d5@o204651.ingest.us.sentry.io/4507788896239616',
 
-  integrations: [Sentry.browserTracingIntegration(), Sentry.browserProfilingIntegration()],
-
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
-
-  // Add profilesSampleRate for browser profiling
-  profilesSampleRate: 1.0,
-
-  // Set tracePropagationTargets for your domain
-  tracePropagationTargets: ['localhost', /^https:\/\/explorer\.hiro\.so/],
+  tracesSampleRate: 0.1,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
