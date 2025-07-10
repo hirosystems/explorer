@@ -17,10 +17,10 @@ import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { ScrollIndicator } from '../../ScrollIndicator';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
-import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
 import {
   AddressLinkCellRenderer,
   FeeCellRenderer,
@@ -354,7 +354,7 @@ export function TxsTable({
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
-      scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
           ? undefined

@@ -1,3 +1,4 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -8,6 +9,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { Events } from './Events';
 import { TxSummary } from './TxSummary';
+import { FunctionCalled } from './function-called/FunctionCalled';
 
 function TabTriggerComponent({
   label,
@@ -164,9 +166,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="functionCall" value="functionCall" w="100%">
-          <TabsContentContainer>
-            <Text>Function call</Text>
-          </TabsContentContainer>
+          <FunctionCalled tx={tx} />
         </TabsContent>
         <TabsContent key="postConditions" value="postConditions" w="100%">
           <TabsContentContainer>
@@ -208,12 +208,13 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       defaultValue={'overview'}
       gap={2}
       borderRadius="redesign.xl"
+      w="full"
     >
-      <Flex justifyContent={'space-between'} w="full">
-        <TabsList flexWrap={'wrap'}>
-          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
-        </TabsList>
-        <Flex alignItems={'center'} gap={2}>
+      <Flex justifyContent={'space-between'} w="full" gap={2}>
+        <ScrollIndicator>
+          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
+        </ScrollIndicator>
+        <Flex alignItems={'center'} gap={4}>
           <Text textStyle="text-regular-sm">Show:</Text>
           <ValueBasisFilterPopover />
         </Flex>

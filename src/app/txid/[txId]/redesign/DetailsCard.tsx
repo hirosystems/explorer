@@ -80,7 +80,6 @@ function CoinbaseDetailsCardItems({ tx }: { tx: CoinbaseTransaction }) {
   const { data: block, isLoading } = useTxBlock(tx);
   const { btcBlockBaseUrl, btcTxBaseUrl } = useGlobalContext().activeNetwork;
 
-  console.log({ block });
   return (
     <>
       <SummaryItem
