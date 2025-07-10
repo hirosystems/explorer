@@ -1,10 +1,6 @@
-'use client';
-
 import { openModal } from '@/common/components/modals/modal-slice';
-import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
-import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
-import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
-import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
+import { ClearFiltersButton } from '@/common/components/table/filters/ClearFiltersButton';
+import { SingleAddressFilterPopover } from '@/common/components/table/filters/single-address-filter.tsx/SingleAddressFilterPopover';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/ui/Button';
@@ -13,10 +9,11 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
-import { areAnyTxTableFiltersActive } from '../tx-table/tx-table-filters-utils';
-import { ClearFiltersButton } from './ClearFiltersButton';
+import { EventAssetTypeFilterPopover } from './filters/EventAssetTypeFilterPopover';
+import { useEventsTableFilters } from './filters/useEventsTableFilters';
 
 const MobileOpenFilterModalButton = () => {
+  // TODO: lots in common with TxTableFilters MobileOpenFilterModalButton
   const dispatch = useAppDispatch();
 
   return (
@@ -42,30 +39,19 @@ const MobileOpenFilterModalButton = () => {
   );
 };
 
-export const TxTableFilters = () => {
+export const EventsTableFilters = () => {
   const {
-    transactionType,
-    fromAddress,
-    toAddress,
-    startTime,
-    endTime,
+    eventAssetTypes,
+    address,
+    eventAssetTypeFilterHandler,
     addressFilterHandler,
-    dateFilterHandler,
-    transactionTypeFilterHandler,
     clearAllFiltersHandler,
-  } = useTxTableFilters();
+  } = useEventsTableFilters();
 
-  const areAnyFiltersActive = useMemo(
-    () =>
-      !areAnyTxTableFiltersActive({
-        transactionType,
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-      }),
-    [transactionType, fromAddress, toAddress, startTime, endTime]
-  );
+  const areAnyFiltersActive = useMemo(() => {
+    // TODO: put this util function somewhere else
+    return eventAssetTypes.length > 0 || address !== '';
+  }, [eventAssetTypes, address]);
 
   return (
     <Flex flexWrap={'wrap'} gap={4}>
@@ -75,18 +61,12 @@ export const TxTableFilters = () => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover
-            defaultTransactionType={transactionType}
-            transactionTypeFilterHandler={transactionTypeFilterHandler}
+          <EventAssetTypeFilterPopover
+            defaultEventAssetTypes={eventAssetTypes}
+            eventAssetTypeFilterHandler={eventAssetTypeFilterHandler}
           />
-          <DateFilterPopover
-            defaultStartTime={startTime}
-            defaultEndTime={endTime}
-            dateFilterHandler={dateFilterHandler}
-          />
-          <AddressFilterPopover
-            defaultFromAddress={fromAddress}
-            defaultToAddress={toAddress}
+          <SingleAddressFilterPopover
+            defaultAddress={address}
             addressFilterHandler={addressFilterHandler}
           />
           {areAnyFiltersActive && (
