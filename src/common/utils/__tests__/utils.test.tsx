@@ -1,7 +1,41 @@
 import { render, screen } from '@testing-library/react';
 
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '../transactions';
-import { formatNumber, semanticTokenToCssVar } from '../utils';
+import {
+  abbreviateNumber,
+  addSepBetweenStrings,
+  capitalize,
+  formatNumber,
+  formatStacksAmount,
+  ftDecimals,
+  getAssetNameParts,
+  getContractName,
+  getFtDecimalAdjustedBalance,
+  getFungibleAssetName,
+  getLocaleDecimalSeparator,
+  getMemoString,
+  getUsdValue,
+  hexToString,
+  isJSONString,
+  isNumeric,
+  microStxToStx,
+  microToStacks,
+  microToStacksFormatted,
+  removeTrailingSlash,
+  semanticTokenToCssVar,
+  shortenHexDeprecated,
+  stacksToMicro,
+  stringToHslColor,
+  truncateContractName,
+  truncateHex,
+  truncateMiddle,
+  truncateStxAddress,
+  truncateStxContractId,
+  truncateText,
+  validateBnsName,
+  validateStacksAddress,
+  validateStacksContractId,
+} from '../utils';
 
 jest.mock('@phosphor-icons/react', () => ({
   PhoneCall: () => <div data-testid="phone-call">PhoneCall</div>,
@@ -149,5 +183,336 @@ describe('formatNumber', () => {
     expect(result).toContain('1.2');
     expect(result).toContain('K');
     expect(result).not.toContain('.0K');
+  });
+});
+
+describe('shortenHexDeprecated', () => {
+  test('should shorten hex string with default length', () => {
+    expect(shortenHexDeprecated('0x1234567890abcdef')).toBe('0x1234…cdef');
+  });
+
+  test('should shorten hex string with custom length', () => {
+    expect(shortenHexDeprecated('0x1234567890abcdef', 6)).toBe('0x123456…abcdef');
+  });
+});
+
+describe('truncateHex', () => {
+  test('should truncate hex string with prefix', () => {
+    expect(truncateHex('0x1234567890abcdef', 4, 4, true)).toBe('0x1234…cdef');
+  });
+
+  test('should truncate hex string without prefix', () => {
+    expect(truncateHex('0x1234567890abcdef', 4, 4, false)).toBe('0x12…cdef');
+  });
+
+  test('should return original string if no 0x prefix', () => {
+    expect(truncateHex('1234567890abcdef', 4, 4)).toBe('1234567890abcdef');
+  });
+
+  test('should handle empty string', () => {
+    expect(truncateHex('', 4, 4)).toBe('');
+  });
+});
+
+describe('truncateMiddle', () => {
+  test('should truncate middle of string', () => {
+    expect(truncateMiddle('1234567890', 3, 3)).toBe('123…890');
+  });
+
+  test('should handle empty string', () => {
+    expect(truncateMiddle('', 3, 3)).toBe('');
+  });
+});
+
+describe('truncateContractName', () => {
+  test('should truncate contract name with start length only', () => {
+    expect(truncateContractName('very-long-contract-name', 5)).toBe('very-...');
+  });
+
+  test('should truncate contract name with start and end length', () => {
+    expect(truncateContractName('very-long-contract-name', 5, 4)).toBe('very-…name');
+  });
+
+  test('should return original if no start length provided', () => {
+    expect(truncateContractName('contract-name')).toBe('contract-name');
+  });
+
+  test('should return original if truncated would be longer', () => {
+    expect(truncateContractName('short', 10, 10)).toBe('short');
+  });
+});
+
+describe('truncateStxAddress', () => {
+  test('should truncate valid STX address', () => {
+    const address = 'SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335';
+    expect(truncateStxAddress(address)).toBe('SP3D…EH335');
+  });
+
+  test('should return empty string for invalid address', () => {
+    expect(truncateStxAddress('invalid-address')).toBe('');
+  });
+});
+
+describe('truncateStxContractId', () => {
+  test('should truncate valid contract ID', () => {
+    const contractId = 'SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.contract-name';
+    expect(truncateStxContractId(contractId)).toBe('SP3D…EH335.contract-name');
+  });
+
+  test('should return empty string for invalid contract ID', () => {
+    expect(truncateStxContractId('invalid')).toBe('');
+  });
+});
+
+describe('truncateText', () => {
+  test('should truncate text longer than limit', () => {
+    expect(truncateText('This is a very long text', 10)).toBe('This is...');
+  });
+
+  test('should return original text if within limit', () => {
+    expect(truncateText('Short', 10)).toBe('Short');
+  });
+});
+
+describe('formatStacksAmount', () => {
+  test('should format stacks amount with proper decimals', () => {
+    expect(formatStacksAmount(1234.56789)).toBe('1,234.56789');
+  });
+
+  test('should format string input', () => {
+    expect(formatStacksAmount('1000')).toBe('1000');
+  });
+});
+
+describe('microToStacks', () => {
+  test('should convert microstacks to stacks', () => {
+    expect(microToStacks(1000000)).toBe(1);
+  });
+
+  test('should handle string input', () => {
+    expect(microToStacks('2000000')).toBe(2);
+  });
+});
+
+describe('microToStacksFormatted', () => {
+  test('should convert and format microstacks to stacks', () => {
+    expect(microToStacksFormatted(1500000)).toBe('1.50');
+  });
+});
+
+describe('getUsdValue', () => {
+  test('should calculate USD value for stacks amount', () => {
+    expect(getUsdValue(10, 2.5)).toBe('$25.00');
+  });
+
+  test('should calculate USD value for microstacks amount', () => {
+    expect(getUsdValue(1000000, 2.5, true)).toBe('$2.50');
+  });
+});
+
+describe('stacksToMicro', () => {
+  test('should convert stacks to microstacks', () => {
+    expect(stacksToMicro(1)).toBe(1000000);
+  });
+
+  test('should handle string input', () => {
+    expect(stacksToMicro('2.5')).toBe(2500000);
+  });
+
+  test('should handle zero and undefined', () => {
+    expect(stacksToMicro(0)).toBe(0);
+    expect(stacksToMicro('')).toBe(0);
+  });
+});
+
+describe('getContractName', () => {
+  test('should extract contract name from fully qualified name', () => {
+    expect(getContractName('address.contract-name')).toBe('contract-name');
+  });
+});
+
+describe('getFungibleAssetName', () => {
+  test('should extract fungible asset name', () => {
+    expect(getFungibleAssetName('address.contract::token')).toBe('token');
+  });
+});
+
+describe('getAssetNameParts', () => {
+  test('should split asset name into parts', () => {
+    const result = getAssetNameParts('address.contract::asset');
+    expect(result).toEqual({
+      address: 'address',
+      contract: 'contract',
+      asset: 'asset',
+    });
+  });
+});
+
+describe('getMemoString', () => {
+  test('should decode memo string', () => {
+    const hexMemo = '48656c6c6f'; // "Hello" in hex
+    expect(getMemoString(hexMemo)).toBe('Hello');
+  });
+
+  test('should return empty string for invalid hex', () => {
+    expect(getMemoString('invalid')).toBe('');
+  });
+});
+
+describe('addSepBetweenStrings', () => {
+  test('should add separator between strings', () => {
+    expect(addSepBetweenStrings(['a', 'b', 'c'])).toBe('a ∙ b ∙ c');
+  });
+
+  test('should use custom separator', () => {
+    expect(addSepBetweenStrings(['a', 'b'], '-')).toBe('a - b');
+  });
+
+  test('should filter out undefined values', () => {
+    expect(addSepBetweenStrings(['a', undefined, 'c'])).toBe('a ∙ c');
+  });
+});
+
+describe('stringToHslColor', () => {
+  test('should generate consistent HSL color for same string', () => {
+    const color1 = stringToHslColor('test', 50, 50);
+    const color2 = stringToHslColor('test', 50, 50);
+    expect(color1).toBe(color2);
+  });
+
+  test('should generate different colors for different strings', () => {
+    const color1 = stringToHslColor('test1', 50, 50);
+    const color2 = stringToHslColor('test2', 50, 50);
+    expect(color1).not.toBe(color2);
+  });
+});
+
+describe('capitalize', () => {
+  test('should capitalize first letter', () => {
+    expect(capitalize('hello')).toBe('Hello');
+  });
+
+  test('should handle empty string', () => {
+    expect(capitalize('')).toBe('');
+  });
+});
+
+describe('getFtDecimalAdjustedBalance', () => {
+  test('should adjust balance for decimals', () => {
+    expect(getFtDecimalAdjustedBalance(1000, 3)).toBe(1);
+  });
+});
+
+describe('ftDecimals', () => {
+  test('should format with decimals', () => {
+    expect(ftDecimals(1000, 2)).toBe('10');
+  });
+});
+
+describe('getLocaleDecimalSeparator', () => {
+  test('should return decimal separator', () => {
+    const separator = getLocaleDecimalSeparator();
+    expect(typeof separator).toBe('string');
+    expect(separator?.length).toBe(1);
+  });
+});
+
+describe('isNumeric', () => {
+  test('should return true for numeric strings', () => {
+    expect(isNumeric('123')).toBe(true);
+    expect(isNumeric('123.45')).toBe(false); // function only accepts integers
+  });
+
+  test('should return false for non-numeric strings', () => {
+    expect(isNumeric('abc')).toBe(false);
+    expect(isNumeric('12a')).toBe(false);
+  });
+});
+
+describe('hexToString', () => {
+  test('should convert hex to string', () => {
+    expect(hexToString('48656c6c6f')).toBe('Hello');
+  });
+
+  test('should handle 0x prefix', () => {
+    expect(hexToString('0x48656c6c6f')).toBe('Hello');
+  });
+
+  test('should handle undefined input', () => {
+    expect(hexToString()).toBe('');
+  });
+});
+
+describe('abbreviateNumber', () => {
+  test('should abbreviate large numbers', () => {
+    expect(abbreviateNumber(1500)).toBe('1,500'); // Under 1M, no abbreviation
+    expect(abbreviateNumber(1500000)).toBe('1.5M');
+    expect(abbreviateNumber(1500000000)).toBe('1.5B');
+  });
+
+  test('should handle small numbers', () => {
+    expect(abbreviateNumber(50)).toBe('50');
+  });
+});
+
+describe('microStxToStx', () => {
+  test('should convert microstx to stx', () => {
+    expect(microStxToStx(1000000)).toBe(1);
+  });
+
+  test('should handle string input', () => {
+    expect(microStxToStx('2000000')).toBe(2);
+  });
+});
+
+describe('isJSONString', () => {
+  test('should return true for valid JSON', () => {
+    expect(isJSONString('{"key": "value"}')).toBe(true);
+    expect(isJSONString('[]')).toBe(true);
+  });
+
+  test('should return false for invalid JSON', () => {
+    expect(isJSONString('invalid')).toBe(false);
+    expect(isJSONString('{key: value}')).toBe(false);
+  });
+});
+
+describe('removeTrailingSlash', () => {
+  test('should remove trailing slash', () => {
+    expect(removeTrailingSlash('https://example.com/')).toBe('https://example.com');
+  });
+
+  test('should handle string without trailing slash', () => {
+    expect(removeTrailingSlash('https://example.com')).toBe('https://example.com');
+  });
+
+  test('should handle undefined input', () => {
+    expect(removeTrailingSlash()).toBe('');
+  });
+});
+
+describe('validateBnsName', () => {
+  test('should validate BNS names', () => {
+    expect(validateBnsName('name.btc')).toBe(true);
+    expect(validateBnsName('invalid.com')).toBe(false);
+    expect(validateBnsName()).toBe(false);
+  });
+});
+
+describe('validateStacksAddress', () => {
+  test('should validate Stacks addresses', () => {
+    expect(validateStacksAddress('SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335')).toBe(true);
+    expect(validateStacksAddress('invalid')).toBe(false);
+    expect(validateStacksAddress()).toBe(false);
+  });
+});
+
+describe('validateStacksContractId', () => {
+  test('should validate contract IDs', () => {
+    expect(validateStacksContractId('SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.contract')).toBe(
+      true
+    );
+    expect(validateStacksContractId('invalid')).toBe(false);
+    expect(validateStacksContractId()).toBe(false);
   });
 });
