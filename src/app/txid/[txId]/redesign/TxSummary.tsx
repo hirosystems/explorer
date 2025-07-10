@@ -6,11 +6,13 @@ import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
+import { Flex, Icon, Stack, Table } from '@chakra-ui/react';
 
 import {
   CoinbaseTransaction,
+  ContractCallTransaction,
   MempoolCoinbaseTransaction,
+  MempoolContractCallTransaction,
   MempoolTenureChangeTransaction,
   MempoolTokenTransferTransaction,
   MempoolTransaction,
@@ -390,7 +392,6 @@ export const CoinbaseTxSummaryItems = ({
 }: {
   tx: CoinbaseTransaction | MempoolCoinbaseTransaction;
 }) => {
-  console.log('coinbase tx', { tx });
   return (
     <>
       <SummaryItem label="ID" value={tx.tx_id} copyable />
@@ -478,19 +479,116 @@ export const CoinbaseTxSummaryItems = ({
   );
 };
 
+export const ContractCallTxSummaryItems = ({
+  tx,
+}: {
+  tx: ContractCallTransaction | MempoolContractCallTransaction;
+}) => {
+  return (
+    <>
+      <SummaryItem
+        label="ID"
+        value={tx.tx_id}
+        valueRenderer={value => (
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
+            {value}
+          </AddressLink>
+        )}
+        copyable
+      />
+      <SummaryItem
+        label="Status"
+        value={tx.tx_status}
+        valueRenderer={value => <TransactionStatusBadge tx={tx} />}
+        copyable
+      />
+      <SummaryItem
+        label="From"
+        value={tx.sender_address}
+        valueRenderer={value => (
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
+            {value}
+          </AddressLink>
+        )}
+        copyable
+      />
+      <SummaryItem
+        label="To"
+        value={tx.contract_call?.contract_id}
+        valueRenderer={value => (
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
+            {value}
+          </AddressLink>
+        )}
+        copyable
+      />
+      {'block_time' in tx && tx.block_time && (
+        <SummaryItem
+          label="Timestamp"
+          value={formatBlockTime(tx.block_time)}
+          valueRenderer={value => (
+            <Badge variant="solid">
+              <DefaultBadgeLabel label={value} />
+            </Badge>
+          )}
+          copyable
+        />
+      )}
+      <SummaryItem
+        label="Fee"
+        value={tx.fee_rate}
+        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+      />
+      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
+      {'block_height' in tx && tx.block_height && (
+        <SummaryItem
+          label="Block height"
+          value={tx.block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        />
+      )}
+      {'block_hash' in tx && tx.block_hash && (
+        <SummaryItem
+          label="Block hash"
+          value={tx.block_hash?.toString() || ''}
+          copyable
+          valueRenderer={value => (
+            <BlockLink hash={value} wordBreak="break-all">
+              {value}
+            </BlockLink>
+          )}
+        />
+      )}
+      {/* <SummaryItem
+        label="Tenure height"
+        value={tx.tenure_change_payload?.previous_tenure_end || ''}
+        copyable
+        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+      /> */}
+      {'burn_block_height' in tx && tx.burn_block_height && (
+        <SummaryItem
+          label="Bitcoin Anchor"
+          value={tx.burn_block_height?.toString() || ''}
+          copyable
+          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        />
+      )}
+    </>
+  );
+};
+
 export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   let summaryContent;
   if (tx.tx_type === 'coinbase') summaryContent = <CoinbaseTxSummaryItems tx={tx} />;
   if (tx.tx_type === 'token_transfer') summaryContent = <TokenTransferTxSummaryItems tx={tx} />;
-  if (tx.tx_type === 'contract_call') summaryContent = null;
+  if (tx.tx_type === 'contract_call') summaryContent = <ContractCallTxSummaryItems tx={tx} />;
   if (tx.tx_type === 'smart_contract') summaryContent = null;
   if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Box borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
-      <Table.Root w="full">
-        <Table.Body>{summaryContent}</Table.Body>
-      </Table.Root>
-    </Box>
+    <Table.Root w="full">
+      <Table.Body>{summaryContent}</Table.Body>
+    </Table.Root>
   );
 }

@@ -86,7 +86,45 @@ function getTabsTriggersByTransactionType(
     );
   }
   if (tx.tx_type === 'contract_call') {
-    return null;
+    return (
+      <>
+        <TabTriggerComponent
+          key="overview"
+          label="Overview"
+          value="overview"
+          isActive={selectedTab === 'overview'}
+          onClick={() => setSelectedTab('overview')}
+        />
+        <TabTriggerComponent
+          key="functionCall"
+          label={'Function call'}
+          value="functionCall"
+          isActive={selectedTab === 'functionCall'}
+          onClick={() => setSelectedTab('functionCall')}
+        />
+        <TabTriggerComponent
+          key="postConditions"
+          label={`Post-conditions ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`} // TODO: add count
+          value="postConditions"
+          isActive={selectedTab === 'postConditions'}
+          onClick={() => setSelectedTab('postConditions')}
+        />
+        <TabTriggerComponent
+          key="events"
+          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
+          value="events"
+          isActive={selectedTab === 'events'}
+          onClick={() => setSelectedTab('events')}
+        />
+        <TabTriggerComponent
+          key="sourceCode"
+          label={'Source code'}
+          value="sourceCode"
+          isActive={selectedTab === 'sourceCode'}
+          onClick={() => setSelectedTab('sourceCode')}
+        />
+      </>
+    );
   }
   if (tx.tx_type === 'coinbase') {
     return null;
@@ -118,7 +156,35 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     );
   }
   if (tx.tx_type === 'contract_call') {
-    return null;
+    return (
+      <>
+        <TabsContent key="overview" value="overview" w="100%">
+          <TabsContentContainer>
+            <TxSummary tx={tx} />
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="functionCall" value="functionCall" w="100%">
+          <TabsContentContainer>
+            <Text>Function call</Text>
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="postConditions" value="postConditions" w="100%">
+          <TabsContentContainer>
+            <Text>Post-conditions</Text>
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="events" value="events" w="100%">
+          <TabsContentContainer>
+            <Events tx={tx} />
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="sourceCode" value="sourceCode" w="100%">
+          <TabsContentContainer>
+            <Text>Source code</Text>
+          </TabsContentContainer>
+        </TabsContent>
+      </>
+    );
   }
   if (tx.tx_type === 'coinbase') {
     return null;
