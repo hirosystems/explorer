@@ -15,6 +15,7 @@ import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/Token
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
   const isRedesign = useIsRedesignUrl();
+  console.log("Tx Id Page Client component")
 
   if (tx.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 

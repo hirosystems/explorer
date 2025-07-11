@@ -7,6 +7,7 @@ export default async function Page(props: { params: Promise<{ txId: string }> })
   const params = await props.params;
   const { txId } = params;
   const tokenPrice = await getTokenPrice();
+  console.log("Tx Id Page Server component")
 
   return (
     <TxIdPageDataProvider stxPrice={tokenPrice.stxPrice}>
