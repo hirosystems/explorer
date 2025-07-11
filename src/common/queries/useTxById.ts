@@ -16,10 +16,22 @@ export function useTxById(
   options: any = {}
 ): UseQueryResult<Transaction | MempoolTransaction> {
   const apiClient = useApiClient();
+
+  if (typeof window !== 'undefined') {
+    console.log(
+      `[CLIENT-SIDE] useSuspenseTxById query for txId: ${txId} at ${new Date().toISOString()}`
+    );
+  }
+
   return useQuery({
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+
+      if (typeof window !== 'undefined') {
+        console.log(`[CLIENT-SIDE] Executing query function for txId: ${txId}`);
+      }
+
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
