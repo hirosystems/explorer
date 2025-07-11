@@ -8,7 +8,19 @@ export const getCurrentBtcPrice = async (): Promise<number> =>
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
   })
-    .then(res => res.json())
+    .then(res => {
+      // Log whether this response came from the cache
+      console.log({ resHeaders: res.headers.keys() });
+      console.log(
+        'BTC price request - Cache Status:',
+        res.headers.get('x-vercel-cache') || 'Not cached'
+      );
+      console.log(
+        'BTC price request - Fresh or Revalidated:',
+        !res.headers.get('x-vercel-cache') || res.headers.get('x-vercel-cache') === 'REVALIDATED'
+      );
+      return res.json();
+    })
     .then(data => data?.data?.price || 0);
 
 export const getCurrentStxPrice = async (): Promise<number> =>
@@ -18,7 +30,18 @@ export const getCurrentStxPrice = async (): Promise<number> =>
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
   })
-    .then(res => res.json())
+    .then(res => {
+      // Log whether this response came from the cache
+      console.log(
+        'STX price request - Cache Status:',
+        res.headers.get('x-vercel-cache') || 'Not cached'
+      );
+      console.log(
+        'STX price request - Fresh or Revalidated:',
+        !res.headers.get('x-vercel-cache') || res.headers.get('x-vercel-cache') === 'REVALIDATED'
+      );
+      return res.json();
+    })
     .then(data => data?.data?.price || 0);
 
 export async function getTokenPrice(): Promise<TokenPrice> {

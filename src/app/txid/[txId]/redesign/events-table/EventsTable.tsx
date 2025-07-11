@@ -147,7 +147,6 @@ export function EventsTable({
   columnDefinitions,
   pageSize = EVENTS_TABLE_PAGE_SIZE,
 }: EventsTableProps) {
-  console.log('EventsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,

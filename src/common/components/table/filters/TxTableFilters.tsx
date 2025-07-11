@@ -57,7 +57,7 @@ export const TxTableFilters = () => {
 
   const areAnyFiltersActive = useMemo(
     () =>
-      !areAnyTxTableFiltersActive({
+      areAnyTxTableFiltersActive({
         transactionType,
         fromAddress,
         toAddress,
