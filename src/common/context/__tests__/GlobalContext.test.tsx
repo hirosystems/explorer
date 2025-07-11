@@ -1,21 +1,24 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { useSearchParams as useSearchParamsActual } from 'next/navigation';
+import {
+  usePathname as usePathnameActual,
+  useRouter as useRouterActual,
+  useSearchParams as useSearchParamsActual,
+} from 'next/navigation';
 import { useContext } from 'react';
 import { CookiesProvider } from 'react-cookie';
 
 import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
 import { GlobalContext, GlobalContextProvider } from '../GlobalContextProvider';
 
-const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
-
 jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn(() => ({
-    get: (key: string) => {
-      if (key === 'chain') return 'custom';
-      return null;
-    },
-  })),
+  useSearchParams: jest.fn(),
+  useRouter: jest.fn(),
+  usePathname: jest.fn(),
 }));
+
+const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
+const useRouter = useRouterActual as jest.MockedFunction<typeof useRouterActual>;
+const usePathname = usePathnameActual as jest.MockedFunction<typeof usePathnameActual>;
 
 jest.mock('@stacks/blockchain-api-client', () => ({
   connectWebSocketClient: jest.fn(),
@@ -47,7 +50,19 @@ const getContextField = (fieldId: string) => {
 describe('GlobalContext', () => {
   beforeEach(() => {
     useSearchParams.mockReset();
+    useRouter.mockReset();
+    usePathname.mockReset();
+
+    useRouter.mockReturnValue({
+      replace: jest.fn(),
+      push: jest.fn(),
+      pathname: '/',
+      query: {},
+    } as any);
+
+    usePathname.mockReturnValue('/');
   });
+
   it('renders provider and children without error', () => {
     useSearchParams.mockReturnValue({
       get: (key: string) => {

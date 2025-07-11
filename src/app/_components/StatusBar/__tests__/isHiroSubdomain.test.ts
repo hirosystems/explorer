@@ -1,4 +1,4 @@
-import { isHiroSubdomain } from '../NonHiroNetworkWarningBar';
+import { isHiroSubdomain } from '../../../../common/utils/network-utils';
 
 describe('isValidSubdomain', () => {
   it('should return true for a valid subdomain of hiro.so', () => {
