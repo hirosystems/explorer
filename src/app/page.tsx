@@ -1,6 +1,6 @@
+import { logError } from '@/common/utils/error-utils';
 import { getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { Flex, Stack } from '@chakra-ui/react';
-import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
@@ -25,36 +25,64 @@ export default async function HomeRedesign(props: {
   const api = searchParams?.api;
   const isSSRDisabled = searchParams?.ssr === 'false';
 
-  const nonStacksRequests = [getTokenPrice()] as const;
+  let tokenPrice: any;
+  let recentBlocks: any;
+  let stackingCycle: any;
+  let initialTxTableData: any;
+  let mempoolStats: any;
+  let sampleTxsFeeEstimate: any;
+  let feeEstimates: any;
 
-  const stacksAPIRequests = isSSRDisabled
-    ? []
-    : ([
-        fetchRecentBlocks(chain, api),
-        fetchCurrentStackingCycle(chain, api),
-        fetchRecentUITxs(chain, api),
-        fetchUIMempoolStats(chain, api),
-        getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
-      ] as const);
+  try {
+    const nonStacksRequests = [getTokenPrice()] as const;
 
-  const [tokenPrice, ...stacksAPIResults] = await Promise.all([
-    ...nonStacksRequests,
-    ...stacksAPIRequests,
-  ]);
+    const stacksAPIRequests = isSSRDisabled
+      ? []
+      : ([
+          fetchRecentBlocks(chain, api),
+          fetchCurrentStackingCycle(chain, api),
+          fetchRecentUITxs(chain, api),
+          fetchUIMempoolStats(chain, api),
+          getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
+        ] as const);
 
-  const [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
-    isSSRDisabled
-      ? ([undefined, undefined, undefined, undefined, undefined] as const)
-      : stacksAPIResults;
+    tokenPrice = await Promise.all(nonStacksRequests);
+    const stacksAPIResults = await Promise.all(stacksAPIRequests);
+    // [tokenPrice, ...stacksAPIResults] = await Promise.all([
+    //   ...nonStacksRequests,
+    //   ...stacksAPIRequests,
+    // ]);
 
-  const feeEstimates = sampleTxsFeeEstimate
-    ? {
-        tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
-        contractCallFees: sampleTxsFeeEstimate.contractCallFees,
-        contractDeployFees: sampleTxsFeeEstimate.contractDeployFees,
-        averageFees: sampleTxsFeeEstimate.averageFees,
-      }
-    : undefined;
+    [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
+      isSSRDisabled
+        ? ([undefined, undefined, undefined, undefined, undefined] as const)
+        : stacksAPIResults;
+
+    feeEstimates = sampleTxsFeeEstimate
+      ? {
+          tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
+          contractCallFees: sampleTxsFeeEstimate.contractCallFees,
+          contractDeployFees: sampleTxsFeeEstimate.contractDeployFees,
+          averageFees: sampleTxsFeeEstimate.averageFees,
+        }
+      : undefined;
+  } catch (error) {
+    logError(
+      error as Error,
+      'Home page server-side fetch for initialTxTableData',
+      {
+        api,
+        chain,
+        tokenPrice,
+        recentBlocks,
+        stackingCycle,
+        mempoolStats,
+        sampleTxsFeeEstimate,
+        feeEstimates,
+      },
+      'error'
+    );
+  }
   return (
     <HomePageDataProvider
       stxPrice={tokenPrice.stxPrice}
