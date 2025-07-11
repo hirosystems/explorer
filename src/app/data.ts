@@ -62,7 +62,7 @@ export interface UIStackingCycle {
 export async function fetchRecentBtcBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 300, // 5 minutes
       tags: ['btc-blocks'],
@@ -76,7 +76,7 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
   const response = await fetch(
     `${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
     {
-      cache: 'default',
+      cache: 'force-cache',
       next: {
         revalidate: 10, // 10 seconds
         tags: ['stx-blocks'],
@@ -89,7 +89,7 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
 export async function fetchStackingCycleData(chain: string, api?: string): Promise<PoxInfo> {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/v2/pox`, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 60, // 60 seconds
       tags: ['stacking'],
@@ -106,7 +106,7 @@ export async function fetchStacksBlock(
   const apiUrl = getApiUrl(chain, api);
   const fetchUrl = `${apiUrl}/extended/v2/blocks/${blockHeightOrHash}`;
   const response = await fetch(fetchUrl, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 10, // 10 seconds
       tags: ['stacking'],
@@ -122,7 +122,7 @@ export async function fetchBurnBlock(
 ): Promise<BurnBlock> {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/${heightOrHash}`, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 60, // 60 seconds
       tags: ['stacking'],
@@ -134,7 +134,7 @@ export async function fetchBurnBlock(
 export async function fetchMempoolStats(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v1/tx/mempool/stats`, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 10, // 10 seconds
       tags: ['mempool-stats'],
@@ -259,7 +259,7 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
 export async function fetchRecentTxs(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 10, // 10 seconds
       tags: ['transactions'],
@@ -301,7 +301,7 @@ export async function fetchTxFeeEstimation(
       estimated_len: estimatedLen,
       transaction_payload: transactionPayload,
     }),
-    cache: 'default',
+    cache: 'force-cache',
     next: {
       revalidate: 10, // 10 seconds
       tags: ['fee-estimation'],
