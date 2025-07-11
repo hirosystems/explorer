@@ -23,6 +23,10 @@ export const TESTNET_BTC_ADDRESS_BASE_URL =
   process.env.NEXT_PUBLIC_TESTNET_BTC_ADDRESS_BASE_URL ||
   'https://mempool.bitcoin.regtest.hiro.so/address';
 
+export const DEVNET_PORT = process.env.NEXT_PUBLIC_EXPLORER_DEVNET_PORT || '8000';
+export const DEVNET_SERVER =
+  process.env.NEXT_PUBLIC_EXPLORER_DEVNET_SERVER || 'http://localhost:3999';
+
 export const LUNAR_CRUSH_API_KEY = process.env.LUNAR_CRUSH_API_KEY || '';
 export const CMS_URL = process.env.CMS_URL ?? '';
 
