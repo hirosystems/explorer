@@ -54,7 +54,10 @@ export const TransactionStatus: Record<string, TxStatus> = {
   DROPPED: 'dropped',
 };
 
-export const BTC_BNS_CONTRACT = 'SP000000000000000000002Q6VF78.bns::names';
+export const BNSV1_CONTRACT = 'SP000000000000000000002Q6VF78.bns::names';
+export const BNSV2_CONTRACT = 'SP2QEZ06AGJ3RKJPBV14SY1V5BBFNAW33D96YPGZF.BNS-V2::BNS-V2';
+
+export const BNS_EXTENSIONS = ['.btc', '.locker', '.stx', '.id'];
 
 export const SUBNETS_PARENT_NETWORK_IDS = {
   mainnet: '0x17000000',

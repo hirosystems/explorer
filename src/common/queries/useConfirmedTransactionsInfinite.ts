@@ -11,8 +11,11 @@ import { Transaction, TransactionType } from '@stacks/stacks-blockchain-api-type
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
+import { NetworkModes } from '../types/network';
 import { getNextPageParam } from '../utils/utils';
+import { hasBnsExtension } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 import { searchByBnsName } from './useSearchQuery';
 
@@ -31,6 +34,7 @@ export function useConfirmedTransactionsInfinite(
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
   const apiClient = useApiClient();
+  const { activeNetwork } = useGlobalContext();
   return useInfiniteQuery({
     queryKey: [
       'confirmedTransactionsInfinite',
@@ -42,12 +46,17 @@ export function useConfirmedTransactionsInfinite(
       sortBy,
     ],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
-      if (fromAddress?.endsWith('.btc')) {
-        fromAddress =
-          (await searchByBnsName(apiClient, fromAddress))?.result.entity_id || fromAddress;
+      let resolvedFromAddress = fromAddress;
+      let resolvedToAddress = toAddress;
+      if (hasBnsExtension(fromAddress)) {
+        const fromResult = await searchByBnsName(activeNetwork.mode, fromAddress!);
+        resolvedFromAddress =
+          (fromResult?.found ? (fromResult.result as any).entity_id : undefined) || fromAddress;
       }
-      if (toAddress?.endsWith('.btc')) {
-        toAddress = (await searchByBnsName(apiClient, toAddress))?.result.entity_id || toAddress;
+      if (hasBnsExtension(toAddress)) {
+        const toResult = await searchByBnsName(activeNetwork.mode, toAddress!);
+        resolvedToAddress =
+          (toResult?.found ? (toResult.result as any).entity_id : undefined) || toAddress;
       }
 
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/', {
@@ -55,8 +64,8 @@ export function useConfirmedTransactionsInfinite(
           query: {
             limit: DEFAULT_LIST_LIMIT,
             offset: pageParam,
-            ...(fromAddress && { from_address: fromAddress }),
-            ...(toAddress && { to_address: toAddress }),
+            ...(resolvedFromAddress && { from_address: resolvedFromAddress }),
+            ...(resolvedToAddress && { to_address: resolvedToAddress }),
             ...(startTime && { start_time: Number(startTime) }),
             ...(endTime && { end_time: Number(endTime) }),
             ...(sortBy && {
@@ -86,6 +95,7 @@ export function useConfirmedTransactions(
   options: any = {}
 ): UseQueryResult<GenericResponseType<Transaction>> {
   const apiClient = useApiClient();
+  const { activeNetwork } = useGlobalContext();
   return useQuery({
     queryKey: [
       'confirmedTransactions',
@@ -100,12 +110,17 @@ export function useConfirmedTransactions(
       ...(transactionType ? [{ transactionType }] : []),
     ],
     queryFn: async () => {
-      if (fromAddress?.endsWith('.btc')) {
-        fromAddress =
-          (await searchByBnsName(apiClient, fromAddress))?.result.entity_id || fromAddress;
+      let resolvedFromAddress = fromAddress;
+      let resolvedToAddress = toAddress;
+      if (hasBnsExtension(fromAddress)) {
+        const fromResult = await searchByBnsName(activeNetwork.mode, fromAddress!);
+        resolvedFromAddress =
+          (fromResult?.found ? (fromResult.result as any).entity_id : undefined) || fromAddress;
       }
-      if (toAddress?.endsWith('.btc')) {
-        toAddress = (await searchByBnsName(apiClient, toAddress))?.result.entity_id || toAddress;
+      if (hasBnsExtension(toAddress)) {
+        const toResult = await searchByBnsName(activeNetwork.mode, toAddress!);
+        resolvedToAddress =
+          (toResult?.found ? (toResult.result as any).entity_id : undefined) || toAddress;
       }
 
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/', {
@@ -113,8 +128,8 @@ export function useConfirmedTransactions(
           query: {
             limit: limit || DEFAULT_LIST_LIMIT,
             offset,
-            ...(fromAddress && { from_address: fromAddress }),
-            ...(toAddress && { to_address: toAddress }),
+            ...(resolvedFromAddress && { from_address: resolvedFromAddress }),
+            ...(resolvedToAddress && { to_address: resolvedToAddress }),
             ...(startTime && { start_time: Number(startTime) }),
             ...(endTime && { end_time: Number(endTime) }),
             ...(sortBy && {

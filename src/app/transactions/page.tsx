@@ -4,6 +4,7 @@ import { fetchBnsAddress } from '@/common/queries/bns-queries';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
+import { hasBnsExtension } from '@/common/utils/utils';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import Page from './PageClient';
@@ -40,11 +41,11 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
 
   try {
     let bnsAddress;
-    if (apiUrl && fromAddress?.endsWith('.btc')) {
-      bnsAddress = await fetchBnsAddress(apiUrl, fromAddress);
+    if (apiUrl && hasBnsExtension(fromAddress)) {
+      bnsAddress = await fetchBnsAddress(apiUrl, fromAddress!);
     }
-    if (apiUrl && toAddress?.endsWith('.btc')) {
-      bnsAddress = await fetchBnsAddress(apiUrl, toAddress);
+    if (apiUrl && hasBnsExtension(toAddress)) {
+      bnsAddress = await fetchBnsAddress(apiUrl, toAddress!);
     }
 
     const params = new URLSearchParams({

@@ -2,6 +2,7 @@
 
 import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
+import { getNameInfo } from 'bns-v2-sdk';
 
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
@@ -9,9 +10,10 @@ import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
 import { blur, focus } from '../../features/search/search-slice';
-import { BTC_BNS_CONTRACT } from '../constants/constants';
+import { BNSV1_CONTRACT } from '../constants/constants';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppDispatch } from '../state/hooks';
-import { Network } from '../types/network';
+import { Network, NetworkModes } from '../types/network';
 import {
   BlockSearchResult,
   BnsSearchResult,
@@ -20,7 +22,7 @@ import {
   SearchResultType,
 } from '../types/search-results';
 import { buildUrl } from '../utils/buildUrl';
-import { isNumeric } from '../utils/utils';
+import { hasBnsExtension, isNumeric } from '../utils/utils';
 
 function blockToSearchResult(block: Block): FoundResult {
   const blockResult: BlockSearchResult = {
@@ -47,31 +49,34 @@ export function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string):
   };
 }
 
-export async function searchByBnsName(apiClient: ReturnType<typeof useApiClient>, bnsName: string) {
+export async function searchByBnsName(
+  networkMode: NetworkModes,
+  bnsName: string
+): Promise<FoundResult | NotFoundResult> {
   try {
-    const nftHistory = await callApiWithErrorHandling(
-      apiClient,
-      `/extended/v1/tokens/nft/history`,
-      {
-        params: {
-          query: {
-            asset_identifier: BTC_BNS_CONTRACT,
-            value: cvToHex(
-              tupleCV({
-                ['name']: bufferCVFromString(bnsName.replace(new RegExp('.btc$'), '')),
-                ['namespace']: bufferCVFromString('btc'),
-              })
-            ),
-            tx_metadata: false,
-          },
-        },
-      }
-    );
-
-    if (nftHistory?.results.length) {
-      return nftHistoryToSearchResult(nftHistory.results[0], bnsName);
+    const nameInfo = await getNameInfo({
+      fullyQualifiedName: bnsName,
+      network: networkMode,
+    });
+    if (nameInfo?.owner) {
+      return nftHistoryToSearchResult({ recipient: nameInfo.owner }, bnsName);
     }
-  } catch (e) {}
+    return {
+      found: false,
+      result: {
+        entity_type: SearchResultType.UnknownHash,
+      },
+      error: 'BNS name not found',
+    } as NotFoundResult;
+  } catch (e) {
+    return {
+      found: false,
+      result: {
+        entity_type: SearchResultType.UnknownHash,
+      },
+      error: 'BNS name not found',
+    } as NotFoundResult;
+  }
 }
 
 export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:' | 'TERM:';
@@ -285,7 +290,8 @@ export function useRecentResultsLocalStorage() {
 
 export function useSearchQuery(id: string, isRedesign?: boolean) {
   const dispatch = useAppDispatch();
-  const isBtcName = id.endsWith('.btc');
+  const { activeNetwork } = useGlobalContext();
+  const isBnsName = hasBnsExtension(id);
   const advancedSearchQuery = parseAdvancedSearchQuery(id);
   const isAdvancedSearch = advancedSearchQuery.length > 0;
   const apiClient = useApiClient();
@@ -311,15 +317,16 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
           ({ filterName }) => filterName === 'fromAddress'
         );
         const toFilter = advancedSearchQuery.find(({ filterName }) => filterName === 'toAddress');
-        if (fromFilter?.filterValue?.endsWith('.btc')) {
-          fromFilter.filterValue =
-            (await searchByBnsName(apiClient, fromFilter.filterValue))?.result.entity_id ||
-            fromFilter.filterValue;
+        if (hasBnsExtension(fromFilter?.filterValue)) {
+          const fromResult = await searchByBnsName(activeNetwork.mode, fromFilter!.filterValue);
+          fromFilter!.filterValue =
+            (fromResult?.found ? fromResult.result.entity_id : undefined) ||
+            fromFilter!.filterValue;
         }
-        if (toFilter?.filterValue?.endsWith('.btc')) {
-          toFilter.filterValue =
-            (await searchByBnsName(apiClient, toFilter.filterValue))?.result.entity_id ||
-            toFilter.filterValue;
+        if (hasBnsExtension(toFilter?.filterValue)) {
+          const toResult = await searchByBnsName(activeNetwork.mode, toFilter!.filterValue);
+          toFilter!.filterValue =
+            (toResult?.found ? toResult.result.entity_id : undefined) || toFilter!.filterValue;
         }
         const fromAddress = advancedSearchQuery.find(
           ({ filterName }) => filterName === 'fromAddress'
@@ -365,8 +372,13 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
             },
           },
         };
-      } else if (isBtcName) {
-        foundResult = await searchByBnsName(apiClient, id);
+      } else if (isBnsName) {
+        const bnsResult = await searchByBnsName(activeNetwork.mode, id);
+        if (bnsResult?.found) {
+          foundResult = bnsResult as FoundResult;
+        } else {
+          notFoundResult = bnsResult as NotFoundResult;
+        }
       } else if (isNumeric(id)) {
         // Fetch block height if numeric
         try {
