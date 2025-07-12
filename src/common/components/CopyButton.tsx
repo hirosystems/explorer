@@ -1,5 +1,5 @@
-import { Button } from '@/ui/Button';
-import { Clipboard, Icon, IconButtonProps } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@/ui/Button';
+import { Icon, IconButtonProps, IconProps, useClipboard } from '@chakra-ui/react';
 import { Check, CopySimple } from '@phosphor-icons/react';
 
 import { ClipboardIconButton, ClipboardRoot } from '../../components/ui/clipboard';
@@ -17,68 +17,39 @@ export const CopyButton = ({
 
 export const CopyButtonRedesign = ({
   initialValue,
-  height,
-  width,
-  color,
-  ...rest
-}: { initialValue: string; height: number; width: number; color: string } & IconButtonProps) => {
+  buttonProps,
+  iconProps,
+}: {
+  initialValue: string;
+  iconProps: IconProps;
+  buttonProps: ButtonProps;
+}) => {
+  const { copied, copy } = useClipboard({
+    value: initialValue,
+    timeout: 750,
+  });
   return (
-    <Clipboard.Root
-      value={initialValue}
-      p={0}
-      m={0}
-      h={height}
-      w={width}
-      minH={height}
-      minW={width}
-      maxH={height}
-      maxW={width}
-      border="none"
-      borderRadius="none"
+    <Button
+      onClick={() => copy()}
+      {...buttonProps}
+      bg={copied ? 'surfaceInvert' : 'transparent'}
+      _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
+      _groupHover={{ bg: copied ? 'surfaceInvert' : 'surfaceTertiary' }}
+      borderRadius="redesign.sm"
+      minWidth="0"
+      h="fit-content"
+      w="fit-content"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
     >
-      <Clipboard.Trigger asChild>
-        <Button
-          bg="transparent"
-          p={0}
-          m={0}
-          h={height}
-          w={width}
-          minH={height}
-          minW={width}
-          maxH={height}
-          maxW={width}
-          border="none"
-          borderRadius="none"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Clipboard.Indicator
-            p={0}
-            m={0}
-            h={height}
-            w={width}
-            minH={height}
-            minW={width}
-            maxH={height}
-            maxW={width}
-            border="none"
-            borderRadius="none"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            copied={
-              <Icon h={height} w={width} color={color}>
-                <Check />
-              </Icon>
-            }
-          >
-            <Icon h={height} w={width} color={color}>
-              <CopySimple />
-            </Icon>
-          </Clipboard.Indicator>
-        </Button>
-      </Clipboard.Trigger>
-    </Clipboard.Root>
+      <Icon
+        {...iconProps}
+        color={copied ? 'iconInvert' : 'iconSecondary'}
+        _hover={{ color: copied ? 'iconInvert' : 'iconPrimary' }}
+      >
+        {copied ? <Check /> : <CopySimple />}
+      </Icon>
+    </Button>
   );
 };

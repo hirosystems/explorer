@@ -4,14 +4,10 @@ import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import {
-  MempoolTransaction,
-  TokenTransferTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Events } from './Events';
-import { TokenTransferTxSummary } from './TxSummary';
+import { TxSummary } from './TxSummary';
 
 function TabTriggerComponent({
   label,
@@ -50,7 +46,7 @@ function TabTriggerComponent({
   );
 }
 
-function TabsContentContainer({ children }: { children: React.ReactNode }) {
+export function TabsContentContainer({ children }: { children: React.ReactNode }) {
   return (
     <Stack
       borderRadius="redesign.xl"
@@ -110,7 +106,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
       <>
         <TabsContent key="overview" value="overview" w="100%">
           <TabsContentContainer>
-            <TokenTransferTxSummary tx={tx as TokenTransferTransaction} />
+            <TxSummary tx={tx} />
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
