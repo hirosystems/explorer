@@ -7,7 +7,6 @@ import { ReactNode } from 'react';
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
-import { TokenPrice } from '../../common/types/tokenPrice';
 import { TestnetBanner } from './Banner/TestnetBanner';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
@@ -40,12 +39,10 @@ function WrapperWithBg({ children }: { children: ReactNode; serverThemeCookie: s
 
 export function PageWrapper({
   children,
-  tokenPrice,
   statusBarContent,
   serverThemeCookie,
 }: {
   children: ReactNode;
-  tokenPrice: TokenPrice;
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
@@ -59,7 +56,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-2xl" p={6} minHeight={'100vh'}>
-          <NewNavBar tokenPrices={tokenPrice} />
+          <NewNavBar />
           <Stack
             marginTop={'50px'}
             mb={8}

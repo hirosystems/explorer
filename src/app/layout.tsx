@@ -40,12 +40,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Providers
           addedCustomNetworksCookie={addedCustomNetworksCookie}
           removedCustomNetworksCookie={removedCustomNetworksCookie}
+          tokenPrice={tokenPrice}
         >
-          <PageWrapper
-            tokenPrice={tokenPrice}
-            statusBarContent={statusBarContent}
-            serverThemeCookie={themeCookie}
-          >
+          <PageWrapper statusBarContent={statusBarContent} serverThemeCookie={themeCookie}>
             {children}
           </PageWrapper>
         </Providers>

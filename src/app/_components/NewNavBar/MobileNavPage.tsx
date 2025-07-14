@@ -1,4 +1,3 @@
-import { TokenPrice } from '@/common/types/tokenPrice';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Icon, Stack, useDisclosure } from '@chakra-ui/react';
 import { CaretLeft, CaretRight, X } from '@phosphor-icons/react';
@@ -76,12 +75,10 @@ const bottomXYDuration = 0.3;
 const MobileContentBottom = ({
   isSettingsMenuOpen,
   toggleSettingsMenu,
-  tokenPrices,
   onClose,
 }: {
   isSettingsMenuOpen: boolean;
   toggleSettingsMenu: () => void;
-  tokenPrices: TokenPrice;
   onClose: () => void;
 }) => {
   return (
@@ -105,7 +102,7 @@ const MobileContentBottom = ({
         >
           <Stack gap={4} position="absolute" bottom={0} left={0} w="full">
             <Stack gap={2}>
-              <Prices tokenPrices={tokenPrices} />
+              <Prices />
               <Flex
                 bg="surfacePrimary"
                 borderRadius="redesign.lg"
@@ -194,13 +191,7 @@ const MobileContentBottom = ({
   );
 };
 
-export const MobileNavPage = ({
-  onClose,
-  tokenPrices,
-}: {
-  onClose: () => void;
-  tokenPrices: TokenPrice;
-}) => {
+export const MobileNavPage = ({ onClose }: { onClose: () => void }) => {
   const { open: isSettingsMenuOpen, onToggle: toggleSettingsMenu } = useDisclosure();
 
   const handleScroll = (event: Event) => {
@@ -237,7 +228,6 @@ export const MobileNavPage = ({
       <Stack justifyContent="space-between" height="full">
         <MobileContentTop isSettingsMenuOpen={isSettingsMenuOpen} onClose={onClose} />
         <MobileContentBottom
-          tokenPrices={tokenPrices}
           isSettingsMenuOpen={isSettingsMenuOpen}
           toggleSettingsMenu={toggleSettingsMenu}
           onClose={onClose}
