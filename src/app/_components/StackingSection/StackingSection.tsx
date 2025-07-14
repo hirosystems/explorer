@@ -130,7 +130,8 @@ function CycleHeader() {
 }
 
 function StxStats() {
-  const { stackingCycle, stxPrice } = useHomePageData();
+  const { stackingCycle } = useHomePageData();
+  const stxPrice = useGlobalContext().tokenPrice.stxPrice;
   if (!stackingCycle) {
     return null;
   }
