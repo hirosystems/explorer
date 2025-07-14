@@ -8,6 +8,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 
 import { GlobalContextProvider } from '../../common/context/GlobalContextProvider';
 import { store } from '../../common/state/store';
+import { TokenPrice } from '../../common/types/tokenPrice';
 import { ColorModeProvider } from '../../components/ui/color-mode';
 import { system } from '../../ui/theme/theme';
 import { StacksAuthProvider } from './AppConfig';
@@ -27,10 +28,12 @@ export const Providers = ({
   children,
   addedCustomNetworksCookie,
   removedCustomNetworksCookie,
+  tokenPrice,
 }: {
   children: ReactNode;
   addedCustomNetworksCookie: string | undefined;
   removedCustomNetworksCookie: string | undefined;
+  tokenPrice: TokenPrice;
 }) => {
   return (
     <ChakraProvider value={system}>
@@ -38,6 +41,7 @@ export const Providers = ({
         <GlobalContextProvider
           addedCustomNetworksCookie={addedCustomNetworksCookie}
           removedCustomNetworksCookie={removedCustomNetworksCookie}
+          tokenPrice={tokenPrice}
         >
           <ColorModeProvider>
             <ReduxProvider store={store}>

@@ -22,6 +22,7 @@ import {
 } from '../constants/network';
 import { ONE_HOUR } from '../queries/query-stale-time';
 import { Network, NetworkModes } from '../types/network';
+import { TokenPrice } from '../types/tokenPrice';
 import { removeTrailingSlash } from '../utils/utils';
 
 function filterNetworks(
@@ -41,6 +42,7 @@ interface GlobalContext {
   networks: Record<string, Network>;
   stacksApiSocketClientInfo: StacksApiSocketClientInfo | null;
   apiClient: ReturnType<typeof getApiClient>;
+  tokenPrice: TokenPrice;
 }
 
 export const GlobalContext = createContext<GlobalContext>({
@@ -51,13 +53,15 @@ export const GlobalContext = createContext<GlobalContext>({
   networks: {},
   stacksApiSocketClientInfo: null,
   apiClient: getApiClient(NetworkModeUrlMap[NetworkModes.Mainnet]),
+  tokenPrice: { btcPrice: 0, stxPrice: 0 },
 });
 
 export const GlobalContextProvider: FC<{
   addedCustomNetworksCookie: string | undefined;
   removedCustomNetworksCookie: string | undefined;
+  tokenPrice: TokenPrice;
   children: ReactNode;
-}> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, children }) => {
+}> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, tokenPrice, children }) => {
   // Parsing search params
   const searchParams = useSearchParams();
   const chain = searchParams?.get('chain');
@@ -233,7 +237,7 @@ export const GlobalContextProvider: FC<{
         removeCustomNetwork,
         networks,
         apiClient: getApiClient(activeNetworkKey),
-
+        tokenPrice,
         stacksApiSocketClientInfo: {
           client: stacksApiSocketClient,
           connect: connectStacksApiSocket,

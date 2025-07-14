@@ -1,13 +1,14 @@
-import { TokenPrice } from '@/common/types/tokenPrice';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { usdFormatter } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import BitcoinIcon from '@/ui/icons/BitcoinIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
 
-export const Prices = ({ tokenPrices }: { tokenPrices: TokenPrice }) => {
-  const formattedBtcPrice = tokenPrices.btcPrice ? usdFormatter.format(tokenPrices.btcPrice) : '';
-  const formattedStxPrice = tokenPrices.stxPrice ? usdFormatter.format(tokenPrices.stxPrice) : '';
+export const Prices = () => {
+  const { tokenPrice } = useGlobalContext();
+  const formattedBtcPrice = tokenPrice.btcPrice ? usdFormatter.format(tokenPrice.btcPrice) : '';
+  const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
   return (
     <Flex gap={1.5} alignItems="center">
       <Flex
