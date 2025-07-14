@@ -3,15 +3,14 @@
 import { Tabs } from '@chakra-ui/react';
 import { useMemo } from 'react';
 
-import { cvToJSON, hexToCV } from '@stacks/transactions';
-
 import { Section } from '../../../../common/components/Section';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
 import { useSuspenseNftHoldings } from '../../../../common/queries/useNftHoldings';
-import { hexToString } from '../../../../common/utils/utils';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { FtBalance } from './FtBalance';
 import { NftBalance } from './NftBalance';
+import { useBnsNames } from './useBnsNames';
 
 interface TokenBalanceCardProps {
   address: string;
@@ -20,31 +19,14 @@ interface TokenBalanceCardProps {
 function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
   const { data: balance } = useAccountBalance(address);
   const { data: nftHoldings } = useSuspenseNftHoldings(address, { refetchOnWindowFocus: true });
-  const bnsHexValues = useMemo(
-    () =>
-      nftHoldings?.results
-        ?.filter(nftHolding => nftHolding.asset_identifier.endsWith('.bns::names'))
-        ?.reduce(
-          (acc, data) => {
-            acc[data.asset_identifier] = data.value?.hex
-              ? {
-                  name: hexToString(
-                    cvToJSON(hexToCV(data.value.hex))?.value?.name?.value?.replace('0x', '')
-                  ),
-                  namespace: hexToString(
-                    cvToJSON(hexToCV(data.value.hex))?.value?.namespace?.value?.replace('0x', '')
-                  ),
-                }
-              : {};
-            return acc;
-          },
-          {} as Record<string, { name?: string; namespace?: string }>
-        ) || {},
-    [nftHoldings]
-  );
+  const { activeNetwork } = useGlobalContext();
+
+  const { bnsNames } = useBnsNames(nftHoldings, activeNetwork.mode);
+
+  if (!balance) return null;
 
   return (
-    <Section title="Holdings" {...rest}>
+    <Section title={'Holdings'} {...rest}>
       <Tabs.Root lazyMount defaultValue="tokens">
         <Tabs.List>
           <Tabs.Trigger value="tokens">Tokens</Tabs.Trigger>
@@ -53,7 +35,7 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
         <Tabs.Content value="tokens">{!!balance && <FtBalance balance={balance} />}</Tabs.Content>
         <Tabs.Content value="collectibles">
           {!!balance && (
-            <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsHexValues} />
+            <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsNames} />
           )}
         </Tabs.Content>
       </Tabs.Root>

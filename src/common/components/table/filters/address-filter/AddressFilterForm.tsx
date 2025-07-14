@@ -1,4 +1,4 @@
-import { validateBnsName, validateStacksAddress } from '@/common/utils/utils';
+import { hasBnsExtension, validateStacksAddress } from '@/common/utils/utils';
 import { Field as ChakraField } from '@/components/ui/field';
 import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
@@ -11,12 +11,12 @@ const AddressValidationSchema = Yup.object().shape({
   fromAddress: Yup.string().test(
     'valid-stacks-address',
     'Invalid Stacks address',
-    value => !value || validateStacksAddress(value) || validateBnsName(value)
+    value => !value || validateStacksAddress(value) || hasBnsExtension(value)
   ),
   toAddress: Yup.string().test(
     'valid-stacks-address',
     'Invalid Stacks address',
-    value => !value || validateStacksAddress(value) || validateBnsName(value)
+    value => !value || validateStacksAddress(value) || hasBnsExtension(value)
   ),
 });
 

@@ -13,6 +13,7 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { BNS_EXTENSIONS } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { ContractCallTxs } from '../types/tx';
 
@@ -40,14 +41,9 @@ dayjs.updateLocale('en', {
 
 export const MICROSTACKS_IN_STACKS = 1000000;
 
-/**
- * validateBnsName
- *
- * @param {String} name - the BNS name to validate
- */
-export const validateBnsName = (name?: string): boolean => {
+export const hasBnsExtension = (name?: string): boolean => {
   if (!name) return false;
-  return name.endsWith('.btc');
+  return BNS_EXTENSIONS.some((ext: string) => name.endsWith(ext));
 };
 
 /**

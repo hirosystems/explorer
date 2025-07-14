@@ -1,6 +1,6 @@
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
-import { BTC_BNS_CONTRACT } from '../constants/constants';
+import { BNSV1_CONTRACT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 
 interface NftHistory {
@@ -46,7 +46,7 @@ export async function fetchBnsHistory(
 ): Promise<GenericResponseType<NftHistory>> {
   const bnsNftHistory = await fetchNftHistory(
     apiUrl,
-    BTC_BNS_CONTRACT,
+    BNSV1_CONTRACT,
     cvToHex(
       tupleCV({
         ['name']: bufferCVFromString(bnsName.replace(new RegExp('.btc$'), '')),

@@ -29,7 +29,7 @@ const ITEMS_PER_PAGE = 5;
 
 export const NftBalance: React.FC<{
   balance: AddressBalanceResponse;
-  bnsHexValues: any;
+  bnsHexValues: Record<string, { name: string; namespace: string }>;
   nftHoldings?: NonFungibleTokenHoldingsList;
 }> = ({ balance, bnsHexValues, nftHoldings }) => {
   const nftKeys = Object.keys(balance.non_fungible_tokens);
