@@ -13,15 +13,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 const BORDER_WIDTH = 1;
 
-const Badge = ({
-  value,
-  valueFormatter,
-  copiedText,
-}: {
-  value: string;
-  valueFormatter?: (value: string) => string;
-  copiedText: string;
-}) => {
+const Badge = ({ value, copiedText }: { value: string; copiedText: string }) => {
   const { copied, copy } = useClipboard({
     value,
     timeout: 750,
@@ -44,7 +36,7 @@ const Badge = ({
         }}
       >
         <Text textStyle="text-medium-md" whiteSpace="nowrap">
-          {valueFormatter ? valueFormatter(value) : value}
+          {value}
         </Text>
       </Flex>
     </Tooltip>
@@ -54,8 +46,7 @@ const Badge = ({
 const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   return (
     <Badge
-      value={tx.tx_id}
-      valueFormatter={value => truncateHex(value, 4, 5, false)}
+      value={truncateHex(tx.tx_id, 4, 5, false)}
       copiedText="Transaction ID copied to clipboard"
     />
   );
@@ -63,11 +54,7 @@ const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
 
 const AddressBadge = ({ address }: { address: string }) => {
   return address ? (
-    <Badge
-      value={address}
-      valueFormatter={truncateStxAddress}
-      copiedText={`Address copied to clipboard`}
-    />
+    <Badge value={truncateStxAddress(address)} copiedText={`Address copied to clipboard`} />
   ) : null;
 };
 
