@@ -1,3 +1,10 @@
+# [1.309.0](https://github.com/hirosystems/explorer/compare/v1.308.0...v1.309.0) (2025-07-14)
+
+
+### Features
+
+* disable historical price ([#2401](https://github.com/hirosystems/explorer/issues/2401)) ([2dc17d9](https://github.com/hirosystems/explorer/commit/2dc17d95a1a99366db580a6c6d853746cf7e4edf))
+
 # [1.308.0](https://github.com/hirosystems/explorer/compare/v1.307.1...v1.308.0) (2025-07-10)
 
 
