@@ -15,7 +15,6 @@ import {
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
-import { getTokenPrice } from './getTokenPriceInfo';
 
 export default async function HomeRedesign(props: {
   searchParams: Promise<Record<string, string>>;
@@ -24,8 +23,6 @@ export default async function HomeRedesign(props: {
   const chain = searchParams?.chain || 'mainnet';
   const api = searchParams?.api;
   const isSSRDisabled = searchParams?.ssr === 'false';
-
-  const nonStacksRequests = [getTokenPrice()] as const;
 
   const stacksAPIRequests = isSSRDisabled
     ? []
@@ -37,10 +34,7 @@ export default async function HomeRedesign(props: {
         getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
       ] as const);
 
-  const [tokenPrice, ...stacksAPIResults] = await Promise.all([
-    ...nonStacksRequests,
-    ...stacksAPIRequests,
-  ]);
+  const stacksAPIResults = await Promise.all(stacksAPIRequests);
 
   const [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
     isSSRDisabled
@@ -57,7 +51,6 @@ export default async function HomeRedesign(props: {
     : undefined;
   return (
     <HomePageDataProvider
-      stxPrice={tokenPrice.stxPrice}
       initialRecentBlocks={recentBlocks}
       stackingCycle={stackingCycle}
       mempoolStats={mempoolStats}
@@ -74,7 +67,7 @@ export default async function HomeRedesign(props: {
           <TxsSection initialTxTableData={initialTxTableData} />
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
             <MempoolSection />
-            <FeeSection tokenPrice={tokenPrice} />
+            <FeeSection />
           </Flex>
         </Flex>
       </Stack>

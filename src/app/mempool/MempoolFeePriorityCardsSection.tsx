@@ -11,8 +11,8 @@ import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types/genera
 
 import { Card } from '../../common/components/Card';
 import { getTxTypeIcon } from '../../common/components/TxIcon';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { useSuspenseMempoolFee } from '../../common/queries/useMempoolFee';
-import { TokenPrice } from '../../common/types/tokenPrice';
 import { MICROSTACKS_IN_STACKS, getUsdValue } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
@@ -153,14 +153,15 @@ export const MempoolFeePriorityCardTitle = ({
 function MempoolFeePriorityCard({
   mempoolFeeResponse,
   priority,
-  stxPrice,
   txTypeFilter,
 }: {
   mempoolFeeResponse: MempoolFeePriorities;
   priority: keyof MempoolFeePriorities['all'];
-  stxPrice: number;
   txTypeFilter: TransactionTypeFilterTypes;
 } & FlexProps) {
+  const { tokenPrice } = useGlobalContext();
+  const stxPrice = tokenPrice.stxPrice;
+
   const isTxTypeFiltered = txTypeFilter !== TransactionTypeFilterTypes.AverageForAllTransactions;
   const mempoolFeeAll = isTxTypeFiltered
     ? mempoolFeeResponse?.[
@@ -231,11 +232,9 @@ function MempoolFeePriorityCard({
 }
 
 export const MempoolFeePriorityCards = ({
-  tokenPrice,
   filteredMempoolFeeResponse,
   transactionType,
 }: {
-  tokenPrice: TokenPrice;
   filteredMempoolFeeResponse: MempoolFeePriorities;
   transactionType: TransactionTypeFilterTypes;
 }) => {
@@ -244,19 +243,16 @@ export const MempoolFeePriorityCards = ({
       <MempoolFeePriorityCard
         mempoolFeeResponse={filteredMempoolFeeResponse}
         priority={'low_priority'}
-        stxPrice={tokenPrice.stxPrice}
         txTypeFilter={transactionType}
       />
       <MempoolFeePriorityCard
         mempoolFeeResponse={filteredMempoolFeeResponse}
         priority={'medium_priority'}
-        stxPrice={tokenPrice.stxPrice}
         txTypeFilter={transactionType}
       />
       <MempoolFeePriorityCard
         mempoolFeeResponse={filteredMempoolFeeResponse}
         priority={'high_priority'}
-        stxPrice={tokenPrice.stxPrice}
         txTypeFilter={transactionType}
       />
     </>
@@ -321,12 +317,10 @@ export function MempoolFeePriorityCardsLayout({
 }
 
 export function MempoolFeePriorityCardsSectionBase({
-  tokenPrice,
   feeEstimates,
   transactionType,
   setTransactionType,
 }: {
-  tokenPrice: TokenPrice;
   feeEstimates: FeeEstimates;
   transactionType: TransactionTypeFilterTypes;
   setTransactionType: (transactionType: TransactionTypeFilterTypes) => void;
@@ -358,7 +352,6 @@ export function MempoolFeePriorityCardsSectionBase({
       setTransactionType={setTransactionType}
       mempoolFeePriorityCards={
         <MempoolFeePriorityCards
-          tokenPrice={tokenPrice}
           filteredMempoolFeeResponse={filteredMempoolFeeResponse}
           transactionType={transactionType}
         />
@@ -368,12 +361,10 @@ export function MempoolFeePriorityCardsSectionBase({
 }
 
 export function MempoolFeePriorityCardsSection({
-  tokenPrice,
   feeEstimates,
   transactionType,
   setTransactionType,
 }: {
-  tokenPrice: TokenPrice;
   feeEstimates: FeeEstimates;
   transactionType: TransactionTypeFilterTypes;
   setTransactionType: (transactionType: TransactionTypeFilterTypes) => void;
@@ -381,7 +372,6 @@ export function MempoolFeePriorityCardsSection({
   return (
     <Suspense fallback={<MempoolFeePriorityCardsSectionSkeleton />}>
       <MempoolFeePriorityCardsSectionBase
-        tokenPrice={tokenPrice}
         feeEstimates={feeEstimates}
         transactionType={transactionType}
         setTransactionType={setTransactionType}

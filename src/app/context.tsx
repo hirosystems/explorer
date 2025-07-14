@@ -22,7 +22,6 @@ export interface FeeEstimates {
 }
 
 interface HomePageDataContextType {
-  stxPrice: number;
   initialRecentBlocks?: RecentBlocks;
   stackingCycle?: UIStackingCycle;
   mempoolStats?: UIMempoolStats;
@@ -31,7 +30,6 @@ interface HomePageDataContextType {
 }
 
 const DEFAULT_HOME_PAGE_DATA: HomePageDataContextType = {
-  stxPrice: 0,
   initialRecentBlocks: undefined,
   stackingCycle: undefined,
   mempoolStats: undefined,
@@ -43,7 +41,6 @@ const HomePageDataContext = createContext<HomePageDataContextType>(DEFAULT_HOME_
 
 export function HomePageDataProvider({
   children,
-  stxPrice = DEFAULT_HOME_PAGE_DATA.stxPrice,
   initialRecentBlocks = DEFAULT_HOME_PAGE_DATA.initialRecentBlocks,
   stackingCycle = DEFAULT_HOME_PAGE_DATA.stackingCycle,
   mempoolStats = DEFAULT_HOME_PAGE_DATA.mempoolStats,
@@ -51,7 +48,6 @@ export function HomePageDataProvider({
   isSSRDisabled = DEFAULT_HOME_PAGE_DATA.isSSRDisabled,
 }: HomePageDataContextType & { children: ReactNode }) {
   const contextValue = {
-    stxPrice,
     initialRecentBlocks,
     stackingCycle,
     mempoolStats,

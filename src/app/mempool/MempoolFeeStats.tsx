@@ -4,7 +4,6 @@ import { Grid } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { TokenPrice } from '../../common/types/tokenPrice';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { FeeEstimates } from '../context';
 import { MempoolFeePieChartSection } from './MempoolFeePieChartSection';
@@ -34,13 +33,7 @@ export function MempoolFeeStatsLayout({
   );
 }
 
-export function MempoolFeeStatsBase({
-  tokenPrice,
-  feeEstimates,
-}: {
-  tokenPrice: TokenPrice;
-  feeEstimates: FeeEstimates;
-}) {
+export function MempoolFeeStatsBase({ feeEstimates }: { feeEstimates: FeeEstimates }) {
   const [transactionType, setTransactionType] = useState<TransactionTypeFilterTypes>(
     TransactionTypeFilterTypes.AverageForAllTransactions
   );
@@ -50,7 +43,6 @@ export function MempoolFeeStatsBase({
       mempoolFeePieChartSection={<MempoolFeePieChartSection transactionType={transactionType} />}
       mempoolFeePriorityCardsSection={
         <MempoolFeePriorityCardsSection
-          tokenPrice={tokenPrice}
           feeEstimates={feeEstimates}
           transactionType={transactionType}
           setTransactionType={setTransactionType}
@@ -60,16 +52,10 @@ export function MempoolFeeStatsBase({
   );
 }
 
-export function MempoolFeeStats({
-  tokenPrice,
-  feeEstimates,
-}: {
-  tokenPrice: TokenPrice;
-  feeEstimates: FeeEstimates;
-}) {
+export function MempoolFeeStats({ feeEstimates }: { feeEstimates: FeeEstimates }) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <MempoolFeeStatsBase tokenPrice={tokenPrice} feeEstimates={feeEstimates} />
+      <MempoolFeeStatsBase feeEstimates={feeEstimates} />
     </ExplorerErrorBoundary>
   );
 }

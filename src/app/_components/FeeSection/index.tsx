@@ -1,7 +1,7 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
-import { TokenPrice } from '@/common/types/tokenPrice';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
@@ -16,7 +16,9 @@ import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
 import { SSRDisabledMessage } from '../SSRDisabledMessage';
 
-function SectionHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
+function SectionHeader() {
+  const { tokenPrice } = useGlobalContext();
+
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
       <HStack align="center" gap={2}>
@@ -61,15 +63,9 @@ function TabIcon({ children }: { children: ReactNode }) {
   );
 }
 
-function FeeData({
-  title,
-  ustxValue,
-  tokenPrice,
-}: {
-  title: ReactNode;
-  ustxValue?: number;
-  tokenPrice: TokenPrice;
-}) {
+function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue?: number }) {
+  const { tokenPrice } = useGlobalContext();
+
   const stxValue =
     ustxValue !== undefined ? Number((ustxValue / MICROSTACKS_IN_STACKS).toFixed(4)) : undefined;
   const formattedStxValue = stxValue !== undefined && stxValue < 0.0001 ? '<0.0001' : stxValue;
@@ -129,7 +125,7 @@ const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] 
   keyof MempoolFeePriorities | 'all'
 >;
 
-function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
+function FeeTabs() {
   const { feeEstimates } = useHomePageData();
 
   if (!feeEstimates) {
@@ -162,15 +158,10 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
               <TabsContent key={txType} value={txType}>
                 <Stack gap={4}>
                   <Flex gap={2} flexWrap={'wrap'}>
-                    <FeeData
-                      title="Low"
-                      ustxValue={feeEstimatesMap[txType]?.low_priority}
-                      tokenPrice={tokenPrice}
-                    />
+                    <FeeData title="Low" ustxValue={feeEstimatesMap[txType]?.low_priority} />
                     <FeeData
                       title="Standard"
                       ustxValue={feeEstimatesMap[txType]?.medium_priority}
-                      tokenPrice={tokenPrice}
                     />
                     <FeeData
                       title={
@@ -182,7 +173,6 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
                         </Flex>
                       }
                       ustxValue={feeEstimatesMap[txType]?.high_priority}
-                      tokenPrice={tokenPrice}
                     />
                   </Flex>
                   <Text textStyle="text-regular-xs" color="textSecondary">
@@ -198,12 +188,12 @@ function FeeTabs({ tokenPrice }: { tokenPrice: TokenPrice }) {
   );
 }
 
-export function FeeSection({ tokenPrice }: { tokenPrice: TokenPrice }) {
+export function FeeSection() {
   const { isSSRDisabled } = useHomePageData();
   return (
     <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
-      <SectionHeader tokenPrice={tokenPrice} />
-      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs tokenPrice={tokenPrice} />}
+      <SectionHeader />
+      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs />}
     </Stack>
   );
 }
