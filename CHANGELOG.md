@@ -1,3 +1,10 @@
+# [1.310.0](https://github.com/hirosystems/explorer/compare/v1.309.0...v1.310.0) (2025-07-14)
+
+
+### Features
+
+* remove unwanted stx price request ([31eae52](https://github.com/hirosystems/explorer/commit/31eae52feb657fdfa75a175f72fac593b2748ed5))
+
 # [1.309.0](https://github.com/hirosystems/explorer/compare/v1.308.0...v1.309.0) (2025-07-14)
 
 
