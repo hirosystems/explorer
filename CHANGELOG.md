@@ -1,3 +1,10 @@
+# [1.312.0](https://github.com/hirosystems/explorer/compare/v1.311.0...v1.312.0) (2025-07-14)
+
+
+### Features
+
+* support bns 2 ([#2400](https://github.com/hirosystems/explorer/issues/2400)) ([31f576b](https://github.com/hirosystems/explorer/commit/31f576b508ddf588ff915959720b0ae8c20b32f7))
+
 # [1.311.0](https://github.com/hirosystems/explorer/compare/v1.310.0...v1.311.0) (2025-07-14)
 
 
