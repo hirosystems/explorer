@@ -2,7 +2,7 @@
 
 import { Flex, FlexProps } from '@chakra-ui/react';
 
-import { useStxPrice } from '../../../../common/queries/useCurrentPrices';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import {
   formatStacksAmount,
   getLocaleDecimalSeparator,
@@ -12,7 +12,7 @@ import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 function UsdBalanceBase({ balance }: { balance: number }) {
-  const { data: stxPrice } = useStxPrice();
+  const { currentStxPrice: stxPrice } = useGlobalContext();
   const usdBalance = getUsdValue(balance, stxPrice);
 
   if (!usdBalance) {

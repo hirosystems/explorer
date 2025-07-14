@@ -22,7 +22,7 @@ export const useStxPrice = (
 ) => {
   const blockBurnTimeDate = blockBurnTime?.split('T')[0];
   return useQuery({
-    queryKey: ['stx-price', blockBurnTimeDate ? blockBurnTime.split('T')[0] : 'current'],
+    queryKey: ['stx-price', blockBurnTimeDate || 'current'],
     queryFn: getHistoricalStxPrice,
     staleTime: blockBurnTime ? Infinity : ONE_HOUR * 3,
     refetchOnWindowFocus: false,

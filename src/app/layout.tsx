@@ -40,6 +40,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Providers
           addedCustomNetworksCookie={addedCustomNetworksCookie}
           removedCustomNetworksCookie={removedCustomNetworksCookie}
+          currentStxPrice={tokenPrice.stxPrice}
         >
           <PageWrapper
             tokenPrice={tokenPrice}

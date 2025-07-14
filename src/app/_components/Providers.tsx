@@ -27,10 +27,12 @@ export const Providers = ({
   children,
   addedCustomNetworksCookie,
   removedCustomNetworksCookie,
+  currentStxPrice,
 }: {
   children: ReactNode;
   addedCustomNetworksCookie: string | undefined;
   removedCustomNetworksCookie: string | undefined;
+  currentStxPrice?: number;
 }) => {
   return (
     <ChakraProvider value={system}>
@@ -38,6 +40,7 @@ export const Providers = ({
         <GlobalContextProvider
           addedCustomNetworksCookie={addedCustomNetworksCookie}
           removedCustomNetworksCookie={removedCustomNetworksCookie}
+          currentStxPrice={currentStxPrice}
         >
           <ColorModeProvider>
             <ReduxProvider store={store}>

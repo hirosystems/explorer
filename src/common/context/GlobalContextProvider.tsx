@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { FC, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
+import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { getApiClient } from '../../api/getApiClient';
@@ -41,6 +41,7 @@ interface GlobalContext {
   networks: Record<string, Network>;
   stacksApiSocketClientInfo: StacksApiSocketClientInfo | null;
   apiClient: ReturnType<typeof getApiClient>;
+  currentStxPrice: number;
 }
 
 export const GlobalContext = createContext<GlobalContext>({
@@ -51,13 +52,15 @@ export const GlobalContext = createContext<GlobalContext>({
   networks: {},
   stacksApiSocketClientInfo: null,
   apiClient: getApiClient(NetworkModeUrlMap[NetworkModes.Mainnet]),
+  currentStxPrice: 0,
 });
 
 export const GlobalContextProvider: FC<{
   addedCustomNetworksCookie: string | undefined;
   removedCustomNetworksCookie: string | undefined;
+  currentStxPrice?: number;
   children: ReactNode;
-}> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, children }) => {
+}> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, currentStxPrice = 0, children }) => {
   // Parsing search params
   const searchParams = useSearchParams();
   const chain = searchParams?.get('chain');
@@ -218,6 +221,8 @@ export const GlobalContextProvider: FC<{
     addCustomNetwork,
   ]);
 
+  const apiClient = useMemo(() => getApiClient(activeNetworkKey), [activeNetworkKey]);
+
   const {
     client: stacksApiSocketClient,
     connect: connectStacksApiSocket,
@@ -232,7 +237,8 @@ export const GlobalContextProvider: FC<{
         addCustomNetwork,
         removeCustomNetwork,
         networks,
-        apiClient: getApiClient(activeNetworkKey),
+        apiClient,
+        currentStxPrice,
 
         stacksApiSocketClientInfo: {
           client: stacksApiSocketClient,

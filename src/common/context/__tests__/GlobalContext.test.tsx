@@ -57,7 +57,7 @@ describe('GlobalContext', () => {
     } as any);
     render(
       <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''} currentStxPrice={0}>
           <GlobalContextTestComponent />
         </GlobalContextProvider>
       </CookiesProvider>
@@ -76,7 +76,7 @@ describe('GlobalContext', () => {
     } as any);
     render(
       <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''} currentStxPrice={0}>
           <GlobalContextTestComponent />
         </GlobalContextProvider>
       </CookiesProvider>

@@ -2,7 +2,7 @@ import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
 
-import { fetchFromApi } from '../../../api/fetch';
+import { HIRO_HEADERS } from '../../../constants/env';
 import { DEFAULT_V2_INFO_ENDPOINT } from '../../../constants/constants';
 
 export async function validateUrl(
@@ -42,8 +42,11 @@ export const fetchCustomNetworkId: (
   url: string,
   isSubnet: boolean
 ) => Promise<ChainID | undefined> = (url, isSubnet) => {
-  return fetchFromApi(url)(DEFAULT_V2_INFO_ENDPOINT)
+  return fetch(`${url}${DEFAULT_V2_INFO_ENDPOINT}`, {
+    credentials: 'omit',
+    headers: HIRO_HEADERS,
+  })
     .then(res => res.json())
-    .then(res => res.network_id)
+    .then((res: any) => res.network_id)
     .catch();
 };
