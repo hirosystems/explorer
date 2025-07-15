@@ -19,6 +19,7 @@ import {
 } from '@leather.io/stacks';
 import { convertAmountToBaseUnit, createMoney, stxToMicroStx } from '@leather.io/utils';
 import BigNumber from 'bignumber.js';
+import { unstable_cache } from 'next/cache';
 
 import { StacksNetworkName } from '@stacks/network';
 import { StacksTransactionWire } from '@stacks/transactions-v7';
@@ -111,7 +112,7 @@ async function getStacksFeeEstimate(unsignedTx: StacksTransactionWire, chain: st
   };
 }
 
-export async function getSampleTxsFeeEstimate(chain: StacksNetworkName, api: string) {
+async function fetchSampleTxsFeeEstimate(chain: StacksNetworkName, api: string) {
   const { tokenTransferTx, contractCallTx, contractDeployTx } = await generateSampleTxs(chain);
   const [tokenTransferFees, contractCallFees, contractDeployFees] = await Promise.all([
     getStacksFeeEstimate(tokenTransferTx, chain, api),
@@ -147,4 +148,21 @@ export async function getSampleTxsFeeEstimate(chain: StacksNetworkName, api: str
     contractDeployFees,
     averageFees,
   };
+}
+
+const cachedFeeEstimate = unstable_cache(
+  async (chain: StacksNetworkName, api: string) => {
+    const execStartTime = Date.now();
+    const result = await fetchSampleTxsFeeEstimate(chain, api);
+    return result;
+  },
+  ['sample-txs-fee-estimate'],
+  {
+    tags: ['sample-txs-fee-estimate'],
+    revalidate: 120, // 2 minutes
+  }
+);
+
+export async function getSampleTxsFeeEstimate(chain: StacksNetworkName, api: string) {
+  return await cachedFeeEstimate(chain, api);
 }
