@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
@@ -20,6 +20,7 @@ import {
   mainnetNetwork,
   testnetNetwork,
 } from '../constants/network';
+import { useDevnetRedirect } from '../hooks/useDevnetRedirect';
 import { ONE_HOUR } from '../queries/query-stale-time';
 import { Network, NetworkModes } from '../types/network';
 import { TokenPrice } from '../types/tokenPrice';
@@ -64,11 +65,16 @@ export const GlobalContextProvider: FC<{
 }> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, tokenPrice, children }) => {
   // Parsing search params
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const chain = searchParams?.get('chain');
   const api = searchParams?.get('api');
+  const ssr = searchParams?.get('ssr');
   const btcBlockBaseUrl = searchParams?.get('btcBlockBaseUrl');
   const btcTxBaseUrl = searchParams?.get('btcTxBaseUrl');
   const btcAddressBaseUrl = searchParams?.get('btcAddressBaseUrl');
+
+  // Auto-redirect for devnet URLs
+  useDevnetRedirect({ api, ssr, searchParams, pathname });
 
   // Deriving and setting up network state
   const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||

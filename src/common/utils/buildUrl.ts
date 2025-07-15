@@ -1,13 +1,20 @@
 import { Network } from '../types/network';
+import { isLocalhost } from './network-utils';
 
 export function getQueryParams(network: Network) {
-  const suffix = `?chain=${encodeURIComponent(network?.mode || 'mainnet')}`;
+  let suffix = `?chain=${encodeURIComponent(network?.mode || 'mainnet')}`;
+
   if (network?.isSubnet) {
-    return `${suffix}&subnet=${network.url}`;
+    suffix += `&subnet=${network.url}`;
+  } else if (network?.isCustomNetwork) {
+    suffix += `&api=${network.url}`;
   }
-  if (network?.isCustomNetwork) {
-    return `${suffix}&api=${network.url}`;
+
+  // Add ssr=false for devnet
+  if (isLocalhost(network.url)) {
+    suffix += '&ssr=false';
   }
+
   return suffix;
 }
 
