@@ -1,3 +1,11 @@
+# [1.313.0](https://github.com/hirosystems/explorer/compare/v1.312.0...v1.313.0) (2025-07-15)
+
+
+### Features
+
+* add utils unit tests ([#2398](https://github.com/hirosystems/explorer/issues/2398)) ([968514c](https://github.com/hirosystems/explorer/commit/968514c53a70509c6dd6c2ad4eedacd23bce450a))
+* devnet improvements ([#2399](https://github.com/hirosystems/explorer/issues/2399)) ([5e7d0a3](https://github.com/hirosystems/explorer/commit/5e7d0a31f2ad577d3cb4dbbad0f7846e54924024))
+
 # [1.312.0](https://github.com/hirosystems/explorer/compare/v1.311.0...v1.312.0) (2025-07-14)
 
 
