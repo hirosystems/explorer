@@ -209,7 +209,7 @@ export function MempoolTable({
     pageSize: TX_TABLE_PAGE_SIZE,
   });
 
-  const { fromAddress, toAddress, transactionType } = filters || {};
+  const { fromAddress, toAddress } = filters || {};
 
   if (isCacheSetWithInitialData.current === false && initialData) {
     const queryKey = ['mempoolTransactionsInfinite', sort, order, fromAddress, toAddress];
@@ -238,8 +238,7 @@ export function MempoolTable({
 
   const isTableFiltered =
     (filters?.fromAddress && filters.fromAddress !== '') ||
-    (filters?.toAddress && filters.toAddress !== '') ||
-    (filters?.transactionType && filters.transactionType.length > 0);
+    (filters?.toAddress && filters.toAddress !== '');
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -259,14 +258,7 @@ export function MempoolTable({
   }, [newTxsAvailable]);
 
   const rowData: MempoolTableData[] = useMemo(() => {
-    let filteredTxs = txs;
-
-    // Only filter by transaction type client-side since server-side filtering handles addresses
-    if (filters?.transactionType && filters.transactionType.length > 0) {
-      filteredTxs = txs.filter(tx => filters.transactionType!.includes(tx.tx_type));
-    }
-
-    return filteredTxs.map(tx => {
+    return txs.map(tx => {
       const to = getToAddress(tx);
       const amount = getAmount(tx);
 
@@ -300,7 +292,7 @@ export function MempoolTable({
         [TxTableColumns.BlockTime]: tx.receipt_time,
       };
     });
-  }, [txs, filters?.transactionType]);
+  }, [txs]);
 
   return (
     <Table

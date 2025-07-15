@@ -19,7 +19,7 @@ function MempoolTableWithFiltersContent({ initialData }: MempoolTableWithFilters
 
   return (
     <Stack gap={4}>
-      <TxTableFilters showDateFilter={false} />
+      <TxTableFilters showDateFilter={false} showTypeFilter={false} />
       <MempoolTable
         filters={{
           fromAddress,

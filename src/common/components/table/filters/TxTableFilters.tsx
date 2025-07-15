@@ -42,9 +42,13 @@ const MobileOpenFilterModalButton = () => {
 
 export interface TxTableFiltersProps {
   showDateFilter?: boolean;
+  showTypeFilter?: boolean;
 }
 
-export const TxTableFilters = ({ showDateFilter = true }: TxTableFiltersProps = {}) => {
+export const TxTableFilters = ({
+  showDateFilter = true,
+  showTypeFilter = true,
+}: TxTableFiltersProps = {}) => {
   const {
     transactionType,
     fromAddress,
@@ -64,10 +68,12 @@ export const TxTableFilters = ({ showDateFilter = true }: TxTableFiltersProps = 
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover
-            defaultTransactionType={transactionType}
-            transactionTypeFilterHandler={transactionTypeFilterHandler}
-          />
+          {showTypeFilter && (
+            <TransactionTypeFilterPopover
+              defaultTransactionType={transactionType}
+              transactionTypeFilterHandler={transactionTypeFilterHandler}
+            />
+          )}
           {showDateFilter && (
             <DateFilterPopover
               defaultStartTime={startTime}

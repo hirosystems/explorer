@@ -1,6 +1,7 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { FeeEstimates } from '@/app/context';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
@@ -14,15 +15,30 @@ import { ReactNode } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
+import { SSRDisabledMessage } from '../SSRDisabledMessage';
+
+interface FeeSectionProps {
+  feeEstimates?: FeeEstimates;
+  isSSRDisabled?: boolean;
+}
+
 function SectionHeader() {
   const { tokenPrice } = useGlobalContext();
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
       <HStack align="center" gap={2}>
         <Text textStyle="heading-sm" color="textPrimary">
-        Estimated transaction fees
+          Estimated transaction fees
         </Text>
-        <Tooltip content={<Box maxW={'400px'}>This chart shows current estimated fees for low, medium, and high priority transactions. Users can manually select a priority level in their wallets, with  higher fees increasing the chances of faster confirmation.</Box>}>
+        <Tooltip
+          content={
+            <Box maxW={'400px'}>
+              This chart shows current estimated fees for low, medium, and high priority
+              transactions. Users can manually select a priority level in their wallets, with higher
+              fees increasing the chances of faster confirmation.
+            </Box>
+          }
+        >
           <Icon color="iconSecondary" h={3.5} w={3.5}>
             <Info />
           </Icon>
@@ -114,21 +130,13 @@ function getFeeDescription(txType: keyof MempoolFeePriorities) {
   }
 }
 
-const txTypeFees: (keyof MempoolFeePriorities)[] = [
-  'all',
-  'token_transfer',
-  'contract_call',
-  'smart_contract',
-];
+const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] as Array<
+  keyof MempoolFeePriorities | 'all'
+>;
 
-function FeeTabs() {
-  const { feeEstimates } = useHomePageData();
+function FeeTabs({ feeEstimates }: { feeEstimates?: FeeEstimates }) {
   if (!feeEstimates) {
-    return (
-      <Text textStyle="text-regular-sm" color="textSecondary">
-        Loading fee estimates...
-      </Text>
-    );
+    return null;
   }
 
   const feeEstimatesMap = {
@@ -187,8 +195,7 @@ function FeeTabs() {
   );
 }
 
-export function FeeSection() {
-  const { isSSRDisabled } = useHomePageData();
+export function FeeSection({ feeEstimates, isSSRDisabled = false }: FeeSectionProps) {
   return (
     <Stack
       align="space-between"
@@ -202,14 +209,7 @@ export function FeeSection() {
       justifyContent="center"
     >
       <SectionHeader />
-      {isSSRDisabled ? (
-        <Text textStyle="text-regular-sm" color="textSecondary">
-          Loading fee data...
-        </Text>
-      ) : (
-        <FeeTabs />
-      )}
-
+      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs feeEstimates={feeEstimates} />}
     </Stack>
   );
 }

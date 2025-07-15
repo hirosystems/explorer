@@ -2,6 +2,7 @@ import { FeeSection } from '@/app/_components/FeeSection';
 import { MempoolSection } from '@/app/_components/MempoolSection';
 import { getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { Flex, Stack } from '@chakra-ui/react';
+import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 
 import { NetworkOverview } from './_components/NetworkOverview/NetworkOverview';
 import { RecentBlocksSection } from './_components/RecentBlocks/RecentBlocks';
@@ -65,8 +66,12 @@ export default async function HomeRedesign(props: {
         <Flex gap={[20, 20, 20, 2]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
           <TxsSection initialTxTableData={initialTxTableData} />
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
-          <MempoolSection />
-          <FeeSection />
+            <MempoolSection
+              mempoolStats={mempoolStats}
+              isSSRDisabled={isSSRDisabled}
+              showHeader={true}
+            />
+            <FeeSection feeEstimates={feeEstimates} isSSRDisabled={isSSRDisabled} />
           </Flex>
         </Flex>
       </Stack>

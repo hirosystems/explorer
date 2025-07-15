@@ -3,12 +3,11 @@ import { MempoolSection } from '@/app/_components/MempoolSection';
 import { Flex, Stack } from '@chakra-ui/react';
 
 import { getSampleTxsFeeEstimate } from '../../common/utils/fee-utils';
+import { PageTitle } from '../_components/PageTitle';
 import { SSRDisabledMessage } from '../_components/SSRDisabledMessage';
 import { fetchUIMempoolStats } from '../data';
 import MempoolTransactionsTable from './MempoolTransactionsTable';
 import { fetchUIMempoolTransactions } from './data';
-import { PageTitle } from '../_components/PageTitle';
-
 
 export default async function (props: { searchParams: Promise<Record<string, string>> }) {
   const searchParams = await props.searchParams;
@@ -31,7 +30,6 @@ export default async function (props: { searchParams: Promise<Record<string, str
   const [mempoolStats, initialMempoolTxData, sampleTxsFeeEstimate] = isSSRDisabled
     ? [undefined, undefined, undefined]
     : stacksAPIResults;
-
 
   const feeEstimates = sampleTxsFeeEstimate
     ? {
@@ -64,7 +62,7 @@ export default async function (props: { searchParams: Promise<Record<string, str
         </Flex>
         <Flex flex="1">
           {feeEstimates ? (
-            <FeeSection/>
+            <FeeSection feeEstimates={feeEstimates} isSSRDisabled={isSSRDisabled} />
           ) : (
             <SSRDisabledMessage sectionName="Fee estimates" />
           )}
