@@ -70,14 +70,12 @@ export function createSampleContractDeployOptions(
 }
 
 export async function generateSampleTxs(network: StacksNetworkName) {
-  console.log('making unsigned txs requests');
   const [tokenTransferTx, contractCallTx, contractDeployTx] = await Promise.all([
     generateStacksUnsignedTransaction(createSampleTokenTransferOptions(network)),
     generateStacksUnsignedTransaction(createSampleContractCallOptions(network)),
     generateStacksUnsignedTransaction(createSampleContractDeployOptions(network)),
   ]);
 
-  console.log('unsigned txs requests made');
   return {
     tokenTransferTx,
     contractCallTx,
