@@ -28,8 +28,6 @@ export const getCurrentStxPrice = async (): Promise<number> =>
     .then(data => data?.data?.price || 0);
 
 export async function getTokenPrice(): Promise<TokenPrice> {
-  console.log('[debug] fetching token price');
-
   const btcPrice = await getCurrentBtcPrice();
   const stxPrice = await getCurrentStxPrice();
 

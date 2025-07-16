@@ -51,9 +51,29 @@ export const useBlockList = (
   options?: any
 ): UseQueryResult<GenericResponseType<Block>> => {
   const apiClient = useApiClient();
+
+  if (typeof window !== 'undefined') {
+    console.log(
+      `[CLIENT-SIDE] useBlockList query for limit: ${limit} at ${new Date().toISOString()}`
+    );
+  } else {
+    console.log(
+      `[SERVER-SIDE] useBlockList query for limit: ${limit} at ${new Date().toISOString()}`
+    );
+  }
+
   return useQuery({
     queryKey: [BLOCK_LIST_QUERY_KEY, limit],
     queryFn: async () => {
+      if (typeof window !== 'undefined') {
+        console.log(
+          `[CLIENT-SIDE] Executing query function for useBlockList: ${limit} at ${new Date().toISOString()}`
+        );
+      } else {
+        console.log(
+          `[SERVER-SIDE] Executing query function for useBlockList: ${limit} at ${new Date().toISOString()}`
+        );
+      }
       return await callApiWithErrorHandling(apiClient, '/extended/v1/block/', {
         params: { query: { limit } },
       });

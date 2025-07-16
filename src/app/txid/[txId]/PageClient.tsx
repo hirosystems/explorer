@@ -1,6 +1,7 @@
 'use client';
 
 import { useIsRedesignUrl } from '@/common/utils/url-utils';
+import { useEffect, useState } from 'react';
 
 import { useSuspenseTxById } from '../../../common/queries/useTxById';
 import { CoinbasePage } from './CoinbasePage';
@@ -12,7 +13,11 @@ import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 
 function Tx({ txId }: { txId: string }) {
-  const { data: tx } = useSuspenseTxById(txId);
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  const { data: tx } = useSuspenseTxById(txId, { enabled: isClient });
   const isRedesign = useIsRedesignUrl();
 
   if (tx.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
