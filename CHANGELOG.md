@@ -1,3 +1,10 @@
+# [1.314.0](https://github.com/hirosystems/explorer/compare/v1.313.0...v1.314.0) (2025-07-16)
+
+
+### Features
+
+* cache fee estimate ([#2402](https://github.com/hirosystems/explorer/issues/2402)) ([86b1f73](https://github.com/hirosystems/explorer/commit/86b1f733a0a00c1c17bb429241d3075d412b9d3f))
+
 # [1.313.0](https://github.com/hirosystems/explorer/compare/v1.312.0...v1.313.0) (2025-07-15)
 
 
