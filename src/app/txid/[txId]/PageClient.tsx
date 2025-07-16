@@ -11,7 +11,7 @@ import { SmartContract } from './SmartContract/SmartContract';
 import { SmartContractTx } from './SmartContract/SmartContractTx';
 import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
-
+import { TokenTransferPage } from './TokenTransfer/index';
 function Tx({ txId }: { txId: string }) {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -22,9 +22,9 @@ function Tx({ txId }: { txId: string }) {
 
   if (tx.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
-  if (tx.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
+  // if (tx.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
   // if (tx.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
-  // if (tx.tx_type === 'token_transfer') return <TokenTransferPage tx={tx} />;
+  if (tx.tx_type === 'token_transfer') return <TokenTransferPage tx={tx} />;
 
   if (tx.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;
 
