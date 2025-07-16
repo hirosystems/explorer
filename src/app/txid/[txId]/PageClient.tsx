@@ -16,29 +16,29 @@ function Tx() {
   const { initialTxData: tx } = useTxIdPageData();
   const isRedesign = useIsRedesignUrl();
 
-  if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
+  // if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
   if (tx?.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
   // if (tx.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
   // if (tx.tx_type === 'token_tr ansfer') return <TokenTransferPage tx={tx} />;
 
-  if (tx?.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;
+  // if (tx?.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;
 
-  if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
+  // if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
 
-  if (tx?.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
+  // if (tx?.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
-  if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
+  // if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
   return null;
 }
 
 function TransactionIdPage() {
-  const { txId } = useTxIdPageData();
-  const isContractId = txId.includes('.');
-  if (isContractId) {
-    return <SmartContract contractId={txId} />;
-  }
+  // const { txId } = useTxIdPageData();
+  // const isContractId = txId.includes('.');
+  // if (isContractId) {
+  //   return <SmartContract contractId={txId} />;
+  // }
   return <Tx />;
 }
 

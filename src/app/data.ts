@@ -6,7 +6,6 @@ import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import {
   Block,
   BurnBlock,
-  MempoolFeePriorities,
   MempoolTransactionStatsResponse,
 } from '@stacks/stacks-blockchain-api-types';
 

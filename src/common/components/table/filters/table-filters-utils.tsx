@@ -75,7 +75,6 @@ export function eventAssetTypeFilterMutator(
   eventAssetType?: TransactionEventType[]
 ) {
   if (eventAssetType) {
-    console.log('eventAssetTypeFilterMutator', { eventAssetType });
     params.set(FilterQueryKey.EventAssetType, eventAssetType.join(','));
   } else {
     params.delete(FilterQueryKey.EventAssetType);
