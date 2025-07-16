@@ -1,7 +1,7 @@
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { logError } from '@/common/utils/error-utils';
 
-import TransactionIdPage from './PageClient';
+import TransactionIdPage from './PageClientNoSSR';
 import { TxIdPageDataProvider } from './TxIdPageContext';
 
 export default async function Page(props: { params: Promise<{ txId: string }> }) {
