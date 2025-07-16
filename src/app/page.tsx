@@ -86,7 +86,6 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
   }
   return (
     <HomePageDataProvider
-      stxPrice={tokenPrice?.stxPrice}
       initialRecentBlocks={recentBlocks}
       stackingCycle={stackingCycle}
       mempoolStats={mempoolStats}
@@ -109,7 +108,7 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
           <TxsSection initialTxTableData={initialTxTableData} />
           <Stack gap={4} flex={1}>
             <MempoolSection />
-            <FeeSection tokenPrice={tokenPrice} />
+            <FeeSection />
           </Stack>
         </Flex>
       </Stack>
