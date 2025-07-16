@@ -1,6 +1,5 @@
 import { DEFAULT_MAINNET_SERVER } from '@/common/constants/env';
 import { NetworkModes } from '@/common/types/network';
-import { TokenPrice } from '@/common/types/tokenPrice';
 import { logError } from '@/common/utils/error-utils';
 import { SampleTxsFeeEstimate, getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
@@ -22,7 +21,6 @@ import {
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
-import { getTokenPrice } from './getTokenPriceInfo';
 import { CommonSearchParams } from './transactions/page';
 import { CompressedTxTableData } from './transactions/utils';
 
@@ -39,10 +37,6 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
   const apiUrl = getApiUrl(chain, api);
   const isSSRDisabled = ssr === 'false';
 
-  let tokenPrice: TokenPrice = {
-    stxPrice: 0,
-    btcPrice: 0,
-  };
   let recentBlocks: RecentBlocks | undefined;
   let stackingCycle: UIStackingCycle | undefined;
   let initialTxTableData: CompressedTxTableData | undefined;
@@ -50,8 +44,6 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
   let feeEstimates: SampleTxsFeeEstimate | undefined;
 
   try {
-    tokenPrice = await getTokenPrice();
-
     const stacksAPIRequests = isSSRDisabled
       ? []
       : ([
@@ -74,7 +66,6 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
       {
         apiUrl,
         chain,
-        tokenPrice,
         recentBlocks,
         stackingCycle,
         mempoolStats,
