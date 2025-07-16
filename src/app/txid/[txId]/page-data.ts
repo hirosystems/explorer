@@ -6,10 +6,11 @@ const getTxTag = (txId: string) => `tx-id-${txId}`;
 const PENDING_TX_REVALIDATION_INTERVAL = 7; // 7 seconds
 const CONFIRMED_TX_REVALIDATION_TIMEOUT = 600; // 10 minutes
 
-export async function fetchTxById(apiUrl: string, txId: string): Promise<Transaction | MempoolTransaction> {
-  const fetchUrl = `${apiUrl}/extended/v1/tx/${txId}`;
-  console.log({ fetchUrl });
-  const response = await fetch(fetchUrl, {
+export async function fetchTxById(
+  apiUrl: string,
+  txId: string
+): Promise<Transaction | MempoolTransaction> {
+  const response = await fetch(`${apiUrl}/extended/v1/tx/${txId}`, {
     cache: 'default',
     next: {
       revalidate: CONFIRMED_TX_REVALIDATION_TIMEOUT,

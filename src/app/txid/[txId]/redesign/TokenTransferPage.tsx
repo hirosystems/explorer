@@ -8,14 +8,12 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { TxHeader, TxHeaderMinimized } from './TxHeader';
 import { TxTabs } from './TxTabs';
-import { useBlockList } from '@/common/queries/useBlockListInfinite';
 
 export const TokenTransferPage: React.FC<{
   tx: Transaction | MempoolTransaction;
 }> = ({ tx }) => {
   const txHeaderRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useIsInViewport(txHeaderRef);
-  const { data: blockList } = useBlockList();
 
   return (
     <>

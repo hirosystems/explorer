@@ -11,7 +11,7 @@ import { TenureChangePage } from './TenureChange';
 import { useTxIdPageData } from './TxIdPageContext';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 
-function Tx({ txId }: { txId: string }) {
+function Tx() {
   // const { data: tx } = useSuspenseTxById(txId);
   const { initialTxData: tx } = useTxIdPageData();
   const isRedesign = useIsRedesignUrl();
@@ -39,7 +39,7 @@ function TransactionIdPage() {
   if (isContractId) {
     return <SmartContract contractId={txId} />;
   }
-  return <Tx txId={txId} />;
+  return <Tx />;
 }
 
 export default TransactionIdPage;
