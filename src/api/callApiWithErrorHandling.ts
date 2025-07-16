@@ -23,10 +23,14 @@ export async function callApiWithErrorHandling<Endpoint extends PathsWithMethod<
   apiUrl: Endpoint,
   apiParams?: ApiParams<Endpoint>
 ): Promise<OperationResponse[Endpoint]> {
+  console.log('callApiWithErrorHandling is happening on the server', {
+    apiUrl,
+    apiParams,
+  });
   const { error, data } = await apiClient.GET(apiUrl, apiParams as any);
 
   if (error) {
-    console.log('callApiWithErrorHandling is happening on the server', {
+    console.log('callApiWithErrorHandling error is happening on the server', {
       error,
       apiUrl,
       apiParams,

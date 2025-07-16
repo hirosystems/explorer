@@ -136,15 +136,12 @@ export async function fetchSampleTxsFeeEstimate(
   chain: StacksNetworkName,
   api: string
 ): Promise<SampleTxsFeeEstimate> {
-  console.log('making unsigned txs requests');
   const { tokenTransferTx, contractCallTx, contractDeployTx } = await generateSampleTxs(chain);
-  console.log('making fee requests');
   const [tokenTransferFees, contractCallFees, contractDeployFees] = await Promise.all([
     getStacksFeeEstimate(tokenTransferTx, chain, api),
     getStacksFeeEstimate(contractCallTx, chain, api),
     getStacksFeeEstimate(contractDeployTx, chain, api),
   ]);
-  console.log('fee requests made');
 
   const averageFees = {
     no_priority: 0,
