@@ -15,6 +15,7 @@ import {
   getLocaleDecimalSeparator,
   getMemoString,
   getUsdValue,
+  hasBnsExtension,
   hexToString,
   isJSONString,
   isNumeric,
@@ -32,7 +33,6 @@ import {
   truncateStxAddress,
   truncateStxContractId,
   truncateText,
-  validateBnsName,
   validateStacksAddress,
   validateStacksContractId,
 } from '../utils';
@@ -491,11 +491,11 @@ describe('removeTrailingSlash', () => {
   });
 });
 
-describe('validateBnsName', () => {
+describe('hasBnsExtension', () => {
   test('should validate BNS names', () => {
-    expect(validateBnsName('name.btc')).toBe(true);
-    expect(validateBnsName('invalid.com')).toBe(false);
-    expect(validateBnsName()).toBe(false);
+    expect(hasBnsExtension('name.btc')).toBe(true);
+    expect(hasBnsExtension('invalid.com')).toBe(false);
+    expect(hasBnsExtension()).toBe(false);
   });
 });
 
