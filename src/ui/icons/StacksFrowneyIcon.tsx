@@ -78,8 +78,8 @@ const weights = new Map<IconWeight, ReactElement>([
           y2="0"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.276042" stop-color="#95918C" />
-          <stop offset="0.526042" stop-color="#E5E0DC" stop-opacity="0.34" />
+          <stop offset="0.276042" stopColor="#95918C" />
+          <stop offset="0.526042" stopColor="#E5E0DC" stopOpacity="0.34" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_4954_36475"
@@ -89,8 +89,8 @@ const weights = new Map<IconWeight, ReactElement>([
           y2="7.11914"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.276042" stop-color="#95918C" />
-          <stop offset="0.526042" stop-color="#E5E0DC" stop-opacity="0.34" />
+          <stop offset="0.276042" stopColor="#95918C" />
+          <stop offset="0.526042" stopColor="#E5E0DC" stopOpacity="0.34" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_4954_36475"
@@ -100,8 +100,8 @@ const weights = new Map<IconWeight, ReactElement>([
           y2="15.2837"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.276042" stop-color="#95918C" stop-opacity="0.69" />
-          <stop offset="0.629036" stop-color="#E5E0DC" stop-opacity="0.34" />
+          <stop offset="0.276042" stopColor="#95918C" stopOpacity="0.69" />
+          <stop offset="0.629036" stopColor="#E5E0DC" stopOpacity="0.34" />
         </linearGradient>
       </defs>
     </>,
