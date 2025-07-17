@@ -22,6 +22,7 @@ export async function fetchTxById(
     tx_id: tx.tx_id,
     tx_status: tx.tx_status,
     tx_type: tx.tx_type,
+    tx,
     response: {
       status: response.status,
       statusText: response.statusText,
