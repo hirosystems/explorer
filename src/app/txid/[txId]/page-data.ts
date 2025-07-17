@@ -18,16 +18,19 @@ export async function fetchTxById(
     },
   });
   const tx: Transaction | MempoolTransaction = await response.json();
+  console.log('fetched tx', {
+    tx_id: tx.tx_id,
+    tx_status: tx.tx_status,
+    tx_type: tx.tx_type,
+    response: {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+    },
+  });
   const txStatus = tx.tx_status;
   if (txStatus === 'pending') {
     setTimeout(() => revalidatePath(getTxTag(txId), 'page'), PENDING_TX_REVALIDATION_INTERVAL); // Revalidate a dynamic page
   }
   return tx;
-}
-
-export function compressTx(tx: Transaction | MempoolTransaction) {
-  return {
-    ...tx,
-    // ...compressTransactions([tx])[0],
-  };
 }

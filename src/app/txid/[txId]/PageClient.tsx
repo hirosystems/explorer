@@ -40,9 +40,7 @@ const PoisonMicroblock = dynamic(() => import('./PoisonMicroblock'), {
 });
 
 function TransactionIdPage() {
-  const { txId } = useTxIdPageData();
-
-  const { initialTxData: tx } = useTxIdPageData();
+  const { initialTxData: tx, txId } = useTxIdPageData();
   const isRedesign = useIsRedesignUrl();
 
   const isContractId = txId.includes('.');

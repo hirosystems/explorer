@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useIsInViewport(ref: React.RefObject<HTMLElement | null>) {
   const [isInView, setIsInView] = useState(true);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || !window) return;
     const observer = new window.IntersectionObserver(
       ([entry]) => setIsInView(entry.isIntersecting),
       { threshold: 0 }
