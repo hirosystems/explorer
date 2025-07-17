@@ -18,6 +18,8 @@ export function SSRDisabledMessage({
       bg="surfaceTertiary"
       textAlign="center"
       minH="200px"
+      width="100%"
+      flex="1"
       display="flex"
       alignItems="center"
       justifyContent="center"

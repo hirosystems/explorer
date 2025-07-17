@@ -1,4 +1,3 @@
-import { useHomePageData } from '@/app/context';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { capitalize, semanticTokenToCssVar } from '@/common/utils/utils';
 import { SkeletonCircle } from '@/components/ui/skeleton';
@@ -17,8 +16,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Cell, Pie, PieChart, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
-const PIE_CHART_WIDTH = 280;
-const PIE_CHART_HEIGHT = 280;
+const DEFAULT_PIE_CHART_WIDTH = 280;
+const DEFAULT_PIE_CHART_HEIGHT = 280;
 const INNER_RADIUS = 120;
 const LINE_WIDTH = 7;
 const OUTER_RADIUS = INNER_RADIUS + LINE_WIDTH;
@@ -89,14 +88,17 @@ const CenterDisplay = ({
   </Stack>
 );
 
-const LoadingSkeleton = () => (
-  <Flex
-    justifyContent="center"
-    alignItems="center"
-    width={PIE_CHART_WIDTH}
-    height={PIE_CHART_HEIGHT}
-  >
-    <SkeletonCircle width={INNER_RADIUS * 2} height={INNER_RADIUS * 2} />
+const LoadingSkeleton = ({
+  width,
+  height,
+  innerRadius,
+}: {
+  width: number;
+  height: number;
+  innerRadius: number;
+}) => (
+  <Flex justifyContent="center" alignItems="center" width={width} height={height}>
+    <SkeletonCircle width={innerRadius * 2} height={innerRadius * 2} />
   </Flex>
 );
 
@@ -227,6 +229,10 @@ const PieChartComponent = ({
   onMouseLeave,
   onMouseMove,
   showTooltip,
+  width,
+  height,
+  innerRadius,
+  outerRadius,
 }: {
   data: TransactionTypeData[];
   hoveredItem: TransactionTypeData | null;
@@ -235,17 +241,21 @@ const PieChartComponent = ({
   onMouseLeave: () => void;
   onMouseMove: (e: React.MouseEvent) => void;
   showTooltip: boolean;
+  width: number;
+  height: number;
+  innerRadius: number;
+  outerRadius: number;
 }) => (
   <Stack
     alignItems="center"
-    width={PIE_CHART_WIDTH}
-    height={PIE_CHART_HEIGHT}
+    width={width}
+    height={height}
     position="relative"
     onMouseMove={onMouseMove}
   >
     <PieChart
-      width={PIE_CHART_WIDTH}
-      height={PIE_CHART_HEIGHT}
+      width={width}
+      height={height}
       id="mempool-tx-count-chart"
       role="img"
       aria-label="Pie chart showing distribution of transaction types in mempool"
@@ -279,11 +289,11 @@ const PieChartComponent = ({
         data={data}
         dataKey="value"
         nameKey="name"
-        cx={PIE_CHART_WIDTH / 2}
-        cy={PIE_CHART_HEIGHT / 2}
+        cx={width / 2}
+        cy={height / 2}
         labelLine={false}
-        innerRadius={INNER_RADIUS}
-        outerRadius={OUTER_RADIUS}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
         isAnimationActive={false}
         stroke="none"
         onMouseEnter={onMouseEnter}
@@ -341,8 +351,20 @@ function useTransactionData(data?: { tx_type_counts: Record<string, number> }) {
   return { totalTxCount, pieData };
 }
 
-export function TxCountChart() {
-  const { mempoolStats } = useHomePageData();
+export function TxCountChart({
+  mempoolStats,
+  width = DEFAULT_PIE_CHART_WIDTH,
+  height = DEFAULT_PIE_CHART_HEIGHT,
+  innerRadius = INNER_RADIUS,
+  reverseOrder = false,
+}: {
+  mempoolStats?: { tx_type_counts: Record<string, number> };
+  width?: number;
+  height?: number;
+  innerRadius?: number;
+  reverseOrder?: boolean;
+}) {
+  const outerRadius = innerRadius + LINE_WIDTH;
   const { totalTxCount, pieData } = useTransactionData(mempoolStats);
   const [hoveredItem, setHoveredItem] = useState<TransactionTypeData | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -376,7 +398,7 @@ export function TxCountChart() {
   };
 
   if (!pieData.length) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeleton width={width} height={height} innerRadius={innerRadius} />;
   }
 
   const centerDisplayValue = hoveredItem ? hoveredItem.value : totalTxCount;
@@ -385,16 +407,19 @@ export function TxCountChart() {
     : 'var(--stacks-colors-text-secondary)';
 
   return (
-    <ClientOnly fallback={<LoadingSkeleton />}>
+    <ClientOnly
+      fallback={<LoadingSkeleton width={width} height={height} innerRadius={innerRadius} />}
+    >
       <Flex width="100%" flexGrow="1">
         <Flex
           width="100%"
           justifyContent="space-between"
           alignItems="center"
-          gap={4}
+          gap={6}
           ref={containerRef}
           flexWrap="wrap-reverse"
           flexGrow="1"
+          flexDirection={reverseOrder ? 'row-reverse' : 'row'}
         >
           <TypesList
             data={pieData}
@@ -405,12 +430,14 @@ export function TxCountChart() {
             flexGrow="1"
             flexBasis="fit-content"
             mb={4}
+            alignSelf="center"
+            mx="auto"
           />
 
           <Stack
             alignItems="center"
-            width={PIE_CHART_WIDTH}
-            height={PIE_CHART_HEIGHT}
+            width={width}
+            height={height}
             position="relative"
             mx={['auto', 'auto', 'auto', 'unset']}
           >
@@ -428,6 +455,10 @@ export function TxCountChart() {
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
               showTooltip={showTooltip}
+              width={width}
+              height={height}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
             />
           </Stack>
         </Flex>

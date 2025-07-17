@@ -1,6 +1,7 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { FeeEstimates } from '@/app/context';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
@@ -8,7 +9,7 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StxThinIcon from '@/ui/icons/StacksThinIcon';
-import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { Info, Lightning, PlusMinus } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
@@ -16,19 +17,27 @@ import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
 import { SSRDisabledMessage } from '../SSRDisabledMessage';
 
+interface FeeSectionProps {
+  feeEstimates?: FeeEstimates;
+  isSSRDisabled?: boolean;
+}
+
 function SectionHeader() {
   const { tokenPrice } = useGlobalContext();
-
   return (
     <HStack align="center" justify={'space-between'} gap={2} flexWrap={'wrap'}>
       <HStack align="center" gap={2}>
         <Text textStyle="heading-sm" color="textPrimary">
-          Current transaction fees
+          Estimated transaction fees
         </Text>
         <Tooltip
-          variant="redesignPrimary"
-          size="lg"
-          content="Higher fees increase the chances of a transaction being confirmed faster than others."
+          content={
+            <Box maxW={'400px'}>
+              This chart shows current estimated fees for low, medium, and high priority
+              transactions. Users can manually select a priority level in their wallets, with higher
+              fees increasing the chances of faster confirmation.
+            </Box>
+          }
         >
           <Icon color="iconSecondary" h={3.5} w={3.5}>
             <Info />
@@ -125,9 +134,7 @@ const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] 
   keyof MempoolFeePriorities | 'all'
 >;
 
-function FeeTabs() {
-  const { feeEstimates } = useHomePageData();
-
+function FeeTabs({ feeEstimates }: { feeEstimates?: FeeEstimates }) {
   if (!feeEstimates) {
     return null;
   }
@@ -188,12 +195,21 @@ function FeeTabs() {
   );
 }
 
-export function FeeSection() {
-  const { isSSRDisabled } = useHomePageData();
+export function FeeSection({ feeEstimates, isSSRDisabled = false }: FeeSectionProps) {
   return (
-    <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
+    <Stack
+      align="space-between"
+      bg="surfaceSecondary"
+      borderRadius={'xl'}
+      p="6"
+      gap="4"
+      flex="1"
+      width="100%"
+      height="100%"
+      justifyContent="center"
+    >
       <SectionHeader />
-      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs />}
+      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs feeEstimates={feeEstimates} />}
     </Stack>
   );
 }
