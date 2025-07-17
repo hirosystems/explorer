@@ -75,6 +75,7 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
       'error'
     );
   }
+
   return (
     <HomePageDataProvider
       initialRecentBlocks={recentBlocks}
