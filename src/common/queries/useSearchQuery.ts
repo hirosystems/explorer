@@ -4,7 +4,7 @@ import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
 import { getNameInfo } from 'bns-v2-sdk';
 
-import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Block, Transaction, TransactionType } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
@@ -79,7 +79,7 @@ export async function searchByBnsName(
   }
 }
 
-export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:' | 'TERM:';
+export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:' | 'TERM:' | 'TXTYPE:';
 
 type AdvancedSearchConfig = Record<
   string,
@@ -96,6 +96,8 @@ export function getKeywordByFilter(keyword: string) {
       return 'BEFORE:';
     case 'startTime':
       return 'AFTER:';
+    case 'transactionType':
+      return 'TXTYPE:';
     default:
       return '';
   }
@@ -115,6 +117,7 @@ export const filterToFormattedValueMap: Record<string, (value: string) => string
   toAddress: (value: string) => value,
   endTime: formatTimestamp,
   startTime: formatTimestamp,
+  transactionType: (value: string) => value,
 };
 
 export function isValidDateString(dateString: string): boolean {
@@ -191,6 +194,12 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
   'TERM:': {
     filter: 'term',
     type: 'string',
+    transform: (value: string) => value,
+    build: (value: string) => value,
+  },
+  'TXTYPE:': {
+    filter: 'transactionType',
+    type: 'transaction type',
     transform: (value: string) => value,
     build: (value: string) => value,
   },
@@ -340,6 +349,9 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
         const endTime = advancedSearchQuery.find(
           ({ filterName }) => filterName === 'endTime'
         )?.filterValue;
+        const transactionType = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'transactionType'
+        )?.filterValue;
         const term = advancedSearchQuery
           .filter(({ filterName }) => filterName === 'term')
           .reduce((acc, { filterValue }) => acc + filterValue + ' ', '')
@@ -357,6 +369,7 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
               ...(toAddress && { to_address: toAddress }),
               ...(startTime && { start_time: Number(startTime) }),
               ...(endTime && { end_time: Number(endTime) }),
+              ...(transactionType && { type: [transactionType as TransactionType] }),
             },
           },
         });
