@@ -16,17 +16,20 @@ export async function fetchTxById(
       revalidate: CONFIRMED_TX_REVALIDATION_TIMEOUT,
       tags: [getTxTag(txId)],
     },
+    headers: {
+      'x-api-key': 'mJoTNHeaNjfQUQjhHYcmKDNdVnD3DgDk',
+    },
   });
   const tx: Transaction | MempoolTransaction = await response.json();
   console.log('fetched tx', {
     tx_id: tx.tx_id,
     tx_status: tx.tx_status,
     tx_type: tx.tx_type,
-    tx,
     response: {
       status: response.status,
       statusText: response.statusText,
       ok: response.ok,
+      headers: response.headers,
     },
   });
   const txStatus = tx.tx_status;
