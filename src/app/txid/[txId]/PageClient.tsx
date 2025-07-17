@@ -50,7 +50,7 @@ function TransactionIdPage() {
     return <SmartContract contractId={txId} />;
   }
 
-  console.log('rendering tx_id', tx?.tx_id);
+  console.log('rendering tx_id', tx?.tx_id, 'tx_type', tx?.tx_type);
   if (tx?.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
   if (tx?.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
