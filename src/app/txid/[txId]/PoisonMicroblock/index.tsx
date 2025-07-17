@@ -8,7 +8,7 @@ import {
 import { TxPage } from '../TxPage';
 import { TxDetails } from './TxDetails';
 
-export function PoisonMicroblock({
+export default function PoisonMicroblock({
   tx,
 }: {
   tx: PoisonMicroblockTransaction | MempoolPoisonMicroblockTransaction;

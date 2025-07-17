@@ -1,8 +1,7 @@
+import { getAmount, getToAddress } from '@/app/transactions/utils';
 import {
   TxTableData,
   defaultColumnDefinitions,
-  getAmount,
-  getToAddress,
 } from '@/common/components/table/table-examples/TxsTable';
 import { TxTableColumns } from '@/common/components/table/table-examples/types';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';

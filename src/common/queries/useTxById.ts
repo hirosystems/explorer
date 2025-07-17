@@ -16,10 +16,28 @@ export function useTxById(
   options: any = {}
 ): UseQueryResult<Transaction | MempoolTransaction> {
   const apiClient = useApiClient();
+
+  if (typeof window !== 'undefined') {
+    console.log(`[CLIENT-SIDE] useTxById query for txId: ${txId} at ${new Date().toISOString()}`);
+  } else {
+    console.log(`[SERVER-SIDE] useTxById query for txId: ${txId} at ${new Date().toISOString()}`);
+  }
+
   return useQuery({
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+
+      if (typeof window !== 'undefined') {
+        console.log(
+          `[CLIENT-SIDE] Executing query function for useTxById: ${txId} at ${new Date().toISOString()}`
+        );
+      } else {
+        console.log(
+          `[SERVER-SIDE] Executing query function for useTxById: ${txId} at ${new Date().toISOString()}`
+        );
+      }
+
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
@@ -38,10 +56,32 @@ export function useSuspenseTxById(
   options: any = {}
 ): UseSuspenseQueryResult<Transaction | MempoolTransaction> {
   const apiClient = useApiClient();
+
+  if (typeof window !== 'undefined') {
+    console.log(
+      `[CLIENT-SIDE] useSuspenseTxById query for txId: ${txId} at ${new Date().toISOString()}`
+    );
+  } else {
+    console.log(
+      `[SERVER-SIDE] useSuspenseTxById query for txId: ${txId} at ${new Date().toISOString()}`
+    );
+  }
+
   return useSuspenseQuery({
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+
+      if (typeof window !== 'undefined') {
+        console.log(
+          `[CLIENT-SIDE] Executing query function for useSuspenseTxById: ${txId}   at ${new Date().toISOString()}`
+        );
+      } else {
+        console.log(
+          `[SERVER-SIDE] Executing query function for useSuspenseTxById: ${txId} at ${new Date().toISOString()}`
+        );
+      }
+
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
