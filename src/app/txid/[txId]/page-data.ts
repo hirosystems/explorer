@@ -17,7 +17,7 @@ export async function fetchTxById(
       tags: [getTxTag(txId)],
     },
     headers: {
-      'x-api-key': 'mJoTNHeaNjfQUQjhHYcmKDNdVnD3DgDk',
+      'x-api-key': '',
     },
   });
   const tx: Transaction | MempoolTransaction = await response.json();
