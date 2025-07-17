@@ -16,6 +16,7 @@ export default function ContractCallPage({
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) {
+  console.log('rendering contract call tx');
   const txContractId = getTxContractId(tx);
   const txStatus = getTransactionStatus(tx);
   const result = 'tx_result' in tx ? tx.tx_result : undefined;

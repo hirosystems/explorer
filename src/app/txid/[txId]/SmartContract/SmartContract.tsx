@@ -12,6 +12,7 @@ export default function SmartContract({ contractId }: { contractId: string }) {
   const { data: contract } = useContractById(contractId);
   const { data: tx } = useTxById(contract?.tx_id);
   const source = contract?.source_code;
+  console.log('rendering smart contract', contractId);
 
   if (tx?.tx_type !== 'smart_contract') return null;
 
