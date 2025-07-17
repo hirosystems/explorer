@@ -173,7 +173,6 @@ export async function fetchSampleTxsFeeEstimate(
 
 const cachedFeeEstimate = unstable_cache(
   async (chain: StacksNetworkName, api: string) => {
-    const execStartTime = Date.now();
     const result = await fetchSampleTxsFeeEstimate(chain, api);
     return result;
   },
