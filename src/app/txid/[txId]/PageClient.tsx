@@ -7,6 +7,8 @@ import { useTxIdPageData } from './TxIdPageContext';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import Skeleton from './skeleton';
 
+const test = 'test';
+
 const CoinbasePage = dynamic(() => import('./CoinbasePage'), {
   loading: () => <Skeleton />,
   ssr: false,
