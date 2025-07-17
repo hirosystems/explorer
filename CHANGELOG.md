@@ -1,3 +1,10 @@
+# [1.315.0](https://github.com/hirosystems/explorer/compare/v1.314.0...v1.315.0) (2025-07-17)
+
+
+### Features
+
+* redesign: mempool page ([#2393](https://github.com/hirosystems/explorer/issues/2393)) ([dd57fb0](https://github.com/hirosystems/explorer/commit/dd57fb0eae8c16e6787c0f6314f8ded13645ba1a))
+
 # [1.314.0](https://github.com/hirosystems/explorer/compare/v1.313.0...v1.314.0) (2025-07-16)
 
 
