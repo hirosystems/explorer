@@ -9,6 +9,7 @@ export function useFilterParams() {
       filter === 'toAddress' ||
       filter === 'startTime' ||
       filter === 'endTime' ||
+      filter === 'transactionType' ||
       filter.startsWith('term_')
     ) {
       filterParams[filter] = value;

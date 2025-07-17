@@ -502,8 +502,8 @@ function SearchInput({
   const searchEntityUrl = getSearchEntityUrl(network, searchResponse.data);
 
   useEffect(() => {
-    setTempSearchTerm(searchTermFromQueryParams);
-  }, [searchTermFromQueryParams]);
+    dispatch(setTempSearchTerm(searchTermFromQueryParams));
+  }, [searchTermFromQueryParams, dispatch]);
 
   const handleSearch = useCallback(() => {
     if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {

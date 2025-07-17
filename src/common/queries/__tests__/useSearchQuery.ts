@@ -36,6 +36,31 @@ describe('parseAdvancedSearchQuery', () => {
     expect(result).toEqual([{ filterName: 'startTime', filterValue: 1689897600 }]);
   });
 
+  test('should parse txtype: correctly', () => {
+    const result = parseAdvancedSearchQuery('TXTYPE:token_transfer');
+    expect(result).toEqual([{ filterName: 'transactionType', filterValue: 'token_transfer' }]);
+  });
+
+  test('should parse multiple advanced search terms correctly including txtype', () => {
+    const beforeDateInput = '2023-07-01';
+    const afterDateInput = '2023-06-27';
+    const beforeDateTimestamp = 1688255999;
+    const afterDateTimestamp = 1687824000;
+    const result = parseAdvancedSearchQuery(
+      `FROM:${STX_ADDRESS_1} TO:${STX_ADDRESS_2} TXTYPE:contract_call BEFORE:${beforeDateInput}AFTER:${afterDateInput}`
+    );
+    expect(result).toEqual([
+      { filterName: 'fromAddress', filterValue: STX_ADDRESS_1 },
+      { filterName: 'toAddress', filterValue: STX_ADDRESS_2 },
+      { filterName: 'endTime', filterValue: beforeDateTimestamp },
+      { filterName: 'startTime', filterValue: afterDateTimestamp },
+      { filterName: 'transactionType', filterValue: 'contract_call' },
+    ]);
+
+    expect(advancedSearchConfig['BEFORE:'].build(beforeDateTimestamp)).toEqual(beforeDateInput);
+    expect(advancedSearchConfig['AFTER:'].build(afterDateTimestamp)).toEqual(afterDateInput);
+  });
+
   test('should parse multiple advanced search terms correctly', () => {
     const beforeDateInput = '2023-07-01';
     const afterDateInput = '2023-06-27';
@@ -65,6 +90,16 @@ describe('parseAdvancedSearchQuery', () => {
 });
 
 describe('buildAdvancedSearchQuery', () => {
+  test('should build a query string with transaction type', () => {
+    const query = {
+      fromAddress: STX_ADDRESS_1,
+      transactionType: 'token_transfer',
+      endTime: 1689983999,
+    };
+    const result = buildAdvancedSearchQuery(query);
+    expect(result).toBe(`FROM:${STX_ADDRESS_1} TXTYPE:token_transfer BEFORE:2023-07-21`);
+  });
+
   test('should build a query string from a parsed object', () => {
     const query = {
       fromAddress: STX_ADDRESS_1,
