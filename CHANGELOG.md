@@ -1,3 +1,10 @@
+# [1.316.0](https://github.com/hirosystems/explorer/compare/v1.315.0...v1.316.0) (2025-07-17)
+
+
+### Features
+
+* add txtype keyword for advanced search ([#2429](https://github.com/hirosystems/explorer/issues/2429)) ([5d0826d](https://github.com/hirosystems/explorer/commit/5d0826d8aa8c9b8f5730c89d6fe7ecd586092995))
+
 # [1.315.0](https://github.com/hirosystems/explorer/compare/v1.314.0...v1.315.0) (2025-07-17)
 
 
