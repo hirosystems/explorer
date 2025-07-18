@@ -18,13 +18,11 @@ function TabTriggerComponent({
   value,
   isActive,
   onClick,
-  className,
 }: {
   label: string;
   value: string;
   isActive: boolean;
   onClick: () => void;
-  className?: string;
 }) {
   return (
     <TabsTrigger
@@ -35,7 +33,7 @@ function TabTriggerComponent({
       maxW="100%"
       gap={2}
       flexDir={'column'}
-      className={`group ${className}`}
+      className={`group`}
       background={isActive ? 'surfacePrimary' : 'none'}
       py={1}
       px={3}
@@ -80,7 +78,6 @@ function getTabsTriggersByTransactionType(
           value="overview"
           isActive={selectedTab === 'overview'}
           onClick={() => setSelectedTab('overview')}
-          className="tx-details-summary"
         />
         <TabTriggerComponent
           key="events"

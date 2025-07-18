@@ -104,7 +104,7 @@ function SummaryItem({
 
 export function TokenTransferTxSummary({ tx }: { tx: TokenTransferTransaction }) {
   return (
-    <Stack>
+    <Stack className="tx-details-summary">
       <SummaryItem label="ID" value={tx.tx_id} copyable />
       <SummaryItem
         label="Status"
