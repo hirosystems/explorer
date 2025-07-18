@@ -1,3 +1,11 @@
+## [1.316.1](https://github.com/hirosystems/explorer/compare/v1.316.0...v1.316.1) (2025-07-18)
+
+
+### Bug Fixes
+
+* sentry: filter out 3rd party extension errors ([#2435](https://github.com/hirosystems/explorer/issues/2435)) ([0b83726](https://github.com/hirosystems/explorer/commit/0b83726fc0be937adabf54ca7bfe28bbd22afc2f))
+* signer page ssr error ([#2432](https://github.com/hirosystems/explorer/issues/2432)) ([a553986](https://github.com/hirosystems/explorer/commit/a55398632c98f80c3d2228da3f6f835ae45af095))
+
 # [1.316.0](https://github.com/hirosystems/explorer/compare/v1.315.0...v1.316.0) (2025-07-17)
 
 
