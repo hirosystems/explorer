@@ -13,6 +13,35 @@ Sentry.init({
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
+
+  beforeSend(event, hint) {
+    const error = hint.originalException;
+    const errorMessage = event.exception?.values?.[0]?.value || '';
+    const filename = event.exception?.values?.[0]?.stacktrace?.frames?.[0]?.filename || '';
+
+    if (
+      filename.includes('gt-window-provider') ||
+      errorMessage.includes('shouldSetTallyForCurrentProvider') ||
+      errorMessage.includes('walletRouter')
+    ) {
+      console.log('Third-party extension error:', errorMessage);
+      console.log(error);
+      return null;
+    }
+
+    if (
+      filename.startsWith('extension://') ||
+      filename.startsWith('moz-extension://') ||
+      filename.startsWith('chrome-extension://') ||
+      filename.startsWith('safari-extension://')
+    ) {
+      console.log('Browser extension error:', errorMessage);
+      console.log(error);
+      return null;
+    }
+
+    return event;
+  },
 });
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
