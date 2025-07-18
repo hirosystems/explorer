@@ -183,6 +183,9 @@ jobs:
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
           application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
+          gpg_key: ${{ secrets.HIRO_DEVOPS_GPG_KEY }}
+          gpg_key_passphrase: ${{ secrets.HIRO_DEVOPS_GPG_KEY_PASSPHRASE }}
+          gpg_key_id: ${{ secrets.HIRO_DEVOPS_GPG_KEY_ID }}
 
   auto-approve-staging:
     runs-on: ubuntu-latest
@@ -224,3 +227,6 @@ jobs:
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
           application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
+          gpg_key: ${{ secrets.HIRO_DEVOPS_GPG_KEY }}
+          gpg_key_passphrase: ${{ secrets.HIRO_DEVOPS_GPG_KEY_PASSPHRASE }}
+          gpg_key_id: ${{ secrets.HIRO_DEVOPS_GPG_KEY_ID }}
