@@ -5,12 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getNameInfo } from 'bns-v2-sdk';
 
 import { Block, Transaction, TransactionType } from '@stacks/stacks-blockchain-api-types';
-import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
 import { blur, focus } from '../../features/search/search-slice';
-import { BNSV1_CONTRACT } from '../constants/constants';
 import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppDispatch } from '../state/hooks';
 import { Network, NetworkModes } from '../types/network';
@@ -112,12 +110,22 @@ export function formatTimestamp(value: string) {
   return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
+export function formatTransactionType(value: string) {
+  if (value.includes(',')) {
+    return value
+      .split(',')
+      .map(type => type.trim())
+      .join(', ');
+  }
+  return value;
+}
+
 export const filterToFormattedValueMap: Record<string, (value: string) => string> = {
   fromAddress: (value: string) => value,
   toAddress: (value: string) => value,
   endTime: formatTimestamp,
   startTime: formatTimestamp,
-  transactionType: (value: string) => value,
+  transactionType: formatTransactionType,
 };
 
 export function isValidDateString(dateString: string): boolean {
@@ -143,13 +151,13 @@ export function isValidDateString(dateString: string): boolean {
 export const advancedSearchConfig: AdvancedSearchConfig = {
   'FROM:': {
     filter: 'fromAddress',
-    type: 'address',
+    type: 'ADDRESS',
     transform: (value: string) => value,
     build: (value: string) => value,
   },
   'TO:': {
     filter: 'toAddress',
-    type: 'address',
+    type: 'ADDRESS',
     transform: (value: string) => value,
     build: (value: string) => value,
   },
@@ -199,9 +207,19 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
   },
   'TXTYPE:': {
     filter: 'transactionType',
-    type: 'transaction type',
-    transform: (value: string) => value,
-    build: (value: string) => value,
+    type: 'token_transfer,contract_call,smart_contract,...',
+    transform: (value: string) => {
+      return value
+        .split(',')
+        .map(type => type.trim())
+        .filter(Boolean);
+    },
+    build: (value: string | string[]) => {
+      if (Array.isArray(value)) {
+        return value.join(',');
+      }
+      return value;
+    },
   },
 };
 
@@ -209,7 +227,7 @@ export const advancedSearchKeywords: string[] = Object.keys(
   advancedSearchConfig
 ) as AdvancedSearchKeywords[];
 
-const splitRegex = new RegExp(`/ +/|(${advancedSearchKeywords.join('|')})`);
+const splitRegex = new RegExp(` +|(${advancedSearchKeywords.join('|')})`);
 
 export function parseAdvancedSearchQuery(id: string) {
   const query: { filterName: string; filterValue: string }[] = [];
@@ -369,7 +387,11 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
               ...(toAddress && { to_address: toAddress }),
               ...(startTime && { start_time: Number(startTime) }),
               ...(endTime && { end_time: Number(endTime) }),
-              ...(transactionType && { type: [transactionType as TransactionType] }),
+              ...(transactionType && {
+                type: (Array.isArray(transactionType)
+                  ? transactionType
+                  : [transactionType]) as TransactionType[],
+              }),
             },
           },
         });

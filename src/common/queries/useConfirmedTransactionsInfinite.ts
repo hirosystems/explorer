@@ -30,7 +30,7 @@ type FilterProps = {
 };
 
 export function useConfirmedTransactionsInfinite(
-  { fromAddress, toAddress, startTime, endTime, order, sortBy }: FilterProps = {},
+  { fromAddress, toAddress, startTime, endTime, transactionType, order, sortBy }: FilterProps = {},
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
   const apiClient = useApiClient();
@@ -42,6 +42,7 @@ export function useConfirmedTransactionsInfinite(
       toAddress,
       startTime,
       endTime,
+      transactionType,
       order,
       sortBy,
     ],
@@ -68,6 +69,9 @@ export function useConfirmedTransactionsInfinite(
             ...(resolvedToAddress && { to_address: resolvedToAddress }),
             ...(startTime && { start_time: Number(startTime) }),
             ...(endTime && { end_time: Number(endTime) }),
+            ...(transactionType && {
+              type: transactionType as TransactionType[],
+            }),
             ...(sortBy && {
               sort_by: sortBy as 'block_height' | 'burn_block_time' | 'fee' | undefined,
             }),

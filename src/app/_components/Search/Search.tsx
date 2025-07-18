@@ -96,7 +96,6 @@ function KeywordsPreview() {
             fontSize={'xs'}
             borderRadius="redesign.md"
             whiteSpace="pre"
-            textTransform={'uppercase'}
             fontFamily="var(--font-matter-mono)"
             fontWeight={'400'}
           >
@@ -403,7 +402,7 @@ function EndElement({ handleSearch }: { handleSearch: () => void }) {
       px={2}
       zIndex={1}
       gap={1.5}
-      height={5.5}
+      height={'100%'}
     >
       {isSearchFieldFocused ? (
         !!tempSearchTerm ? (

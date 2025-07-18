@@ -6,14 +6,17 @@ import { useTxTableFilters } from './useTxTableFilters';
 
 export function TxsTableWithFilters({
   initialData,
+  onTotalChange,
 }: {
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
+  onTotalChange?: (total: number) => void;
 }) {
   const { fromAddress, toAddress, startTime, endTime, transactionType } = useTxTableFilters();
   return (
     <TxsTable
       initialData={initialData}
       filters={{ fromAddress, toAddress, startTime, endTime, transactionType }}
+      onTotalChange={onTotalChange}
     />
   );
 }
