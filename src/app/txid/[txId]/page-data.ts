@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 
 const getTxTag = (txId: string) => `tx-id-${txId}`;
 const PENDING_TX_REVALIDATION_INTERVAL = 7; // 7 seconds
@@ -10,7 +11,7 @@ export async function fetchTxById(
   apiUrl: string,
   txId: string
 ): Promise<Transaction | MempoolTransaction> {
-  const response = await fetch(`${apiUrl}/extended/v1/tx/${txId}`, {
+  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx/${txId}`, {
     cache: 'default',
     next: {
       revalidate: CONFIRMED_TX_REVALIDATION_TIMEOUT,

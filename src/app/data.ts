@@ -1,3 +1,4 @@
+import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { getApiUrl } from '@/common/utils/network-utils';
@@ -60,7 +61,7 @@ export interface UIStackingCycle {
 
 export async function fetchRecentBtcBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
+  const response = await stacksAPIFetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
     cache: 'default',
     next: {
       revalidate: 300, // 5 minutes
@@ -72,7 +73,7 @@ export async function fetchRecentBtcBlocks(chain: string, api?: string) {
 
 export async function fetchRecentStxBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(
+  const response = await stacksAPIFetch(
     `${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
     {
       cache: 'default',
@@ -87,7 +88,7 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
 
 export async function fetchStackingCycleData(chain: string, api?: string): Promise<PoxInfo> {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/v2/pox`, {
+  const response = await stacksAPIFetch(`${apiUrl}/v2/pox`, {
     cache: 'default',
     next: {
       revalidate: 60, // 60 seconds
@@ -104,7 +105,7 @@ export async function fetchStacksBlock(
 ): Promise<Block> {
   const apiUrl = getApiUrl(chain, api);
   const fetchUrl = `${apiUrl}/extended/v2/blocks/${blockHeightOrHash}`;
-  const response = await fetch(fetchUrl, {
+  const response = await stacksAPIFetch(fetchUrl, {
     cache: 'default',
     next: {
       revalidate: 10, // 10 seconds
@@ -120,7 +121,7 @@ export async function fetchBurnBlock(
   api?: string
 ): Promise<BurnBlock> {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/${heightOrHash}`, {
+  const response = await stacksAPIFetch(`${apiUrl}/extended/v2/burn-blocks/${heightOrHash}`, {
     cache: 'default',
     next: {
       revalidate: 60, // 60 seconds
@@ -132,7 +133,7 @@ export async function fetchBurnBlock(
 
 export async function fetchMempoolStats(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/extended/v1/tx/mempool/stats`, {
+  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx/mempool/stats`, {
     cache: 'default',
     next: {
       revalidate: 10, // 10 seconds
@@ -257,13 +258,16 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
 
 export async function fetchRecentTxs(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
-    cache: 'default',
-    next: {
-      revalidate: 10, // 10 seconds
-      tags: ['transactions'],
-    },
-  });
+  const response = await stacksAPIFetch(
+    `${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`,
+    {
+      cache: 'default',
+      next: {
+        revalidate: 10, // 10 seconds
+        tags: ['transactions'],
+      },
+    }
+  );
   return response;
 }
 
@@ -294,7 +298,7 @@ export async function fetchTxFeeEstimation(
   api?: string
 ) {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/v2/fees/transaction`, {
+  const response = await stacksAPIFetch(`${apiUrl}/v2/fees/transaction`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
