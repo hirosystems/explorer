@@ -5,7 +5,8 @@ import { Card } from '../../common/components/Card';
 import { Button } from '../../ui/Button';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
-import SignersMap, { getContinent } from './SignersMap';
+import SignersMap from './SignersMap';
+import { getContinent } from './continentUtils';
 import { SignersMapSkeleton } from './skeleton';
 import { useSignersLocation } from './useSignerLocations';
 
