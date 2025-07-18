@@ -14,7 +14,6 @@ export const TokenTransferPage: React.FC<{
 }> = ({ tx }) => {
   const txHeaderRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useIsInViewport(txHeaderRef);
-  console.log('rendering token transfer tx');
 
   return (
     <>

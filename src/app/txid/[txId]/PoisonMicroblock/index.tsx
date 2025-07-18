@@ -13,6 +13,5 @@ export default function PoisonMicroblock({
 }: {
   tx: PoisonMicroblockTransaction | MempoolPoisonMicroblockTransaction;
 }) {
-  console.log('rendering poison microblock tx');
   return <TxPage tx={tx} txDetails={<TxDetails tx={tx} />} />;
 }

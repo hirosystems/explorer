@@ -40,27 +40,10 @@ export function useTxEventsByIdInfinite(
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<TransactionEvent>>> {
   const apiClient = useApiClient();
-  if (typeof window !== 'undefined') {
-    console.log(
-      `[CLIENT-SIDE] useTxEventsByIdInfinite query for txId events supposedly: ${txId} at ${new Date().toISOString()}`
-    );
-  } else {
-    console.log(
-      `[SERVER-SIDE] useTxEventsByIdInfinite query for txId events supposedly: ${txId} at ${new Date().toISOString()}`
-    );
-  }
+
   return useInfiniteQuery({
     queryKey: [TX_EVENTS_BY_ID_QUERY_KEY, txId],
     queryFn: async ({ pageParam }: { pageParam?: number }) => {
-      if (typeof window !== 'undefined') {
-        console.log(
-          `[CLIENT-SIDE] Executing query function for txId events supposedly: ${txId} at ${new Date().toISOString()}`
-        );
-      } else {
-        console.log(
-          `[SERVER-SIDE] Executing query function for txId events supposedly: ${txId} at ${new Date().toISOString()}`
-        );
-      }
       const tx = await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         // This query isn't for tx events
         params: {

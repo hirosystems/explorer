@@ -6,7 +6,10 @@ import {
 import { TxPage } from '../TxPage';
 import { TxDetails } from './TxDetails';
 
-export default function CoinbasePage({ tx }: { tx: CoinbaseTransaction | MempoolCoinbaseTransaction }) {
-  console.log('rendering coinbase tx');
+export default function CoinbasePage({
+  tx,
+}: {
+  tx: CoinbaseTransaction | MempoolCoinbaseTransaction;
+}) {
   return <TxPage tx={tx} txDetails={<TxDetails tx={tx} />} />;
 }

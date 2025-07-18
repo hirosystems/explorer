@@ -13,6 +13,5 @@ export default function TenureChangePage({
 }: {
   tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
 }) {
-  console.log('rendering tenure change tx');
   return <TxPage tx={tx} txDetails={<TxDetails tx={tx} />} />;
 }

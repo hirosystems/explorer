@@ -16,7 +16,6 @@ export default function SmartContractTx({
 }: {
   tx: SmartContractTransaction | MempoolSmartContractTransaction;
 }) {
-  console.log('rendering smart contract tx');
   const txContractId = getTxContractId(tx);
   const { data: contract } = useContractById(txContractId);
   const source = contract?.source_code;
