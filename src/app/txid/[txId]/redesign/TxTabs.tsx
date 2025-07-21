@@ -170,7 +170,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
         </TabsContent>
         <TabsContent key="postConditions" value="postConditions" w="100%">
           <TabsContentContainer>
-            <Text>Post-conditions</Text>
+            <Text>Post-conditions</Text> {/* TODO: add post-conditions */}
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
@@ -180,7 +180,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
         </TabsContent>
         <TabsContent key="sourceCode" value="sourceCode" w="100%">
           <TabsContentContainer>
-            <Text>Source code</Text>
+            <Text>Source code</Text> {/* TODO: add source code */}
           </TabsContentContainer>
         </TabsContent>
       </>

@@ -7,6 +7,7 @@ import {
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { formatFunctionArgs } from './utils';
 
 enum FunctionArgsTableColumns {
   Name = 'name',
@@ -44,87 +45,13 @@ const columnDefinitions: ColumnDef<FunctionArgsTableData>[] = [
   },
 ];
 
-const formatClarityValueType = (type: string) => {
-  if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
-    switch (type) {
-      case 'bool':
-        return 'Boolean';
-      case 'int':
-        return 'Integer';
-      case 'principal':
-        return 'Principal';
-      case 'uint':
-        return 'Unsigned Integer';
-    }
-  }
-
-  if (type.includes('tuple')) {
-    return 'Tuple';
-  }
-  return type;
-};
-
-const tupleToArr = (tuple: string) =>
-  tuple
-    .replace('(tuple (', '')
-    .replace('))', '')
-    .split(') (')
-    .map(item => item.split(' '));
-
-function formatTupleResult(tuple: string) {
-  const tupleArr = tupleToArr(tuple);
-  let result = '';
-  tupleArr.forEach((entry: any, index: number) => {
-    if (entry && entry.length) {
-      const key = entry?.[0]?.replace(/\(/g, '');
-      const value = entry?.[1]?.replace(/\)/g, '');
-      result += `${key}: ${value}`;
-
-      if (index !== tuple.length - 1) {
-        result += ', ';
-      }
-    }
-  });
-
-  return result;
-}
-
-interface FunctionArg {
+export interface FunctionArg {
   name: string;
   value: string;
   type: string;
 }
 
-function formatFunctionArgs(
-  tx: ContractCallTransaction | MempoolContractCallTransaction
-): FunctionArg[] {
-  const args = (tx?.contract_call?.function_args || []).filter(arg => !!arg);
-  console.log('args', args);
-  return args.map(arg => {
-    let value: string = arg.repr;
-    if (arg.type === 'principal') {
-      const principal = arg.hex ? (cvToJSON(hexToCV(arg.hex)) || {}).value : '';
-      const isContract = principal.includes('.');
-      value = isContract ? principal : arg.repr;
-    }
-    if (arg.type === 'uint') {
-      value = arg.repr.replace('u', '');
-      if (arg.name.includes('ustx')) {
-        value = `${microToStacksFormatted(value)} STX`;
-      }
-      value = parseInt(value).toLocaleString();
-    }
-    if (arg.type.includes('tuple')) {
-      value = formatTupleResult(arg.repr);
-    }
 
-    return {
-      name: arg.name,
-      value,
-      type: formatClarityValueType(arg.type),
-    };
-  });
-}
 
 export function FunctionArgsTable({
   tx,
