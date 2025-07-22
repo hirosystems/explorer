@@ -1,3 +1,10 @@
+## [1.317.1](https://github.com/hirosystems/explorer/compare/v1.317.0...v1.317.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* sbtc quicklink ([#2433](https://github.com/hirosystems/explorer/issues/2433)) ([53e8d22](https://github.com/hirosystems/explorer/commit/53e8d22bf695eb2ee29bb959f9c6a6ce95126918))
+
 # [1.317.0](https://github.com/hirosystems/explorer/compare/v1.316.1...v1.317.0) (2025-07-22)
 
 
