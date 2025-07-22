@@ -1,3 +1,10 @@
+# [1.317.0](https://github.com/hirosystems/explorer/compare/v1.316.1...v1.317.0) (2025-07-22)
+
+
+### Features
+
+* redesign: search results page ([#2430](https://github.com/hirosystems/explorer/issues/2430)) ([a5df39f](https://github.com/hirosystems/explorer/commit/a5df39fbaca1ecfa28cf78054789da2f09f7f944))
+
 ## [1.316.1](https://github.com/hirosystems/explorer/compare/v1.316.0...v1.316.1) (2025-07-18)
 
 
