@@ -207,7 +207,7 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
   },
   'TXTYPE:': {
     filter: 'transactionType',
-    type: 'token_transfer,contract_call,smart_contract,...',
+    type: 'token_transfer,contract_call,contract_deploy,coinbase,tenure_change',
     transform: (value: string) => {
       return value
         .split(',')

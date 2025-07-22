@@ -1,5 +1,6 @@
 import { useFilterParams } from '@/common/utils/search-param-utils';
 import {
+  Box,
   Flex,
   FlexProps,
   HStack,
@@ -86,25 +87,28 @@ export function SearchResultsWrapper({
 }
 
 function KeywordsPreview() {
+  const keywords = Object.keys(advancedSearchConfig).filter(key => key !== 'TERM:');
+
   return (
-    <Flex rowGap={1} columnGap={2} flexWrap={'wrap'} mt={1}>
-      {Object.keys(advancedSearchConfig).map(key => {
-        if (key === 'TERM:') return null;
-        return (
-          <Flex
-            key={key}
-            fontSize={'xs'}
-            borderRadius="redesign.md"
-            whiteSpace="pre"
-            fontFamily="var(--font-matter-mono)"
-            fontWeight={'400'}
+    <Box mt={1} as="p" textStyle="text-mono-xs" lineHeight="tall">
+      {keywords.map((key, index) => (
+        <React.Fragment key={key}>
+          <Text as="span" color={'textSecondary'} style={{ display: 'inline' }}>
+            {key}
+          </Text>
+          <Text
+            as="span"
+            color={'textTertiary'}
+            display="inline"
+            wordBreak="break-all"
+            overflowWrap="anywhere"
           >
-            <Text color={'textSecondary'}>{key}</Text>
-            <Text color={'textTertiary'}>({advancedSearchConfig[key].type})</Text>
-          </Flex>
-        );
-      })}
-    </Flex>
+            ({advancedSearchConfig[key].type})
+          </Text>
+          {index < keywords.length - 1 && ' '}
+        </React.Fragment>
+      ))}
+    </Box>
   );
 }
 
