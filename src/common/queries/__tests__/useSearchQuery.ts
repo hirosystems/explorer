@@ -2,6 +2,7 @@ import { Network } from '../../types/network';
 import {
   advancedSearchConfig,
   buildAdvancedSearchQuery,
+  formatTransactionType,
   getSearchPageUrl,
   isValidDateString,
   parseAdvancedSearchQuery,
@@ -38,7 +39,14 @@ describe('parseAdvancedSearchQuery', () => {
 
   test('should parse txtype: correctly', () => {
     const result = parseAdvancedSearchQuery('TXTYPE:token_transfer');
-    expect(result).toEqual([{ filterName: 'transactionType', filterValue: 'token_transfer' }]);
+    expect(result).toEqual([{ filterName: 'transactionType', filterValue: ['token_transfer'] }]);
+  });
+
+  test('should parse comma-separated txtype: correctly', () => {
+    const result = parseAdvancedSearchQuery('TXTYPE:token_transfer,contract_call');
+    expect(result).toEqual([
+      { filterName: 'transactionType', filterValue: ['token_transfer', 'contract_call'] },
+    ]);
   });
 
   test('should parse multiple advanced search terms correctly including txtype', () => {
@@ -54,7 +62,7 @@ describe('parseAdvancedSearchQuery', () => {
       { filterName: 'toAddress', filterValue: STX_ADDRESS_2 },
       { filterName: 'endTime', filterValue: beforeDateTimestamp },
       { filterName: 'startTime', filterValue: afterDateTimestamp },
-      { filterName: 'transactionType', filterValue: 'contract_call' },
+      { filterName: 'transactionType', filterValue: ['contract_call'] },
     ]);
 
     expect(advancedSearchConfig['BEFORE:'].build(beforeDateTimestamp)).toEqual(beforeDateInput);
@@ -98,6 +106,18 @@ describe('buildAdvancedSearchQuery', () => {
     };
     const result = buildAdvancedSearchQuery(query);
     expect(result).toBe(`FROM:${STX_ADDRESS_1} TXTYPE:token_transfer BEFORE:2023-07-21`);
+  });
+
+  test('should build a query string with multiple transaction types', () => {
+    const query = {
+      fromAddress: STX_ADDRESS_1,
+      transactionType: 'token_transfer,contract_call',
+      endTime: 1689983999,
+    };
+    const result = buildAdvancedSearchQuery(query);
+    expect(result).toBe(
+      `FROM:${STX_ADDRESS_1} TXTYPE:token_transfer,contract_call BEFORE:2023-07-21`
+    );
   });
 
   test('should build a query string from a parsed object', () => {
@@ -207,5 +227,26 @@ describe('isValidDateString', () => {
     expect(isValidDateString('2020-02-29')).toBe(true);
     expect(isValidDateString('2000-02-29')).toBe(true);
     expect(isValidDateString('2100-02-29')).toBe(false);
+  });
+});
+
+describe('formatTransactionType', () => {
+  test('should return single transaction type unchanged', () => {
+    expect(formatTransactionType('token_transfer')).toBe('token_transfer');
+    expect(formatTransactionType('contract_call')).toBe('contract_call');
+    expect(formatTransactionType('smart_contract')).toBe('smart_contract');
+  });
+
+  test('should format comma-separated transaction types with spaces', () => {
+    expect(formatTransactionType('token_transfer,contract_call')).toBe(
+      'token_transfer, contract_call'
+    );
+    expect(formatTransactionType('token_transfer,contract_call,smart_contract')).toBe(
+      'token_transfer, contract_call, smart_contract'
+    );
+  });
+
+  test('should handle empty string', () => {
+    expect(formatTransactionType('')).toBe('');
   });
 });

@@ -18,6 +18,7 @@ import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
@@ -211,6 +212,7 @@ export interface TxsTableProps {
   columnDefinitions?: ColumnDef<TxTableData>[];
   pageSize?: number;
   filters?: TxPageFilters;
+  onTotalChange?: (total: number) => void;
 }
 
 const DEFAULT_FILTERS: TxPageFilters = {
@@ -227,7 +229,10 @@ export function TxsTable({
   disablePagination = false,
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
+  onTotalChange,
 }: TxsTableProps) {
+  const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -272,7 +277,11 @@ export function TxsTable({
   let { data, refetch, isFetching, isLoading } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
-    { ...filters },
+    {
+      ...filters,
+      order: activeConfirmedTxsOrder,
+      sortBy: activeConfirmedTxsSort,
+    },
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
@@ -291,6 +300,12 @@ export function TxsTable({
   const isTableFiltered = Object.values(filters).some(
     filterValue => filterValue != null && filterValue !== '' && filterValue?.length !== 0
   );
+
+  useEffect(() => {
+    if (onTotalChange && typeof total === 'number') {
+      onTotalChange(total);
+    }
+  }, [total, onTotalChange]);
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
 
