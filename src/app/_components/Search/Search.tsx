@@ -145,7 +145,9 @@ function QuickLinks() {
       </Text>
       <Flex gap={2} flexWrap="wrap">
         {isMainnet && (
-          <QuickLinkButton href={'/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?cha'}>
+          <QuickLinkButton
+            href={'/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?chain=mainnet'}
+          >
             sBTC
           </QuickLinkButton>
         )}
