@@ -32,7 +32,10 @@ export const FunctionCalled = ({
           <Text textStyle="text-medium-sm" color="textSecondary">
             Result
           </Text>
-          <FunctionResultsTable tx={tx} />
+          <Stack>
+            <FunctionResultType tx={tx} />
+            <FunctionResultsTable tx={tx} />
+          </Stack>
         </Grid>
       </TabsContentContainer>
       <TabsContentContainer>

@@ -51,8 +51,6 @@ export interface FunctionArg {
   type: string;
 }
 
-
-
 export function FunctionArgsTable({
   tx,
 }: {

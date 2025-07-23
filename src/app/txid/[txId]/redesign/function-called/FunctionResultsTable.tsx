@@ -44,7 +44,7 @@ const columnDefinitions: ColumnDef<FunctionResultsTableData>[] = [
   },
 ];
 
-interface FunctionResult {
+export interface FunctionResult {
   field: string;
   value: string;
   type: string;
@@ -56,5 +56,6 @@ export function FunctionResultsTable({
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) {
   const result = formatFunctionResult(tx);
+  console.log({result})
   return <Table columns={columnDefinitions} data={result} />;
 }

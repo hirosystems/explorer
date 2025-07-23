@@ -7,6 +7,7 @@ import {
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { FunctionArg } from './FunctionArgsTable';
+import { FunctionResult } from './FunctionResultsTable';
 
 const formatClarityValueType = (type: string) => {
   // TODO: add tests for this
