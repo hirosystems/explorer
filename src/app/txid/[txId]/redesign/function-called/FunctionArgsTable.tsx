@@ -6,6 +6,11 @@ import {
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import {
+  NameCellRenderer,
+  TypeCellRenderer,
+  ValueCellRenderer,
+} from './FunctionCalledTableCellRenderers';
 import { formatClarityValue, getContractCallTxFunctionArgs } from './utils';
 
 enum FunctionArgsTableColumns {
@@ -25,21 +30,21 @@ const columnDefinitions: ColumnDef<FunctionArgsTableData>[] = [
     id: FunctionArgsTableColumns.Name,
     header: 'Name',
     accessorKey: FunctionArgsTableColumns.Name,
-    cell: info => info.getValue() as string,
+    cell: info => NameCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
     id: FunctionArgsTableColumns.Value,
     header: 'Value',
     accessorKey: FunctionArgsTableColumns.Value,
-    cell: info => info.getValue() as string,
+    cell: info => ValueCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
     id: FunctionArgsTableColumns.Type,
     header: 'Type',
     accessorKey: FunctionArgsTableColumns.Type,
-    cell: info => info.getValue() as string,
+    cell: info => TypeCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
 ];

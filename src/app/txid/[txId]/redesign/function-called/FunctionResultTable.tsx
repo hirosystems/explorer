@@ -3,6 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
+import { NameCellRenderer, TypeCellRenderer, ValueCellRenderer } from './FunctionCalledTableCellRenderers';
 import { formatFunctionResult } from './utils';
 
 enum FunctionResultsTableColumns {
@@ -22,21 +23,21 @@ const columnDefinitions: ColumnDef<FunctionResultsTableData>[] = [
     id: FunctionResultsTableColumns.Name,
     header: 'Name',
     accessorKey: FunctionResultsTableColumns.Name,
-    cell: info => info.getValue() as string,
+    cell: info => NameCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
     id: FunctionResultsTableColumns.Value,
     header: 'Value',
     accessorKey: FunctionResultsTableColumns.Value,
-    cell: info => info.getValue() as string,
+    cell: info => ValueCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
     id: FunctionResultsTableColumns.Type,
     header: 'Type',
     accessorKey: FunctionResultsTableColumns.Type,
-    cell: info => info.getValue() as string,
+    cell: info => TypeCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
 ];

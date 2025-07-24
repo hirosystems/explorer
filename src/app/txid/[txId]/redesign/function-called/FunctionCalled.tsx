@@ -12,7 +12,7 @@ import {
 import { TabsContentContainer } from '../TxTabs';
 import { FunctionArgsTable } from './FunctionArgsTable';
 import { FunctionResultType } from './FunctionResultType';
-import { FunctionResultsTable } from './FunctionResultsTable';
+import { FunctionResultsTable } from './FunctionResultTable';
 
 function FunctionTitle() {
   return (

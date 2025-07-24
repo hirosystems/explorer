@@ -70,6 +70,7 @@ type ClarityValue = {
 
 // TODO: add tests for this
 // I extracted this monstrosity from the old logic in FunctionSummaryClarityValue, which didn't have any type safety checks
+// wrap this function in a try catch
 export function formatClarityValue(cv: ClarityValue): FormattedClarityValue {
   let value: string | number = cv.repr;
   if (cv.type === 'principal') {
