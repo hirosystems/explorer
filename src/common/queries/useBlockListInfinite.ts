@@ -51,6 +51,7 @@ export const useBlockList = (
   options?: any
 ): UseQueryResult<GenericResponseType<Block>> => {
   const apiClient = useApiClient();
+
   return useQuery({
     queryKey: [BLOCK_LIST_QUERY_KEY, limit],
     queryFn: async () => {

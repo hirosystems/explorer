@@ -38,7 +38,7 @@ const MobileContentTop = ({
         >
           <Box position="absolute" top={0} left={0} w="full">
             {primaryPages.map(page => (
-              <PrimaryPageLink page={page} onClick={onClose} />
+              <PrimaryPageLink page={page} onClick={onClose} key={page.id} />
             ))}
           </Box>
         </motion.div>
