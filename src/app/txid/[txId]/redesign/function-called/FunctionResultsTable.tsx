@@ -1,30 +1,27 @@
 import { Table } from '@/common/components/table/Table';
 import { ColumnDef } from '@tanstack/react-table';
 
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { formatFunctionResult } from './utils';
 
 enum FunctionResultsTableColumns {
-  Field = 'field',
+  Name = 'name',
   Value = 'value',
   Type = 'type',
 }
 
 interface FunctionResultsTableData {
-  [FunctionResultsTableColumns.Field]: string;
+  [FunctionResultsTableColumns.Name]: string;
   [FunctionResultsTableColumns.Value]: string;
   [FunctionResultsTableColumns.Type]: string;
 }
 
 const columnDefinitions: ColumnDef<FunctionResultsTableData>[] = [
   {
-    id: FunctionResultsTableColumns.Field,
-    header: 'Field',
-    accessorKey: FunctionResultsTableColumns.Field,
+    id: FunctionResultsTableColumns.Name,
+    header: 'Name',
+    accessorKey: FunctionResultsTableColumns.Name,
     cell: info => info.getValue() as string,
     enableSorting: false,
   },
@@ -45,17 +42,15 @@ const columnDefinitions: ColumnDef<FunctionResultsTableData>[] = [
 ];
 
 export interface FunctionResult {
-  field: string;
+  name: string;
   value: string;
   type: string;
 }
 
-export function FunctionResultsTable({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) {
-  const result = formatFunctionResult(tx);
-  console.log({result})
-  return <Table columns={columnDefinitions} data={result} />;
+export function FunctionResultsTable({ tx }: { tx: ContractCallTransaction }) {
+  const result = tx.tx_result;
+  console.log('FunctionResultsTable', { result });
+  const formattedResult = formatFunctionResult(result);
+  console.log('FunctionResultsTable', { formattedResult });
+  return <Table columns={columnDefinitions} data={formattedResult} />;
 }

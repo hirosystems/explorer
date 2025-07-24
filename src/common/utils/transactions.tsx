@@ -140,3 +140,9 @@ export function getTxStatusLabel(tx: Transaction | MempoolTransaction) {
   const label = TX_STATUS_LABELS[txStatus] || TX_STATUS_LABELS.default;
   return label;
 }
+
+export function isConfirmedTx<T extends Transaction, U extends MempoolTransaction>(
+  tx: T | U
+): tx is T {
+  return 'block_height' in tx && tx.block_height !== undefined;
+}

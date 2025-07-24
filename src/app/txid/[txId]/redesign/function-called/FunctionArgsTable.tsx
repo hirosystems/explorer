@@ -1,13 +1,12 @@
 import { Table } from '@/common/components/table/Table';
-import { microToStacksFormatted } from '@/common/utils/utils';
 import { ColumnDef } from '@tanstack/react-table';
 
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
-import { formatFunctionArgs } from './utils';
+
+import { formatClarityValue, getContractCallTxFunctionArgs } from './utils';
 
 enum FunctionArgsTableColumns {
   Name = 'name',
@@ -45,17 +44,12 @@ const columnDefinitions: ColumnDef<FunctionArgsTableData>[] = [
   },
 ];
 
-export interface FunctionArg {
-  name: string;
-  value: string;
-  type: string;
-}
-
 export function FunctionArgsTable({
   tx,
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) {
-  const args = formatFunctionArgs(tx);
-  return <Table columns={columnDefinitions} data={args} />;
+  const args = getContractCallTxFunctionArgs(tx);
+  const formattedArgs = args.map(arg => formatClarityValue(arg));
+  return <Table columns={columnDefinitions} data={formattedArgs} />;
 }

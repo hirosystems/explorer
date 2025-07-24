@@ -1,16 +1,10 @@
-import { Pre } from '@/ui/typography';
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
 
-export function FunctionResultType({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) {
-  const result = tx?.tx_result;
-  if (!result) return null;
-  const { success, type, value } = cvToJSON(hexToCV(result.hex));
+import { Pre } from '../Pre';
+
+export function FunctionResultType({ tx }: { tx: ContractCallTransaction }) {
+  const result = tx.tx_result;
+  const { value } = cvToJSON(hexToCV(result.hex));
   return <Pre>{value.type}</Pre>;
 }

@@ -2,7 +2,7 @@ import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Flex, Stack } from '@chakra-ui/react';
+import { Flex, Stack, StackProps } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -48,13 +48,14 @@ function TabTriggerComponent({
   );
 }
 
-export function TabsContentContainer({ children }: { children: React.ReactNode }) {
+export function TabsContentContainer({ children, ...stackProps }: { children: React.ReactNode } & StackProps) {
   return (
     <Stack
       borderRadius="redesign.xl"
       border="1px solid"
       borderColor="redesignBorderSecondary"
       p={3}
+      {...stackProps}
     >
       {children}
     </Stack>

@@ -1,6 +1,7 @@
+import { isConfirmedTx } from '@/common/utils/transactions';
 import { DefaultBadge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
-import { Grid, Stack } from '@chakra-ui/react';
+import { Box, Grid, Stack } from '@chakra-ui/react';
 import { Function } from '@phosphor-icons/react';
 
 import {
@@ -10,42 +11,65 @@ import {
 
 import { TabsContentContainer } from '../TxTabs';
 import { FunctionArgsTable } from './FunctionArgsTable';
+import { FunctionResultType } from './FunctionResultType';
 import { FunctionResultsTable } from './FunctionResultsTable';
+
+function FunctionTitle() {
+  return (
+    <TabsContentContainer>
+      <DefaultBadge
+        label={<DefaultBadgeLabel label="Function called" />}
+        icon={<Function />}
+        variant="solid"
+      />
+    </TabsContentContainer>
+  );
+}
+
+function FunctionResult({ tx }: { tx: ContractCallTransaction | MempoolContractCallTransaction }) {
+  if (!isConfirmedTx(tx)) return null;
+  return (
+    <TabsContentContainer px={6}>
+      <Grid templateColumns="auto 1fr" gap={12} columnGap={12}>
+        <Box pt={4}>
+          <Text textStyle="text-medium-sm" color="textSecondary">
+            Result
+          </Text>
+        </Box>
+        <Stack>
+          <FunctionResultType tx={tx} />
+          <FunctionResultsTable tx={tx} />
+        </Stack>
+      </Grid>
+    </TabsContentContainer>
+  );
+}
+
+function FunctionArgs({ tx }: { tx: ContractCallTransaction | MempoolContractCallTransaction }) {
+  return (
+    <TabsContentContainer px={6}>
+      <Grid templateColumns="auto 1fr" gap={12} columnGap={12}>
+        <Box pt={3}>
+          <Text textStyle="text-medium-sm" color="textSecondary">
+            Arguments
+          </Text>
+        </Box>
+        <FunctionArgsTable tx={tx} />
+      </Grid>
+    </TabsContentContainer>
+  );
+}
 
 export const FunctionCalled = ({
   tx,
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) => {
-  console.log('FunctionCalled', { tx });
   return (
     <Stack gap={2}>
-      <TabsContentContainer>
-        <DefaultBadge
-          label={<DefaultBadgeLabel label="Function called" />}
-          icon={<Function />}
-          variant="solid"
-        />
-      </TabsContentContainer>
-      <TabsContentContainer>
-        <Grid templateColumns="auto 1fr" gap={12} columnGap={12}>
-          <Text textStyle="text-medium-sm" color="textSecondary">
-            Result
-          </Text>
-          <Stack>
-            <FunctionResultType tx={tx} />
-            <FunctionResultsTable tx={tx} />
-          </Stack>
-        </Grid>
-      </TabsContentContainer>
-      <TabsContentContainer>
-        <Grid templateColumns="auto 1fr" gap={12} columnGap={12}>
-          <Text textStyle="text-medium-sm" color="textSecondary">
-            Arguments
-          </Text>
-          <FunctionArgsTable tx={tx} />
-        </Grid>
-      </TabsContentContainer>
+      <FunctionTitle />
+      <FunctionResult tx={tx} />
+      <FunctionArgs tx={tx} />
     </Stack>
   );
 };
