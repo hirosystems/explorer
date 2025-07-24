@@ -1,13 +1,15 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Flex, Stack } from '@chakra-ui/react';
+import { Flex, Stack, StackProps } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Events } from './Events';
 import { TxSummary } from './TxSummary';
+import { FunctionCalled } from './function-called/FunctionCalled';
 
 function TabTriggerComponent({
   label,
@@ -46,13 +48,14 @@ function TabTriggerComponent({
   );
 }
 
-export function TabsContentContainer({ children }: { children: React.ReactNode }) {
+export function TabsContentContainer({ children, ...stackProps }: { children: React.ReactNode } & StackProps) {
   return (
     <Stack
       borderRadius="redesign.xl"
       border="1px solid"
       borderColor="redesignBorderSecondary"
       p={3}
+      {...stackProps}
     >
       {children}
     </Stack>
@@ -86,7 +89,45 @@ function getTabsTriggersByTransactionType(
     );
   }
   if (tx.tx_type === 'contract_call') {
-    return null;
+    return (
+      <>
+        <TabTriggerComponent
+          key="overview"
+          label="Overview"
+          value="overview"
+          isActive={selectedTab === 'overview'}
+          onClick={() => setSelectedTab('overview')}
+        />
+        <TabTriggerComponent
+          key="functionCall"
+          label={'Function call'}
+          value="functionCall"
+          isActive={selectedTab === 'functionCall'}
+          onClick={() => setSelectedTab('functionCall')}
+        />
+        <TabTriggerComponent
+          key="postConditions"
+          label={`Post-conditions ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`} // TODO: add count
+          value="postConditions"
+          isActive={selectedTab === 'postConditions'}
+          onClick={() => setSelectedTab('postConditions')}
+        />
+        <TabTriggerComponent
+          key="events"
+          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
+          value="events"
+          isActive={selectedTab === 'events'}
+          onClick={() => setSelectedTab('events')}
+        />
+        <TabTriggerComponent
+          key="sourceCode"
+          label={'Source code'}
+          value="sourceCode"
+          isActive={selectedTab === 'sourceCode'}
+          onClick={() => setSelectedTab('sourceCode')}
+        />
+      </>
+    );
   }
   if (tx.tx_type === 'coinbase') {
     return null;
@@ -118,7 +159,33 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     );
   }
   if (tx.tx_type === 'contract_call') {
-    return null;
+    return (
+      <>
+        <TabsContent key="overview" value="overview" w="100%">
+          <TabsContentContainer>
+            <TxSummary tx={tx} />
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="functionCall" value="functionCall" w="100%">
+          <FunctionCalled tx={tx} />
+        </TabsContent>
+        <TabsContent key="postConditions" value="postConditions" w="100%">
+          <TabsContentContainer>
+            <Text>Post-conditions</Text> {/* TODO: add post-conditions */}
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="events" value="events" w="100%">
+          <TabsContentContainer>
+            <Events tx={tx} />
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="sourceCode" value="sourceCode" w="100%">
+          <TabsContentContainer>
+            <Text>Source code</Text> {/* TODO: add source code */}
+          </TabsContentContainer>
+        </TabsContent>
+      </>
+    );
   }
   if (tx.tx_type === 'coinbase') {
     return null;
@@ -142,12 +209,13 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       defaultValue={'overview'}
       gap={2}
       borderRadius="redesign.xl"
+      w="full"
     >
-      <Flex justifyContent={'space-between'} w="full">
-        <TabsList flexWrap={'wrap'}>
-          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
-        </TabsList>
-        <Flex alignItems={'center'} gap={2}>
+      <Flex justifyContent={'space-between'} w="full" gap={2}>
+        <ScrollIndicator>
+          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
+        </ScrollIndicator>
+        <Flex alignItems={'center'} gap={4}>
           <Text textStyle="text-regular-sm">Show:</Text>
           <ValueBasisFilterPopover />
         </Flex>

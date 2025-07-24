@@ -1,8 +1,8 @@
 'use client';
 
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
-import { TableScrollIndicator } from '@/common/components/table/TableScrollIndicatorWrapper';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { getTxEventsByIdQueryKey, useTxEventsById } from '@/common/queries/useTxEventsById';
@@ -147,7 +147,6 @@ export function EventsTable({
   columnDefinitions,
   pageSize = EVENTS_TABLE_PAGE_SIZE,
 }: EventsTableProps) {
-  console.log('EventsTable', { filters });
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -240,7 +239,7 @@ export function EventsTable({
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
       tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
-      scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
           ? undefined

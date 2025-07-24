@@ -13,6 +13,7 @@ import { TokenTransferPage } from './TokenTransfer';
 import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
+import { ContractCallPage as ContractCallPageRedesign } from './redesign/ContractCallPage';
 
 function Tx({ txId }: { txId: string }) {
   const { data: tx } = useSuspenseTxById(txId);
@@ -26,7 +27,9 @@ function Tx({ txId }: { txId: string }) {
 
   if (tx.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;
 
-  if (tx.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
+  if (tx.tx_type === 'contract_call') return <ContractCallPageRedesign tx={tx} />;
+  // if (tx.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
+  // if (tx.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
 
   if (tx.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 

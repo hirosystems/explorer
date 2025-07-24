@@ -27,6 +27,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
   if (!result) return null;
   const { success, type, value } = cvToJSON(hexToCV(result.hex));
   const hasType = !type?.includes('UnknownType');
+  console.log('FunctionSummaryResult', { success, type, value });
 
   if (type?.includes('tuple')) {
     return (
