@@ -1,3 +1,10 @@
+# [1.318.0](https://github.com/hirosystems/explorer/compare/v1.317.1...v1.318.0) (2025-07-28)
+
+
+### Features
+
+* adds redesigned token transfer id page ([877875d](https://github.com/hirosystems/explorer/commit/877875d1858c130c9c2b3ab871bde32c92000859))
+
 ## [1.317.1](https://github.com/hirosystems/explorer/compare/v1.317.0...v1.317.1) (2025-07-22)
 
 
