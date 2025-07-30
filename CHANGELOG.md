@@ -1,3 +1,10 @@
+# [1.319.0](https://github.com/hirosystems/explorer/compare/v1.318.0...v1.319.0) (2025-07-30)
+
+
+### Features
+
+* added tenure tx id page ([a62c0c3](https://github.com/hirosystems/explorer/commit/a62c0c3d101b7983a047d790fbe65dce24c90afe))
+
 # [1.318.0](https://github.com/hirosystems/explorer/compare/v1.317.1...v1.318.0) (2025-07-28)
 
 
