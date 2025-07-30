@@ -1,3 +1,10 @@
+## [1.319.1](https://github.com/hirosystems/explorer/compare/v1.319.0...v1.319.1) (2025-07-30)
+
+
+### Bug Fixes
+
+* post condition principal validation ([#2443](https://github.com/hirosystems/explorer/issues/2443)) ([f1ea8fd](https://github.com/hirosystems/explorer/commit/f1ea8fd6722712b427f1591f4afa934df70dd7e3))
+
 # [1.319.0](https://github.com/hirosystems/explorer/compare/v1.318.0...v1.319.0) (2025-07-30)
 
 
