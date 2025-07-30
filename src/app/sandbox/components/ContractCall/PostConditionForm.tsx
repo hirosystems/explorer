@@ -217,7 +217,7 @@ export const checkPostConditionParameters = (
     }
     if (
       (key === 'postConditionAddress' || key === 'postConditionAssetAddress') &&
-      !validateStacksAddress(formikState[key] as string)
+      !validateStacksAddress(formikState[key].split('.')[0])
     ) {
       errors[key] = 'Invalid Stacks address';
       return;
