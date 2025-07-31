@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Events } from './Events';
-import { TxSummary } from './TxSummary';
+import { TxSummary } from './tx-summary/TxSummary';
 
 function TabTriggerComponent({
   label,
@@ -59,7 +59,7 @@ export function TabsContentContainer({ children }: { children: React.ReactNode }
   );
 }
 
-function getTabsTriggersByTransactionType(
+function getTabsListByTransactionType(
   tx: Transaction | MempoolTransaction,
   selectedTab: string,
   setSelectedTab: (tab: string) => void
@@ -89,10 +89,26 @@ function getTabsTriggersByTransactionType(
     return null;
   }
   if (tx.tx_type === 'coinbase') {
-    return null;
+    return (
+      <TabTriggerComponent
+        key="overview"
+        label="Overview"
+        value="overview"
+        isActive={selectedTab === 'overview'}
+        onClick={() => setSelectedTab('overview')}
+      />
+    );
   }
   if (tx.tx_type === 'tenure_change') {
-    return null;
+    return (
+      <TabTriggerComponent
+        key="overview"
+        label="Overview"
+        value="overview"
+        isActive={selectedTab === 'overview'}
+        onClick={() => setSelectedTab('overview')}
+      />
+    );
   }
   if (tx.tx_type === 'smart_contract') {
     return null;
@@ -121,10 +137,22 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     return null;
   }
   if (tx.tx_type === 'coinbase') {
-    return null;
+    return (
+      <TabsContent key="overview" value="overview" w="100%">
+        <TabsContentContainer>
+          <TxSummary tx={tx} />
+        </TabsContentContainer>
+      </TabsContent>
+    );
   }
   if (tx.tx_type === 'tenure_change') {
-    return null;
+    return (
+      <TabsContent key="overview" value="overview" w="100%">
+        <TabsContentContainer>
+          <TxSummary tx={tx} />
+        </TabsContentContainer>
+      </TabsContent>
+    );
   }
   if (tx.tx_type === 'smart_contract') {
     return null;
@@ -145,7 +173,7 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
     >
       <Flex justifyContent={'space-between'} w="full">
         <TabsList flexWrap={'wrap'}>
-          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
+          {getTabsListByTransactionType(tx, selectedTab, setSelectedTab)}
         </TabsList>
         <Flex alignItems={'center'} gap={2}>
           <Text textStyle="text-regular-sm">Show:</Text>
