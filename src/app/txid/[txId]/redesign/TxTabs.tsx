@@ -59,7 +59,7 @@ export function TabsContentContainer({ children }: { children: React.ReactNode }
   );
 }
 
-function getTabsListByTransactionType(
+function getTabsTriggersByTransactionType(
   tx: Transaction | MempoolTransaction,
   selectedTab: string,
   setSelectedTab: (tab: string) => void
@@ -89,26 +89,10 @@ function getTabsListByTransactionType(
     return null;
   }
   if (tx.tx_type === 'coinbase') {
-    return (
-      <TabTriggerComponent
-        key="overview"
-        label="Overview"
-        value="overview"
-        isActive={selectedTab === 'overview'}
-        onClick={() => setSelectedTab('overview')}
-      />
-    );
+    return null;
   }
   if (tx.tx_type === 'tenure_change') {
-    return (
-      <TabTriggerComponent
-        key="overview"
-        label="Overview"
-        value="overview"
-        isActive={selectedTab === 'overview'}
-        onClick={() => setSelectedTab('overview')}
-      />
-    );
+    return null;
   }
   if (tx.tx_type === 'smart_contract') {
     return null;
@@ -137,18 +121,16 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     return null;
   }
   if (tx.tx_type === 'coinbase') {
-    return (
-      <TabsContent key="overview" value="overview" w="100%">
-        <TabsContentContainer>
-          <TxSummary tx={tx} />
-        </TabsContentContainer>
-      </TabsContent>
-    );
+    return null;
   }
   if (tx.tx_type === 'tenure_change') {
-    return (
-      <TabsContent key="overview" value="overview" w="100%">
-        <TabsContentContainer>
+    return null;
+  }
+  if (tx.tx_type === 'smart_contract') {
+    return null;
+  }
+  return null;
+}
           <TxSummary tx={tx} />
         </TabsContentContainer>
       </TabsContent>
@@ -173,7 +155,7 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
     >
       <Flex justifyContent={'space-between'} w="full">
         <TabsList flexWrap={'wrap'}>
-          {getTabsListByTransactionType(tx, selectedTab, setSelectedTab)}
+          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
         </TabsList>
         <Flex alignItems={'center'} gap={2}>
           <Text textStyle="text-regular-sm">Show:</Text>
