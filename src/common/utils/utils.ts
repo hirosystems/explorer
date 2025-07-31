@@ -445,25 +445,6 @@ export const isJSONString = (str: string) => {
   }
 };
 
-export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
-  switch (transaction.tx_type) {
-    case 'smart_contract':
-      return getContractName(transaction?.smart_contract?.contract_id);
-    case 'contract_call':
-      return getFunctionName(transaction);
-    case 'token_transfer':
-      return `${microToStacksFormatted(transaction.token_transfer.amount)} STX transfer`;
-    case 'coinbase':
-      return 'block_height' in transaction && transaction?.block_height
-        ? `Block #${transaction.block_height} coinbase`
-        : 'Coinbase';
-    case 'poison_microblock':
-      return `Poison microblock transaction`;
-    case 'tenure_change':
-      return `Tenure change`;
-  }
-};
-
 export function removeTrailingSlash(url?: string) {
   if (!url) return '';
   return url.replace(/\/$/, '');

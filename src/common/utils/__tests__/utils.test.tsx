@@ -70,27 +70,37 @@ describe('semanticTokenToCssVar', () => {
 
 describe('getTxTypeColor', () => {
   test('should return correct color for token_transfer', () => {
-    expect(getTxTypeColor('token_transfer')).toBe('transactionTypes.tokenTransfer');
+    expect(getTxTypeColor('token_transfer')).toBe(
+      'var(--stacks-colors-transaction-types-token-transfer)'
+    );
   });
 
   test('should return correct color for contract_call', () => {
-    expect(getTxTypeColor('contract_call')).toBe('transactionTypes.contractCall');
+    expect(getTxTypeColor('contract_call')).toBe(
+      'var(--stacks-colors-transaction-types-contract-call)'
+    );
   });
 
   test('should return correct color for smart_contract', () => {
-    expect(getTxTypeColor('smart_contract')).toBe('transactionTypes.contractDeploy');
+    expect(getTxTypeColor('smart_contract')).toBe(
+      'var(--stacks-colors-transaction-types-smart-contract)'
+    );
   });
 
   test('should return correct color for tenure_change', () => {
-    expect(getTxTypeColor('tenure_change')).toBe('transactionTypes.tenureChange');
+    expect(getTxTypeColor('tenure_change')).toBe(
+      'var(--stacks-colors-transaction-types-tenure-change)'
+    );
   });
 
   test('should return correct color for coinbase', () => {
-    expect(getTxTypeColor('coinbase')).toBe('transactionTypes.coinbase');
+    expect(getTxTypeColor('coinbase')).toBe('var(--stacks-colors-transaction-types-coinbase)');
   });
 
   test('should return token_transfer color for unknown transaction type', () => {
-    expect(getTxTypeColor('unknown_type')).toBe('transactionTypes.tokenTransfer');
+    expect(getTxTypeColor('unknown_type')).toBe(
+      'var(--stacks-colors-transaction-types-token-transfer)'
+    );
   });
 });
 

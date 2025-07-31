@@ -5,9 +5,17 @@ import TransferIcon from '@/ui/icons/TransferIcon';
 import { ArrowsClockwise, Clock, Cube, PhoneCall, Question, XCircle } from '@phosphor-icons/react';
 import { CheckCircle } from '@phosphor-icons/react/dist/ssr';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import {
+  CoinbaseTransaction,
+  MempoolCoinbaseTransaction,
+  MempoolTenureChangeTransaction,
+  MempoolTransaction,
+  TenureChangeTransaction,
+  Transaction,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../constants/constants';
+import { getContractName, getFunctionName, microToStacksFormatted } from './utils';
 
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
   if (tx?.tx_status === 'success' && (tx.is_unanchored || tx?.block_hash === '0x')) {
@@ -26,20 +34,20 @@ export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
   return TransactionStatus.PENDING;
 }
 
-export function getTxTypeIcon(txType: string) {
+export function getTxTypeIcon(txType: string, isBold?: boolean) {
   switch (txType) {
     case 'token_transfer':
-      return <TransferIcon />;
+      return <TransferIcon {...(isBold ? { weight: 'bold' } : {})} />;
     case 'contract_call':
-      return <PhoneCall />;
+      return <PhoneCall {...(isBold ? { weight: 'bold' } : {})} />;
     case 'smart_contract':
-      return <ClarityIcon />;
+      return <ClarityIcon {...(isBold ? { weight: 'bold' } : {})} />;
     case 'tenure_change':
-      return <ArrowsClockwise />;
+      return <ArrowsClockwise {...(isBold ? { weight: 'bold' } : {})} />;
     case 'coinbase':
-      return <Cube />;
+      return <Cube {...(isBold ? { weight: 'bold' } : {})} />;
     default:
-      return <Question />;
+      return <Question {...(isBold ? { weight: 'bold' } : {})} />;
   }
 }
 
@@ -63,34 +71,41 @@ export function getTxTypeLabel(txType: string) {
 export function getTxTypeColor(txType: string) {
   switch (txType) {
     case 'token_transfer':
-      return 'transactionTypes.tokenTransfer';
+      return 'var(--stacks-colors-transaction-types-token-transfer)';
     case 'contract_call':
-      return 'transactionTypes.contractCall';
+      return 'var(--stacks-colors-transaction-types-contract-call)';
     case 'smart_contract':
-      return 'transactionTypes.contractDeploy';
+      return 'var(--stacks-colors-transaction-types-smart-contract)';
     case 'tenure_change':
-      return 'transactionTypes.tenureChange';
+      return 'var(--stacks-colors-transaction-types-tenure-change)';
     case 'coinbase':
-      return 'transactionTypes.coinbase';
+      return 'var(--stacks-colors-transaction-types-coinbase)';
     default:
-      return 'transactionTypes.tokenTransfer';
+      return 'var(--stacks-colors-transaction-types-token-transfer)';
   }
 }
 
-const TX_STATUS_ICONS = {
-  [TransactionStatus.PENDING]: <Clock />,
-  [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: <CheckCircle />,
-  [TransactionStatus.SUCCESS_MICROBLOCK]: <CheckCircle />,
-  [TransactionStatus.NON_CANONICAL]: <CheckCircle />,
-  [TransactionStatus.FAILED]: <XCircle />,
-  [TransactionStatus.DROPPED]: <XCircle />,
-  default: <Question />,
-};
-
-export function getTxStatusIcon(tx: Transaction | MempoolTransaction) {
+export function getTxStatusIcon(tx: Transaction | MempoolTransaction, isBold?: boolean) {
   const txStatus = getTransactionStatus(tx);
-  const icon = TX_STATUS_ICONS[txStatus] || TX_STATUS_ICONS.default;
-  return icon;
+  if (txStatus === TransactionStatus.PENDING) {
+    return <Clock {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  if (txStatus === TransactionStatus.SUCCESS_ANCHOR_BLOCK) {
+    return <CheckCircle {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  if (txStatus === TransactionStatus.SUCCESS_MICROBLOCK) {
+    return <CheckCircle {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  if (txStatus === TransactionStatus.NON_CANONICAL) {
+    return <CheckCircle {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  if (txStatus === TransactionStatus.FAILED) {
+    return <XCircle {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  if (txStatus === TransactionStatus.DROPPED) {
+    return <XCircle {...(isBold ? { weight: 'bold' } : {})} />;
+  }
+  return <Question {...(isBold ? { weight: 'bold' } : {})} />;
 }
 
 export const TX_STATUS_ICON_COLORS = {
@@ -146,3 +161,21 @@ export function isConfirmedTx<T extends Transaction, U extends MempoolTransactio
 ): tx is T {
   return 'block_height' in tx && tx.block_height !== undefined;
 }
+export const getTxTitle = (tx: Transaction | MempoolTransaction) => {
+  switch (tx.tx_type) {
+    case 'smart_contract':
+      return getContractName(tx?.smart_contract?.contract_id);
+    case 'contract_call':
+      return getFunctionName(tx);
+    case 'token_transfer':
+      return `Send ${microToStacksFormatted(tx.token_transfer.amount)} STX`;
+    case 'coinbase':
+      return isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx)
+        ? `Block #${tx.block_height}`
+        : 'Coinbase';
+    case 'poison_microblock':
+      return `Poison microblock transaction`;
+    case 'tenure_change':
+      return `Tenure ${tx.tenure_change_payload?.cause} ${isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) ? `(#${tx?.block_height})` : ''}`;
+  }
+};

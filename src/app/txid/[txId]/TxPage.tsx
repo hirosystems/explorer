@@ -1,7 +1,6 @@
 import { getTxTypeIcon } from '@/common/components/TxIcon';
 import { TransactionType } from '@/common/constants/constants';
-import { getTransactionStatus } from '@/common/utils/transactions';
-import { getTxTitle } from '@/common/utils/utils';
+import { getTransactionStatus, getTxTitle } from '@/common/utils/transactions';
 import { Tag } from '@/components/ui/tag';
 import { Text } from '@/ui/Text';
 import { Icon, Stack } from '@chakra-ui/react';
