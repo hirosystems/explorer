@@ -76,6 +76,12 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
     );
   }
 
+  console.log('recentBlocks', recentBlocks);
+  console.log('stackingCycle', stackingCycle);
+  console.log('initialTxTableData', initialTxTableData);
+  console.log('mempoolStats', mempoolStats);
+  console.log('feeEstimates', feeEstimates);
+
   return (
     <HomePageDataProvider
       initialRecentBlocks={recentBlocks}
