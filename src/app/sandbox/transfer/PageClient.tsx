@@ -5,11 +5,9 @@ import { BigNumber } from 'bignumber.js';
 import { Form, Formik } from 'formik';
 import { NextPage } from 'next';
 
-import { openSTXTransfer } from '@stacks/connect';
-
 import { Badge } from '../../../common/components/Badge';
 import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
-import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useFeeTransfer } from '../../../common/queries/useFeeTransfer';
 import { microToStacks, stacksToMicro, validateStacksAddress } from '../../../common/utils/utils';
 import { Button } from '../../../ui/Button';
@@ -17,10 +15,11 @@ import { Input } from '../../../ui/Input';
 import { Text } from '../../../ui/Text';
 import { Caption, Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
+import { transferStx } from '../utils/walletTransactions';
 
 const PageClient: NextPage = () => {
   const { data: feeData } = useFeeTransfer();
-  const network = useStacksNetwork();
+  const network = useGlobalContext().activeNetwork;
   const { isConnected, balance, stxAddress } = useUser();
   const fee = feeData ? new BigNumber(feeData as any).multipliedBy(180) : 0;
 
@@ -50,13 +49,12 @@ const PageClient: NextPage = () => {
         }
         return _errors;
       }}
-      onSubmit={({ recipient, amount, memo }) => {
-        void openSTXTransfer({
-          network,
+      onSubmit={async ({ recipient, amount, memo }) => {
+        await transferStx({
           recipient,
           amount: stacksToMicro(amount || 0).toString(),
           memo,
-          authOrigin: CONNECT_AUTH_ORIGIN,
+          network: network.mode,
         });
       }}
       render={({ handleChange, handleBlur, values, errors, setFieldValue }) => (

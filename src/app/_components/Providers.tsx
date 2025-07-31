@@ -11,7 +11,6 @@ import { store } from '../../common/state/store';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { ColorModeProvider } from '../../components/ui/color-mode';
 import { system } from '../../ui/theme/theme';
-import { StacksAuthProvider } from './AppConfig';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,9 +44,7 @@ export const Providers = ({
         >
           <ColorModeProvider>
             <ReduxProvider store={store}>
-              <StacksAuthProvider>
-                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-              </StacksAuthProvider>
+              <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
             </ReduxProvider>
           </ColorModeProvider>
         </GlobalContextProvider>

@@ -1,6 +1,6 @@
 import { renderWithProviders } from '@/common/utils/test-utils/render-utils';
 import { Box } from '@chakra-ui/react';
-import { screen, waitFor } from '@testing-library/react';
+import { RenderResult, screen, waitFor } from '@testing-library/react';
 import { useParams as useParamsActual } from 'next/navigation';
 import { act } from 'react';
 
@@ -24,7 +24,7 @@ describe('TxListTabs component', () => {
     const confirmedList = <Box>Confirmed List</Box>;
     const mempoolList = <Box>Mempool List</Box>;
 
-    let utils;
+    let utils: RenderResult;
     await act(async () => {
       utils = renderWithProviders(
         <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
@@ -41,7 +41,7 @@ describe('TxListTabs component', () => {
     });
 
     await waitFor(() => {
-      expect(utils.getByText('Mempool List')).toBeVisible();
+      expect(utils!.getByText('Mempool List')).toBeVisible();
     });
   });
 

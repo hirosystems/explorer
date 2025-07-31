@@ -27,17 +27,7 @@ export const ContractAvailableFunctions: FC<{
     <>
       {!isConnected ? (
         <Flex alignItems={'center'} justifyContent={'center'} py={6}>
-          <Button
-            onClick={() =>
-              connect({
-                onFinish: authData => {
-                  dispatch(setUserData({ userData: authData.userSession.loadUserData() }));
-                },
-              })
-            }
-          >
-            Connect Stacks Wallet
-          </Button>
+          <Button onClick={connect}>Connect Stacks Wallet</Button>
         </Flex>
       ) : functionName ? (
         <FunctionView

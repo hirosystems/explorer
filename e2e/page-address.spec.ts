@@ -1,19 +1,19 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, Page } from '@playwright/test';
 import { addresses, emptyAddresses } from './addresses-test-vector';
 
-async function hasTransactions(page) {
+async function hasTransactions(page: Page) {
   await expect(page.locator('[data-test=account-transaction-list]')).toHaveCount(1);
 }
 
-async function hasNoTransactions(page) {
+async function hasNoTransactions(page: Page) {
   await expect(page.locator('[data-test=account-transaction-list]')).toHaveCount(0);
 }
 
 test.describe('/address page', () => {
   test.describe('Loads the address pages (non empty addresses)', () => {
-    Object.keys(addresses).forEach(network => {
-      Object.keys(addresses[network]).forEach(type => {
-        addresses[network][type].forEach(address => {
+    Object.keys(addresses).forEach((network: string) => {
+      Object.keys((addresses as any)[network]).forEach((type: string) => {
+        (addresses as any)[network][type].forEach((address: string) => {
           test(`transactions type ${type} with address=${address} on network=${network}`, async ({
             page,
           }) => {
@@ -27,9 +27,9 @@ test.describe('/address page', () => {
   });
 
   test.describe('Loads the address pages (empty addresses)', () => {
-    Object.keys(emptyAddresses).forEach(network => {
-      Object.keys(emptyAddresses[network]).forEach(type => {
-        emptyAddresses[network][type].forEach(address => {
+    Object.keys(emptyAddresses).forEach((network: string) => {
+      Object.keys((emptyAddresses as any)[network]).forEach((type: string) => {
+        (emptyAddresses as any)[network][type].forEach((address: string) => {
           test(`transactions type ${type} with address=${address} on network=${network}`, async ({
             page,
           }) => {

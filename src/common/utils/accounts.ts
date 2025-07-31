@@ -33,10 +33,10 @@ export const hasStxBalance = (balances?: AddressBalanceResponse) => {
 
     const total =
       parseInt(balance) +
-      parseInt(total_sent) +
-      parseInt(total_received) +
-      parseInt(total_fees_sent) +
-      parseInt(total_miner_rewards_received);
+      parseInt(total_sent || '0') +
+      parseInt(total_received || '0') +
+      parseInt(total_fees_sent || '0') +
+      parseInt(total_miner_rewards_received || '0');
     if (total > 0) {
       hasBalance = true;
     }

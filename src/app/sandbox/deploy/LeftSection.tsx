@@ -1,15 +1,12 @@
 'use client';
 
 import { Box, Button, Flex, Icon, Stack } from '@chakra-ui/react';
-import { ArrowSquareOut, Toolbox, X } from '@phosphor-icons/react';
+import { Toolbox, X } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 
-import { openContractDeploy } from '@stacks/connect';
-
-import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useRandomName } from '../../../common/hooks/useRandomName';
-import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { InputGroup } from '../../../components/ui/input-group';
 import { IconButton } from '../../../ui/IconButton';
@@ -18,29 +15,24 @@ import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
-import { useUser } from '../hooks/useUser';
-import { selectCodeBody, setUserData, toggleCodeToolbar } from '../sandbox-slice';
+import { selectCodeBody, toggleCodeToolbar } from '../sandbox-slice';
+import { deployContract } from '../utils/walletTransactions';
 
 export function LeftSection() {
   const dispatch = useAppDispatch();
   const randomName = useRandomName();
-  const { isConnected, connect } = useUser();
-  const network = useStacksNetwork();
+  const network = useGlobalContext().activeNetwork;
   const [contractName, setContractName] = useState(randomName());
   const codeBody = useAppSelector(selectCodeBody);
   const queryClient = useQueryClient();
 
-  const onDeploy = useCallback(() => {
-    void openContractDeploy({
-      network,
-      postConditionMode: 0x01,
-      codeBody,
-      contractName,
-      authOrigin: CONNECT_AUTH_ORIGIN,
-      onFinish: () => {
-        void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
-      },
+  const onDeploy = useCallback(async () => {
+    await deployContract({
+      name: contractName,
+      clarityCode: codeBody,
+      network: network.mode,
     });
+    void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
   }, [codeBody, contractName, network, queryClient]);
   return (
     <>
@@ -92,19 +84,13 @@ export function LeftSection() {
           </Flex>
           <Stack alignItems="center" justifyContent={'center'} gap={2}>
             <Button
-              onClick={() =>
-                isConnected
-                  ? onDeploy()
-                  : connect({
-                      onFinish: authData => {
-                        dispatch(setUserData({ userData: authData.userSession.loadUserData() }));
-                      },
-                    })
-              }
+              onClick={async () => {
+                await onDeploy();
+              }}
               width="100%"
               variant={'primary'}
             >
-              {isConnected ? 'Deploy' : 'Connect Stacks Wallet'}
+              Deploy
             </Button>
           </Stack>
         </Stack>

@@ -9,7 +9,7 @@ const txTypes = [
   'coinbase',
 ];
 
-function hasTransactions(page) {
+function hasTransactions(page: Page) {
   const selectors = txTypes.map(type => `[data-test=${type}-transaction]`);
   return page.waitForSelector(selectors.join(', '));
 }

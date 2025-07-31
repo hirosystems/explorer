@@ -22,7 +22,7 @@ import BigNumber from 'bignumber.js';
 import { unstable_cache } from 'next/cache';
 
 import { StacksNetworkName } from '@stacks/network';
-import { StacksTransactionWire } from '@stacks/transactions-v7';
+import { StacksTransactionWire } from '@stacks/transactions';
 
 export function createSampleTokenTransferOptions(
   network: StacksNetworkName

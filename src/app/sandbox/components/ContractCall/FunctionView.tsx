@@ -7,7 +7,6 @@ import { Form, Formik, FormikErrors } from 'formik';
 import { ChangeEvent, FC, ReactNode, useMemo, useState } from 'react';
 
 import { asciiToBytes, bytesToHex } from '@stacks/common';
-import { openContractCall } from '@stacks/connect';
 import {
   ClarityAbiFunction,
   ClarityValue,
@@ -19,8 +18,7 @@ import {
 } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
-import { CONNECT_AUTH_ORIGIN } from '../../../../common/constants/env';
-import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { showFn } from '../../../../common/utils/sandbox';
 import { Switch } from '../../../../components/ui/switch';
 import { Button } from '../../../../ui/Button';
@@ -28,6 +26,7 @@ import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';
+import { callContract } from '../../utils/walletTransactions';
 import { Argument } from '../Argument';
 import {
   PostConditionForm,
@@ -66,7 +65,7 @@ export type FunctionFormikState = FormType & PostConditionParameters;
 
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
-  const network = useStacksNetwork();
+  const network = useGlobalContext().activeNetwork;
   const queryClient = useQueryClient();
   const isReadOnly = fn.access === 'read_only';
 
@@ -193,18 +192,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         } = values;
 
         if (fn.access === 'public') {
-          void openContractCall({
-            contractAddress: contractId.split('.')[0],
-            contractName: contractId.split('.')[1],
-            functionName: encodeURIComponent(fn.name),
+          await callContract({
+            contract: contractId,
+            functionName: fn.name,
             functionArgs: Object.values(final),
-            network,
-            authOrigin: CONNECT_AUTH_ORIGIN,
-            onFinish: () => {
-              void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
-            },
+            network: network.mode,
             postConditions:
-              values.postConditionMode === PostConditionMode.Allow
+              postConditionMode === PostConditionMode.Allow
                 ? undefined
                 : getPostCondition({
                     postConditionType,
@@ -215,8 +209,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                     postConditionAssetContractName,
                     postConditionAssetName,
                   }),
-            postConditionMode,
+            postConditionMode: postConditionMode === PostConditionMode.Allow ? 'allow' : 'deny',
           });
+          void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
         } else {
           setReadonlyValue(Object.values(final));
         }

@@ -35,7 +35,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   const { address, asset, contract } = getAssetNameParts(token);
   const contractId = `${address}.${contract}`;
   const firstNftValue = !!holdings?.length
-    ? (hexToCV(holdings[0].value.hex) as IntCV).value
+    ? BigInt((hexToCV(holdings[0].value.hex) as IntCV).value)
     : undefined;
 
   if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
