@@ -55,7 +55,7 @@ function TransactionIdPage() {
   useEffect(() => {
     const revalidateTxIdPage = async () => {
       const txStatus = tx?.tx_status;
-      if (txStatus === 'pending') {
+      if (txStatus === 'pending' && isRedesign) {
         try {
           const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
           const revalidateResponse = await fetch(revalidateUrl);
