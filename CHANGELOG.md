@@ -1,3 +1,10 @@
+# [1.320.0](https://github.com/hirosystems/explorer/compare/v1.319.2...v1.320.0) (2025-07-31)
+
+
+### Features
+
+* added coinbase tx id page ([81cfcaf](https://github.com/hirosystems/explorer/commit/81cfcafacdaf0ddeccd568019139ee2530cb9d77))
+
 ## [1.319.2](https://github.com/hirosystems/explorer/compare/v1.319.1...v1.319.2) (2025-07-31)
 
 
