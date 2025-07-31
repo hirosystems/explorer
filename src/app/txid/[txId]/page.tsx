@@ -1,6 +1,6 @@
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
-import { DEFAULT_MAINNET_SERVER } from '@/common/constants/env';
+import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
@@ -11,13 +11,18 @@ import TransactionIdPage from './PageClient';
 import { TxIdPageDataProvider } from './TxIdPageContext';
 import { fetchTxById } from './page-data';
 
-interface TxPageSearchParams extends CommonSearchParams {
-  txId: string;
-}
-
-export default async function Page(props: { params: Promise<TxPageSearchParams> }) {
+export default async function Page(props: {
+  params: Promise<{ txId: string }>;
+  searchParams: Promise<CommonSearchParams>;
+}) {
   const params = await props.params;
-  const { txId, chain = NetworkModes.Mainnet, api = DEFAULT_MAINNET_SERVER } = params;
+  const searchParams = await props.searchParams;
+  const { txId } = params;
+  const chain = (searchParams.chain as NetworkModes) || NetworkModes.Mainnet;
+  const api =
+    searchParams.api || chain === NetworkModes.Mainnet
+      ? DEFAULT_MAINNET_SERVER
+      : DEFAULT_TESTNET_SERVER;
   let tokenPrice = {
     stxPrice: 0,
     btcPrice: 0,
