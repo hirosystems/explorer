@@ -1,7 +1,12 @@
+import { TransactionStatus as TransactionStatusEnum } from '@/common/constants/constants';
+import { getTransactionStatus } from '@/common/utils/transactions';
 import { Alert as ChakraAlert } from '@/components/ui/alert';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
+import { Stack } from '@chakra-ui/react';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
+
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export type AlertStatus = 'neutral' | 'warning' | 'error';
 
@@ -87,4 +92,85 @@ export function TenureAlert() {
       }
     />
   );
+}
+
+export function NonCanonicalAlert() {
+  return (
+    <Alert
+      status="warning"
+      description="This transaction is in a non-canonical fork. It is not in the canonical Stacks chain"
+    />
+  );
+}
+
+export function getFailureDescription(tx: Transaction | MempoolTransaction) {
+  const reasonForFailure =
+    tx.tx_status === 'abort_by_response'
+      ? 'This transaction did not succeed because the transaction was aborted during its execution'
+      : tx.tx_status === 'abort_by_post_condition'
+        ? 'This transaction would have succeeded, but was rolled back by a supplied post-condition'
+        : undefined;
+  const vmError =
+    'vm_error' in tx && tx.vm_error && typeof tx.vm_error === 'string' ? tx.vm_error : undefined;
+
+  return (
+    <Stack gap={1}>
+      <Text textStyle="text-regular-xs" color="textPrimary">
+        {reasonForFailure}. A failed transaction is included in a block (mining fees are paid to the
+        miner and are non-refundable), but failed because it violated the rules of the Stacks
+        protocol or of the smart contract it interacted with. See the error code and/or the contract
+        to learn more about the specific cause of failure.
+      </Text>
+      <Text textStyle="text-regular-xs" color="textPrimary"></Text>
+      {vmError && (
+        <Text textStyle="text-regular-xs" color="textPrimary">
+          VM Error: {vmError}
+        </Text>
+      )}
+    </Stack>
+  );
+}
+
+export function TransactionFailedAlert({ tx }: { tx: Transaction | MempoolTransaction }) {
+  const failureDescription = getFailureDescription(tx);
+  return <Alert status="error" title="Transaction failed" description={failureDescription} />;
+}
+
+export function getTxAlert(tx: Transaction | MempoolTransaction) {
+  const txType = tx.tx_type;
+  const txStatus = getTransactionStatus(tx);
+
+  let alertContent;
+
+  switch (txStatus) {
+    case TransactionStatusEnum.Pending:
+      alertContent = <PendingAlert />;
+      break;
+    case TransactionStatusEnum.Dropped:
+      alertContent = <TransactionDroppedAlert />;
+      break;
+    case TransactionStatusEnum.RolledBack:
+      alertContent = <TransactionRolledBackAlert />;
+      break;
+    case TransactionStatusEnum.FAILED:
+      alertContent = <TransactionFailedAlert tx={tx} />;
+      break;
+    case TransactionStatusEnum.NON_CANONICAL:
+      alertContent = <NonCanonicalAlert />;
+      break;
+    default:
+      alertContent = null;
+      break;
+  }
+
+  if (txType === 'tenure_change') {
+    alertContent = (
+      <Stack gap={2}>
+        <TenureAlert />
+        {alertContent}
+      </Stack>
+    );
+  }
+
+  return alertContent;
 }

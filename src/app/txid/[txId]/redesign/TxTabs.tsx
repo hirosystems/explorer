@@ -1,4 +1,3 @@
-import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -8,18 +7,20 @@ import { useState } from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Events } from './Events';
-import { TxSummary } from './TxSummary';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
+import { TxSummary } from './tx-summary/TxSummary';
 
 function TabTriggerComponent({
   label,
   value,
+  secondaryLabel,
   isActive,
   onClick,
 }: {
   label: string;
   value: string;
+  secondaryLabel?: string;
   isActive: boolean;
   onClick: () => void;
 }) {
@@ -38,13 +39,16 @@ function TabTriggerComponent({
       px={3}
       onClick={onClick}
     >
-      <Text
-        font="matterRegular"
-        textStyle="text-regular-xl"
-        color={isActive ? 'textPrimary' : 'textTertiary'}
-      >
-        {label}
-      </Text>
+      <Flex gap={1} alignItems="center">
+        <Text textStyle="heading-xs" color={isActive ? 'textPrimary' : 'textSecondary'}>
+          {label}
+        </Text>
+        {secondaryLabel && (
+          <Text textStyle="heading-xs" color={isActive ? 'textPrimary' : 'textTertiary'}>
+            {secondaryLabel}
+          </Text>
+        )}
+      </Flex>
     </TabsTrigger>
   );
 }
@@ -76,8 +80,8 @@ enum TransactionIdPageTab {
 
 function getTabsTriggersByTransactionType(
   tx: Transaction | MempoolTransaction,
-  selectedTab: string,
-  setSelectedTab: (tab: string) => void
+  selectedTab: TransactionIdPageTab,
+  setSelectedTab: (tab: TransactionIdPageTab) => void
 ) {
   const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
   const numPostConditions = 'post_conditions' in tx ? tx.post_conditions.length : 0;
@@ -93,7 +97,8 @@ function getTabsTriggersByTransactionType(
         />
         <TabTriggerComponent
           key={TransactionIdPageTab.Events}
-          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
+          label={`Events`}
+          secondaryLabel={numTxEvents > 0 ? `(${numTxEvents})` : ''}
           value={TransactionIdPageTab.Events}
           isActive={selectedTab === TransactionIdPageTab.Events}
           onClick={() => setSelectedTab(TransactionIdPageTab.Events)}
@@ -105,39 +110,39 @@ function getTabsTriggersByTransactionType(
     return (
       <>
         <TabTriggerComponent
-          key="overview"
+          key={TransactionIdPageTab.Overview}
           label="Overview"
-          value="overview"
-          isActive={selectedTab === 'overview'}
-          onClick={() => setSelectedTab('overview')}
+          value={TransactionIdPageTab.Overview}
+          isActive={selectedTab === TransactionIdPageTab.Overview}
+          onClick={() => setSelectedTab(TransactionIdPageTab.Overview)}
         />
         <TabTriggerComponent
-          key="functionCall"
+          key={TransactionIdPageTab.FunctionCall}
           label={'Function call'}
-          value="functionCall"
-          isActive={selectedTab === 'functionCall'}
-          onClick={() => setSelectedTab('functionCall')}
+          value={TransactionIdPageTab.FunctionCall}
+          isActive={selectedTab === TransactionIdPageTab.FunctionCall}
+          onClick={() => setSelectedTab(TransactionIdPageTab.FunctionCall)}
         />
         <TabTriggerComponent
-          key="postConditions"
+          key={TransactionIdPageTab.PostConditions}
           label={`Post-conditions ${numPostConditions > 0 ? `(${numPostConditions})` : ''}`}
-          value="postConditions"
-          isActive={selectedTab === 'postConditions'}
-          onClick={() => setSelectedTab('postConditions')}
+          value={TransactionIdPageTab.PostConditions}
+          isActive={selectedTab === TransactionIdPageTab.PostConditions}
+          onClick={() => setSelectedTab(TransactionIdPageTab.PostConditions)}
         />
         <TabTriggerComponent
-          key="events"
+          key={TransactionIdPageTab.Events}
           label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
-          value="events"
-          isActive={selectedTab === 'events'}
-          onClick={() => setSelectedTab('events')}
+          value={TransactionIdPageTab.Events}
+          isActive={selectedTab === TransactionIdPageTab.Events}
+          onClick={() => setSelectedTab(TransactionIdPageTab.Events)}
         />
         <TabTriggerComponent
-          key="sourceCode"
+          key={TransactionIdPageTab.SourceCode}
           label={'Source code'}
-          value="sourceCode"
-          isActive={selectedTab === 'sourceCode'}
-          onClick={() => setSelectedTab('sourceCode')}
+          value={TransactionIdPageTab.SourceCode}
+          isActive={selectedTab === TransactionIdPageTab.SourceCode}
+          onClick={() => setSelectedTab(TransactionIdPageTab.SourceCode)}
         />
       </>
     );
@@ -158,15 +163,17 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
   if (tx.tx_type === 'token_transfer') {
     return (
       <>
-        <TabsContent key="overview" value="overview" w="100%">
+        <TabsContent
+          key={TransactionIdPageTab.Overview}
+          value={TransactionIdPageTab.Overview}
+          w="100%"
+        >
           <TabsContentContainer>
             <TxSummary tx={tx} />
           </TabsContentContainer>
         </TabsContent>
-        <TabsContent key="events" value="events" w="100%">
-          <TabsContentContainer>
-            <Events tx={tx} />
-          </TabsContentContainer>
+        <TabsContent key={TransactionIdPageTab.Events} value={TransactionIdPageTab.Events} w="100%">
+          <Events tx={tx} />
         </TabsContent>
       </>
     );
@@ -174,23 +181,39 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
   if (tx.tx_type === 'contract_call') {
     return (
       <>
-        <TabsContent key="overview" value="overview" w="100%">
+        <TabsContent
+          key={TransactionIdPageTab.Overview}
+          value={TransactionIdPageTab.Overview}
+          w="100%"
+        >
           <TabsContentContainer>
             <TxSummary tx={tx} />
           </TabsContentContainer>
         </TabsContent>
-        <TabsContent key="functionCall" value="functionCall" w="100%">
+        <TabsContent
+          key={TransactionIdPageTab.FunctionCall}
+          value={TransactionIdPageTab.FunctionCall}
+          w="100%"
+        >
           <FunctionCalled tx={tx} />
         </TabsContent>
-        <TabsContent key="postConditions" value="postConditions" w="100%">
+        <TabsContent
+          key={TransactionIdPageTab.PostConditions}
+          value={TransactionIdPageTab.PostConditions}
+          w="100%"
+        >
           <PostConditions tx={tx} />
         </TabsContent>
-        <TabsContent key="events" value="events" w="100%">
+        <TabsContent key={TransactionIdPageTab.Events} value={TransactionIdPageTab.Events} w="100%">
           <TabsContentContainer>
             <Events tx={tx} />
           </TabsContentContainer>
         </TabsContent>
-        <TabsContent key="sourceCode" value="sourceCode" w="100%">
+        <TabsContent
+          key={TransactionIdPageTab.SourceCode}
+          value={TransactionIdPageTab.SourceCode}
+          w="100%"
+        >
           <TabsContentContainer>
             <Text>Source code</Text> {/* TODO: add source code */}
           </TabsContentContainer>
@@ -211,25 +234,26 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
 }
 
 export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
-  const [selectedTab, setSelectedTab] = useState('overview');
-
+  const [selectedTab, setSelectedTab] = useState(TransactionIdPageTab.Overview);
   return (
     <TabsRoot
       variant="primary"
       size="redesignMd"
-      defaultValue={'overview'}
+      defaultValue={TransactionIdPageTab.Overview}
       gap={2}
       borderRadius="redesign.xl"
       w="full"
     >
-      <Flex justifyContent={'space-between'} w="full" gap={2}>
-        <ScrollIndicator>
-          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
-        </ScrollIndicator>
-        <Flex alignItems={'center'} gap={4}>
-          <Text textStyle="text-regular-sm">Show:</Text>
-          <ValueBasisFilterPopover />
-        </Flex>
+      <Flex justifyContent={'space-between'} w="full">
+        <TabsList flexWrap={'wrap'}>
+          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
+        </TabsList>
+        {tx.tx_type === 'token_transfer' && (
+          <Flex alignItems={'center'} gap={2}>
+            <Text textStyle="text-regular-sm">Show:</Text>
+            <ValueBasisFilterPopover />
+          </Flex>
+        )}
       </Flex>
       {getTabsContentByTransactionType(tx)}
     </TabsRoot>

@@ -8,7 +8,7 @@ import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
-import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
+import { validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
@@ -16,7 +16,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { ScrollIndicator } from '../../ScrollIndicator';
@@ -36,7 +36,7 @@ import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
 
 export interface TxTableData {
-  [TxTableColumns.Transaction]: TxTableTransactionColumnData;
+  [TxTableColumns.Transaction]: Transaction | MempoolTransaction;
   [TxTableColumns.TxId]: string;
   [TxTableColumns.TxType]: Transaction['tx_type'];
   [TxTableColumns.From]: TxTableAddressColumnData;
@@ -45,22 +45,6 @@ export interface TxTableData {
   [TxTableColumns.Fee]: string;
   [TxTableColumns.Amount]: number;
   [TxTableColumns.BlockTime]: number;
-}
-
-export interface TxTableTransactionColumnData {
-  amount?: string;
-  functionName?: string;
-  contractName?: string;
-  txType?: Transaction['tx_type'];
-  status?: Transaction['tx_status'];
-  tenureChangePayload?: {
-    cause?: string;
-  };
-  smartContract?: {
-    contractId?: string;
-  };
-  txId: string;
-  blockHeight: number;
 }
 
 export interface TxTableAddressColumnData {
@@ -73,7 +57,7 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.Transaction,
     header: 'Transaction',
     accessorKey: TxTableColumns.Transaction,
-    cell: info => TransactionTitleCellRenderer(info.getValue() as TxTableTransactionColumnData),
+    cell: info => TransactionTitleCellRenderer(info.getValue() as Transaction | MempoolTransaction),
     enableSorting: false,
   },
   {
@@ -333,31 +317,18 @@ export function TxsTable({
         const amount = getAmount(tx);
 
         return {
-          [TxTableColumns.Transaction]: {
-            amount: microToStacksFormatted(amount),
-            functionName:
-              tx.tx_type === 'contract_call' ? tx.contract_call?.function_name : undefined,
-            contractName:
-              tx.tx_type === 'contract_call' ? tx.contract_call?.contract_id : undefined,
-            txType: tx.tx_type,
-            status: tx.tx_status,
-            smartContract: {
-              contractId:
-                tx.tx_type === 'smart_contract' ? tx.smart_contract?.contract_id : undefined,
-            },
-            tenureChangePayload: {
-              cause: tx.tx_type === 'tenure_change' ? tx.tenure_change_payload?.cause : undefined,
-            },
-            txId: tx.tx_id,
-            blockHeight: tx.block_height,
-          },
+          [TxTableColumns.Transaction]: tx,
           [TxTableColumns.TxId]: tx.tx_id,
           [TxTableColumns.TxType]: tx.tx_type,
           [TxTableColumns.From]: {
             address: tx.sender_address,
             isContract: validateStacksContractId(tx.sender_address),
           },
-          [TxTableColumns.ArrowRight]: <ArrowRight />,
+          [TxTableColumns.ArrowRight]: (
+            <Icon color="iconTertiary">
+              <ArrowRight />
+            </Icon>
+          ),
           [TxTableColumns.To]: {
             address: to,
             isContract: validateStacksContractId(to),

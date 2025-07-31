@@ -33,7 +33,7 @@ export const checkboxSlotRecipe = defineSlotRecipe({
         control: {
           color: 'iconInvert',
           borderColor: 'redesignBorderPrimary',
-          bg: 'surfaceTertiary',
+          bg: 'surfacePrimary',
           borderRadius: 'redesign.xs',
           _focus: {
             outline: 'none',
