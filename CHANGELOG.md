@@ -1,3 +1,10 @@
+## [1.320.1](https://github.com/hirosystems/explorer/compare/v1.320.0...v1.320.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* handling burn block request failure ([#2447](https://github.com/hirosystems/explorer/issues/2447)) ([b227e23](https://github.com/hirosystems/explorer/commit/b227e23a93234396794df6d64d4ebc606f2ed5e6))
+
 # [1.320.0](https://github.com/hirosystems/explorer/compare/v1.319.2...v1.320.0) (2025-07-31)
 
 
