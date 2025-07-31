@@ -1,3 +1,10 @@
+## [1.319.2](https://github.com/hirosystems/explorer/compare/v1.319.1...v1.319.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* tx page query params ([#2444](https://github.com/hirosystems/explorer/issues/2444)) ([e8516e6](https://github.com/hirosystems/explorer/commit/e8516e6bfc8452ca96fb1761d03110d9b12701d4))
+
 ## [1.319.1](https://github.com/hirosystems/explorer/compare/v1.319.0...v1.319.1) (2025-07-30)
 
 
