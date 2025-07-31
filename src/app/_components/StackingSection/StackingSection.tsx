@@ -282,11 +282,18 @@ function BlocksSection() {
     startStacksBlockHash,
     endBurnBlockHeight,
   } = stackingCycle;
+
+  if (!startBurnBlockHash) {
+    return null;
+  }
+
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
         <BlockInfo height={startBurnBlockHeight} hash={startBurnBlockHash} type="bitcoin" />
-        <BlockInfo height={startStacksBlockHeight} hash={startStacksBlockHash} type="stacks" />
+        {startStacksBlockHash && startStacksBlockHeight && (
+          <BlockInfo height={startStacksBlockHeight} hash={startStacksBlockHash} type="stacks" />
+        )}
       </Flex>
       <Flex gap={1.5} flexWrap={'wrap'} justify={'flex-end'}>
         <BlockInfo height={endBurnBlockHeight} type="bitcoin" isActive={false} />
@@ -311,12 +318,19 @@ export function StackingSection() {
       {isSSRDisabled ? (
         <SSRDisabledMessage />
       ) : (
-        <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
+        <Stack
+          borderRadius={'redesign.xl'}
+          bg="surfacePrimary"
+          px={[4, 6]}
+          py={[5, 6]}
+          gap={6}
+          flex={1}
+        >
           <Stack gap={2.5}>
             <CycleHeader />
             <StxStats />
           </Stack>
-          <Stack gap={3}>
+          <Stack gap={3} flex={1}>
             <CycleProgress />
             <BlocksSection />
           </Stack>

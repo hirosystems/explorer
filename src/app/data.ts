@@ -53,9 +53,9 @@ export interface UIStackingCycle {
   approximateEndTimestamp: number;
   rewardCycleLength: number;
   startBurnBlockHeight: number;
-  startBurnBlockHash: string;
-  startStacksBlockHeight: number;
-  startStacksBlockHash: string;
+  startBurnBlockHash?: string;
+  startStacksBlockHeight?: number;
+  startStacksBlockHash?: string;
   endBurnBlockHeight: number;
 }
 
@@ -119,7 +119,7 @@ export async function fetchBurnBlock(
   heightOrHash: string | number,
   chain: string,
   api?: string
-): Promise<BurnBlock> {
+): Promise<BurnBlock | null> {
   const apiUrl = getApiUrl(chain, api);
   const response = await stacksAPIFetch(`${apiUrl}/extended/v2/burn-blocks/${heightOrHash}`, {
     cache: 'default',
@@ -128,6 +128,15 @@ export async function fetchBurnBlock(
       tags: ['stacking'],
     },
   });
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      // burn block not found for height/hash
+      return null;
+    }
+    throw new Error(`Failed to fetch burn block: ${response.status} ${response.statusText}`);
+  }
+
   return response.json();
 }
 
@@ -183,14 +192,23 @@ export async function fetchCurrentStackingCycle(
 
   // fetch the burn block in order to get its hash and the first stacks block hash
   const startBurnBlock = await fetchBurnBlock(startBurnBlockHeight, chain, api);
-  const startBurnBlockHash = startBurnBlock.burn_block_hash;
+  const startBurnBlockHash = startBurnBlock?.burn_block_hash;
   const firstStacksBlockHashInStartBurnBlock =
-    startBurnBlock.stacks_blocks?.[startBurnBlock.stacks_blocks?.length - 1];
+    startBurnBlock?.stacks_blocks?.[startBurnBlock.stacks_blocks?.length - 1];
 
-  // fetch the start stacks block
-  const startStacksBlock = await fetchStacksBlock(firstStacksBlockHashInStartBurnBlock, chain, api);
-  const startStacksBlockHeight = startStacksBlock.height;
-  const startStacksBlockHash = startStacksBlock.hash;
+  // fetch the start stacks block only if we have the burn block data
+  let startStacksBlockHeight: number | undefined;
+  let startStacksBlockHash: string | undefined;
+
+  if (firstStacksBlockHashInStartBurnBlock) {
+    const startStacksBlock = await fetchStacksBlock(
+      firstStacksBlockHashInStartBurnBlock,
+      chain,
+      api
+    );
+    startStacksBlockHeight = startStacksBlock.height;
+    startStacksBlockHash = startStacksBlock.hash;
+  }
 
   return {
     cycleId,

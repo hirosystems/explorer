@@ -89,6 +89,7 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
         <Flex
           gap={{ base: 20, md: 20, lg: 20, xl: 2 }}
           flexDirection={{ base: 'column', '2xl': 'row' }}
+          alignItems="stretch"
         >
           <StackingSection />
           <NetworkOverview />
