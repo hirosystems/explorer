@@ -22,7 +22,7 @@ export function EventAssetTypeFilterTrigger({
   filterContainerProps: FilterTriggerContainerProps;
 }) {
   const isFilterActive = eventAssetTypes.length > 0;
-  const triggerTextPrefix = isFilterActive ? 'Asset Type:' : 'Asset Type';
+  const triggerTextPrefix = isFilterActive ? 'Asset type:' : 'Asset type';
   const triggerTextSuffix =
     eventAssetTypes.length > 1
       ? `${EventAssetTypeFilterLabel[eventAssetTypes[0]]}, +${eventAssetTypes.length - 1}`

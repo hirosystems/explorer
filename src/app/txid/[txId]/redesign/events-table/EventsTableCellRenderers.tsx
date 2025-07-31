@@ -33,7 +33,13 @@ export const AssetEventTypeCellRenderer = ({
 }) => {
   return (
     <DefaultBadge
-      icon={<DefaultBadgeIcon icon={getAssetEventTypeIcon(assetEventType)} bg="surfaceFifth" />}
+      icon={
+        <DefaultBadgeIcon
+          icon={getAssetEventTypeIcon(assetEventType)}
+          bg="surfaceFifth"
+          color="iconPrimary"
+        />
+      }
       label={<DefaultBadgeLabel label={getAssetEventTypeLabel(assetEventType)} />}
     />
   );
@@ -46,7 +52,7 @@ export const IndexCellRenderer = ({ index }: { index: number }) => {
       justifyContent="center"
       p={1.5}
       borderRadius="redesign.sm"
-      bg="surfaceFifth"
+      bg="surfacePrimary"
       _groupHover={{
         bg: 'surfaceTertiary',
       }}
@@ -112,7 +118,7 @@ export const AddressLinkCellRenderer = (value: EventsTableAddressColumnData) => 
   );
 };
 
-export const AmountCellRenderer = (value: number) => {
+export const AmountCellRenderer = (value: string) => {
   return (
     <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">

@@ -1,4 +1,6 @@
-import { Stack } from '@chakra-ui/react';
+import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
+import { Text } from '@/ui/Text';
+import { Flex, Stack } from '@chakra-ui/react';
 
 import {
   MempoolTenureChangeTransaction,
@@ -7,7 +9,8 @@ import {
 
 import { TenureAlert } from './Alert';
 import { TxHeader } from './TxHeader';
-import { TxSummary } from './TxSummary';
+import { TabsContentContainer } from './TxTabs';
+import { TxSummary } from './tx-summary/TxSummary';
 
 export const TenureChangePage = ({
   tx,
@@ -20,7 +23,12 @@ export const TenureChangePage = ({
         <TxHeader tx={tx} />
         <TenureAlert />
       </Stack>
-      <TxSummary tx={tx} />
+      <Stack gap={3}>
+        <Text textStyle="heading-xs">Overview</Text>
+        <TabsContentContainer>
+          <TxSummary tx={tx} />
+        </TabsContentContainer>
+      </Stack>
     </>
   );
 };
