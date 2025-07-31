@@ -61,6 +61,7 @@ export const tabsSlotRecipe = defineSlotRecipe({
           px: '3',
           textStyle: 'heading-xs',
           borderRadius: 'redesign.md',
+          fontFamily: 'var(--font-matter-mono)',
         },
         label: {
           lineHeight: 'spacious',
@@ -72,6 +73,7 @@ export const tabsSlotRecipe = defineSlotRecipe({
           px: '4',
           textStyle: 'heading-sm',
           borderRadius: 'redesign.lg',
+          fontFamily: 'var(--font-matter-mono)',
         },
         label: {
           lineHeight: 'base',
@@ -83,6 +85,7 @@ export const tabsSlotRecipe = defineSlotRecipe({
           px: '4',
           textStyle: 'heading-md',
           borderRadius: 'redesign.lg',
+          fontFamily: 'var(--font-matter-mono)',
         },
         label: {
           lineHeight: 'base',

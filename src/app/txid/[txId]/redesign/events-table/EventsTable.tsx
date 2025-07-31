@@ -4,10 +4,12 @@ import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { AddressLinkCellRenderer } from '@/common/components/table/CommonTableCellRenderers';
 import { Table } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
+import { FeeCellRenderer } from '@/common/components/table/table-examples/TxTableCellRenderers';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { getTxEventsByIdQueryKey, useTxEventsById } from '@/common/queries/useTxEventsById';
-import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
+import { validateStacksContractId } from '@/common/utils/utils';
+import { Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
@@ -41,7 +43,7 @@ export interface EventsTableData {
   [EventsTableColumns.EventType]: TransactionEvent['event_type'];
   [EventsTableColumns.Asset]: string;
   [EventsTableColumns.AssetEventType]: TransactionEventAssetType;
-  [EventsTableColumns.Amount]: string;
+  [EventsTableColumns.Amount]: number;
   [EventsTableColumns.From]: EventsTableAddressColumnData;
   [EventsTableColumns.ArrowRight]: JSX.Element;
   [EventsTableColumns.To]: EventsTableAddressColumnData;
@@ -96,7 +98,7 @@ export const defaultColumnDefinitions: ColumnDef<EventsTableData>[] = [
     id: EventsTableColumns.Amount,
     header: 'Amount',
     accessorKey: EventsTableColumns.Amount,
-    cell: info => info.getValue() as string,
+    cell: info => FeeCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
@@ -216,12 +218,16 @@ export function EventsTable({
           [EventsTableColumns.AssetEventType]: assetEventType,
           [EventsTableColumns.Asset]: asset,
           [EventsTableColumns.EventType]: eventType,
-          [EventsTableColumns.Amount]: microToStacksFormatted(amount),
+          [EventsTableColumns.Amount]: amount,
           [EventsTableColumns.From]: {
             address: from,
             isContract: validateStacksContractId(from),
           },
-          [EventsTableColumns.ArrowRight]: <ArrowRight />,
+          [EventsTableColumns.ArrowRight]: (
+            <Icon color="iconTertiary">
+              <ArrowRight />
+            </Icon>
+          ),
           [EventsTableColumns.To]: {
             address: to,
             isContract: validateStacksContractId(to),

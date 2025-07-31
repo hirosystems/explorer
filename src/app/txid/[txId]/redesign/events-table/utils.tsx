@@ -91,7 +91,7 @@ export function getAssetEventTypeLabel(assetEventType: TransactionEventAssetType
 
 export function getEventTypeLabel(eventType: TransactionEvent['event_type']): string {
   if (eventType === 'stx_asset') {
-    return 'STX';
+    return 'STX token';
   }
   if (eventType === 'fungible_token_asset') {
     return 'Fungible token';

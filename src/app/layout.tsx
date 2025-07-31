@@ -23,7 +23,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
-  const themeCookie = cookieStore.get('stacks-explorer-theme')?.value || 'light';
   const addedCustomNetworksCookie = cookieStore.get('addedCustomNetworks')?.value;
   const removedCustomNetworksCookie = cookieStore.get('removedCustomNetworks')?.value;
 
@@ -42,9 +41,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           removedCustomNetworksCookie={removedCustomNetworksCookie}
           tokenPrice={tokenPrice}
         >
-          <PageWrapper statusBarContent={statusBarContent} serverThemeCookie={themeCookie}>
-            {children}
-          </PageWrapper>
+          <PageWrapper statusBarContent={statusBarContent}>{children}</PageWrapper>
         </Providers>
       </body>
       <GoogleAnalytics gaId="G-NB2VBT0KY2" />
