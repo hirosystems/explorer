@@ -8,7 +8,6 @@ import { useUser } from '../hooks/useUser';
 import { setUserData } from '../sandbox-slice';
 
 export const ConnectToStacks: FC = () => {
-  const dispatch = useAppDispatch();
   const { connect } = useUser();
 
   return (
@@ -24,18 +23,7 @@ export const ConnectToStacks: FC = () => {
       <Stack gap={8} textAlign="center" color="text">
         <Title fontSize={'20px'}>Welcome to the sandbox</Title>
         <Title>Please sign in to continue</Title>
-        <Button
-          onClick={() =>
-            connect({
-              onFinish: authData => {
-                dispatch(setUserData({ userData: authData.userSession.loadUserData() }));
-              },
-            })
-          }
-          width="100%"
-          height={8}
-          variant="secondary"
-        >
+        <Button onClick={connect} width="100%" height={8} variant="secondary">
           Connect Stacks Wallet
         </Button>
       </Stack>

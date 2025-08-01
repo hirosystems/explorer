@@ -28,7 +28,7 @@ const RightPanel = dynamic(() => import('./layout/RightPanel').then(mod => mod.R
 
 export function Wrapper({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch();
-  const { isConnected, userData, connect } = useUser();
+  const { isConnected, userData, connect, stxAddress } = useUser();
   const router = useRouter();
   const { activeNetwork } = useGlobalContext();
   const showRightPanel = useAppSelector(selectShowRightPanel);
@@ -50,19 +50,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
         }
         topRight={
           !isConnected ? (
-            <Button
-              onClick={() =>
-                connect({
-                  onFinish: authData => {
-                    dispatch(setUserData({ userData: authData.userSession.loadUserData() }));
-                  },
-                })
-              }
-              size="xs"
-              fontSize="xs"
-              variant="secondary"
-              height={8}
-            >
+            <Button onClick={connect} size="xs" fontSize="xs" variant="secondary" height={8}>
               Connect Stacks Wallet
             </Button>
           ) : (
@@ -73,7 +61,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
                     <User />
                   </Icon>
                 </Circle>
-                <Caption>{userData?.identityAddress}</Caption>
+                <Caption>{stxAddress}</Caption>
                 <IconButton
                   onClick={() => dispatch(toggleRightPanel())}
                   aria-label={'Toggle right panel'}

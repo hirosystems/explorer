@@ -4,7 +4,7 @@ import { FC, ReactNode } from 'react';
 import { ClarityAbiFunction, ClarityValue } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
-import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useCallReadOnlyFunction } from '../../../../common/queries/useCallReadOnlyFunction';
 import { CodeEditor } from '../../../../ui/CodeEditor';
 import { useUser } from '../../hooks/useUser';
@@ -24,13 +24,13 @@ export const ReadOnlyField: FC<ReadOnlyProps> = ({
   cancelButton,
 }) => {
   const { stxAddress } = useUser();
-  const stacksNetwork = useStacksNetwork();
+  const network = useGlobalContext().activeNetwork;
 
   const { data } = useCallReadOnlyFunction({
     contractId,
     fn,
     readOnlyValue,
-    stacksNetwork,
+    stacksNetwork: network,
     stxAddress,
   });
 

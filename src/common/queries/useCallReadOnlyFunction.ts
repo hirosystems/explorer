@@ -1,10 +1,10 @@
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
-import { StacksNetwork } from '@stacks/network';
 import { ClarityAbiFunction, ClarityValue, cvToHex } from '@stacks/transactions';
 
 import { HIRO_HEADERS } from '../constants/env';
 import { ReadOnlyResponse } from '../types/ReadOnlyResponse';
+import { Network } from '../types/network';
 
 interface ReadOnlyOptions {
   senderAddress: string;
@@ -12,7 +12,7 @@ interface ReadOnlyOptions {
   contractAddress: string;
   functionName: string;
   functionArgs: ClarityValue[];
-  network: StacksNetwork;
+  network: Network;
 }
 
 export const callReadOnlyFunction = async ({
@@ -24,7 +24,7 @@ export const callReadOnlyFunction = async ({
   network,
 }: ReadOnlyOptions): Promise<ReadOnlyResponse> => {
   const url = `${
-    network.coreApiUrl
+    network.url
   }/v2/contracts/call-read/${contractAddress}/${contractName}/${encodeURIComponent(functionName)}`;
 
   const args = functionArgs.map(arg => cvToHex(arg));
@@ -58,7 +58,7 @@ export function useCallReadOnlyFunction(
     fn: ClarityAbiFunction;
     readOnlyValue: ClarityValue[];
     stxAddress?: string;
-    stacksNetwork: StacksNetwork;
+    stacksNetwork: Network;
   },
   options: any = {}
 ): UseQueryResult<ReadOnlyResponse> {
@@ -69,7 +69,7 @@ export function useCallReadOnlyFunction(
       fn.name,
       readOnlyValue.map(cvToHex),
       ...(stxAddress ? [stxAddress] : []),
-      stacksNetwork.chainId,
+      stacksNetwork.networkId,
     ],
     queryFn: () =>
       callReadOnlyFunction({

@@ -1,6 +1,6 @@
 import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom';
-import { screen, waitFor } from '@testing-library/react';
+import { RenderResult, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
 
 import { TabsContainer } from '../TabsContainer';
@@ -20,19 +20,19 @@ const tabs = [
 
 describe('TabsContainer', () => {
   it('renders tabs with correct title', async () => {
-    let utils;
+    let utils: RenderResult;
     await act(async () => {
       utils = renderWithChakraProviders(<TabsContainer tabs={tabs} />);
     });
 
-    const tabList = utils.getAllByRole('tab');
+    const tabList = utils!.getAllByRole('tab');
     expect(tabList).toHaveLength(2);
     expect(tabList[0]).toHaveTextContent('Tab 1');
     expect(tabList[1]).toHaveTextContent('Tab 2');
   });
 
   it('displays correct tab content when a tab is clicked', async () => {
-    let utils;
+    let utils: RenderResult;
     await act(async () => {
       utils = renderWithChakraProviders(<TabsContainer tabs={tabs} />);
     });
@@ -48,7 +48,7 @@ describe('TabsContainer', () => {
     });
 
     await waitFor(() => {
-      expect(utils.getByText('Tab 2 content')).toBeVisible();
+      expect(utils!.getByText('Tab 2 content')).toBeVisible();
     });
 
     // Click on tab 1
@@ -59,7 +59,7 @@ describe('TabsContainer', () => {
     });
 
     await waitFor(() => {
-      expect(utils.getByText('Tab 1 content')).toBeVisible();
+      expect(utils!.getByText('Tab 1 content')).toBeVisible();
     });
   });
 });

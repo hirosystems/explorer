@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { CookiesProvider } from 'react-cookie';
 
 import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
+import { TokenPrice } from '../../types/tokenPrice';
 import { GlobalContext, GlobalContextProvider } from '../GlobalContextProvider';
 
 jest.mock('next/navigation', () => ({
@@ -31,6 +32,11 @@ jest.mock('../../components/modals/AddNetwork/utils', () => ({
 }));
 
 const customApiUrl = 'https://my-custom-api-url.com/something';
+
+const mockTokenPrice: TokenPrice = {
+  btcPrice: 50000,
+  stxPrice: 2.5,
+};
 
 const GlobalContextTestComponent = () => {
   const { activeNetwork, networks } = useContext(GlobalContext);
@@ -72,7 +78,11 @@ describe('GlobalContext', () => {
     } as any);
     render(
       <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+        <GlobalContextProvider
+          addedCustomNetworksCookie={''}
+          removedCustomNetworksCookie={''}
+          tokenPrice={mockTokenPrice}
+        >
           <GlobalContextTestComponent />
         </GlobalContextProvider>
       </CookiesProvider>
@@ -91,7 +101,11 @@ describe('GlobalContext', () => {
     } as any);
     render(
       <CookiesProvider>
-        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+        <GlobalContextProvider
+          addedCustomNetworksCookie={''}
+          removedCustomNetworksCookie={''}
+          tokenPrice={mockTokenPrice}
+        >
           <GlobalContextTestComponent />
         </GlobalContextProvider>
       </CookiesProvider>

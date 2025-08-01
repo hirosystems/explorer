@@ -4,19 +4,20 @@ import { Field, FormikErrors } from 'formik';
 import { useMemo, useState } from 'react';
 
 import {
+  Cl,
   ClarityAbiFunction,
+  FungibleComparator,
   FungibleConditionCode,
+  FungiblePostCondition,
+  NonFungibleComparator,
   NonFungibleConditionCode,
+  NonFungiblePostCondition,
   PostCondition,
   PostConditionMode,
   PostConditionType,
-  createAssetInfo,
+  StxPostCondition,
   isClarityAbiOptional,
   isClarityAbiPrimitive,
-  makeStandardFungiblePostCondition,
-  makeStandardNonFungiblePostCondition,
-  makeStandardSTXPostCondition,
-  stringAsciiCV,
   validateStacksAddress,
 } from '@stacks/transactions';
 
@@ -29,6 +30,46 @@ import { NonTupleValueType } from '../../types/values';
 import { FormikSetFieldValueFunction, FunctionFormikState } from './FunctionView';
 
 type PostConditionConditionCode = FungibleConditionCode | NonFungibleConditionCode;
+
+function isFungibleConditionCode(code: PostConditionConditionCode): code is FungibleConditionCode {
+  return Object.values(FungibleConditionCode).includes(code as FungibleConditionCode);
+}
+
+function isNonFungibleConditionCode(
+  code: PostConditionConditionCode
+): code is NonFungibleConditionCode {
+  return Object.values(NonFungibleConditionCode).includes(code as NonFungibleConditionCode);
+}
+
+function fungibleConditionCodeToComparator(code: FungibleConditionCode): FungibleComparator {
+  switch (code) {
+    case FungibleConditionCode.Equal:
+      return 'eq';
+    case FungibleConditionCode.Greater:
+      return 'gt';
+    case FungibleConditionCode.GreaterEqual:
+      return 'gte';
+    case FungibleConditionCode.Less:
+      return 'lt';
+    case FungibleConditionCode.LessEqual:
+      return 'lte';
+    default:
+      return 'eq';
+  }
+}
+
+function nonFungibleConditionCodeToComparator(
+  code: NonFungibleConditionCode
+): NonFungibleComparator {
+  switch (code) {
+    case NonFungibleConditionCode.Sends:
+      return 'sent';
+    case NonFungibleConditionCode.DoesNotSend:
+      return 'not-sent';
+    default:
+      return 'sent';
+  }
+}
 
 export interface PostConditionParameters {
   postConditionMode?: PostConditionMode;
@@ -109,62 +150,59 @@ export function getPostCondition(
   } = postConditionParameters;
   let postCondition;
 
-  if (postConditionType === PostConditionType.STX) {
-    if (
-      postConditionAddress &&
-      postConditionConditionCode &&
-      postConditionAmount != null &&
-      isUint128(postConditionAmount)
-    ) {
-      postCondition = makeStandardSTXPostCondition(
-        postConditionAddress,
-        postConditionConditionCode as FungibleConditionCode,
-        postConditionAmount
-      );
-    }
-  } else if (postConditionType === PostConditionType.Fungible) {
-    if (
-      postConditionAddress &&
-      postConditionAssetAddress &&
-      postConditionAssetContractName &&
-      postConditionAssetName &&
-      postConditionConditionCode &&
-      postConditionAmount != null &&
-      isUint128(postConditionAmount)
-    ) {
-      const assetInfo = createAssetInfo(
-        postConditionAssetAddress,
-        postConditionAssetContractName,
-        postConditionAssetName
-      );
-      postCondition = makeStandardFungiblePostCondition(
-        postConditionAddress,
-        postConditionConditionCode as FungibleConditionCode,
-        postConditionAmount,
-        assetInfo
-      );
-    }
-  } else if (postConditionType === PostConditionType.NonFungible) {
-    if (
-      postConditionAddress &&
-      postConditionAssetAddress &&
-      postConditionAssetContractName &&
-      postConditionAssetName &&
-      postConditionConditionCode
-    ) {
-      const assetInfo = createAssetInfo(
-        postConditionAssetAddress,
-        postConditionAssetContractName,
-        postConditionAssetName
-      );
-      postCondition = makeStandardNonFungiblePostCondition(
-        postConditionAddress,
-        postConditionConditionCode as NonFungibleConditionCode,
-        assetInfo,
-        stringAsciiCV(postConditionAssetName)
-      );
-    }
-  } else {
+  if (
+    postConditionType === PostConditionType.STX &&
+    postConditionAddress &&
+    postConditionConditionCode &&
+    postConditionAmount != null &&
+    isUint128(postConditionAmount) &&
+    isFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'stx-postcondition',
+      address: postConditionAddress,
+      condition: fungibleConditionCodeToComparator(postConditionConditionCode),
+      amount: postConditionAmount.toString(),
+    } as StxPostCondition;
+  } else if (
+    postConditionType === PostConditionType.Fungible &&
+    postConditionAddress &&
+    postConditionAssetAddress &&
+    postConditionAssetContractName &&
+    postConditionAssetName &&
+    postConditionConditionCode &&
+    postConditionAmount != null &&
+    isUint128(postConditionAmount) &&
+    isFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'ft-postcondition',
+      address: postConditionAddress,
+      condition: fungibleConditionCodeToComparator(postConditionConditionCode),
+      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
+      amount: postConditionAmount.toString(),
+    } as FungiblePostCondition;
+  } else if (
+    postConditionType === PostConditionType.NonFungible &&
+    postConditionAddress &&
+    postConditionAssetAddress &&
+    postConditionAssetContractName &&
+    postConditionAssetName &&
+    postConditionConditionCode &&
+    isNonFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'nft-postcondition',
+      address: postConditionAddress,
+      condition: nonFungibleConditionCodeToComparator(postConditionConditionCode),
+      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
+      assetId: Cl.stringUtf8(postConditionAssetName),
+    } as NonFungiblePostCondition;
+  } else if (
+    postConditionType !== PostConditionType.STX &&
+    postConditionType !== PostConditionType.Fungible &&
+    postConditionType !== PostConditionType.NonFungible
+  ) {
     throw new Error(`There is no post condition type that matches ${postConditionType}`);
   }
 
