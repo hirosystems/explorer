@@ -68,7 +68,6 @@ const AddressBadge = ({ address }: { address: string }) => {
 
 const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   const toAddress = getToAddress(tx);
-  console.log('FromToBadges', { toAddress });
   return (
     <Flex gap={1} alignItems="center">
       <AddressBadge address={tx.sender_address} />

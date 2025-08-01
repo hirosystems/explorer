@@ -1,30 +1,47 @@
-import { TabsContentContainer } from '@/components/ui/tabs';
 import { DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import { Text } from '@/ui/Text';
+import { Flex } from '@chakra-ui/react';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+import { PostConditionMode } from '@stacks/stacks-blockchain-api-types';
 
-import { getFunctionResultSuccessStatus } from './utils';
-
-export function PostConditionsHeader() {
+export function PostConditionsHeader({
+  postConditionMode,
+}: {
+  postConditionMode: PostConditionMode;
+}) {
   return (
-    <TabsContentContainer>
-      {' '}
+    <Flex gap={2.5} alignItems="center" flexDirection={{ base: 'column', md: 'row' }}>
       <DefaultBadge
         icon={
           <DefaultBadgeIcon
-            icon={success ? <CheckCircle /> : <XCircle />}
-            color={success ? 'feedback.green-500' : 'iconError'}
-            bg={success ? 'transactionStatus.confirmed' : 'transactionStatuses.failed'}
+            icon={postConditionMode === 'allow' ? <CheckCircle /> : <XCircle />}
+            color={postConditionMode === 'allow' ? 'feedback.green-500' : 'iconError'}
+            bg={
+              postConditionMode === 'allow'
+                ? 'transactionStatus.confirmed'
+                : 'transactionStatuses.failed'
+            }
           />
         }
         label={
-          success ? <DefaultBadgeLabel label="Success" /> : <DefaultBadgeLabel label="Failure" />
+          postConditionMode === 'allow' ? (
+            <DefaultBadgeLabel label="Allow mode" />
+          ) : (
+            <DefaultBadgeLabel label="Deny mode" />
+          )
         }
         textStyle="text-medium-sm"
-        bg={success ? 'transactionStatus.confirmed' : 'transactionStatuses.failed'}
+        bg={
+          postConditionMode === 'allow' ? 'transactionStatus.confirmed' : 'transactionStatus.failed'
+        }
         border="none"
       />
-    </TabsContentContainer>
+      <Text textStyle="text-regular-sm" color="textSecondary">
+        {postConditionMode === 'allow'
+          ? 'The transaction must at least meet the listed post-conditions, but other transfers are allowed too.'
+          : 'Only the post-conditions explicitly listed are allowed. Anything not listed will cause the transaction to fail.'}
+      </Text>
+    </Flex>
   );
 }

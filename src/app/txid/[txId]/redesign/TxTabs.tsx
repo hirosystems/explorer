@@ -10,6 +10,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 import { Events } from './Events';
 import { TxSummary } from './TxSummary';
 import { FunctionCalled } from './function-called/FunctionCalled';
+import { PostConditions } from './post-conditions/PostConditions';
 
 function TabTriggerComponent({
   label,
@@ -71,6 +72,7 @@ function getTabsTriggersByTransactionType(
   setSelectedTab: (tab: string) => void
 ) {
   const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
+  const numPostConditions = 'post_conditions' in tx ? tx.post_conditions.length : 0;
   if (tx.tx_type === 'token_transfer') {
     return (
       <>
@@ -110,7 +112,7 @@ function getTabsTriggersByTransactionType(
         />
         <TabTriggerComponent
           key="postConditions"
-          label={`Post-conditions ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`} // TODO: add count
+          label={`Post-conditions ${numPostConditions > 0 ? `(${numPostConditions})` : ''}`}
           value="postConditions"
           isActive={selectedTab === 'postConditions'}
           onClick={() => setSelectedTab('postConditions')}
@@ -173,9 +175,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           <FunctionCalled tx={tx} />
         </TabsContent>
         <TabsContent key="postConditions" value="postConditions" w="100%">
-          <TabsContentContainer>
-            <Text>Post-conditions</Text> {/* TODO: add post-conditions */}
-          </TabsContentContainer>
+          <PostConditions tx={tx} />
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
           <TabsContentContainer>

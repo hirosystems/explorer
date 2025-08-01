@@ -31,7 +31,6 @@ const formatClarityValueType = (type: string) => {
 const tupleToArr = (
   tuple: string // TODO: add tests for this
 ) => {
-  console.log('tupleToArr', tuple);
   return tuple
     .replace('(tuple (', '')
     .replace('))', '')
@@ -133,7 +132,6 @@ const getReprValue = ({ type, value }: ReprValueProps) => {
 // TODO: add tests for this
 export function formatFunctionResult(result: ContractCallTxResult): FormattedClarityValue[] {
   const { success, type, value } = cvToJSON(hexToCV(result.hex)); // TODO: what type are we handling here?
-  console.log({ value, type });
   if (type?.includes('tuple')) {
     const formattedResult = Object.keys(value.value).map((name: string) => {
       const isNestedType = Object.keys(value.value).includes('type');

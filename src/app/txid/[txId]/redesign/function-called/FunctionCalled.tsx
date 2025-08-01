@@ -121,7 +121,6 @@ export const FunctionCalled = ({
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) => {
-  console.log('FunctionCalled', tx);
   return (
     <Stack gap={2}>
       <FunctionTitle tx={tx} />

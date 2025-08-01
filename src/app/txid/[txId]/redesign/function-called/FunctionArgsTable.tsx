@@ -58,12 +58,8 @@ export function FunctionArgsTable({
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) {
   const args = getContractCallTxFunctionArgs(tx);
-  console.log('args', args);
   const formattedArgs = args.map(arg => formatClarityValue(arg));
-  console.log('formattedArgs', formattedArgs);
   return (
-    <ScrollIndicator>
-      <Table columns={columnDefinitions} data={formattedArgs} />
-    </ScrollIndicator>
+      <Table columns={columnDefinitions} data={formattedArgs} scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}/>
   );
 }
