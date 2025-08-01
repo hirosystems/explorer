@@ -1,15 +1,13 @@
-import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
+import { TxLink } from '@/common/components/ExplorerLinks';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import {
   formatStacksAmount,
   getContractName,
   microToStacksFormatted,
   truncateHex,
-  truncateStxAddress,
 } from '@/common/utils/utils';
-import { Text, TextProps } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
-import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
@@ -21,21 +19,8 @@ import {
   TransactionStatus,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
-
-const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
-  return (
-    <Text
-      whiteSpace="nowrap"
-      overflow="hidden"
-      textOverflow="ellipsis"
-      fontSize="sm"
-      {...textProps}
-    >
-      {children}
-    </Text>
-  );
-};
+import { EllipsisText } from '../CommonTableCellRenderers';
+import { TxTableTransactionColumnData } from './TxsTable';
 
 export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
   return (
@@ -73,46 +58,6 @@ export const TxLinkCellRenderer = (value: string) => {
     <TxLink txId={value} variant="tableLink">
       <EllipsisText>{truncateHex(value, 4, 5, false)}</EllipsisText>
     </TxLink>
-  );
-};
-
-export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
-  const { address, isContract } = value;
-  return address && isContract ? (
-    <Flex
-      gap={1}
-      alignItems="center"
-      bg="surfacePrimary"
-      borderRadius="redesign.md"
-      py={0.5}
-      px={1}
-      w="fit-content"
-      _groupHover={{
-        bg: 'surfaceTertiary',
-      }}
-    >
-      <Icon h={3} w={3} color="iconPrimary">
-        <ClarityIcon />
-      </Icon>
-      <AddressLink principal={address} variant="tableLink">
-        <EllipsisText
-          textStyle="text-regular-xs"
-          color="textPrimary"
-          _hover={{
-            color: 'textInteractiveHover',
-          }}
-          fontFamily="var(--font-matter-mono)"
-        >
-          {getContractName(address)}
-        </EllipsisText>
-      </AddressLink>
-    </Flex>
-  ) : address && !isContract ? (
-    <AddressLink principal={address} variant="tableLink">
-      <EllipsisText fontSize="sm">{truncateStxAddress(address)}</EllipsisText>
-    </AddressLink>
-  ) : (
-    <EllipsisText fontSize="sm">-</EllipsisText>
   );
 };
 

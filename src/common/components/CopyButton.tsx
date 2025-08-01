@@ -21,8 +21,8 @@ export const CopyButtonRedesign = ({
   iconProps,
 }: {
   initialValue: string;
-  iconProps: IconProps;
-  buttonProps: ButtonProps;
+  iconProps?: IconProps;
+  buttonProps?: ButtonProps;
 }) => {
   const { copied, copy } = useClipboard({
     value: initialValue,
@@ -32,7 +32,6 @@ export const CopyButtonRedesign = ({
     <Button
       onClick={() => copy()}
       variant="unstyled"
-      {...buttonProps}
       bg={copied ? 'surfaceInvert' : 'transparent'}
       _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
       _groupHover={{ bg: copied ? 'surfaceInvert' : 'surfaceTertiary' }}
@@ -43,11 +42,12 @@ export const CopyButtonRedesign = ({
       display="flex"
       alignItems="center"
       justifyContent="center"
+      {...buttonProps}
     >
       <Icon
-        {...iconProps}
         color={copied ? 'iconInvert' : 'iconSecondary'}
         _hover={{ color: copied ? 'iconInvert' : 'iconPrimary' }}
+        {...iconProps}
       >
         {copied ? <Check /> : <CopySimple />}
       </Icon>
