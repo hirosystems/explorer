@@ -9,7 +9,7 @@ import { Stack } from '@chakra-ui/react';
 import { CoinbaseTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useTxBlock } from '../useTxBlock';
-import { SummaryItemLabel, SummaryItemValue } from './TxSummary';
+import { SummaryItemLabel, SummaryItemValue } from './tx-summary/TxSummary';
 
 export function DetailsCard({ tx }: { tx: Transaction }) {
   const items = getDetailsCardItems(tx);

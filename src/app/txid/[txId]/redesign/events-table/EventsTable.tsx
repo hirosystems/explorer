@@ -1,7 +1,6 @@
 'use client';
 
 import { Table } from '@/common/components/table/Table';
-import { TableContainer } from '@/common/components/table/TableContainer';
 import { TableScrollIndicator } from '@/common/components/table/TableScrollIndicatorWrapper';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
@@ -238,7 +237,6 @@ export function EventsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
       scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
       pagination={
         disablePagination

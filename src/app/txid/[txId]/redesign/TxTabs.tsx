@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Events } from './Events';
-import { TxSummary } from './TxSummary';
+import { TxSummary } from './tx-summary/TxSummary';
 
 function TabTriggerComponent({
   label,
