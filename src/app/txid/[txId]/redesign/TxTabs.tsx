@@ -131,16 +131,6 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
   }
   return null;
 }
-          <TxSummary tx={tx} />
-        </TabsContentContainer>
-      </TabsContent>
-    );
-  }
-  if (tx.tx_type === 'smart_contract') {
-    return null;
-  }
-  return null;
-}
 
 export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   const [selectedTab, setSelectedTab] = useState('overview');
