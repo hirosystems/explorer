@@ -404,7 +404,7 @@ export const CoinbaseTxSummaryItems = ({
         )}
         showCopyButton
       />
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
+      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && tx.coinbase_payload?.alt_recipient && (
         <SummaryItem
           label="Reward Recipient"
           value={tx.coinbase_payload?.alt_recipient}
