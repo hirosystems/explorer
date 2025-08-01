@@ -1,3 +1,10 @@
+# [1.321.0](https://github.com/hirosystems/explorer/compare/v1.320.2...v1.321.0) (2025-08-01)
+
+
+### Features
+
+* Upgrade @stacks/connect & support SIP-030 ([#2446](https://github.com/hirosystems/explorer/issues/2446)) ([f820c6e](https://github.com/hirosystems/explorer/commit/f820c6e93d36794ee786801a37b3c9c18381a361))
+
 ## [1.320.2](https://github.com/hirosystems/explorer/compare/v1.320.1...v1.320.2) (2025-07-31)
 
 
