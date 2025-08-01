@@ -150,61 +150,59 @@ export function getPostCondition(
   } = postConditionParameters;
   let postCondition;
 
-  if (postConditionType === PostConditionType.STX) {
-    if (
-      postConditionAddress &&
-      postConditionConditionCode &&
-      postConditionAmount != null &&
-      isUint128(postConditionAmount)
-    ) {
-      if (isFungibleConditionCode(postConditionConditionCode)) {
-        postCondition = {
-          type: 'stx-postcondition',
-          address: postConditionAddress,
-          condition: fungibleConditionCodeToComparator(postConditionConditionCode),
-          amount: postConditionAmount.toString(),
-        } as StxPostCondition;
-      }
-    }
-  } else if (postConditionType === PostConditionType.Fungible) {
-    if (
-      postConditionAddress &&
-      postConditionAssetAddress &&
-      postConditionAssetContractName &&
-      postConditionAssetName &&
-      postConditionConditionCode &&
-      postConditionAmount != null &&
-      isUint128(postConditionAmount)
-    ) {
-      if (isFungibleConditionCode(postConditionConditionCode)) {
-        postCondition = {
-          type: 'ft-postcondition',
-          address: postConditionAddress,
-          condition: fungibleConditionCodeToComparator(postConditionConditionCode),
-          asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
-          amount: postConditionAmount.toString(),
-        } as FungiblePostCondition;
-      }
-    }
-  } else if (postConditionType === PostConditionType.NonFungible) {
-    if (
-      postConditionAddress &&
-      postConditionAssetAddress &&
-      postConditionAssetContractName &&
-      postConditionAssetName &&
-      postConditionConditionCode
-    ) {
-      if (isNonFungibleConditionCode(postConditionConditionCode)) {
-        postCondition = {
-          type: 'nft-postcondition',
-          address: postConditionAddress,
-          condition: nonFungibleConditionCodeToComparator(postConditionConditionCode),
-          asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
-          assetId: Cl.stringUtf8(postConditionAssetName),
-        } as NonFungiblePostCondition;
-      }
-    }
-  } else {
+  if (
+    postConditionType === PostConditionType.STX &&
+    postConditionAddress &&
+    postConditionConditionCode &&
+    postConditionAmount != null &&
+    isUint128(postConditionAmount) &&
+    isFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'stx-postcondition',
+      address: postConditionAddress,
+      condition: fungibleConditionCodeToComparator(postConditionConditionCode),
+      amount: postConditionAmount.toString(),
+    } as StxPostCondition;
+  } else if (
+    postConditionType === PostConditionType.Fungible &&
+    postConditionAddress &&
+    postConditionAssetAddress &&
+    postConditionAssetContractName &&
+    postConditionAssetName &&
+    postConditionConditionCode &&
+    postConditionAmount != null &&
+    isUint128(postConditionAmount) &&
+    isFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'ft-postcondition',
+      address: postConditionAddress,
+      condition: fungibleConditionCodeToComparator(postConditionConditionCode),
+      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
+      amount: postConditionAmount.toString(),
+    } as FungiblePostCondition;
+  } else if (
+    postConditionType === PostConditionType.NonFungible &&
+    postConditionAddress &&
+    postConditionAssetAddress &&
+    postConditionAssetContractName &&
+    postConditionAssetName &&
+    postConditionConditionCode &&
+    isNonFungibleConditionCode(postConditionConditionCode)
+  ) {
+    postCondition = {
+      type: 'nft-postcondition',
+      address: postConditionAddress,
+      condition: nonFungibleConditionCodeToComparator(postConditionConditionCode),
+      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
+      assetId: Cl.stringUtf8(postConditionAssetName),
+    } as NonFungiblePostCondition;
+  } else if (
+    postConditionType !== PostConditionType.STX &&
+    postConditionType !== PostConditionType.Fungible &&
+    postConditionType !== PostConditionType.NonFungible
+  ) {
     throw new Error(`There is no post condition type that matches ${postConditionType}`);
   }
 

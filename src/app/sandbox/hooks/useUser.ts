@@ -37,7 +37,6 @@ export function useUser() {
         if (localStorageData.addresses.stx && localStorageData.addresses.stx.length > 0) {
           const stxAddr = localStorageData.addresses.stx[0];
 
-          // Check if the stored network URL matches current network
           const storedNetworkUrl = localStorage.getItem(NETWORK_URL_KEY);
           if (storedNetworkUrl && storedNetworkUrl !== activeNetwork.url) {
             console.log('Stored network URL does not match current network, disconnecting wallet');
@@ -58,7 +57,7 @@ export function useUser() {
         }
       }
     }
-  }, [dispatch, activeNetwork.mode]);
+  }, [dispatch, activeNetwork.url]);
 
   const isConnectedState = !!userData;
 

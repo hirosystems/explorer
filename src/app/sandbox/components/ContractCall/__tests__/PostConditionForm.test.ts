@@ -10,7 +10,7 @@ describe('checkPostConditionParameters', () => {
       postConditionMode: PostConditionMode.Allow,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
-      postCondwitionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
       postConditionAmount: 12345,
       postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
       postConditionAssetContractName: 'asset-contract-name',

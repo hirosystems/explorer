@@ -1,7 +1,24 @@
 'use client';
 
+import { logError } from '@/common/utils/error-utils';
+
 import { request } from '@stacks/connect';
 import { Cl } from '@stacks/transactions';
+
+const formatClarityArgs = (args: any[]): any[] => {
+  return args.map(arg => {
+    if (typeof arg === 'number') {
+      return Cl.uint(arg);
+    }
+    if (typeof arg === 'string') {
+      return Cl.stringAscii(arg);
+    }
+    if (typeof arg === 'boolean') {
+      return Cl.bool(arg);
+    }
+    return arg;
+  });
+};
 
 const handleUserRejection = (error: any, operation: string) => {
   if (error?.message?.includes('User rejected') || error?.message?.includes('rejected')) {
@@ -9,6 +26,7 @@ const handleUserRejection = (error: any, operation: string) => {
     return null;
   }
   console.error(`${operation} failed:`, error);
+  logError(error, `Sandbox ${operation}`, { operation }, 'error');
   throw error;
 };
 
@@ -62,18 +80,7 @@ export const callContract = async (params: {
   postConditionMode?: 'allow' | 'deny';
 }) => {
   try {
-    const clarityArgs = params.functionArgs.map(arg => {
-      if (typeof arg === 'number') {
-        return Cl.uint(arg);
-      }
-      if (typeof arg === 'string') {
-        return Cl.stringAscii(arg);
-      }
-      if (typeof arg === 'boolean') {
-        return Cl.bool(arg);
-      }
-      return arg;
-    });
+    const clarityArgs = formatClarityArgs(params.functionArgs);
 
     const response = await request('stx_callContract', {
       contract: params.contract as `${string}.${string}`,
