@@ -1,6 +1,7 @@
 'use client';
 
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
+import { AddressLinkCellRenderer } from '@/common/components/table/CommonTableCellRenderers';
 import { Table } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
@@ -14,11 +15,7 @@ import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 
-import {
-  AddressLinkCellRenderer,
-  AssetEventTypeCellRenderer,
-  IndexCellRenderer,
-} from './EventsTableCellRenderers';
+import { AssetEventTypeCellRenderer, IndexCellRenderer } from './EventsTableCellRenderers';
 import { EVENTS_TABLE_PAGE_SIZE } from './consts';
 import { EventsTableFilters } from './filters/useEventsTableFilters';
 import { EventsTableColumns } from './types';

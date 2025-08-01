@@ -1,8 +1,8 @@
 'use client';
 
+import { AddressLinkCellRenderer } from '@/common/components/table/CommonTableCellRenderers';
 import { DefaultTableColumnHeader } from '@/common/components/table/TableComponents';
 import {
-  AddressLinkCellRenderer,
   TimeStampCellRenderer,
   TransactionTitleCellRenderer,
   TxLinkCellRenderer,

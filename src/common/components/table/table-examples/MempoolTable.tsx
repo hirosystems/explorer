@@ -17,12 +17,12 @@ import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
+import { AddressLinkCellRenderer } from '../CommonTableCellRenderers';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
 import { TxTableFilters } from '../tx-table/useTxTableFilters';
 import {
-  AddressLinkCellRenderer,
   FeeCellRenderer,
   IconCellRenderer,
   TimeStampCellRenderer,
