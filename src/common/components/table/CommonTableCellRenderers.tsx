@@ -1,4 +1,5 @@
 import { AddressLink } from '@/common/components/ExplorerLinks';
+import { truncateStxAddress, truncateStxContractId } from '@/common/utils/utils';
 import { Text, TextProps } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import { Flex, Icon } from '@chakra-ui/react';
@@ -52,13 +53,13 @@ export const AddressLinkCellRenderer = (value: AddressLinkCellRendererProps) => 
           }}
           fontFamily="var(--font-matter-mono)"
         >
-          {address}
+          {truncateStxContractId(address)}
         </EllipsisText>
       </AddressLink>
     </Flex>
   ) : address && !isContract ? (
     <AddressLink principal={address} variant="tableLink">
-      <EllipsisText fontSize="sm">{address}</EllipsisText>
+      <EllipsisText fontSize="sm">{truncateStxAddress(address)}</EllipsisText>
     </AddressLink>
   ) : (
     <EllipsisText fontSize="sm">-</EllipsisText>

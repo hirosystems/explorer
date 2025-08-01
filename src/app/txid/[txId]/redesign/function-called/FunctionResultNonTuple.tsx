@@ -9,7 +9,6 @@ import { formatFunctionResult } from './utils';
 export const FunctionResultNonTuple = ({ tx }: { tx: ContractCallTransaction }) => {
   const result = tx.tx_result;
   const formattedResult = formatFunctionResult(result);
-  console.log('formattedResult', formattedResult);
   const firstFormattedResult = formattedResult[0];
   if (!firstFormattedResult) return null;
   const { value, type } = firstFormattedResult;

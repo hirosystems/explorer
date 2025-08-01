@@ -9,7 +9,7 @@ import { PostConditionsHeader } from './PostConditionsHeader';
 import { PostConditionsTable } from './PostConditionsTable';
 
 export function PostConditions({ tx }: { tx: ContractCallTransaction }) {
-  const { post_conditions: conditions, post_condition_mode: mode } = tx;
+  const { post_condition_mode: mode } = tx;
   return (
     <Stack gap={1}>
       <TabsContentContainer>
