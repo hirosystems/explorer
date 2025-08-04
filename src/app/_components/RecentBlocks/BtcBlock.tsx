@@ -1,4 +1,7 @@
-import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import {
+  formatTimestampToDateString,
+  formatTimestampToRelativeTime,
+} from '@/common/utils/time-utils';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
@@ -35,9 +38,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         _hover={{ textDecoration: 'none' }}
-        aria-label={`Bitcoin block ${formatTimestampToRelativeTime(burnBlock.burn_block_height)} mined at ${formatTimestampToRelativeTime(
-          burnBlock.burn_block_time
-        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        aria-label={`Bitcoin block #${burnBlock.burn_block_height} mined on ${formatTimestampToDateString(burnBlock.burn_block_time)} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
         variant="underlineOnHover"
@@ -136,7 +137,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         rel="noreferrer"
         _hover={{ textDecoration: 'none' }}
-        aria-label={`Newest Bitcoin block ${burnBlock.burn_block_height} mined at ${burnBlock.burn_block_time} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        aria-label={`Newest Bitcoin block #${burnBlock.burn_block_height} mined on ${formatTimestampToDateString(burnBlock.burn_block_time)} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
       >
@@ -207,7 +208,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   <Text
                     textStyle={'text-medium-xs'}
                     color={'textSecondary'}
-                    aria-label={`Block timestamp: ${formatTimestampToRelativeTime(burnBlock.burn_block_time)}`}
+                    aria-label={`Block timestamp: ${new Date(burnBlock.burn_block_time * 1000).toISOString()}`}
                     suppressHydrationWarning
                   >
                     {formatTimestampToRelativeTime(burnBlock.burn_block_time)}

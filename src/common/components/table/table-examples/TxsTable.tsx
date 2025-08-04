@@ -262,11 +262,13 @@ export function TxsTable({
     const queryKey = [
       'confirmedTransactions',
       pagination.pageSize,
-      pagination.pageIndex,
+      pagination.pageIndex * pagination.pageSize,
       ...(fromAddress ? [{ fromAddress }] : []),
       ...(toAddress ? [{ toAddress }] : []),
       ...(startTime ? [{ startTime }] : []),
       ...(endTime ? [{ endTime }] : []),
+      ...(activeConfirmedTxsOrder ? [{ order: activeConfirmedTxsOrder }] : []),
+      ...(activeConfirmedTxsSort ? [{ sortBy: activeConfirmedTxsSort }] : []),
       ...(transactionType ? [{ transactionType }] : []),
     ];
     queryClient.setQueryData(queryKey, initialData);

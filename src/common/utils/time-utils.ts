@@ -101,3 +101,7 @@ export function formatBlockTime(timestampInSeconds: number): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export function formatTimestampToDateString(timestampInSeconds: number): string {
+  return new Date(timestampInSeconds * 1000).toISOString().split('T')[0];
+}
