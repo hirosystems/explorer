@@ -1,3 +1,10 @@
+## [1.321.1](https://github.com/hirosystems/explorer/compare/v1.321.0...v1.321.1) (2025-08-05)
+
+
+### Bug Fixes
+
+* homepage hydration issue and query key ([#2452](https://github.com/hirosystems/explorer/issues/2452)) ([3325c3e](https://github.com/hirosystems/explorer/commit/3325c3e2799930e47306879e4743fd3eaa8c4f59))
+
 # [1.321.0](https://github.com/hirosystems/explorer/compare/v1.320.2...v1.321.0) (2025-08-01)
 
 
