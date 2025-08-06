@@ -1,3 +1,10 @@
+# [1.322.0](https://github.com/hirosystems/explorer/compare/v1.321.2...v1.322.0) (2025-08-06)
+
+
+### Features
+
+* scaffolded the contract call tx id page + added function call tab ([5f8c0ca](https://github.com/hirosystems/explorer/commit/5f8c0ca45aa20db9211ca40926220c3463d52f12))
+
 ## [1.321.2](https://github.com/hirosystems/explorer/compare/v1.321.1...v1.321.2) (2025-08-06)
 
 
