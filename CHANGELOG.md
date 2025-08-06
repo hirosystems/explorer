@@ -1,3 +1,10 @@
+## [1.321.2](https://github.com/hirosystems/explorer/compare/v1.321.1...v1.321.2) (2025-08-06)
+
+
+### Bug Fixes
+
+* remove default api ([#2454](https://github.com/hirosystems/explorer/issues/2454)) ([9fa0935](https://github.com/hirosystems/explorer/commit/9fa09357b41e3e0cff32280c4073984461e28dd7))
+
 ## [1.321.1](https://github.com/hirosystems/explorer/compare/v1.321.0...v1.321.1) (2025-08-05)
 
 
