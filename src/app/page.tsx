@@ -31,7 +31,7 @@ interface HomeSearchParams extends CommonSearchParams {
 export default async function HomeRedesign(props: { searchParams: Promise<HomeSearchParams> }) {
   const {
     chain = NetworkModes.Mainnet,
-    api = DEFAULT_MAINNET_SERVER,
+    api,
     ssr = 'true',
   } = await props.searchParams;
   const apiUrl = getApiUrl(chain, api);
