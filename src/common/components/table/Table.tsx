@@ -356,9 +356,6 @@ export function Table<T>({
                     w="full"
                     gap={1.5}
                     alignItems="center"
-                    py={1}
-                    pl={1}
-                    pr={1.5}
                     {...(header.column.getCanSort() && {
                       _hover: {
                         bg: 'surfaceSecondary',

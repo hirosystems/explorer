@@ -1,5 +1,6 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
-import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
+import { TransactionStatus as TransactionStatusEnum } from '@/common/constants/constants';
+import { getTransactionStatus, getTxTitle } from '@/common/utils/transactions';
 import {
   formatStacksAmount,
   getContractName,
@@ -7,6 +8,7 @@ import {
   truncateHex,
   truncateStxAddress,
 } from '@/common/utils/utils';
+import { TransactionTypeBadge } from '@/ui/Badge';
 import { Text, TextProps } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
@@ -16,12 +18,13 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
 
 import {
+  MempoolTransaction,
   MempoolTransactionStatus,
   Transaction,
   TransactionStatus,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
+import { TxTableAddressColumnData } from './TxsTable';
 
 const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
   return (
@@ -38,34 +41,7 @@ const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } 
 };
 
 export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
-  return (
-    <Flex
-      py={1}
-      pl={1}
-      pr={1.5}
-      bg="surfaceSecondary"
-      w="fit-content"
-      alignItems="center"
-      gap={1.5}
-      border="1px solid var(--stacks-colors-redesign-border-secondary)"
-      borderRadius="redesign.md"
-    >
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        p={1}
-        borderRadius="redesign.sm"
-        bg={getTxTypeColor(txType)}
-      >
-        <Icon h={3} w={3} color="neutral.sand-1000">
-          {getTxTypeIcon(txType)}
-        </Icon>
-      </Flex>
-      <Text textStyle="text-medium-xs" color="textPrimary" whiteSpace="nowrap">
-        {getTxTypeLabel(txType)}
-      </Text>
-    </Flex>
-  );
+  return <TransactionTypeBadge tx={{ tx_type: txType } as Transaction} />;
 };
 
 export const TxLinkCellRenderer = (value: string) => {
@@ -117,6 +93,7 @@ export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
 };
 
 export const FeeCellRenderer = (value: string) => {
+  // TODO: Make this a common cell renderer after merging the function called tab PR
   const stx = microToStacksFormatted(value);
   const microStx = formatStacksAmount(value);
 
@@ -194,19 +171,6 @@ function getTxStatusIcon(status: TransactionStatus | MempoolTransactionStatus) {
   }
 }
 
-function getTxStatusLabel(status: TransactionStatus | MempoolTransactionStatus) {
-  switch (status) {
-    case 'pending':
-      return 'Pending';
-    case 'abort_by_post_condition':
-      return 'Failed';
-    case 'abort_by_response':
-      return 'Failed';
-    default:
-      return 'Unknown';
-  }
-}
-
 function getTxStatusIconColor(status: TransactionStatus | MempoolTransactionStatus) {
   switch (status) {
     case 'pending':
@@ -250,35 +214,24 @@ const StatusTag = ({ status }: { status: TransactionStatus | MempoolTransactionS
   );
 };
 
-const txTextMap: Record<Transaction['tx_type'], (data: TxTableTransactionColumnData) => string> = {
-  contract_call: (data: TxTableTransactionColumnData) => data.functionName ?? '',
-  token_transfer: (data: TxTableTransactionColumnData) => `Send ${data.amount} STX`,
-  tenure_change: (data: TxTableTransactionColumnData) =>
-    `Tenure ${data.tenureChangePayload?.cause} (#${data.blockHeight})`,
-  coinbase: (data: TxTableTransactionColumnData) => `Block #${data.blockHeight}`,
-  smart_contract: (data: TxTableTransactionColumnData) =>
-    getContractName(data.smartContract?.contractId ?? ''),
-  poison_microblock: (data: TxTableTransactionColumnData) => '',
-};
-
-export const TransactionTitleCellRenderer = (value: TxTableTransactionColumnData) => {
-  const { txType, status, txId } = value;
-
-  const text = txType ? txTextMap[txType as keyof typeof txTextMap](value) : '';
+export const TransactionTitleCellRenderer = (tx: Transaction | MempoolTransaction) => {
+  const txStatus = getTransactionStatus(tx);
+  const title = getTxTitle(tx);
 
   let content = (
-    <TxLink txId={txId} variant="tableLink">
-      <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
+    <TxLink txId={tx.tx_id} variant="tableLink">
+      <EllipsisText textStyle="text-medium-sm">{title}</EllipsisText>
     </TxLink>
   );
 
-  if (status && status !== 'success') {
+  if (tx.tx_status && txStatus === TransactionStatusEnum.FAILED) {
     return (
       <Flex alignItems="center" gap={1.5}>
         {content}
-        <StatusTag status={status} />
+        <StatusTag status={tx.tx_status} />
       </Flex>
     );
   }
+
   return content;
 };

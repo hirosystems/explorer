@@ -7,7 +7,7 @@ import { GenericResponseType, useInfiniteQueryResult } from '@/common/hooks/useI
 import { useMempoolTransactionsInfinite } from '@/common/queries/useMempoolTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
-import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
+import { validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
@@ -30,11 +30,11 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
-import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
+import { TxTableAddressColumnData } from './TxsTable';
 import { TxTableColumns } from './types';
 
 export interface MempoolTableData {
-  [TxTableColumns.Transaction]: TxTableTransactionColumnData;
+  [TxTableColumns.Transaction]: Transaction | MempoolTransaction;
   [TxTableColumns.TxId]: string;
   [TxTableColumns.TxType]: MempoolTransaction['tx_type'];
   [TxTableColumns.From]: TxTableAddressColumnData;
@@ -50,7 +50,7 @@ const defaultColumnDefinitions: ColumnDef<MempoolTableData>[] = [
     id: TxTableColumns.Transaction,
     header: 'Transaction',
     accessorKey: TxTableColumns.Transaction,
-    cell: info => TransactionTitleCellRenderer(info.getValue() as TxTableTransactionColumnData),
+    cell: info => TransactionTitleCellRenderer(info.getValue() as Transaction | MempoolTransaction),
     enableSorting: false,
   },
   {
@@ -262,19 +262,7 @@ export function MempoolTable({
       const amount = getAmount(tx);
 
       return {
-        [TxTableColumns.Transaction]: {
-          amount: microToStacksFormatted(amount),
-          functionName:
-            tx.tx_type === 'contract_call' ? tx.contract_call?.function_name : undefined,
-          contractName: tx.tx_type === 'contract_call' ? tx.contract_call?.contract_id : undefined,
-          txType: tx.tx_type,
-          smartContract: {
-            contractId:
-              tx.tx_type === 'smart_contract' ? tx.smart_contract?.contract_id : undefined,
-          },
-          txId: tx.tx_id,
-          blockHeight: 0,
-        },
+        [TxTableColumns.Transaction]: tx,
         [TxTableColumns.TxId]: tx.tx_id,
         [TxTableColumns.TxType]: tx.tx_type,
         [TxTableColumns.From]: {

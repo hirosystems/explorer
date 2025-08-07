@@ -56,16 +56,25 @@ function TransactionIdPage() {
   useEffect(() => {
     const revalidateTxIdPage = async () => {
       const txStatus = tx?.tx_status;
-      if (txStatus === 'pending' && isRedesign) {
-        try {
-          const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
-          const revalidateResponse = await fetch(revalidateUrl);
-          if (!revalidateResponse.ok) {
-            throw new Error('Failed to revalidate tx id page for txId: ' + txId);
-          }
-        } catch (error) {
-          logError(error as Error, 'Revalidating tx-id page for txId: ' + txId, { txId, txStatus });
+      // if (txStatus === 'pending') {
+      //   try {
+      //     const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
+      //     const revalidateResponse = await fetch(revalidateUrl);
+      //     if (!revalidateResponse.ok) {
+      //       throw new Error('Failed to revalidate tx id page for txId: ' + txId);
+      //     }
+      //   } catch (error) {
+      //     logError(error as Error, 'Revalidating tx-id page for txId: ' + txId, { txId, txStatus });
+      //   }
+      // }
+      try {
+        const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
+        const revalidateResponse = await fetch(revalidateUrl);
+        if (!revalidateResponse.ok) {
+          throw new Error('Failed to revalidate tx id page for txId: ' + txId);
         }
+      } catch (error) {
+        logError(error as Error, 'Revalidating tx-id page for txId: ' + txId, { txId, txStatus });
       }
     };
 
@@ -79,14 +88,11 @@ function TransactionIdPage() {
 
   if (tx?.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
-  if (tx?.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
-  if (tx?.tx_type === 'token_transfer') return <TokenTransferPage tx={tx} />;
+  if (tx?.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
-  if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
+  if (tx?.tx_type === 'tenure_change') return <TenureChangePageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
-  if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
+  if (tx?.tx_type === 'coinbase') return <CoinbasePageRedesign tx={tx} />;
 
   if (tx?.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
   if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;

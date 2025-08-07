@@ -18,6 +18,9 @@ export type CompressedTxTableData = Pick<
   | 'block_time'
   | 'block_height'
   | 'sender_address'
+  | 'is_unanchored'
+  | 'microblock_canonical'
+  | 'canonical'
 > & {
   token_transfer?: Pick<
     NonNullable<TokenTransferTransaction['token_transfer']>,
@@ -71,6 +74,9 @@ export function compressTransactions(transactions: Transaction[]): CompressedTxT
       fee_rate: tx.fee_rate,
       block_time: tx.block_time,
       sender_address: tx.sender_address,
+      is_unanchored: tx.is_unanchored,
+      microblock_canonical: tx.microblock_canonical,
+      canonical: tx.canonical,
     };
 
     if ('token_transfer' in tx && tx.token_transfer) {

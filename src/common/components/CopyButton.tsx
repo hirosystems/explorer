@@ -33,8 +33,8 @@ export const CopyButtonRedesign = ({
       onClick={() => copy()}
       variant="unstyled"
       bg={copied ? 'surfaceInvert' : 'transparent'}
-      _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
       _groupHover={{ bg: copied ? 'surfaceInvert' : 'surfaceTertiary' }}
+      _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
       borderRadius="redesign.sm"
       minWidth="0"
       h="fit-content"

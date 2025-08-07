@@ -23,3 +23,9 @@ export function getAmount(tx: Transaction | MempoolTransaction): number {
   }
   return 0;
 }
+
+export function isConfirmedTx<T extends Transaction, U extends MempoolTransaction>(
+  tx: T | U
+): tx is T {
+  return 'block_height' in tx && tx.block_height !== undefined;
+}

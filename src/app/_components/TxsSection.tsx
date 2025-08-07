@@ -11,7 +11,6 @@ import {
 import {
   TxTableAddressColumnData,
   TxTableData,
-  TxTableTransactionColumnData,
   TxsTable,
 } from '@/common/components/table/table-examples/TxsTable';
 import { TxTableColumns } from '@/common/components/table/table-examples/types';
@@ -23,6 +22,8 @@ import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
 import { ColumnDef, Header } from '@tanstack/react-table';
 
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+
 import { TXS_LIST_SIZE } from '../consts';
 
 export const columnDefinitions: ColumnDef<TxTableData>[] = [
@@ -30,7 +31,7 @@ export const columnDefinitions: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.Transaction,
     header: 'Transaction',
     accessorKey: TxTableColumns.Transaction,
-    cell: info => TransactionTitleCellRenderer(info.getValue() as TxTableTransactionColumnData),
+    cell: info => TransactionTitleCellRenderer(info.getValue() as Transaction | MempoolTransaction),
     enableSorting: false,
   },
   {
