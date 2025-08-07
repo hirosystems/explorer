@@ -1,7 +1,7 @@
 import { CopyButtonRedesign } from '@/common/components/CopyButton';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Flex, Icon, Stack, Table } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -193,8 +193,10 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Table.Root w="full" className="tx-details-summary">
-      <Table.Body>{summaryContent}</Table.Body>
-    </Table.Root>
+    <Box className="tx-details-summary">
+      <Table.Root w="full">
+        <Table.Body>{summaryContent}</Table.Body>
+      </Table.Root>
+    </Box>
   );
 }
