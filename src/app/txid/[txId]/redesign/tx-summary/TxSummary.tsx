@@ -193,7 +193,7 @@ export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
 
   return (
-    <Table.Root w="full">
+    <Table.Root w="full" className="tx-details-summary">
       <Table.Body>{summaryContent}</Table.Body>
     </Table.Root>
   );
