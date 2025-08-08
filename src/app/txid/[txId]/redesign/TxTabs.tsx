@@ -11,6 +11,7 @@ import { Events } from './Events';
 import { TxSummary } from './TxSummary';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
+import { Source } from './source/Source';
 
 function TabTriggerComponent({
   label,
@@ -191,9 +192,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           </TabsContentContainer>
         </TabsContent>
         <TabsContent key="sourceCode" value="sourceCode" w="100%">
-          <TabsContentContainer>
-            <Text>Source code</Text> {/* TODO: add source code */}
-          </TabsContentContainer>
+          <Source tx={tx} />
         </TabsContent>
       </>
     );
