@@ -1,7 +1,6 @@
 'use client';
 
-import { Stack } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
@@ -15,58 +14,55 @@ import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBar } from './StatusBar/IncidentsStatusBar';
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
 
-const StyledWrapper = styled(Stack)<{ bg: string }>`
-  position: relative;
-  max-width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow: hidden;
-  background: ${props => props.bg};
-  background-repeat: no-repeat, repeat;
-  background-size:
-    100% 530px,
-    100% 100%;
-  font-variant-ligatures: no-contextual;
-`;
-
-function WrapperWithBg({ children }: { children: ReactNode; serverThemeCookie: string }) {
-  return (
-    <StyledWrapper bg={'surfaceTertiary'} className="wrapper-with-bg">
-      {children}
-    </StyledWrapper>
-  );
-}
-
 export function PageWrapper({
   children,
   statusBarContent,
-  serverThemeCookie,
 }: {
   children: ReactNode;
   statusBarContent: IncidentContent | null;
-  serverThemeCookie: string;
 }) {
   return (
     <>
-      <Stack gap={0} top={0} w="full">
+      <Stack gap={0} top={0} w="full" className="banner-area">
         <NonHiroNetworkWarningBar />
         <IncidentsStatusBar />
         <CMSStatusBars statusBarContent={statusBarContent} />
         <TestnetBanner />
       </Stack>
-      <WrapperWithBg serverThemeCookie={serverThemeCookie}>
-        <Stack mx="auto" width="full" maxWidth="breakpoint-2xl" p={6} minHeight={'100vh'}>
-          <NewNavBar />
-          <Stack
-            marginTop={'50px'}
-            mb={8}
-            gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
-          >
-            {children}
-          </Stack>
-          <NewFooter />
+      <Stack
+        className="page-layout"
+        bg="surfaceTertiary"
+        maxWidth="100vw"
+        minHeight="100vh"
+        overflow="hidden"
+        fontVariantLigatures="no-contextual"
+      >
+        <Stack
+          className="page-content-layout"
+          height="full"
+          minHeight="100vh"
+          width="full"
+          maxWidth="breakpoint-2xl"
+          p={6}
+          mx="auto"
+          justifyContent="space-between"
+        >
+          <Box className="navbar-content-wrapper" h="full" w="full">
+            <NewNavBar />
+            <Stack
+              className="page-content-spacing"
+              marginTop={'50px'}
+              mb={8}
+              gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
+            >
+              {children}
+            </Stack>
+          </Box>
+          <Flex className="footer-position" w="full">
+            <NewFooter />
+          </Flex>
         </Stack>
-      </WrapperWithBg>
+      </Stack>
       <AddNetworkModal />
       <AddNetworkModalNew />
       <NetworkModeToast />

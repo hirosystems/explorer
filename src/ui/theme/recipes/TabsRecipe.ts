@@ -224,7 +224,7 @@ export const tabsSlotRecipe = defineSlotRecipe({
           position: 'relative',
           cursor: 'button',
           color: 'textSecondary',
-          fontFamily: 'var(--font-instrument-sans)',
+          fontFamily: 'var(--font-matter-mono)',
           whiteSpace: 'nowrap',
           _disabled: {
             cursor: 'not-allowed',

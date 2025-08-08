@@ -965,21 +965,7 @@ export const storybookTxTableRowData: TxTableData[] = storybookTxTableData.map(t
   const to = getToAddress(tx);
   const amount = getAmount(tx);
   return {
-    [TxTableColumns.Transaction]: {
-      amount: microToStacksFormatted(amount),
-      functionName: tx.tx_type === 'contract_call' ? tx.contract_call?.function_name : undefined,
-      contractName: tx.tx_type === 'contract_call' ? tx.contract_call?.contract_id : undefined,
-      txType: tx.tx_type,
-      status: tx.tx_status,
-      txId: tx.tx_id,
-      blockHeight: tx.block_height,
-      smartContract: {
-        contractId: tx.tx_type === 'smart_contract' ? tx.smart_contract?.contract_id : undefined,
-      },
-      tenureChangePayload: {
-        cause: tx.tx_type === 'tenure_change' ? tx.tenure_change_payload?.cause : undefined,
-      },
-    },
+    [TxTableColumns.Transaction]: tx,
     [TxTableColumns.TxId]: tx.tx_id,
     [TxTableColumns.TxType]: tx.tx_type,
     [TxTableColumns.From]: {

@@ -51,16 +51,15 @@ export const BlockHeightBadge = forwardRef<
   const network = useGlobalContext().activeNetwork;
 
   return (
-    <Badge ref={ref} {...rest} variant="solid" content="iconAndLabel">
-      <Flex alignItems="center" gap={1.5}>
+    <Badge ref={ref} {...rest} variant="solid" type="blockHeight">
+      <Flex alignItems="center" gap={1}>
         <DefaultBadgeIcon
           icon={blockType === 'stx' ? <StacksIconBlock /> : <BitcoinCircleIcon />}
           color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}
         />
         <NextLink
           href={buildUrl(`${blockType === 'stx' ? '/block/' : '/btcblock'}${blockHeight}`, network)}
-          color="textPrimary"
-          variant="aTag"
+          variant="tableLink"
         >
           #{blockHeight}
         </NextLink>
@@ -79,13 +78,10 @@ export const TransactionTypeBadge = forwardRef<
       {...rest}
       variant="outline"
       content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
+      type="transactionType"
     >
-      <Flex alignItems="center" gap={1.5}>
-        <DefaultBadgeIcon
-          icon={getTxTypeIcon(tx.tx_type)}
-          color="iconPrimary"
-          bg={getTxTypeColor(tx.tx_type)}
-        />
+      <Flex alignItems="center" gap={1}>
+        <DefaultBadgeIcon icon={getTxTypeIcon(tx.tx_type)} bg={getTxTypeColor(tx.tx_type)} />
         {withoutLabel ? null : <DefaultBadgeLabel label={getTxTypeLabel(tx.tx_type)} />}
       </Flex>
     </Badge>
@@ -101,10 +97,11 @@ export const TransactionStatusBadge = forwardRef<
       ref={ref}
       {...rest}
       bg={getTxStatusBgColor(tx)}
+      type="transactionStatus"
       content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
     >
-      <Flex alignItems="center" gap={1.5}>
-        <DefaultBadgeIcon icon={getTxStatusIcon(tx)} color={getTxStatusIconColor(tx)} />
+      <Flex alignItems="center" gap={1}>
+        <DefaultBadgeIcon icon={getTxStatusIcon(tx, true)} color={getTxStatusIconColor(tx)} />
         {withoutLabel ? null : <DefaultBadgeLabel label={getTxStatusLabel(tx)} />}
       </Flex>
     </Badge>
@@ -113,7 +110,7 @@ export const TransactionStatusBadge = forwardRef<
 
 export const DefaultBadgeIcon = ({
   icon,
-  color = 'iconPrimary',
+  color = 'var(--stacks-colors-neutral-sand-1000)',
   bg,
 }: {
   icon: React.ReactNode;
@@ -121,13 +118,21 @@ export const DefaultBadgeIcon = ({
   bg?: string;
 }) => {
   return bg ? (
-    <Flex alignItems="center" justifyContent="center" p={0.5} borderRadius="redesign.sm" bg={bg}>
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      p={0.5}
+      borderRadius="redesign.sm"
+      bg={bg}
+      h={4.5}
+      w={4.5}
+    >
       <Icon h={3} w={3} color={color}>
         {icon}
       </Icon>
     </Flex>
   ) : (
-    <Icon h={4} w={4} color={color}>
+    <Icon h={3.5} w={3.5} color={color}>
       {icon}
     </Icon>
   );

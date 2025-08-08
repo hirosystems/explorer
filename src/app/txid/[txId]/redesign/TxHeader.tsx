@@ -1,12 +1,7 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { getToAddress } from '@/common/utils/transaction-utils';
-import {
-  getTxTitle,
-  truncateHex,
-  truncateStxAddress,
-  truncateStxContractId,
-  validateStacksContractId,
-} from '@/common/utils/utils';
+import { getTxTitle, getTxTypeColor } from '@/common/utils/transactions';
+import { truncateHex, truncateStxAddress, validateStacksContractId } from '@/common/utils/utils';
 import { TransactionStatusBadge, TransactionTypeBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
@@ -19,14 +14,22 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 const BORDER_WIDTH = 1;
 
-const Badge = ({ value, copiedText }: { value: string; copiedText: string }) => {
+const Badge = ({
+  value,
+  copyValue,
+  copiedText,
+}: {
+  value: string;
+  copyValue: string;
+  copiedText: string;
+}) => {
   const { copied, copy } = useClipboard({
-    value,
+    value: copyValue,
     timeout: 750,
   });
 
   return (
-    <Tooltip content={copiedText || 'Copied!'} open={copied}>
+    <Tooltip content={copiedText || 'Copied!'} open={copied} variant="redesignPrimary">
       <Flex
         px={3}
         py={1}
@@ -51,6 +54,7 @@ const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   return (
     <Badge
       value={truncateHex(tx.tx_id, 4, 5, false)}
+      copyValue={tx.tx_id}
       copiedText="Transaction ID copied to clipboard"
     />
   );
@@ -60,7 +64,8 @@ const AddressBadge = ({ address }: { address: string }) => {
   const isContract = validateStacksContractId(address);
   return address ? (
     <Badge
-      value={isContract ? truncateStxContractId(address) : truncateStxAddress(address)}
+      value={truncateStxAddress(address)}
+      copyValue={address}
       copiedText={`Address copied to clipboard`}
     />
   ) : null;
@@ -74,7 +79,7 @@ const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       {toAddress ? (
         <>
           <Icon h={6} w={3.5} color="iconTertiary">
-            <ArrowRight />
+            <ArrowRight weight="bold" />
           </Icon>
           <AddressBadge address={toAddress} />
         </>
@@ -89,12 +94,10 @@ export const TxHeaderUnminimized = forwardRef<
 >(({ tx }, ref) => {
   return (
     <Flex
-      bg={
-        'linear-gradient(to bottom, var(--stacks-colors-accent-bitcoin-500), var(--stacks-colors-surface-primary))'
-      }
+      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.tx_type)}, var(--stacks-colors-surface-primary))`}
       padding={`${BORDER_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
-      boxShadow="var(--stacks-shadows-elevation2)"
+      boxShadow="elevation2"
       ref={ref}
     >
       <Stack p={4} gap={3} w="full" borderRadius="redesign.xl" bg="surfaceSecondary">
@@ -117,9 +120,7 @@ export const TxHeaderUnminimized = forwardRef<
 export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   return (
     <Flex
-      bg={
-        'linear-gradient(to bottom, var(--stacks-colors-accent-bitcoin-500), var(--stacks-colors-surface-primary))'
-      }
+      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.tx_type)}, var(--stacks-colors-surface-primary))`}
       padding={`${BORDER_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
       boxShadow="elevation2"
@@ -130,13 +131,13 @@ export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction
         w="full"
         borderRadius="redesign.xl"
         bg="surfaceSecondary"
-        alignItems="baseline"
+        alignItems="center"
       >
         <Flex gap={1} alignItems="center">
           <TransactionTypeBadge tx={tx} withoutLabel />
           <TransactionStatusBadge tx={tx} withoutLabel />
         </Flex>
-        <Flex gap={3}>
+        <Flex gap={3} alignItems="center">
           <Text textStyle="text-medium-md">{getTxTitle(tx)}</Text>
           <Flex alignItems="center" gap={2} hideBelow="md">
             <TxIdBadge tx={tx} />
