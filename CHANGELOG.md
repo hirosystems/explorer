@@ -1,3 +1,10 @@
+# [1.323.0](https://github.com/hirosystems/explorer/compare/v1.322.0...v1.323.0) (2025-08-08)
+
+
+### Features
+
+* added post conditions tab ([242f6d6](https://github.com/hirosystems/explorer/commit/242f6d6b9af2ad92356b108a231361494307cec9))
+
 # [1.322.0](https://github.com/hirosystems/explorer/compare/v1.321.2...v1.322.0) (2025-08-06)
 
 
