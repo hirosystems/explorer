@@ -2,13 +2,16 @@ import { getIsSBTC } from '@/app/tokens/utils';
 
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { TabsContainer } from '../../../../common/components/TabsContainer';
-import { useSuspenseContractById } from '../../../../common/queries/useContractById';
+import {
+  useContractById,
+  useSuspenseContractById,
+} from '../../../../common/queries/useContractById';
 import { AddressConfirmedTxsList } from '../../../../features/txs-list/AddressConfirmedTxsList';
 import { AddressMempoolTxsList } from '../../../../features/txs-list/AddressMempoolTxsList';
 import { CodeEditor } from '../../../../ui/CodeEditor';
 import { TabsRootProps } from '../../../../ui/Tabs';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
-import { sbtcDepositAddress } from '../consts';
+import { sbtcDepositAddress, sbtcWidthdrawlContractAddress } from '../consts';
 import { DeveloperData, TokenInfoProps } from '../types';
 import { Developers } from './Developers';
 import HoldersTable from './holders/Holders';
@@ -23,6 +26,10 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
   const { data: contract } = useSuspenseContractById(tokenId);
   const source = contract?.source_code;
   const isSBTC = getIsSBTC(tokenId);
+  const { data: sbtcWithdrawalContract } = useContractById(
+    isSBTC ? sbtcWidthdrawlContractAddress : undefined
+  );
+
   return (
     <TabsContainer
       tabs={[
@@ -51,6 +58,20 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
                 title: 'Pending Deposits',
                 id: 'pending-deposits',
                 content: <AddressMempoolTxsList address={sbtcDepositAddress} />,
+              },
+            ]
+          : []),
+        ...(isSBTC && sbtcWithdrawalContract
+          ? [
+              {
+                title: 'Withdraw Deposits',
+                id: 'withdraw-deposits',
+                content: (
+                  <ContractAvailableFunctions
+                    contractId={sbtcWidthdrawlContractAddress}
+                    contract={sbtcWithdrawalContract}
+                  />
+                ),
               },
             ]
           : []),
