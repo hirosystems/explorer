@@ -1,3 +1,10 @@
+## [1.323.1](https://github.com/hirosystems/explorer/compare/v1.323.0...v1.323.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* addressed tx id page feedback ([3789a57](https://github.com/hirosystems/explorer/commit/3789a57ef9551268e0f695f80382d7da1e0c5b80))
+
 # [1.323.0](https://github.com/hirosystems/explorer/compare/v1.322.0...v1.323.0) (2025-08-08)
 
 
