@@ -1,3 +1,10 @@
+# [1.325.0](https://github.com/hirosystems/explorer/compare/v1.324.0...v1.325.0) (2025-08-12)
+
+
+### Features
+
+* update layout breakpoints ([#2464](https://github.com/hirosystems/explorer/issues/2464)) ([5f739b1](https://github.com/hirosystems/explorer/commit/5f739b1649abf0e607cc3aecac0b8edf5e6a695d))
+
 # [1.324.0](https://github.com/hirosystems/explorer/compare/v1.323.1...v1.324.0) (2025-08-12)
 
 
