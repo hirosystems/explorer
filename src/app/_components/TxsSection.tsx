@@ -90,7 +90,7 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
   const network = useGlobalContext().activeNetwork;
 
   return (
-    <Stack gap={6} flex={1} maxWidth={['100%', '100%', '100%', '100%', '100%']}>
+    <Stack gap={6} width="100%">
       <Flex justifyContent={'space-between'} alignItems={'center'}>
         <Text textStyle="heading-md" color="textPrimary" whiteSpace={'nowrap'}>
           Latest transactions

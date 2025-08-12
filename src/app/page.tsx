@@ -84,7 +84,7 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
         <RecentBlocksSection />
         <Flex
           gap={{ base: 20, md: 20, lg: 20, xl: 2 }}
-          flexDirection={{ base: 'column', '2xl': 'row' }}
+          flexDirection={{ base: 'column', xl: 'row' }}
           alignItems="stretch"
         >
           <StackingSection />
@@ -92,9 +92,11 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
         </Flex>
         <Flex
           gap={{ base: 20, md: 20, lg: 20, xl: 2 }}
-          flexDirection={{ base: 'column', '2xl': 'row' }}
+          flexDirection={{ base: 'column', xl: 'row' }}
         >
-          <TxsSection initialTxTableData={initialTxTableData} />
+          <Flex flex={1} minWidth={0}>
+            <TxsSection initialTxTableData={initialTxTableData} />
+          </Flex>
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
             <MempoolSection
               mempoolStats={mempoolStats}
