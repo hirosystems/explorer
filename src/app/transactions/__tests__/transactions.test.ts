@@ -15,6 +15,9 @@ describe('compressTransactions', () => {
       fee_rate: tokenTransferTx!.fee_rate,
       block_time: tokenTransferTx!.block_time,
       sender_address: tokenTransferTx!.sender_address,
+      is_unanchored: tokenTransferTx!.is_unanchored,
+      microblock_canonical: tokenTransferTx!.microblock_canonical,
+      canonical: tokenTransferTx!.canonical,
       token_transfer: {
         amount: tokenTransferTx!.token_transfer!.amount,
         recipient_address: tokenTransferTx!.token_transfer!.recipient_address,
@@ -34,6 +37,9 @@ describe('compressTransactions', () => {
       fee_rate: contractCallTx!.fee_rate,
       block_time: contractCallTx!.block_time,
       sender_address: contractCallTx!.sender_address,
+      is_unanchored: contractCallTx!.is_unanchored,
+      microblock_canonical: contractCallTx!.microblock_canonical,
+      canonical: contractCallTx!.canonical,
       contract_call: {
         contract_id: contractCallTx!.contract_call!.contract_id,
         function_name: contractCallTx!.contract_call!.function_name,
@@ -53,6 +59,9 @@ describe('compressTransactions', () => {
       fee_rate: tenureChangeTx!.fee_rate,
       block_time: tenureChangeTx!.block_time,
       sender_address: tenureChangeTx!.sender_address,
+      is_unanchored: tenureChangeTx!.is_unanchored,
+      microblock_canonical: tenureChangeTx!.microblock_canonical,
+      canonical: tenureChangeTx!.canonical,
       tenure_change_payload: {
         cause: tenureChangeTx!.tenure_change_payload!.cause,
       },
@@ -72,6 +81,9 @@ describe('compressTransactions', () => {
       expect(tx).toHaveProperty('fee_rate', transactions[index].fee_rate);
       expect(tx).toHaveProperty('block_time', transactions[index].block_time);
       expect(tx).toHaveProperty('sender_address', transactions[index].sender_address);
+      expect(tx).toHaveProperty('is_unanchored', transactions[index].is_unanchored);
+      expect(tx).toHaveProperty('microblock_canonical', transactions[index].microblock_canonical);
+      expect(tx).toHaveProperty('canonical', transactions[index].canonical);
     });
   });
 
