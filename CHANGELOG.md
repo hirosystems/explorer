@@ -1,3 +1,10 @@
+# [1.324.0](https://github.com/hirosystems/explorer/compare/v1.323.1...v1.324.0) (2025-08-12)
+
+
+### Features
+
+* removed the tx id feature flag checks ([c79422f](https://github.com/hirosystems/explorer/commit/c79422f0a6537ee9e56227676007b62aa3e93e2d))
+
 ## [1.323.1](https://github.com/hirosystems/explorer/compare/v1.323.0...v1.323.1) (2025-08-12)
 
 
