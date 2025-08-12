@@ -13,11 +13,6 @@ import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureC
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import Skeleton from './skeleton';
 
-const CoinbasePage = dynamic(() => import('./CoinbasePage'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
 const ContractCallPage = dynamic(() => import('./ContractCall'), {
   loading: () => <Skeleton />,
   ssr: false,
@@ -38,16 +33,6 @@ const PoisonMicroblock = dynamic(() => import('./PoisonMicroblock'), {
   ssr: false,
 });
 
-const TokenTransferPage = dynamic(() => import('./TokenTransfer'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
-const TenureChangePage = dynamic(() => import('./TenureChange'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
 function TransactionIdPage() {
   const { initialTxData: tx, txId } = useTxIdPageData();
   const isRedesign = useIsRedesignUrl();
@@ -56,7 +41,7 @@ function TransactionIdPage() {
   useEffect(() => {
     const revalidateTxIdPage = async () => {
       const txStatus = tx?.tx_status;
-      if (txStatus === 'pending' && isRedesign) {
+      if (txStatus === 'pending') {
         try {
           const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
           const revalidateResponse = await fetch(revalidateUrl);
@@ -79,14 +64,11 @@ function TransactionIdPage() {
 
   if (tx?.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
 
-  if (tx?.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
-  if (tx?.tx_type === 'token_transfer') return <TokenTransferPage tx={tx} />;
+  if (tx?.tx_type === 'token_transfer') return <TokenTransferPageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
-  if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
+  if (tx?.tx_type === 'tenure_change') return <TenureChangePageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
-  if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
+  if (tx?.tx_type === 'coinbase') return <CoinbasePageRedesign tx={tx} />;
 
   if (tx?.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
   if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
