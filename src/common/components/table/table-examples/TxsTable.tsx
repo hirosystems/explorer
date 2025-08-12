@@ -11,7 +11,7 @@ import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
-import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -24,6 +24,7 @@ import { AddressLinkCellRenderer } from '../CommonTableCellRenderers';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
+import { UpdateTableBannerRow } from '../UpdateTableBannerRow';
 import {
   FeeCellRenderer,
   IconCellRenderer,
@@ -135,60 +136,6 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     },
   },
 ];
-
-export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
-  const numColumns = Object.keys(TxTableColumns).length;
-
-  return (
-    <ChakraTable.Row
-      bg="transparent"
-      css={{
-        '& > td:first-of-type': {
-          borderTopLeftRadius: 'redesign.md',
-          borderBottomLeftRadius: 'redesign.md',
-        },
-        '& > td:last-of-type': {
-          borderTopRightRadius: 'redesign.md',
-          borderBottomRightRadius: 'redesign.md',
-        },
-      }}
-      onClick={onClick}
-      cursor="pointer"
-      className="group"
-    >
-      <ChakraTable.Cell colSpan={numColumns} py={2} px={1}>
-        <Flex
-          alignItems="center"
-          justifyContent={{ base: 'flex-start', md: 'center' }}
-          gap={1.5}
-          boxShadow="0px 4px 4px 0px rgba(252, 100, 50, 0.25), 0px 4px 4px 0px rgba(255, 85, 18, 0.25)"
-          border="1px dashed var(--stacks-colors-accent-stacks-500)"
-          borderRadius="redesign.lg"
-          h={12}
-          px={4}
-        >
-          <Box display="inline-flex">
-            <Text fontSize="sm" fontWeight="medium" color="textSecondary">
-              New transactions have come in.
-            </Text>
-            &nbsp;
-            <Text
-              fontSize="sm"
-              fontWeight="medium"
-              color="textSecondary"
-              _groupHover={{ color: 'textPrimary' }}
-            >
-              Update list
-            </Text>
-          </Box>
-          <Icon h={3.5} w={3.5} color="iconTertiary" _groupHover={{ color: 'iconSecondary' }}>
-            <ArrowsClockwise />
-          </Icon>
-        </Flex>
-      </ChakraTable.Cell>
-    </ChakraTable.Row>
-  );
-};
 
 export interface TxsTableProps {
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
@@ -365,6 +312,8 @@ export function TxsTable({
               setNewTxsAvailable(false);
               refetch();
             }}
+            colSpan={Object.keys(TxTableColumns).length}
+            message="New transactions have come in. Update list"
           />
         ) : null
       }

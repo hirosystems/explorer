@@ -2,6 +2,7 @@ import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksFrowneyIcon from '@/ui/icons/StacksFrowneyIcon';
 import {
+  Box,
   Table as ChakraTable,
   TableRootProps as ChakraTableRootProps,
   Flex,
@@ -33,6 +34,8 @@ declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends unknown, TValue> {
     tooltip?: string;
     isPinned?: 'left' | 'right' | false;
+    textAlign?: 'left' | 'center' | 'right';
+    isSpanRow?: (rowData: TData) => boolean;
   }
 }
 
@@ -351,11 +354,22 @@ export function Table<T>({
                   }
                   w={header.column.columnDef.size ? `${header.column.columnDef.size}px` : 'auto'}
                   boxSizing="border-box"
+                  textAlign={header.column.columnDef.meta?.textAlign}
                 >
                   <Flex
                     w="full"
                     gap={1.5}
                     alignItems="center"
+                    py={1}
+                    pl={1}
+                    pr={1.5}
+                    justifyContent={
+                      header.column.columnDef.meta?.textAlign === 'right'
+                        ? 'flex-end'
+                        : header.column.columnDef.meta?.textAlign === 'center'
+                          ? 'center'
+                          : 'flex-start'
+                    }
                     {...(header.column.getCanSort() && {
                       _hover: {
                         bg: 'surfaceSecondary',
@@ -400,48 +414,69 @@ export function Table<T>({
       <ChakraTable.Body>
         <ChakraTable.Row key={'empty-gap-row'} bg="transparent" h={2} />
         {bannerRow}
-        {table.getRowModel().rows.map((row, rowIndex) => (
-          <ChakraTable.Row
-            key={row.id}
-            bg="transparent"
-            css={{
-              '& > td:first-of-type': {
-                borderTopLeftRadius: 'redesign.md',
-                borderBottomLeftRadius: 'redesign.md',
-              },
-              '& > td:last-of-type': {
-                borderTopRightRadius: 'redesign.md',
-                borderBottomRightRadius: 'redesign.md',
-              },
-            }}
-            className="group"
-            minH={13}
-          >
-            {row.getVisibleCells().map((cell, columnIndex) => {
-              return (
-                <ChakraTable.Cell
-                  key={cell.id}
-                  py={3}
-                  px={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
-                  css={{ ...getCommonPinningStyles(cell.column) }}
-                  _groupHover={{
-                    bg: 'surfacePrimary',
-                  }}
-                  minW={
-                    cell.column.columnDef.minSize ? `${cell.column.columnDef.minSize}px` : undefined
-                  }
-                  maxW={
-                    cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : undefined
-                  }
-                  w={cell.column.columnDef.size ? `${cell.column.columnDef.size}px` : undefined}
-                  boxSizing="border-box"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </ChakraTable.Cell>
-              );
-            })}
-          </ChakraTable.Row>
-        ))}
+        {table.getRowModel().rows.map((row, rowIndex) => {
+          const firstCell = row.getVisibleCells()[0];
+          const isSpanRow = firstCell?.column.columnDef.meta?.isSpanRow?.(row.original) ?? false;
+
+          return (
+            <ChakraTable.Row
+              key={row.id}
+              bg="transparent"
+              css={{
+                '& > td:first-of-type': {
+                  borderTopLeftRadius: 'redesign.md',
+                  borderBottomLeftRadius: 'redesign.md',
+                },
+                '& > td:last-of-type': {
+                  borderTopRightRadius: 'redesign.md',
+                  borderBottomRightRadius: 'redesign.md',
+                },
+              }}
+              className="group"
+              minH={13}
+            >
+              {row.getVisibleCells().map((cell, columnIndex) => {
+                if (isSpanRow && columnIndex > 0) {
+                  return null;
+                }
+                return (
+                  <ChakraTable.Cell
+                    key={cell.id}
+                    py={3}
+                    px={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
+                    css={{ ...getCommonPinningStyles(cell.column) }}
+                    _groupHover={{
+                      bg: 'surfacePrimary',
+                    }}
+                    minW={
+                      cell.column.columnDef.minSize
+                        ? `${cell.column.columnDef.minSize}px`
+                        : undefined
+                    }
+                    maxW={
+                      cell.column.columnDef.maxSize
+                        ? `${cell.column.columnDef.maxSize}px`
+                        : undefined
+                    }
+                    w={
+                      cell.column.columnDef.size
+                        ? `${cell.column.columnDef.size}px`
+                        : isSpanRow
+                          ? 'auto !important'
+                          : undefined
+                    }
+                    boxSizing="border-box"
+                    textAlign={cell.column.columnDef.meta?.textAlign}
+                    colSpan={isSpanRow ? columns.length : 1}
+                    bg={isSpanRow ? 'surfacePrimary' : undefined}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </ChakraTable.Cell>
+                );
+              })}
+            </ChakraTable.Row>
+          );
+        })}
       </ChakraTable.Body>
     </ChakraTable.Root>
   );

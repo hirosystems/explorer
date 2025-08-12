@@ -2,7 +2,7 @@ import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table, TableProps } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
 import { TableSkeleton } from '@/common/components/table/TableSkeleton';
-import { UpdateTableBannerRow } from '@/common/components/table/table-examples/TxsTable';
+import { UpdateTableBannerRow } from '@/common/components/table/UpdateTableBannerRow';
 import { Box, Stack } from '@chakra-ui/react';
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -215,7 +215,15 @@ export const TxTable: Story = {
             }
             columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
             data={args.isEmpty ? [] : storybookTxTableRowData}
-            bannerRow={args.bannerRow ? <UpdateTableBannerRow onClick={() => {}} /> : undefined}
+            bannerRow={
+              args.bannerRow ? (
+                <UpdateTableBannerRow
+                  onClick={() => {}}
+                  colSpan={5}
+                  message="New data available. Update list"
+                />
+              ) : undefined
+            }
             isLoading={args.isLoading}
             suspenseWrapper={
               args.hasSuspenseWrapper
