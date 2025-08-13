@@ -1,5 +1,6 @@
 import { FeeSection } from '@/app/_components/FeeSection';
 import { MempoolSection } from '@/app/_components/MempoolSection';
+import { NetworkModes } from '@/common/types/network';
 import { Flex, Stack } from '@chakra-ui/react';
 
 import { getSampleTxsFeeEstimate } from '../../common/utils/fee-utils';

@@ -27,7 +27,7 @@ function MempoolTableWithFiltersContent({ initialData }: MempoolTableWithFilters
           transactionType,
         }}
         initialData={initialData}
-        disablePagination={true}
+        disablePagination={false}
       />
     </Stack>
   );
@@ -40,9 +40,6 @@ export function MempoolTableWithFilters({
   initialData?: GenericResponseType<CompressedMempoolTxTableData>;
   searchParams?: Record<string, string>;
 }) {
-  const defaultTransactionType = searchParams?.transactionType
-    ? searchParams.transactionType.split(',')
-    : [];
   const defaultFromAddress = searchParams?.fromAddress || '';
   const defaultToAddress = searchParams?.toAddress || '';
   const defaultStartTime = searchParams?.startTime || '';
@@ -50,7 +47,6 @@ export function MempoolTableWithFilters({
 
   return (
     <TxTableFiltersProvider
-      defaultTransactionType={defaultTransactionType}
       defaultFromAddress={defaultFromAddress}
       defaultToAddress={defaultToAddress}
       defaultStartTime={defaultStartTime}
