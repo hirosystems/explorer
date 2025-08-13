@@ -339,7 +339,7 @@ function useTransactionData(data?: { tx_type_counts: Record<string, number> }) {
             name: txType,
             value: count,
             label: capitalize(getTxTypeLabel(txType).toLowerCase()),
-            color: semanticTokenToCssVar(getTxTypeColor(txType)),
+            color: getTxTypeColor(txType),
             percent: total > 0 ? count / total : 0,
           };
         });
