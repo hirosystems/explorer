@@ -1,3 +1,10 @@
+## [1.325.1](https://github.com/hirosystems/explorer/compare/v1.325.0...v1.325.1) (2025-08-13)
+
+
+### Bug Fixes
+
+* fixed the ring colors on the mempool pie chart ([4c515c7](https://github.com/hirosystems/explorer/commit/4c515c78555c2db9169964ffd77271ceeb157418))
+
 # [1.325.0](https://github.com/hirosystems/explorer/compare/v1.324.0...v1.325.0) (2025-08-12)
 
 
