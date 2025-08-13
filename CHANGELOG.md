@@ -1,3 +1,10 @@
+# [1.326.0](https://github.com/hirosystems/explorer/compare/v1.325.1...v1.326.0) (2025-08-13)
+
+
+### Features
+
+* mempool page pagination ([#2465](https://github.com/hirosystems/explorer/issues/2465)) ([395b80f](https://github.com/hirosystems/explorer/commit/395b80fd704b8ebb9e96169909fd3ee080517c9f))
+
 ## [1.325.1](https://github.com/hirosystems/explorer/compare/v1.325.0...v1.325.1) (2025-08-13)
 
 
