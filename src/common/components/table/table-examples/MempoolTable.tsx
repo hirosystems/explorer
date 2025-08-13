@@ -3,8 +3,12 @@
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { CompressedMempoolTxTableData } from '@/app/transactions/utils';
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
-import { GenericResponseType, useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
-import { useMempoolTransactionsInfinite } from '@/common/queries/useMempoolTransactionsInfinite';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
+import {
+  getMempoolTransactionsQueryKey,
+  useMempoolTransactions,
+} from '@/common/queries/useMempoolTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
@@ -210,22 +214,36 @@ export function MempoolTable({
 
   const { fromAddress, toAddress } = filters || {};
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }, [fromAddress, toAddress]);
+
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = ['mempoolTransactionsInfinite', sort, order, fromAddress, toAddress];
-    queryClient.setQueryData(queryKey, {
-      pageParams: [0],
-      pages: [initialData],
-    });
+    const queryKey = getMempoolTransactionsQueryKey(
+      pagination.pageSize,
+      pagination.pageIndex * pagination.pageSize,
+      sort,
+      order,
+      { fromAddress, toAddress }
+    );
+    queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
 
-  const response = useMempoolTransactionsInfinite(sort, order, {
-    fromAddress,
-    toAddress,
-  });
-  const txs = useInfiniteQueryResult<MempoolTransaction>(
-    response,
-    disablePagination ? undefined : TX_TABLE_PAGE_SIZE
+  const { data, refetch, isFetching, isLoading } = useMempoolTransactions(
+    pagination.pageSize,
+    pagination.pageIndex * pagination.pageSize,
+    { fromAddress, toAddress },
+    sort,
+    order,
+    {
+      staleTime: THIRTY_SECONDS,
+      gcTime: THIRTY_SECONDS,
+    }
   );
 
   const handlePageChange = useCallback((page: PaginationState) => {
@@ -233,6 +251,7 @@ export function MempoolTable({
       ...prev,
       pageIndex: page.pageIndex,
     }));
+    window?.scrollTo(0, 0); // Smooth scroll to top
   }, []);
 
   const isTableFiltered =
@@ -255,6 +274,8 @@ export function MempoolTable({
       setIsSubscriptionActive(true);
     }
   }, [newTxsAvailable]);
+
+  const { total, results: txs = [] } = data || {};
 
   const rowData: MempoolTableData[] = useMemo(() => {
     return txs.map(tx => {
@@ -294,7 +315,7 @@ export function MempoolTable({
               manualPagination: true,
               pageIndex: pagination.pageIndex,
               pageSize: pagination.pageSize,
-              totalRows: response.data?.pages[0]?.total || 0,
+              totalRows: total || 0,
               onPageChange: handlePageChange,
             }
       }
@@ -303,13 +324,13 @@ export function MempoolTable({
           <UpdateTableBannerRow
             onClick={() => {
               setNewTxsAvailable(false);
-              response.refetch();
+              refetch();
             }}
           />
         ) : null
       }
-      isLoading={response.isLoading}
-      isFetching={response.isFetching}
+      isLoading={isLoading}
+      isFetching={isFetching}
     />
   );
 }
