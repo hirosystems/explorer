@@ -32,7 +32,7 @@ export default async function (props: { searchParams: Promise<Record<string, str
     ? [undefined, undefined, undefined]
     : stacksAPIResults;
 
-  const feeEstimates = sampleTxsFeeEstimate
+  const initialFeeEstimates = sampleTxsFeeEstimate
     ? {
         tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
         contractCallFees: sampleTxsFeeEstimate.contractCallFees,
@@ -46,27 +46,19 @@ export default async function (props: { searchParams: Promise<Record<string, str
       <PageTitle>Mempool</PageTitle>
       <Flex gap={6} flexDirection={{ base: 'column', '2xl': 'row' }}>
         <Flex flex="1">
-          {mempoolStats ? (
-            <MempoolSection
-              mempoolStats={mempoolStats}
-              isSSRDisabled={isSSRDisabled}
-              showHeader={false}
-              chartWidth={220}
-              chartHeight={220}
-              chartInnerRadius={90}
-              reverseOrder={true}
-              maxWidth={600}
-            />
-          ) : (
-            <SSRDisabledMessage sectionName="Mempool statistics" />
-          )}
+          <MempoolSection
+            mempoolStats={mempoolStats}
+            isSSRDisabled={isSSRDisabled}
+            showHeader={false}
+            chartWidth={220}
+            chartHeight={220}
+            chartInnerRadius={90}
+            reverseOrder={true}
+            maxWidth={600}
+          />
         </Flex>
         <Flex flex="1">
-          {feeEstimates ? (
-            <FeeSection feeEstimates={feeEstimates} isSSRDisabled={isSSRDisabled} />
-          ) : (
-            <SSRDisabledMessage sectionName="Fee estimates" />
-          )}
+          <FeeSection initialFeeEstimates={initialFeeEstimates} />
         </Flex>
       </Flex>
       <MempoolTransactionsTable

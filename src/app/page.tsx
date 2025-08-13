@@ -103,7 +103,7 @@ export default async function HomeRedesign(props: { searchParams: Promise<HomeSe
               isSSRDisabled={isSSRDisabled}
               showHeader={true}
             />
-            <FeeSection feeEstimates={feeEstimates} isSSRDisabled={isSSRDisabled} />
+            <FeeSection initialFeeEstimates={feeEstimates} />
           </Flex>
         </Flex>
       </Stack>

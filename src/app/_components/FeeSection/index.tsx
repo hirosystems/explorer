@@ -1,8 +1,8 @@
 'use client';
 
-import { useHomePageData } from '@/app/context';
 import { FeeEstimates } from '@/app/context';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { useFeeEstimates } from '@/common/queries/useFeeEstimates';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
@@ -11,15 +11,13 @@ import { Tooltip } from '@/ui/Tooltip';
 import StxThinIcon from '@/ui/icons/StacksThinIcon';
 import { Box, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { Info, Lightning, PlusMinus } from '@phosphor-icons/react';
-import { ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { ReactNode, useRef } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
-import { SSRDisabledMessage } from '../SSRDisabledMessage';
-
 interface FeeSectionProps {
-  feeEstimates?: FeeEstimates;
-  isSSRDisabled?: boolean;
+  initialFeeEstimates?: FeeEstimates;
 }
 
 function SectionHeader() {
@@ -134,9 +132,43 @@ const txTypeFees = ['all', 'token_transfer', 'contract_call', 'smart_contract'] 
   keyof MempoolFeePriorities | 'all'
 >;
 
+function FeeSkeleton() {
+  return (
+    <Stack gap={4} w="100%">
+      <Stack gap={3}>
+        <Flex gap={2} flexWrap={'wrap'} rowGap={2}>
+          {[...Array(4)].map((_, i) => (
+            <Box key={i} h={10} w={20} bg="surfacePrimary" borderRadius="md" opacity={0.6} />
+          ))}
+        </Flex>
+        <Flex gap={2} flexWrap={'wrap'}>
+          {[...Array(3)].map((_, i) => (
+            <Stack
+              key={i}
+              gap={2}
+              px={4}
+              pt={3}
+              pb={2}
+              borderRadius={'redesign.md'}
+              border="1px solid"
+              borderColor="redesignBorderSecondary"
+              flex="1"
+              minWidth="fit-content"
+            >
+              <Box h={5} bg="surfacePrimary" borderRadius="sm" opacity={0.6} />
+              <Box h={4} bg="surfacePrimary" borderRadius="sm" opacity={0.4} />
+            </Stack>
+          ))}
+        </Flex>
+        <Box h={4} bg="surfacePrimary" borderRadius="sm" opacity={0.4} w="60%" />
+      </Stack>
+    </Stack>
+  );
+}
+
 function FeeTabs({ feeEstimates }: { feeEstimates?: FeeEstimates }) {
   if (!feeEstimates) {
-    return null;
+    return <FeeSkeleton />;
   }
 
   const feeEstimatesMap = {
@@ -195,7 +227,17 @@ function FeeTabs({ feeEstimates }: { feeEstimates?: FeeEstimates }) {
   );
 }
 
-export function FeeSection({ feeEstimates, isSSRDisabled = false }: FeeSectionProps) {
+export function FeeSection({ initialFeeEstimates }: FeeSectionProps) {
+  const queryClient = useQueryClient();
+  const isCacheSetWithInitialData = useRef(false);
+
+  if (isCacheSetWithInitialData.current === false && initialFeeEstimates) {
+    queryClient.setQueryData(['feeEstimates'], initialFeeEstimates);
+    isCacheSetWithInitialData.current = true;
+  }
+
+  const { data: feeEstimates, error } = useFeeEstimates();
+
   return (
     <Stack
       align="space-between"
@@ -209,7 +251,13 @@ export function FeeSection({ feeEstimates, isSSRDisabled = false }: FeeSectionPr
       justifyContent="center"
     >
       <SectionHeader />
-      {isSSRDisabled ? <SSRDisabledMessage /> : <FeeTabs feeEstimates={feeEstimates} />}
+      {error ? (
+        <Text color="textSecondary" textAlign="center">
+          Unable to load fee estimates
+        </Text>
+      ) : (
+        <FeeTabs feeEstimates={feeEstimates} />
+      )}
     </Stack>
   );
 }
