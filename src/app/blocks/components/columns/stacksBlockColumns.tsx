@@ -1,11 +1,18 @@
-import { Flex, Icon, Link, Text } from '@chakra-ui/react';
+import { BlockHeightBadge } from '@/ui/Badge';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 import { ColumnDef } from '@tanstack/react-table';
-import NextLink from 'next/link';
 
-import { BitcoinBlockChip } from '../../../../common/components/BlockChips';
 import { formatTimestamp } from '../../../../common/utils/time-utils';
 import { StacksBlockRow } from '../table-rows/StacksBlockRow';
+
+export enum StacksBlockColumnId {
+  HEIGHT = 'height',
+  HASH = 'hash',
+  TRANSACTIONS = 'transactions',
+  TOTAL_FEES = 'totalFees',
+  TIMESTAMP = 'timestamp',
+}
 
 export interface StacksBlockTableData {
   height: number;
@@ -25,62 +32,48 @@ export interface BurnBlockGroupHeader {
 
 export type StacksTableRow = StacksBlockTableData | BurnBlockGroupHeader;
 
+const BurnBlockHeaderCell = {
+  render: (row: BurnBlockGroupHeader) => (
+    <Flex alignItems="center" gap={3} w="100%" pl={1.5}>
+      <BlockHeightBadge blockType="btc" blockHeight={row.burn_block_height} variant="outline" />
+      <Text as="span" color="iconTertiary">
+        •
+      </Text>
+      <Text textStyle="text-medium-xs" color="textSecondary">
+        {formatTimestamp(row.burn_block_time)}
+      </Text>
+      <Text as="span" color="iconTertiary">
+        •
+      </Text>
+      <Flex align="center" gap={1.5}>
+        <Text textStyle="text-medium-xs" color="textSecondary">
+          {(row.stacks_blocks_count ?? 0).toLocaleString()} blocks
+        </Text>
+        <Icon
+          h={3}
+          w={3}
+          color="iconSecondary"
+          display="inline-flex"
+          alignItems="center"
+          justifyContent="center"
+          verticalAlign="middle"
+        >
+          <CaretRight />
+        </Icon>
+      </Flex>
+    </Flex>
+  ),
+};
+
 export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
   {
-    id: 'height',
+    id: StacksBlockColumnId.HEIGHT,
     header: 'Height',
-    accessorKey: 'height',
+    accessorKey: StacksBlockColumnId.HEIGHT,
     cell: info => {
-      const row = info.row.original as any;
+      const row = info.row.original as StacksTableRow;
       if ('type' in row && row.type === 'burn-block-header') {
-        return (
-          <Flex alignItems="center" gap={3} w="100%" pl={1.5}>
-            <Link
-              as={NextLink}
-              href={`/btcblock/${row.burn_block_hash}`}
-              _hover={{ textDecoration: 'none' }}
-            >
-              <BitcoinBlockChip
-                value={row.burn_block_height}
-                iconColor="iconTertiary"
-                bg="transparent"
-                px={0}
-                py={0}
-                width="fit-content"
-                textProps={{
-                  color: 'textPrimary',
-                  textDecoration: 'underline',
-                  _hover: { color: 'textInteractiveHover' },
-                }}
-              />
-            </Link>
-            <Text as="span" color="iconTertiary">
-              •
-            </Text>
-            <Text textStyle="text-medium-xs" color="textSecondary">
-              {formatTimestamp(row.burn_block_time)}
-            </Text>
-            <Text as="span" color="iconTertiary">
-              •
-            </Text>
-            <Flex align="center" gap={1.5}>
-              <Text textStyle="text-medium-xs" color="textSecondary">
-                {(row.stacks_blocks_count ?? 0).toLocaleString()} blocks
-              </Text>
-              <Icon
-                h={3}
-                w={3}
-                color="iconSecondary"
-                display="inline-flex"
-                alignItems="center"
-                justifyContent="center"
-                verticalAlign="middle"
-              >
-                <CaretRight />
-              </Icon>
-            </Flex>
-          </Flex>
-        );
+        return BurnBlockHeaderCell.render(row as BurnBlockGroupHeader);
       }
       return StacksBlockRow.HeightCell((row as StacksBlockTableData).height);
     },
@@ -92,9 +85,9 @@ export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
     },
   },
   {
-    id: 'hash',
+    id: StacksBlockColumnId.HASH,
     header: 'Hash',
-    accessorKey: 'hash',
+    accessorKey: StacksBlockColumnId.HASH,
     cell: info => {
       const row = info.row.original;
       if ('type' in row && row.type === 'burn-block-header') {
@@ -106,9 +99,9 @@ export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
     size: 120,
   },
   {
-    id: 'transactions',
+    id: StacksBlockColumnId.TRANSACTIONS,
     header: 'Transactions',
-    accessorKey: 'transactions',
+    accessorKey: StacksBlockColumnId.TRANSACTIONS,
     cell: info => {
       const row = info.row.original;
       if ('type' in row && row.type === 'burn-block-header') {
@@ -121,9 +114,9 @@ export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
     meta: { textAlign: 'right' },
   },
   {
-    id: 'totalFees',
+    id: StacksBlockColumnId.TOTAL_FEES,
     header: 'Total fees',
-    accessorKey: 'totalFees',
+    accessorKey: StacksBlockColumnId.TOTAL_FEES,
     cell: info => {
       const row = info.row.original;
       if ('type' in row && row.type === 'burn-block-header') {
@@ -136,9 +129,9 @@ export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
     meta: { textAlign: 'right' },
   },
   {
-    id: 'timestamp',
+    id: StacksBlockColumnId.TIMESTAMP,
     header: 'Timestamp',
-    accessorKey: 'timestamp',
+    accessorKey: StacksBlockColumnId.TIMESTAMP,
     cell: info => {
       const row = info.row.original;
       if ('type' in row && row.type === 'burn-block-header') {

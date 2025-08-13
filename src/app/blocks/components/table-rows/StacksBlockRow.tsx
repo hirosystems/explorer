@@ -1,9 +1,9 @@
 'use client';
 
-import { BitcoinBlockChip, StacksBlockChip } from '@/common/components/BlockChips';
 import { TimeStampCellRenderer } from '@/common/components/table/table-examples/TxTableCellRenderers';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { truncateMiddle } from '@/common/utils/utils';
+import { BlockHeightBadge } from '@/ui/Badge';
 import BitcoinIcon from '@/ui/icons/BitcoinIcon';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Box, Flex, Link, Text, Tooltip } from '@chakra-ui/react';
@@ -11,20 +11,7 @@ import NextLink from 'next/link';
 
 export const StacksBlockRow = {
   HeightCell: (height: number) => (
-    <StacksBlockChip
-      value={height}
-      iconColor="accent.bitcoin-500"
-      bg="surfacePrimary"
-      width="fit-content"
-      textProps={{
-        color: 'textPrimary',
-        textDecoration: 'underline',
-        _hover: {
-          color: 'textInteractiveHover',
-        },
-      }}
-      _groupHover={{ bg: 'surfaceTertiary' }}
-    />
+    <BlockHeightBadge blockType="stx" blockHeight={height} variant="outline" />
   ),
 
   HashCell: (hash: string) => (
@@ -43,21 +30,7 @@ export const StacksBlockRow = {
   ),
 
   BitcoinBlockCell: (height: number, burnBlockHash: string) => (
-    <Link as={NextLink} href={`/btcblock/${burnBlockHash}`} _hover={{ textDecoration: 'none' }}>
-      <BitcoinBlockChip
-        value={height}
-        iconColor="iconSecondary"
-        bg="surfacePrimary"
-        textProps={{
-          color: 'textPrimary',
-          textDecoration: 'underline',
-          _hover: {
-            color: 'textInteractiveHover',
-          },
-        }}
-        _groupHover={{ bg: 'surfaceTertiary' }}
-      />
-    </Link>
+    <BlockHeightBadge blockType="btc" blockHeight={height} variant="outline" />
   ),
 
   TransactionsCell: (count: number) => (
@@ -103,18 +76,11 @@ export const StacksBlockRow = {
       borderColor="borderSecondary"
     >
       <Flex alignItems="center" gap={3}>
-        <Link
-          as={NextLink}
-          href={`/btcblock/${burnBlock.burn_block_hash}`}
-          _hover={{ textDecoration: 'none' }}
-        >
-          <BitcoinBlockChip
-            value={burnBlock.burn_block_height}
-            iconColor="accent.bitcoin-500"
-            bg="surfaceTertiary"
-            width="fit-content"
-          />
-        </Link>
+        <BlockHeightBadge
+          blockType="btc"
+          blockHeight={burnBlock.burn_block_height}
+          variant="outline"
+        />
 
         <Text textStyle="text-medium-sm" color="textSecondary">
           Bitcoin Block

@@ -11,13 +11,12 @@ import {
 
 export function useBitcoinTableData(
   btcBlocksQuery: any,
-  activeView: string,
   pagination: { pageIndex: number }
 ): BitcoinBlockTableData[] {
   return useMemo(() => {
     let sourceData: BurnBlock[] = [];
 
-    if (btcBlocksQuery.data && activeView === 'bitcoin') {
+    if (btcBlocksQuery.data) {
       const currentPageData = btcBlocksQuery.data.pages[pagination.pageIndex];
       if (currentPageData) {
         sourceData = currentPageData.results;
@@ -43,18 +42,17 @@ export function useBitcoinTableData(
         burn_block_hash: block.burn_block_hash,
       };
     });
-  }, [btcBlocksQuery.data, activeView, pagination.pageIndex]);
+  }, [btcBlocksQuery.data, pagination.pageIndex]);
 }
 
 export function useStacksTableData(
   stxBlocksQuery: any,
-  activeView: string,
   pagination: { pageIndex: number }
 ): StacksTableRow[] {
   return useMemo(() => {
     let sourceData: any[] = [];
 
-    if (stxBlocksQuery.data && activeView === 'stacks') {
+    if (stxBlocksQuery.data) {
       const currentPageData = stxBlocksQuery.data.pages[pagination.pageIndex];
       if (currentPageData) {
         sourceData = Array.isArray(currentPageData.results) ? currentPageData.results : [];
@@ -96,5 +94,5 @@ export function useStacksTableData(
     });
 
     return result;
-  }, [stxBlocksQuery.data, activeView, pagination.pageIndex]);
+  }, [stxBlocksQuery.data, pagination.pageIndex]);
 }

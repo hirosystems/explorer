@@ -1,8 +1,8 @@
-import { BitcoinBlockChip } from '@/common/components/BlockChips';
 import {
   formatTimestampToDateString,
   formatTimestampToRelativeTime,
 } from '@/common/utils/time-utils';
+import { BlockHeightBadge } from '@/ui/Badge';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
@@ -55,10 +55,11 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
           <Stack gap={4} justifyContent={'space-between'} flex={1}>
             <Stack gap={2}>
               <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
-                <BitcoinBlockChip
-                  value={burnBlock.burn_block_height}
+                <BlockHeightBadge
+                  blockType="btc"
+                  blockHeight={burnBlock.burn_block_height}
+                  variant="outline"
                   className="block-height"
-                  bg="surfacePrimary"
                 />
                 <Icon
                   w={7}
@@ -166,10 +167,11 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
               <Stack gap={4}>
                 <Stack gap={2}>
                   <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
-                    <BitcoinBlockChip
-                      value={burnBlock.burn_block_height}
+                    <BlockHeightBadge
+                      blockType="btc"
+                      blockHeight={burnBlock.burn_block_height}
+                      variant="outline"
                       className="block-height"
-                      bg="surfacePrimary"
                     />
                     <Icon
                       w={7}

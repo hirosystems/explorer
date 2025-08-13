@@ -1,30 +1,17 @@
 'use client';
 
-import { BitcoinBlockChip, StacksBlockChip } from '@/common/components/BlockChips';
 import { TimeStampCellRenderer } from '@/common/components/table/table-examples/TxTableCellRenderers';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { truncateMiddle } from '@/common/utils/utils';
+import { BlockHeightBadge, DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export const BitcoinBlockRow = {
   HeightCell: (height: number, burnBlockHash: string) => (
-    <Link as={NextLink} href={`/btcblock/${burnBlockHash}`} _hover={{ textDecoration: 'none' }}>
-      <BitcoinBlockChip
-        value={height}
-        iconColor="accent.bitcoin-500"
-        bg="surfacePrimary"
-        textProps={{
-          color: 'textPrimary',
-          textDecoration: 'underline',
-          _hover: {
-            color: 'textInteractiveHover',
-          },
-        }}
-        _groupHover={{ bg: 'surfaceTertiary' }}
-      />
-    </Link>
+    <BlockHeightBadge blockType="btc" blockHeight={height} variant="outline" />
   ),
 
   HashCell: (hash: string, burnBlockHash: string) => (
@@ -53,17 +40,18 @@ export const BitcoinBlockRow = {
               key={`${blockHash}-${index}`}
               _hover={{ textDecoration: 'none' }}
             >
-              <StacksBlockChip
-                value={truncateMiddle(blockHash, 4, 4)}
-                iconColor="iconTertiary"
+              <DefaultBadge
+                variant="outline"
+                icon={<DefaultBadgeIcon icon={<StacksIconBlock />} color="iconTertiary" />}
+                label={
+                  <DefaultBadgeLabel
+                    label={`#${truncateMiddle(blockHash, 4, 4)}`}
+                    color="textPrimary"
+                    textDecoration="underline"
+                    _hover={{ color: 'textInteractiveHover' }}
+                  />
+                }
                 bg="surfacePrimary"
-                textProps={{
-                  color: 'textPrimary',
-                  textDecoration: 'underline',
-                  _hover: {
-                    color: 'textInteractiveHover',
-                  },
-                }}
                 _groupHover={{ bg: 'surfaceTertiary' }}
               />
             </Link>
