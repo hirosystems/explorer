@@ -1,3 +1,10 @@
+# [1.327.0](https://github.com/hirosystems/explorer/compare/v1.326.0...v1.327.0) (2025-08-13)
+
+
+### Features
+
+* update mempool sections when updating txs ([#2469](https://github.com/hirosystems/explorer/issues/2469)) ([9603b1a](https://github.com/hirosystems/explorer/commit/9603b1a13c678c1093c481f82c5f78b5a84a7fb8))
+
 # [1.326.0](https://github.com/hirosystems/explorer/compare/v1.325.1...v1.326.0) (2025-08-13)
 
 
