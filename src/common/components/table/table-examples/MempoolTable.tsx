@@ -325,6 +325,12 @@ export function MempoolTable({
             onClick={() => {
               setNewTxsAvailable(false);
               refetch();
+              queryClient.invalidateQueries({
+                queryKey: ['mempoolTransactionStats'],
+              });
+              queryClient.invalidateQueries({
+                queryKey: ['feeEstimates'],
+              });
             }}
           />
         ) : null

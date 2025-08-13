@@ -1,10 +1,13 @@
 'use client';
 
 import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { useMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Flex, HStack, Stack } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
 
 import { TxCountChart } from './TxCountChart';
 
@@ -89,22 +92,27 @@ export function MempoolSection({
   maxWidth = 800,
 }: MempoolSectionProps) {
   const network = useGlobalContext().activeNetwork;
+  const queryClient = useQueryClient();
+  const isCacheSetWithInitialData = useRef(false);
+
+  if (isCacheSetWithInitialData.current === false && mempoolStats) {
+    queryClient.setQueryData(['mempoolTransactionStats'], mempoolStats);
+    isCacheSetWithInitialData.current = true;
+  }
+
+  const { data: currentMempoolStats } = useMempoolTransactionStats();
 
   return (
     <Stack gap={6} flex={1} height="100%">
       {showHeader && <SectionHeader />}
-      {isSSRDisabled ? (
-        <Text>Loading mempool data...</Text>
-      ) : (
-        <TxCountSection
-          mempoolStats={mempoolStats}
-          chartWidth={chartWidth}
-          chartHeight={chartHeight}
-          chartInnerRadius={chartInnerRadius}
-          reverseOrder={reverseOrder}
-          maxWidth={maxWidth}
-        />
-      )}
+      <TxCountSection
+        mempoolStats={currentMempoolStats}
+        chartWidth={chartWidth}
+        chartHeight={chartHeight}
+        chartInnerRadius={chartInnerRadius}
+        reverseOrder={reverseOrder}
+        maxWidth={maxWidth}
+      />
       {showHeader && (
         <ButtonLink
           href={buildUrl('/mempool', network)}
