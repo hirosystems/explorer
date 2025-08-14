@@ -42,7 +42,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
               ]) +
                 ' · ' +
                 addSepBetweenStrings([
-                  `${block?.txs?.length || 0} ${pluralize('transaction', block?.txs?.length || 0)}`,
+                  `${block.txs?.length || 0} ${pluralize('transaction', block.txs?.length || 0)}`,
                 ])}
             </Caption>
           ),

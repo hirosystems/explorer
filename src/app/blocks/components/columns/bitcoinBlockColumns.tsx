@@ -68,15 +68,16 @@ export const bitcoinBlockColumns: ColumnDef<BitcoinBlockTableData>[] = [
     size: 100,
     meta: { textAlign: 'right' },
   },
-  {
-    id: BitcoinBlockColumnId.TOTAL_FEES,
-    header: 'Total fees',
-    accessorKey: BitcoinBlockColumnId.TOTAL_FEES,
-    cell: info => BitcoinBlockRow.TotalFeesCell(info.getValue() as string),
-    enableSorting: false,
-    size: 100,
-    meta: { textAlign: 'right' },
-  },
+  // {
+  //   id: BitcoinBlockColumnId.TOTAL_FEES,
+  //   header: 'Total fees',
+  //   accessorKey: BitcoinBlockColumnId.TOTAL_FEES,
+  //   cell: info => BitcoinBlockRow.TotalFeesCell(info.getValue() as string),
+  //   enableSorting: false,
+  //   size: 100,
+  //   meta: { textAlign: 'right' },
+  // },
+  // TODO: API doesn't support fee data at the moment
   {
     id: BitcoinBlockColumnId.TIMESTAMP,
     header: 'Timestamp',
