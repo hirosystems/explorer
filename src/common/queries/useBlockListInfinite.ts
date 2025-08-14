@@ -1,4 +1,5 @@
 import {
+  UseInfiniteQueryOptions,
   UseQueryResult,
   useInfiniteQuery,
   useQuery,
@@ -31,7 +32,17 @@ export const useSuspenseBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
   });
 };
 
-export const useBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
+export const useBlockListInfinite = (
+  limit = DEFAULT_LIST_LIMIT,
+  options?: {
+    enabled?: boolean;
+    staleTime?: number;
+    gcTime?: number;
+    refetchOnMount?: boolean | 'always';
+    refetchOnReconnect?: boolean | 'always';
+    refetchOnWindowFocus?: boolean | 'always';
+  }
+) => {
   const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: [BLOCK_LIST_QUERY_KEY, limit],
@@ -40,7 +51,12 @@ export const useBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
         params: { query: { limit, offset: pageParam || 0 } },
       });
     },
-    staleTime: TWO_MINUTES,
+    staleTime: options?.staleTime ?? TWO_MINUTES,
+    gcTime: options?.gcTime,
+    enabled: options?.enabled,
+    refetchOnMount: options?.refetchOnMount,
+    refetchOnReconnect: options?.refetchOnReconnect,
+    refetchOnWindowFocus: options?.refetchOnWindowFocus,
     getNextPageParam,
     initialPageParam: 0,
   });

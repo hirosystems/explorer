@@ -1,5 +1,6 @@
 import { UIStxBlock } from '@/app/data';
 import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
+import { BlockHeightBadge } from '@/ui/Badge';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
@@ -153,26 +154,12 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
         >
           <Stack gap={2}>
             <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
-              <HStack
-                gap={1.5}
-                px={1.5}
-                py={1}
-                borderRadius={'redesign.sm'}
-                bg={'surfaceSecondary'}
-              >
-                <Icon w={4} h={4}>
-                  <StacksIconBlock />
-                </Icon>
-
-                <Text
-                  textStyle={'text-mono-sm'}
-                  color={'textPrimary'}
-                  className={'block-height'}
-                  aria-label={`Block height: ${stxBlock.height.toLocaleString()}`}
-                >
-                  #{stxBlock.height}
-                </Text>
-              </HStack>
+              <BlockHeightBadge
+                blockType="stx"
+                blockHeight={stxBlock.height}
+                variant="outline"
+                className="block-height"
+              />
               <Icon
                 w={7}
                 h={'auto'}
@@ -259,20 +246,12 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
           >
             <Stack gap={2}>
               <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
-                <HStack
-                  gap={1.5}
-                  px={1.5}
-                  py={1}
-                  borderRadius={'redesign.sm'}
-                  bg={'surfacePrimary'}
-                >
-                  <Icon w={4} h={4}>
-                    <StacksIconBlock />
-                  </Icon>
-                  <Text textStyle={'text-mono-sm'} color={'textPrimary'} className={'block-height'}>
-                    #{stxBlock.height}
-                  </Text>
-                </HStack>
+                <BlockHeightBadge
+                  blockType="stx"
+                  blockHeight={stxBlock.height}
+                  variant="outline"
+                  className="block-height"
+                />
                 <Icon
                   w={7}
                   h={'auto'}

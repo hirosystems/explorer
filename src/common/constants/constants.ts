@@ -33,6 +33,7 @@ export const DEFAULT_BLOCKS_LIST_LIMIT = 10;
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
 export const DEFAULT_BURN_BLOCKS_LIMIT = 2;
+export const BLOCKS_PAGE_SIZE = 30;
 export const DEFAULT_TX_EVENTS_LIMIT = 100;
 
 export const MAX_BLOCK_TRANSACTIONS_PER_CALL = 200;
