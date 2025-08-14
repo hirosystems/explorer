@@ -1,3 +1,10 @@
+# [1.328.0](https://github.com/hirosystems/explorer/compare/v1.327.0...v1.328.0) (2025-08-14)
+
+
+### Features
+
+* blocks page foundation ([#2461](https://github.com/hirosystems/explorer/issues/2461)) ([044be32](https://github.com/hirosystems/explorer/commit/044be326e887bbf6d2747eceaaa2e8e2d8095d45))
+
 # [1.327.0](https://github.com/hirosystems/explorer/compare/v1.326.0...v1.327.0) (2025-08-13)
 
 
