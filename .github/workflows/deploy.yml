@@ -59,15 +59,15 @@ jobs:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
-          ref: explorer
           token: ${{ secrets.DEVOPS_ACTIONS_REPO_PAT }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
-          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          docker_image: hirosystems/explorer
+          docker_image_tag_or_digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
           gpg_key: ${{ secrets.HIRO_DEVOPS_GPG_KEY }}
           gpg_key_passphrase: ${{ secrets.HIRO_DEVOPS_GPG_KEY_PASSPHRASE }}
@@ -108,8 +108,9 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
-          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          docker_image: hirosystems/explorer
+          docker_image_tag_or_digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
           gpg_key: ${{ secrets.HIRO_DEVOPS_GPG_KEY }}
           gpg_key_passphrase: ${{ secrets.HIRO_DEVOPS_GPG_KEY_PASSPHRASE }}
@@ -150,8 +151,9 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_tag: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
-          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          docker_image: hirosystems/explorer
+          docker_image_tag_or_digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
           gpg_key: ${{ secrets.HIRO_DEVOPS_GPG_KEY }}
           gpg_key_passphrase: ${{ secrets.HIRO_DEVOPS_GPG_KEY_PASSPHRASE }}
