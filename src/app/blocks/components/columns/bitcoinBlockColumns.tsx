@@ -42,14 +42,14 @@ export const bitcoinBlockColumns: ColumnDef<BitcoinBlockTableData>[] = [
     enableSorting: false,
     size: 120,
   },
-  {
-    id: BitcoinBlockColumnId.STACKS_BLOCKS_INTERVAL,
-    header: 'Stacks blocks interval',
-    accessorKey: BitcoinBlockColumnId.STACKS_BLOCKS_INTERVAL,
-    cell: info => BitcoinBlockRow.StacksBlocksIntervalCell(info.getValue() as string[]),
-    enableSorting: false,
-    size: 200,
-  },
+  // {
+  //   id: BitcoinBlockColumnId.STACKS_BLOCKS_INTERVAL,
+  //   header: 'Stacks blocks interval',
+  //   accessorKey: BitcoinBlockColumnId.STACKS_BLOCKS_INTERVAL,
+  //   cell: info => BitcoinBlockRow.StacksBlocksIntervalCell(info.getValue() as string[]),
+  //   enableSorting: false,
+  //   size: 200,
+  // },
   {
     id: BitcoinBlockColumnId.STACKS_BLOCKS,
     header: 'Stacks blocks',
@@ -68,15 +68,16 @@ export const bitcoinBlockColumns: ColumnDef<BitcoinBlockTableData>[] = [
     size: 100,
     meta: { textAlign: 'right' },
   },
-  {
-    id: BitcoinBlockColumnId.TOTAL_FEES,
-    header: 'Total fees',
-    accessorKey: BitcoinBlockColumnId.TOTAL_FEES,
-    cell: info => BitcoinBlockRow.TotalFeesCell(info.getValue() as string),
-    enableSorting: false,
-    size: 100,
-    meta: { textAlign: 'right' },
-  },
+  // {
+  //   id: BitcoinBlockColumnId.TOTAL_FEES,
+  //   header: 'Total fees',
+  //   accessorKey: BitcoinBlockColumnId.TOTAL_FEES,
+  //   cell: info => BitcoinBlockRow.TotalFeesCell(info.getValue() as string),
+  //   enableSorting: false,
+  //   size: 100,
+  //   meta: { textAlign: 'right' },
+  // },
+  // TODO: API doesn't support fee data at the moment
   {
     id: BitcoinBlockColumnId.TIMESTAMP,
     header: 'Timestamp',

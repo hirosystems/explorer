@@ -112,11 +112,15 @@ export const DefaultBadgeIcon = ({
   icon,
   color = 'var(--stacks-colors-neutral-sand-1000)',
   bg,
+  size,
 }: {
   icon: React.ReactNode;
   color?: string;
   bg?: string;
+  size?: number;
 }) => {
+  const iconSize = size ?? (bg ? 3 : 3.5);
+
   return bg ? (
     <Flex
       alignItems="center"
@@ -127,12 +131,12 @@ export const DefaultBadgeIcon = ({
       h={4.5}
       w={4.5}
     >
-      <Icon h={3} w={3} color={color}>
+      <Icon h={iconSize} w={iconSize} color={color}>
         {icon}
       </Icon>
     </Flex>
   ) : (
-    <Icon h={3.5} w={3.5} color={color}>
+    <Icon h={iconSize} w={iconSize} color={color}>
       {icon}
     </Icon>
   );

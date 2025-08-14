@@ -74,7 +74,7 @@ export async function fetchRecentBtcBlocks(chain: string, api?: string) {
 export async function fetchRecentStxBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await stacksAPIFetch(
-    `${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
+    `${apiUrl}/extended/v2/blocks/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
     {
       cache: 'default',
       next: {
@@ -266,7 +266,7 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
           burn_block_height: block.burn_block_height,
           burn_block_hash: block.burn_block_hash,
           block_time: block.block_time,
-          tx_count: block.txs.length,
+          tx_count: block.txs?.length || 0,
         })
       ),
     },

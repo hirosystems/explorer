@@ -4,6 +4,7 @@ import { TimeStampCellRenderer } from '@/common/components/table/table-examples/
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { truncateMiddle } from '@/common/utils/utils';
 import { BlockHeightBadge, DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Box, Flex, Link, Text } from '@chakra-ui/react';
@@ -11,7 +12,31 @@ import NextLink from 'next/link';
 
 export const BitcoinBlockRow = {
   HeightCell: (height: number, burnBlockHash: string) => (
-    <BlockHeightBadge blockType="btc" blockHeight={height} variant="outline" />
+    <DefaultBadge
+      variant="solid"
+      type="blockHeight"
+      icon={<DefaultBadgeIcon icon={<BitcoinCircleIcon />} color="accent.bitcoin-500" size={4} />}
+      label={
+        <Link
+          as={NextLink}
+          href={`/btcblock/${burnBlockHash}`}
+          textStyle="text-mono-sm"
+          color="textPrimary"
+          textDecorationColor="textPrimary"
+          _hover={{
+            color: 'textInteractiveHover',
+            textDecorationColor: 'textInteractiveHover',
+          }}
+          _groupHover={{
+            textDecorationColor: 'textPrimary',
+            _hover: { textDecorationColor: 'textInteractiveHover' },
+          }}
+        >
+          #{height}
+        </Link>
+      }
+      _groupHover={{ bg: 'surfaceTertiary' }}
+    />
   ),
 
   HashCell: (hash: string, burnBlockHash: string) => (
@@ -21,11 +46,12 @@ export const BitcoinBlockRow = {
       textStyle="text-regular-sm"
       color="textPrimary"
       textDecoration="underline"
+      whiteSpace="nowrap"
       _hover={{
         color: 'textInteractiveHover',
       }}
     >
-      {truncateMiddle(hash, 8, 8)}
+      {truncateMiddle(hash, 5, 5)}
     </Link>
   ),
 
@@ -41,17 +67,23 @@ export const BitcoinBlockRow = {
               _hover={{ textDecoration: 'none' }}
             >
               <DefaultBadge
-                variant="outline"
-                icon={<DefaultBadgeIcon icon={<StacksIconBlock />} color="iconTertiary" />}
+                icon={
+                  <DefaultBadgeIcon
+                    icon={<StacksIconBlock color="iconTertiary" />}
+                    color="iconTertiary"
+                  />
+                }
                 label={
                   <DefaultBadgeLabel
-                    label={`#${truncateMiddle(blockHash, 4, 4)}`}
+                    label={`#${truncateMiddle(blockHash, 5, 5)}`}
                     color="textPrimary"
                     textDecoration="underline"
+                    textStyle="text-mono-sm"
                     _hover={{ color: 'textInteractiveHover' }}
                   />
                 }
                 bg="surfacePrimary"
+                border="none"
                 _groupHover={{ bg: 'surfaceTertiary' }}
               />
             </Link>

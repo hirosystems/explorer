@@ -5,7 +5,6 @@ import { defineRecipe } from '@chakra-ui/react';
 export const badgeRecipe = defineRecipe({
   base: {
     borderRadius: 'redesign.md',
-    textStyle: 'text-regular-sm',
   },
   variants: {
     variant: {
