@@ -1,5 +1,5 @@
 import { CopyButtonRedesign } from '@/common/components/CopyButton';
-import { microToStacksFormatted } from '@/common/utils/utils';
+import { microToStacks, microToStacksFormatted, usdFormatter } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon, Stack, Table } from '@chakra-ui/react';
@@ -54,8 +54,11 @@ export function SummaryItemValue({
 
 export function PriceSummaryItemValue({ value }: { value: string }) {
   const { stxPrice } = useTxIdPageData();
-  const usdValue = stxPrice * Number(value);
+  const stxAmount = microToStacks(value);
+  const usdValue = stxPrice * stxAmount;
   const formattedValue = microToStacksFormatted(value);
+  const formattedUsdValue =
+    usdValue > 0 && usdValue < 0.01 ? '<$0.01' : usdFormatter.format(usdValue);
 
   return (
     <Flex gap={1.5} alignItems="center">
@@ -78,10 +81,10 @@ export function PriceSummaryItemValue({ value }: { value: string }) {
         /
       </Text>
       <Text textStyle="text-regular-sm" color="textSecondary">
-        ${usdValue}
+        {formattedUsdValue}
       </Text>
       <CopyButtonRedesign
-        initialValue={usdValue.toString()}
+        initialValue={formattedUsdValue}
         aria-label={`copy usd price`}
         iconProps={{
           height: 3.5,
