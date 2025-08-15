@@ -1,3 +1,10 @@
+# [1.329.0](https://github.com/hirosystems/explorer/compare/v1.328.1...v1.329.0) (2025-08-15)
+
+
+### Features
+
+* default to deploy using Clarity 3 ([#2471](https://github.com/hirosystems/explorer/issues/2471)) ([e1b0a4b](https://github.com/hirosystems/explorer/commit/e1b0a4bce4649549b743b29e713ddcb6457276e1))
+
 ## [1.328.1](https://github.com/hirosystems/explorer/compare/v1.328.0...v1.328.1) (2025-08-15)
 
 
