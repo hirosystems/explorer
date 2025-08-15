@@ -1,3 +1,10 @@
+## [1.328.1](https://github.com/hirosystems/explorer/compare/v1.328.0...v1.328.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* txid page: usd value ([#2470](https://github.com/hirosystems/explorer/issues/2470)) ([6d10cd7](https://github.com/hirosystems/explorer/commit/6d10cd7eeb860b5cf600651d232488967ca49452))
+
 # [1.328.0](https://github.com/hirosystems/explorer/compare/v1.327.0...v1.328.0) (2025-08-14)
 
 
