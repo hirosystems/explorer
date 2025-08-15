@@ -1,13 +1,10 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import { meta } from '../../common/constants/meta';
 
-export async function generateMetadata(
-  { params }: any,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const title = `Recent Blocks`;
+export async function generateMetadata(): Promise<Metadata> {
+  const title = `Recent blocks`;
   return Promise.resolve({
     ...meta,
     title,

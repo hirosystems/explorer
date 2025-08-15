@@ -1,7 +1,9 @@
-import { BlockHeightBadge } from '@/ui/Badge';
-import { Flex, Icon, Text } from '@chakra-ui/react';
+import { DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
+import { Flex, Icon, Link, Text } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 import { ColumnDef } from '@tanstack/react-table';
+import NextLink from 'next/link';
 
 import { formatTimestamp } from '../../../../common/utils/time-utils';
 import { StacksBlockRow } from '../table-rows/StacksBlockRow';
@@ -13,7 +15,6 @@ export enum StacksBlockColumnId {
   TOTAL_FEES = 'totalFees',
   TIMESTAMP = 'timestamp',
 }
-
 export interface StacksBlockTableData {
   height: number;
   hash: string;
@@ -35,7 +36,22 @@ export type StacksTableRow = StacksBlockTableData | BurnBlockGroupHeader;
 const BurnBlockHeaderCell = {
   render: (row: BurnBlockGroupHeader) => (
     <Flex alignItems="center" gap={3} w="100%" pl={1.5}>
-      <BlockHeightBadge blockType="btc" blockHeight={row.burn_block_height} variant="outline" />
+      <Link
+        as={NextLink}
+        href={`/btcblock/${row.burn_block_hash}`}
+        _hover={{ textDecoration: 'none' }}
+      >
+        <Flex align="center" gap={1} cursor="pointer">
+          <DefaultBadgeIcon icon={<BitcoinCircleIcon />} color="iconTertiary" />
+          <Text
+            textStyle="text-mono-sm"
+            color="textPrimary"
+            _hover={{ color: 'textInteractiveHover' }}
+          >
+            #{row.burn_block_height}
+          </Text>
+        </Flex>
+      </Link>
       <Text as="span" color="iconTertiary">
         •
       </Text>
@@ -113,21 +129,22 @@ export const stacksBlockColumns: ColumnDef<StacksTableRow>[] = [
     size: 120,
     meta: { textAlign: 'right' },
   },
-  {
-    id: StacksBlockColumnId.TOTAL_FEES,
-    header: 'Total fees',
-    accessorKey: StacksBlockColumnId.TOTAL_FEES,
-    cell: info => {
-      const row = info.row.original;
-      if ('type' in row && row.type === 'burn-block-header') {
-        return null;
-      }
-      return StacksBlockRow.TotalFeesCell((row as StacksBlockTableData).totalFees);
-    },
-    enableSorting: false,
-    size: 100,
-    meta: { textAlign: 'right' },
-  },
+  // {
+  //   id: StacksBlockColumnId.TOTAL_FEES,
+  //   header: 'Total fees',
+  //   accessorKey: StacksBlockColumnId.TOTAL_FEES,
+  //   cell: info => {
+  //     const row = info.row.original;
+  //     if ('type' in row && row.type === 'burn-block-header') {
+  //       return null;
+  //     }
+  //     return StacksBlockRow.TotalFeesCell((row as StacksBlockTableData).totalFees);
+  //   },
+  //   enableSorting: false,
+  //   size: 100,
+  //   meta: { textAlign: 'right' },
+  // },
+  // TODO: API doesn't support fee data at the moment
   {
     id: StacksBlockColumnId.TIMESTAMP,
     header: 'Timestamp',

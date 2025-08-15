@@ -127,12 +127,12 @@ export const DefaultBadgeIcon = ({
       h={4.5}
       w={4.5}
     >
-      <Icon h={3} w={3} color={color}>
+      <Icon h={4} w={4} color={color}>
         {icon}
       </Icon>
     </Flex>
   ) : (
-    <Icon h={3.5} w={3.5} color={color}>
+    <Icon h={4} w={4} color={color}>
       {icon}
     </Icon>
   );
@@ -140,7 +140,7 @@ export const DefaultBadgeIcon = ({
 
 export const DefaultBadgeLabel = ({ label, ...rest }: { label: string } & TextProps) => {
   return (
-    <Text textStyle="text-medium-xs" color={'textPrimary'} whiteSpace="nowrap" {...rest}>
+    <Text textStyle="text-mono-sm" color={'textPrimary'} whiteSpace="nowrap" {...rest}>
       {label}
     </Text>
   );
