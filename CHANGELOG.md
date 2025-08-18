@@ -1,3 +1,10 @@
+# [1.330.0](https://github.com/hirosystems/explorer/compare/v1.329.0...v1.330.0) (2025-08-18)
+
+
+### Features
+
+* added source code tab ([786028e](https://github.com/hirosystems/explorer/commit/786028ec3ee1edaf19d84a2236488cc9a25fa4a1))
+
 # [1.329.0](https://github.com/hirosystems/explorer/compare/v1.328.1...v1.329.0) (2025-08-15)
 
 
