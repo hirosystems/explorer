@@ -6,7 +6,7 @@ import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import { getColorWithOpacity } from '../../common/utils/color-utils';
 import { useColorMode } from '../../components/ui/color-mode';
 import { system } from '../../ui/theme/theme';
-import { SignerLegendItem } from './SignerDistributionLegend';
+import { SignerLegendItem, removeStackingDaoFromName } from './SignerDistributionLegend';
 import { PoxSigner } from './data/useSigners';
 import { PieChartSkeleton } from './skeleton';
 import { getSignerKeyName } from './utils';
@@ -24,11 +24,11 @@ export function getSignerDistributionPieChartColor(
   } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
     color = 'colors.purple.300';
   } else if (votingPowerPercentage >= 5 && votingPowerPercentage < 10) {
-    color = 'colors.purple.400';
+    color = 'colors.orange.500';
   } else if (votingPowerPercentage >= 10 && votingPowerPercentage < 15) {
     color = 'colors.purple.500';
   } else if (votingPowerPercentage >= 15 && votingPowerPercentage < 20) {
-    color = 'colors.purple.600';
+    color = 'colors.green.500';
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
     color = 'colors.purple.700';
   } else if (votingPowerPercentage >= 25) {
@@ -134,36 +134,51 @@ export function SignersDistributionPieChart({
 
   const pieData: PieData[] = useMemo(() => {
     const thresholdPercentage = 1;
-    const knownSignersWithPercentageGreaterThanThreshold = signers
-      .filter(
-        signer =>
-          getSignerKeyName(signer.signing_key) !== 'unknown' &&
-          signer.weight_percent > thresholdPercentage
-      )
-      .map(signer => ({
-        name: getSignerKeyName(signer.signing_key),
-        value: signer.weight_percent,
-      }))
-      .sort((a, b) => a.value - b.value);
-    const unknownSignersWithPercentageGreaterThanThreshold = signers
-      .filter(
-        signer =>
-          getSignerKeyName(signer.signing_key) === 'unknown' &&
-          signer.weight_percent > thresholdPercentage
-      )
-      .map(signer => ({
-        name: 'Other signer',
-        value: signer.weight_percent,
-      }))
-      .sort((a, b) => a.value - b.value);
 
-    let signersData = knownSignersWithPercentageGreaterThanThreshold;
+    const knownSignersAggregated = signers
+      .filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
+      .map(signer => {
+        let name = getSignerKeyName(signer.signing_key);
+        let nameWithoutStackingDao = removeStackingDaoFromName(name);
 
-    if (!onlyShowPublicSigners) {
-      signersData = signersData.concat(unknownSignersWithPercentageGreaterThanThreshold);
+        return {
+          value: signer.weight_percent,
+          name: nameWithoutStackingDao,
+        };
+      })
+      .reduce(
+        (acc, curr) => {
+          const existingSigner = acc.find(s => s.name === curr.name);
+          if (existingSigner) {
+            existingSigner.value += curr.value;
+            return acc;
+          }
+          return [...acc, curr];
+        },
+        [] as { name: string; value: number }[]
+      )
+      .filter(signer => signer.value > thresholdPercentage);
+
+    const unknownSigners = signers.filter(
+      signer => getSignerKeyName(signer.signing_key) === 'unknown'
+    );
+    const unknownSignersData =
+      unknownSigners.length > 0
+        ? [
+            {
+              name: 'Other signer',
+              value: unknownSigners.reduce((acc, signer) => acc + signer.weight_percent, 0),
+            },
+          ]
+        : [];
+
+    let signersData = knownSignersAggregated;
+
+    if (!onlyShowPublicSigners && unknownSignersData.length > 0) {
+      signersData = signersData.concat(unknownSignersData);
     }
 
-    return signersData;
+    return signersData.sort((a, b) => b.value - a.value);
   }, [signers, onlyShowPublicSigners]);
 
   const CustomTooltip = useCallback(
