@@ -137,7 +137,7 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_image: hirosystems/explorer
+          docker_image: ${{ github.repository }}
           docker_image_tag_or_digest: ${{ needs.build-publish.outputs.docker_image_digest }}
           file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
@@ -154,9 +154,9 @@ jobs:
       - name: Approve pending deployment
         run: |
           sleep 5
-          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
+          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
           if [[ -n "${ENV_ID}" ]]; then
-            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
+            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
           fi
 
   deploy-staging:
@@ -194,9 +194,9 @@ jobs:
       - name: Approve pending deployment
         run: |
           sleep 5
-          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
+          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
           if [[ -n "${ENV_ID}" ]]; then
-            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
+            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
           fi
 
   deploy-prod:
@@ -220,7 +220,7 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_image: hirosystems/explorer
+          docker_image: ${{ github.repository }}
           docker_image_tag_or_digest: ${{ needs.build-publish.outputs.docker_image_digest }}
           file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
