@@ -65,7 +65,7 @@ jobs:
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          docker_image: hirosystems/explorer
+          docker_image: ${{ github.repository }}
           docker_image_tag_or_digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} ))
           file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.DEVOPS_K8S_REPO_PAT }}
