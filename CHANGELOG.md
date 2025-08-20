@@ -1,3 +1,10 @@
+## [1.331.1](https://github.com/hirosystems/explorer/compare/v1.331.0...v1.331.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* add gpg secrets to stg and prd steps ([#2477](https://github.com/hirosystems/explorer/issues/2477)) ([e7e0407](https://github.com/hirosystems/explorer/commit/e7e0407b98cf599bd3ba47a6a4353ebaade8b0a6))
+
 # [1.331.0](https://github.com/hirosystems/explorer/compare/v1.330.1...v1.331.0) (2025-08-20)
 
 
