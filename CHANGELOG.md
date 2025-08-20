@@ -1,3 +1,10 @@
+## [1.331.2](https://github.com/hirosystems/explorer/compare/v1.331.1...v1.331.2) (2025-08-20)
+
+
+### Bug Fixes
+
+* block url ([#2478](https://github.com/hirosystems/explorer/issues/2478)) ([cd75d5a](https://github.com/hirosystems/explorer/commit/cd75d5a77f908fa36672467b61ecaf82d00e5a2a))
+
 ## [1.331.1](https://github.com/hirosystems/explorer/compare/v1.331.0...v1.331.1) (2025-08-20)
 
 
