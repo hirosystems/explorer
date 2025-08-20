@@ -3,15 +3,41 @@
 import { TimeStampCellRenderer } from '@/common/components/table/table-examples/TxTableCellRenderers';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { truncateMiddle } from '@/common/utils/utils';
-import { BlockHeightBadge } from '@/ui/Badge';
-import BitcoinIcon from '@/ui/icons/BitcoinIcon';
+import { BlockHeightBadge, DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
+import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Box, Flex, Link, Text, Tooltip } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 export const StacksBlockRow = {
   HeightCell: (height: number) => (
-    <BlockHeightBadge blockType="stx" blockHeight={height} variant="outline" />
+    <DefaultBadge
+      variant="solid"
+      type="blockHeight"
+      icon={<DefaultBadgeIcon icon={<StacksIconBlock />} color="accent.stacks-500" />}
+      label={
+        <Link
+          as={NextLink}
+          href={`/block/${height}`}
+          textStyle="text-mono-sm"
+          color="textPrimary"
+          textDecorationColor="textPrimary"
+          _hover={{
+            color: 'textInteractiveHover',
+            textDecorationColor: 'textInteractiveHover',
+          }}
+          _groupHover={{
+            textDecorationColor: 'textPrimary',
+            _hover: { textDecorationColor: 'textInteractiveHover' },
+          }}
+        >
+          #{height}
+        </Link>
+      }
+      border="none"
+      _groupHover={{ bg: 'surfaceTertiary' }}
+    />
   ),
 
   HashCell: (hash: string) => (
@@ -21,16 +47,33 @@ export const StacksBlockRow = {
       textStyle="text-regular-sm"
       color="textPrimary"
       textDecoration="underline"
+      whiteSpace="nowrap"
       _hover={{
         color: 'textInteractiveHover',
       }}
     >
-      {truncateMiddle(hash, 8, 8)}
+      {truncateMiddle(hash, 5, 5)}
     </Link>
   ),
 
   BitcoinBlockCell: (height: number, burnBlockHash: string) => (
-    <BlockHeightBadge blockType="btc" blockHeight={height} variant="outline" />
+    <DefaultBadge
+      variant="solid"
+      type="blockHeight"
+      icon={<DefaultBadgeIcon icon={<BitcoinCircleIcon />} color="iconTertiary" size={4} />}
+      label={
+        <Link
+          as={NextLink}
+          href={`/btcblock/${burnBlockHash}`}
+          textStyle="text-mono-sm"
+          color="textPrimary"
+        >
+          #{height}
+        </Link>
+      }
+      border="none"
+      _groupHover={{ bg: 'surfaceTertiary' }}
+    />
   ),
 
   TransactionsCell: (count: number) => (
@@ -57,15 +100,12 @@ export const StacksBlockRow = {
     </Flex>
   ),
 
-  BurnBlockHeaderCell: (
-    burnBlock: {
-      burn_block_height: number;
-      burn_block_hash: string;
-      burn_block_time: number;
-      stacks_blocks_count: number;
-    },
-    columnCount: number
-  ) => (
+  BurnBlockHeaderCell: (burnBlock: {
+    burn_block_height: number;
+    burn_block_hash: string;
+    burn_block_time: number;
+    stacks_blocks_count: number;
+  }) => (
     <Box
       position="relative"
       gridColumn={`1 / -1`}

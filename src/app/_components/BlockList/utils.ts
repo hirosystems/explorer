@@ -15,7 +15,7 @@ export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockL
     timestamp: stxBlock?.block_time,
     txsCount:
       'txs' in stxBlock
-        ? (stxBlock as Block).txs.length
+        ? (stxBlock as Block).txs?.length || 0
         : 'tx_count' in stxBlock
           ? (stxBlock as NakamotoBlock).tx_count
           : 0,
