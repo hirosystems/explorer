@@ -1,3 +1,10 @@
+## [1.330.1](https://github.com/hirosystems/explorer/compare/v1.330.0...v1.330.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* signers chart colors ([#2476](https://github.com/hirosystems/explorer/issues/2476)) ([0c9532b](https://github.com/hirosystems/explorer/commit/0c9532b0ad0c0688eaffabfa07fe5f983587a803))
+
 # [1.330.0](https://github.com/hirosystems/explorer/compare/v1.329.0...v1.330.0) (2025-08-18)
 
 
