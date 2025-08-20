@@ -46,8 +46,8 @@ export const Badge = chakra(BadgeBase, badgeRecipe);
 
 export const BlockHeightBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { blockType: 'stx' | 'btc'; blockHeight: number }
->(({ children, blockType, blockHeight, ...rest }, ref) => {
+  BadgeProps & { blockType: 'stx' | 'btc'; blockHeight: number; disableLink?: boolean }
+>(({ children, blockType, blockHeight, disableLink = false, ...rest }, ref) => {
   const network = useGlobalContext().activeNetwork;
 
   return (
@@ -57,15 +57,21 @@ export const BlockHeightBadge = forwardRef<
           icon={blockType === 'stx' ? <StacksIconBlock /> : <BitcoinCircleIcon />}
           color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}
         />
-        <NextLink
-          href={buildUrl(
-            `${blockType === 'stx' ? '/block/' : '/btcblock/'}${blockHeight}`,
-            network
-          )}
-          variant="tableLink"
-        >
-          #{blockHeight}
-        </NextLink>
+        {disableLink ? (
+          <Text textStyle="text-mono-sm" color="textPrimary" textDecoration="none">
+            #{blockHeight}
+          </Text>
+        ) : (
+          <NextLink
+            href={buildUrl(
+              `${blockType === 'stx' ? '/block/' : '/btcblock/'}${blockHeight}`,
+              network
+            )}
+            variant="tableLink"
+          >
+            #{blockHeight}
+          </NextLink>
+        )}
       </Flex>
     </Badge>
   );

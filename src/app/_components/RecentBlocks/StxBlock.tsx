@@ -65,6 +65,7 @@ export function StxBlockGroup({
         >
           <Link
             href={buildUrl(`/btcblock/${stxBlocks[0].burn_block_hash}`, network)}
+            textDecoration="none"
             _hover={{ textDecoration: 'none' }}
           >
             <HStack
@@ -141,6 +142,7 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
       <Link
         href={buildUrl(`/block/${stxBlock.hash}`, network)}
         rel="noreferrer"
+        textDecoration="none"
         _hover={{ textDecoration: 'none' }}
       >
         <Stack
@@ -157,8 +159,10 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
               <BlockHeightBadge
                 blockType="stx"
                 blockHeight={stxBlock.height}
-                variant="outline"
+                variant="solid"
+                bg="surfaceSecondary"
                 className="block-height"
+                disableLink={true}
               />
               <Icon
                 w={7}
@@ -226,6 +230,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
       <Link
         href={buildUrl(`/block/${stxBlock.hash}`, network)}
         rel="noreferrer"
+        textDecoration="none"
         _hover={{ textDecoration: 'none' }}
       >
         <Flex
@@ -251,6 +256,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                   blockHeight={stxBlock.height}
                   variant="outline"
                   className="block-height"
+                  disableLink={true}
                 />
                 <Icon
                   w={7}
