@@ -58,8 +58,10 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                 <BlockHeightBadge
                   blockType="btc"
                   blockHeight={burnBlock.burn_block_height}
-                  variant="outline"
+                  variant="solid"
+                  bg="surfaceSecondary"
                   className="block-height"
+                  disableLink={true}
                 />
                 <Icon
                   w={7}
@@ -129,6 +131,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         rel="noreferrer"
+        textDecoration="none"
         _hover={{ textDecoration: 'none' }}
         aria-label={`Newest Bitcoin block #${burnBlock.burn_block_height} mined on ${formatTimestampToDateString(burnBlock.burn_block_time)} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
@@ -172,6 +175,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                       blockHeight={burnBlock.burn_block_height}
                       variant="outline"
                       className="block-height"
+                      disableLink={true}
                     />
                     <Icon
                       w={7}
