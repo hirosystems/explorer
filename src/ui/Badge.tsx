@@ -58,7 +58,10 @@ export const BlockHeightBadge = forwardRef<
           color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}
         />
         <NextLink
-          href={buildUrl(`${blockType === 'stx' ? '/block/' : '/btcblock'}${blockHeight}`, network)}
+          href={buildUrl(
+            `${blockType === 'stx' ? '/block/' : '/btcblock/'}${blockHeight}`,
+            network
+          )}
           variant="tableLink"
         >
           #{blockHeight}
