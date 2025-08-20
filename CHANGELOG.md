@@ -1,3 +1,10 @@
+# [1.331.0](https://github.com/hirosystems/explorer/compare/v1.330.1...v1.331.0) (2025-08-20)
+
+
+### Features
+
+* redesign: blocks page ([#2460](https://github.com/hirosystems/explorer/issues/2460)) ([be2d145](https://github.com/hirosystems/explorer/commit/be2d1457ea781fee8de76509581beee334e9a359))
+
 ## [1.330.1](https://github.com/hirosystems/explorer/compare/v1.330.0...v1.330.1) (2025-08-20)
 
 
