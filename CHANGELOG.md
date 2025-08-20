@@ -1,3 +1,10 @@
+## [1.331.3](https://github.com/hirosystems/explorer/compare/v1.331.2...v1.331.3) (2025-08-20)
+
+
+### Bug Fixes
+
+* blocks badge hydration issue ([#2479](https://github.com/hirosystems/explorer/issues/2479)) ([1a27077](https://github.com/hirosystems/explorer/commit/1a270775b20d10993790311d383de8931ad121b0))
+
 ## [1.331.2](https://github.com/hirosystems/explorer/compare/v1.331.1...v1.331.2) (2025-08-20)
 
 
