@@ -62,6 +62,7 @@ export function TokenTransferTxSummaryItems({
         value={tx.fee_rate}
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
+      <SummaryItem label="Memo" value={tx.token_transfer.memo} showCopyButton />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
       {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
         <SummaryItem
