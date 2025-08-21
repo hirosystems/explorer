@@ -1,3 +1,10 @@
+# [1.332.0](https://github.com/hirosystems/explorer/compare/v1.331.3...v1.332.0) (2025-08-21)
+
+
+### Features
+
+* added memo field to token transfer token id page ([5f73833](https://github.com/hirosystems/explorer/commit/5f738330999e9dea458529dccb2393a9a21baab9))
+
 ## [1.331.3](https://github.com/hirosystems/explorer/compare/v1.331.2...v1.331.3) (2025-08-20)
 
 
