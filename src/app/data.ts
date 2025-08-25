@@ -8,6 +8,7 @@ import {
   Block,
   BurnBlock,
   MempoolTransactionStatsResponse,
+  NakamotoBlock,
 } from '@stacks/stacks-blockchain-api-types';
 
 import {
@@ -259,14 +260,14 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
     stxBlocks: {
       ...stxBlocksData,
       results: stxBlocksData.results.map(
-        (block: Block): UIStxBlock => ({
+        (block: NakamotoBlock): UIStxBlock => ({
           hash: block.hash,
           height: block.height,
           burn_block_time: block.burn_block_time,
           burn_block_height: block.burn_block_height,
           burn_block_hash: block.burn_block_hash,
           block_time: block.block_time,
-          tx_count: block.txs?.length || 0,
+          tx_count: block.tx_count,
         })
       ),
     },
