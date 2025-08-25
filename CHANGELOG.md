@@ -1,3 +1,10 @@
+# [1.333.0](https://github.com/hirosystems/explorer/compare/v1.332.0...v1.333.0) (2025-08-25)
+
+
+### Features
+
+* update recent blocks to v2 ([#2481](https://github.com/hirosystems/explorer/issues/2481)) ([c6ef737](https://github.com/hirosystems/explorer/commit/c6ef7378f2d1f75a110d6bd1810bd1b172a2dce1))
+
 # [1.332.0](https://github.com/hirosystems/explorer/compare/v1.331.3...v1.332.0) (2025-08-21)
 
 
