@@ -6,7 +6,7 @@ import {
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
-import { Block } from '@stacks/stacks-blockchain-api-types';
+import { NakamotoBlock } from '@stacks/stacks-blockchain-api-types';
 
 import { stacksAPIFetch } from '../../../api/stacksAPIFetch';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
@@ -36,7 +36,7 @@ export const useBlocksV2Infinite = (
       const url = `${activeNetwork.url}/extended/v2/blocks/?limit=${limit}&offset=${offset}`;
       const response = await stacksAPIFetch(url);
       const data = await response.json();
-      return data as GenericResponseType<Block>;
+      return data as GenericResponseType<NakamotoBlock>;
     },
     staleTime: options?.staleTime ?? TWO_MINUTES,
     gcTime: options?.gcTime,
@@ -52,7 +52,7 @@ export const useBlocksV2Infinite = (
 export const useBlocksV2List = (
   limit = DEFAULT_LIST_LIMIT,
   options?: any
-): UseQueryResult<GenericResponseType<Block>> => {
+): UseQueryResult<GenericResponseType<NakamotoBlock>> => {
   const { apiClient, activeNetwork } = useGlobalContext();
 
   return useQuery({
@@ -61,7 +61,7 @@ export const useBlocksV2List = (
       const url = `${activeNetwork.url}/extended/v2/blocks/?limit=${limit}`;
       const response = await stacksAPIFetch(url);
       const data = await response.json();
-      return data as GenericResponseType<Block>;
+      return data as GenericResponseType<NakamotoBlock>;
     },
     staleTime: TWO_MINUTES,
     ...options,

@@ -1,9 +1,12 @@
+import { BLOCKS_V2_QUERY_KEY, useBlocksV2List } from '@/app/blocks/queries/useBlocksV2Queries';
 import { useHomePageData } from '@/app/context';
 import { UIStxBlock } from '@/app/data';
-import { BLOCK_LIST_QUERY_KEY, useBlockList } from '@/common/queries/useBlockListInfinite';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { HStack } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useRef } from 'react';
+
+import { NakamotoBlock } from '@stacks/stacks-blockchain-api-types';
 
 import { FadingOverlay } from './FadingOverlay';
 import { NewBlockPlaceholder } from './NewBlockPlaceholder';
@@ -12,19 +15,20 @@ import { BLOCK_HEIGHT, RECENT_STX_BLOCKS_COUNT } from './consts';
 
 export function RecentStxBlocks() {
   const { initialRecentBlocks } = useHomePageData();
+  const { activeNetwork } = useGlobalContext();
   const recentStxBlocks = initialRecentBlocks?.stxBlocks;
   const recentBtcBlocks = initialRecentBlocks?.btcBlocks;
   const queryClient = useQueryClient();
   const isCacheSetWithInitialData = useRef(false);
 
   if (isCacheSetWithInitialData.current === false && recentStxBlocks) {
-    const queryKey = [BLOCK_LIST_QUERY_KEY, RECENT_STX_BLOCKS_COUNT];
+    const queryKey = [BLOCKS_V2_QUERY_KEY, RECENT_STX_BLOCKS_COUNT, activeNetwork.url];
     queryClient.setQueryData(queryKey, recentStxBlocks);
     isCacheSetWithInitialData.current = true;
   }
 
-  const { data: stxBlocksData, refetch } = useBlockList(RECENT_STX_BLOCKS_COUNT, {
-    manual: true,
+  const { data: stxBlocksData, refetch } = useBlocksV2List(RECENT_STX_BLOCKS_COUNT, {
+    enabled: false,
   });
   const stxBlocks = stxBlocksData?.results || [];
 
@@ -34,7 +38,7 @@ export function RecentStxBlocks() {
         if (!acc[block.burn_block_height]) {
           acc[block.burn_block_height] = [];
         }
-        acc[block.burn_block_height].push({ tx_count: block?.txs?.length || 0, ...block });
+        acc[block.burn_block_height].push({ ...block, tx_count: block.tx_count });
         return acc;
       },
       {} as Record<number, UIStxBlock[]>
