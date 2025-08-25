@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { connect, disconnect, getLocalStorage, isConnected } from '@stacks/connect';
 import {
@@ -23,6 +23,39 @@ export type UserData = {
   publicKey: string;
   networkUrl: string;
 };
+
+// @stacks/connect types
+interface AddressEntry {
+  symbol?: string;
+  address: string;
+  publicKey: string;
+}
+
+interface GetAddressesResult {
+  addresses: AddressEntry[];
+}
+
+interface xVerseWalletAddressEntry {
+  address: string;
+  publicKey: string;
+  purpose: string;
+  addressType: string;
+  walletType: string;
+}
+
+interface xVerseWalletGetAddressesResult {
+  id: string;
+  walletType: string;
+  addresses: xVerseWalletAddressEntry[];
+  network: {
+    bitcoin: {
+      name: string;
+    };
+    stacks: {
+      name: string;
+    };
+  };
+}
 
 export function useUser() {
   const dispatch = useAppDispatch();
@@ -59,8 +92,8 @@ export function useUser() {
     }
   }, [dispatch, activeNetwork.url]);
 
-  const isConnectedState = !!userData;
-
+  // refetch address data
+  // TODO: Why are we doing this?
   const stxAddress = userData?.stxAddress;
 
   const confirmedTxsResponse = useAddressConfirmedTxsWithTransfersInfinite(stxAddress);
@@ -80,12 +113,16 @@ export function useUser() {
 
     setIsLoading(true);
     try {
-      const response = await connect();
+      const response: GetAddressesResult | xVerseWalletGetAddressesResult = await connect();
       console.log('Wallet connection finished');
       console.log('Response:', response);
 
       if (response?.addresses && response.addresses.length > 0) {
-        const stxAddr = response.addresses.find(addr => addr.symbol === 'STX');
+        const stxAddr = response.addresses.find(
+          (addr: AddressEntry | xVerseWalletAddressEntry) =>
+            ('symbol' in addr && addr.symbol === 'STX') ||
+            ('addressType' in addr && addr.addressType === 'stacks')
+        );
         if (stxAddr) {
           console.log('Setting user data with STX address:', stxAddr);
           localStorage.setItem(NETWORK_URL_KEY, activeNetwork.url);
@@ -99,6 +136,7 @@ export function useUser() {
             })
           );
         }
+        throw new Error('No STX address found in response');
       } else {
         console.log('No addresses in response');
       }
@@ -107,7 +145,7 @@ export function useUser() {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, dispatch]);
+  }, [isLoading, dispatch, activeNetwork.url]);
 
   const disconnectWallet = useCallback(() => {
     disconnect();
@@ -116,7 +154,7 @@ export function useUser() {
   }, [dispatch]);
 
   return {
-    isConnected: isConnectedState,
+    isConnected: !!userData,
     userData,
     stxAddress,
     txs,

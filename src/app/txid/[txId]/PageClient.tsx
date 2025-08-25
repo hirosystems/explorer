@@ -70,8 +70,9 @@ function TransactionIdPage() {
 
   if (tx?.tx_type === 'coinbase') return <CoinbasePageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
-  if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
+  if (tx?.tx_type === 'contract_call') return <ContractCallPageRedesign tx={tx} />;
+  // if (tx?.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
+  // if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
 
   if (tx?.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;
 

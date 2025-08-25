@@ -66,7 +66,7 @@ export interface TxTableAddressColumnData {
 export const defaultColumnDefinitions: ColumnDef<EventsTableData>[] = [
   {
     id: EventsTableColumns.Index,
-    header: 'Index',
+    header: '#',
     accessorKey: EventsTableColumns.Index,
     cell: info => <IndexCellRenderer index={info.getValue() as number} />,
     enableSorting: false,
@@ -241,7 +241,6 @@ export function EventsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
       scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination

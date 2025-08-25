@@ -66,7 +66,7 @@ export const ContractCallTxSummaryItems = ({
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
-      {'block_height' in tx && tx.block_height && (
+      {isConfirmedTx<ContractCallTransaction, MempoolContractCallTransaction>(tx) && (
         <SummaryItem
           label="Block height"
           value={tx.block_height?.toString() || ''}

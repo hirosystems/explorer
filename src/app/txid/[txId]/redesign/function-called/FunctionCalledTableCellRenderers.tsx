@@ -1,7 +1,11 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import {
+  CopyButtonRedesign,
+  DEFAULT_BUTTON_STYLING,
+  DEFAULT_ICON_STYLING,
+} from '@/common/components/CopyButton';
 import { Badge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 export function NameCellRenderer(value: string) {
   return (
@@ -26,10 +30,12 @@ export function ValueCellRenderer(value: string) {
       <CopyButtonRedesign
         initialValue={value}
         iconProps={{
+          ...DEFAULT_ICON_STYLING,
           height: 3.5,
           width: 3.5,
         }}
         buttonProps={{
+          ...DEFAULT_BUTTON_STYLING,
           p: 1.5,
         }}
       />

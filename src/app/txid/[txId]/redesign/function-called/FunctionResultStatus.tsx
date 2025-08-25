@@ -21,7 +21,7 @@ export function FunctionResultStatus({ tx }: { tx: ContractCallTransaction }) {
         success ? <DefaultBadgeLabel label="Success" /> : <DefaultBadgeLabel label="Failure" />
       }
       textStyle="text-medium-sm"
-      bg={success ? 'transactionStatus.confirmed' : 'transactionStatuses.failed'}
+      bg={success ? 'transactionStatus.confirmed' : 'transactionStatus.failed'}
       border="none"
     />
   );
