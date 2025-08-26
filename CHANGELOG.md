@@ -1,3 +1,10 @@
+# [1.335.0](https://github.com/hirosystems/explorer/compare/v1.334.0...v1.335.0) (2025-08-26)
+
+
+### Features
+
+* reduced the cache time to 3 sec and removed revalidation ([87166ed](https://github.com/hirosystems/explorer/commit/87166ed8a580ea5bde77344c1e89f0c89bbc958c))
+
 # [1.334.0](https://github.com/hirosystems/explorer/compare/v1.333.1...v1.334.0) (2025-08-26)
 
 
