@@ -1,3 +1,10 @@
+## [1.333.1](https://github.com/hirosystems/explorer/compare/v1.333.0...v1.333.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* fixed the contract deploy badge color ([d632906](https://github.com/hirosystems/explorer/commit/d6329068798ecb82991a6daa2a167e1e32cba2c0))
+
 # [1.333.0](https://github.com/hirosystems/explorer/compare/v1.332.0...v1.333.0) (2025-08-25)
 
 
