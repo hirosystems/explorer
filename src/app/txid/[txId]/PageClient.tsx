@@ -1,12 +1,9 @@
 'use client';
 
-import { logError } from '@/common/utils/error-utils';
 import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
 
 import { useTxIdPageData } from './TxIdPageContext';
-import { getTxTag } from './page-data';
 import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 import { ContractCallPage as ContractCallPageRedesign } from './redesign/ContractCallPage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
@@ -36,26 +33,6 @@ const PoisonMicroblock = dynamic(() => import('./PoisonMicroblock'), {
 function TransactionIdPage() {
   const { initialTxData: tx, txId } = useTxIdPageData();
   const isRedesign = useIsRedesignUrl();
-
-  // Revalidate tx-id page if tx is pending
-  useEffect(() => {
-    const revalidateTxIdPage = async () => {
-      const txStatus = tx?.tx_status;
-      if (txStatus === 'pending') {
-        try {
-          const revalidateUrl = `/api/revalidate?tag=${getTxTag(txId)}`;
-          const revalidateResponse = await fetch(revalidateUrl);
-          if (!revalidateResponse.ok) {
-            throw new Error('Failed to revalidate tx id page for txId: ' + txId);
-          }
-        } catch (error) {
-          logError(error as Error, 'Revalidating tx-id page for txId: ' + txId, { txId, txStatus });
-        }
-      }
-    };
-
-    revalidateTxIdPage();
-  }, []);
 
   const isContractId = txId.includes('.');
   if (isContractId) {

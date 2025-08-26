@@ -3,8 +3,7 @@ import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getTxTag = (txId: string) => `tx-id-${txId}`;
-const PENDING_TX_REVALIDATION_INTERVAL_IN_MS = 7 * 1000; // 7 seconds
-const CONFIRMED_TX_REVALIDATION_TIMEOUT_IN_SECONDS = 600; // 10 minutes
+const CONFIRMED_TX_REVALIDATION_TIMEOUT_IN_SECONDS = 3; // 3 seconds
 
 export async function fetchTxById(
   apiUrl: string,
