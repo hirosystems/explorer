@@ -75,7 +75,7 @@ export function getTxTypeColor(txType: string) {
     case 'contract_call':
       return 'var(--stacks-colors-transaction-types-contract-call)';
     case 'smart_contract':
-      return 'var(--stacks-colors-transaction-types-smart-contract)';
+      return 'var(--stacks-colors-transaction-types-contract-deploy)';
     case 'tenure_change':
       return 'var(--stacks-colors-transaction-types-tenure-change)';
     case 'coinbase':
