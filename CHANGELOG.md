@@ -1,3 +1,10 @@
+# [1.334.0](https://github.com/hirosystems/explorer/compare/v1.333.1...v1.334.0) (2025-08-26)
+
+
+### Features
+
+* debug env vars ([#2494](https://github.com/hirosystems/explorer/issues/2494)) ([86039d6](https://github.com/hirosystems/explorer/commit/86039d6058999e62372a6242250dc40b539d535f))
+
 ## [1.333.1](https://github.com/hirosystems/explorer/compare/v1.333.0...v1.333.1) (2025-08-26)
 
 
