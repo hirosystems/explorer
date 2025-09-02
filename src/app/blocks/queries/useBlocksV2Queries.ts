@@ -1,10 +1,4 @@
-import {
-  UseInfiniteQueryOptions,
-  UseQueryResult,
-  useInfiniteQuery,
-  useQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query';
+import { UseQueryResult, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { NakamotoBlock } from '@stacks/stacks-blockchain-api-types';
 
@@ -15,7 +9,16 @@ import { GenericResponseType } from '../../../common/hooks/useInfiniteQueryResul
 import { TWO_MINUTES } from '../../../common/queries/query-stale-time';
 import { getNextPageParam } from '../../../common/utils/utils';
 
-export const BLOCKS_V2_QUERY_KEY = 'blocksV2Infinite';
+export const BLOCKS_V2_INFINITE_QUERY_KEY = 'blocksV2Infinite';
+export const BLOCKS_V2_LIST_QUERY_KEY = 'blocksV2List';
+
+export function getBlocksV2InfiniteQueryKey(limit: number, network: string) {
+  return [BLOCKS_V2_INFINITE_QUERY_KEY, limit, network];
+}
+
+export function getBlocksV2ListQueryKey(limit: number, network: string) {
+  return [BLOCKS_V2_LIST_QUERY_KEY, limit, network];
+}
 
 export const useBlocksV2Infinite = (
   limit = DEFAULT_LIST_LIMIT,
@@ -30,7 +33,7 @@ export const useBlocksV2Infinite = (
 ) => {
   const { apiClient, activeNetwork } = useGlobalContext();
   return useInfiniteQuery({
-    queryKey: [BLOCKS_V2_QUERY_KEY, limit, activeNetwork.url],
+    queryKey: getBlocksV2InfiniteQueryKey(limit, activeNetwork.url),
     queryFn: async ({ pageParam }) => {
       const offset = pageParam || 0;
       const url = `${activeNetwork.url}/extended/v2/blocks/?limit=${limit}&offset=${offset}`;
@@ -56,7 +59,7 @@ export const useBlocksV2List = (
   const { apiClient, activeNetwork } = useGlobalContext();
 
   return useQuery({
-    queryKey: [BLOCKS_V2_QUERY_KEY, limit, activeNetwork.url],
+    queryKey: getBlocksV2ListQueryKey(limit, activeNetwork.url),
     queryFn: async () => {
       const url = `${activeNetwork.url}/extended/v2/blocks/?limit=${limit}`;
       const response = await stacksAPIFetch(url);

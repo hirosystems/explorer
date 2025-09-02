@@ -2,52 +2,22 @@
 
 import { Box, Icon, Stack, StackProps } from '@chakra-ui/react';
 import { ArrowsClockwise } from '@phosphor-icons/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-
-import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { Text } from '../../../ui/Text';
-import { useSubscribeBlocks } from '../BlockList/Sockets/useSubscribeBlocks';
 import { BTC_BLOCK_MIN_WIDTH, EMPTY_BTC_BLOCK_WIDTH } from './consts';
 
+interface NewBlockPlaceholderProps extends Omit<StackProps, 'boxShadow'> {
+  hasNewBlocks: boolean;
+  handleUpdate: () => void;
+  boxShadow?: string;
+}
+
 export function NewBlockPlaceholder({
-  newestBlockHeight,
-  refetch,
+  hasNewBlocks,
+  handleUpdate,
   boxShadow,
-  isNewBlock,
   ...stackProps
-}: {
-  newestBlockHeight: number;
-  refetch: () => void;
-  isNewBlock: (block: NakamotoBlock | Block, lastBlockHeight: number) => boolean;
-} & StackProps) {
-  const [hasNewBlocks, setHasNewBlocks] = useState(false);
-  const [socketEnabled, setSocketEnabled] = useState(true);
-  const lastBlockHeightRef = useRef(newestBlockHeight);
-
-  const handleNewBlock = useCallback(
-    (block: NakamotoBlock | Block) => {
-      if (isNewBlock(block, lastBlockHeightRef.current)) {
-        setHasNewBlocks(true);
-        setSocketEnabled(false);
-      }
-    },
-    [isNewBlock]
-  );
-
-  useSubscribeBlocks(socketEnabled, handleNewBlock);
-
-  useEffect(() => {
-    lastBlockHeightRef.current = newestBlockHeight;
-    setHasNewBlocks(false);
-  }, [newestBlockHeight]);
-
-  const handleUpdate = useCallback(() => {
-    refetch();
-    setHasNewBlocks(false);
-    setSocketEnabled(true);
-  }, [refetch]);
-
+}: NewBlockPlaceholderProps) {
   return (
     <Stack
       width={hasNewBlocks ? BTC_BLOCK_MIN_WIDTH : EMPTY_BTC_BLOCK_WIDTH}
@@ -98,5 +68,27 @@ export function NewBlockPlaceholder({
         </Text>
       </Box>
     </Stack>
+  );
+}
+
+export function StacksNewBlockPlaceholder({ ...props }: NewBlockPlaceholderProps) {
+  return (
+    <NewBlockPlaceholder
+      id="stacks-new-block-placeholder"
+      border="1px dashed var(--stacks-colors-accent-stacks-500)"
+      boxShadow={'0px 4px 12px 0px rgba(255, 85, 18, 0.25)'}
+      {...props}
+    />
+  );
+}
+
+export function BtcNewBlockPlaceholder({ ...props }: NewBlockPlaceholderProps) {
+  return (
+    <NewBlockPlaceholder
+      id="btc-new-block-placeholder"
+      border="1px dashed var(--stacks-colors-accent-bitcoin-500)"
+      boxShadow={'0px 4px 12px 0px rgba(255, 145, 0, 0.25)'}
+      {...props}
+    />
   );
 }

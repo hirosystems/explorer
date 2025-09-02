@@ -1,7 +1,6 @@
 import { UIStxBlock } from '@/app/data';
 import { formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { BlockHeightBadge } from '@/ui/Badge';
-import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
 

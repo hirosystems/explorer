@@ -9,8 +9,7 @@ import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransacti
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
-import { Text } from '@/ui/Text';
-import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
+import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';

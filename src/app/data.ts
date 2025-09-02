@@ -65,7 +65,7 @@ export async function fetchRecentBtcBlocks(chain: string, api?: string) {
   const response = await stacksAPIFetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
     cache: 'default',
     next: {
-      revalidate: 300, // 5 minutes
+      revalidate: 10, // 10 seconds
       tags: ['btc-blocks'],
     },
   });
