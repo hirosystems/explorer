@@ -1,6 +1,5 @@
 import { FeeSection } from '@/app/_components/FeeSection';
 import { MempoolSection } from '@/app/_components/MempoolSection';
-import { DEFAULT_MAINNET_SERVER } from '@/common/constants/env';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 import { SampleTxsFeeEstimate, getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';

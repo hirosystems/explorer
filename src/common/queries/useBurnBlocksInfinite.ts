@@ -19,6 +19,26 @@ import { TWO_MINUTES } from './query-stale-time';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
+export function getBurnBlocksQueryKey({
+  limit,
+  offset,
+  networkUrl,
+  queryKeyExtension,
+}: {
+  limit?: number;
+  offset?: number;
+  networkUrl?: string;
+  queryKeyExtension?: string;
+}) {
+  return [
+    BURN_BLOCKS_QUERY_KEY,
+    ...(limit ? [limit] : []),
+    ...(offset ? [offset] : []),
+    ...(networkUrl ? [networkUrl] : []),
+    ...(queryKeyExtension ? [queryKeyExtension] : []),
+  ];
+}
+
 export function useBurnBlocksInfinite(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
   options: any = {},
@@ -71,12 +91,7 @@ export function useBurnBlocks(
 ): UseQueryResult<GenericResponseType<BurnBlock>> {
   const apiClient = useApiClient();
   return useQuery({
-    queryKey: [
-      BURN_BLOCKS_QUERY_KEY,
-      limit,
-      ...(offset ? [offset] : []),
-      ...(queryKeyExtension ? [queryKeyExtension] : []),
-    ],
+    queryKey: getBurnBlocksQueryKey({ limit, offset, queryKeyExtension }),
     queryFn: async () => {
       return await callApiWithErrorHandling(apiClient, '/extended/v2/burn-blocks/', {
         params: { query: { limit, offset } },

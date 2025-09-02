@@ -1,5 +1,4 @@
 import {
-  UseInfiniteQueryOptions,
   UseQueryResult,
   useInfiniteQuery,
   useQuery,

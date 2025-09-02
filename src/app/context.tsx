@@ -1,9 +1,6 @@
 'use client';
 
-import { FeeCalculationTypes, Fees } from '@leather.io/models';
 import { ReactNode, createContext, useContext } from 'react';
-
-import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
 
 import { RecentBlocks, UIMempoolStats, UIStackingCycle } from './data';
 
