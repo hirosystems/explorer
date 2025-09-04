@@ -6,7 +6,7 @@ export interface StacksApiSocketClientInfo {
   client: StacksApiSocketClient | null;
   connect: (
     handleOnConnect?: (client: StacksApiSocketClient) => void,
-    handleError?: (client: StacksApiSocketClient | null) => void
+    handleError?: (error: Error) => void
   ) => void;
   disconnect: () => void;
 }
@@ -27,7 +27,7 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
   const connect = useCallback(
     async (
       handleOnConnect?: (client: StacksApiSocketClient) => void,
-      handleError?: (client: StacksApiSocketClient | null) => void
+      handleError?: (error: Error) => void
     ) => {
       if (!apiUrl) return;
       if (socketClientRef.current?.socket.connected || isSocketClientConnecting.current) {
@@ -49,7 +49,7 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
           client.socket.removeAllListeners();
           client.socket.close();
           disconnect();
-          handleError?.(client);
+          handleError?.(error);
         });
       } catch (error) {
         disconnect();

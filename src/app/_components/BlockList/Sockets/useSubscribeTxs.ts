@@ -11,7 +11,7 @@ interface Subscription {
 export function useSubscribeTxs(
   isSubscriptionActive: boolean,
   handleTransaction: (tx: MempoolTransaction) => void,
-  handleError?: (client: StacksApiSocketClient | null) => void
+  handleError?: (error: Error) => void
 ) {
   const subscription = useRef<Subscription | undefined>(undefined);
   const { stacksApiSocketClientInfo } = useGlobalContext();
