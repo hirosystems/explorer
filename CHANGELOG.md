@@ -1,3 +1,10 @@
+## [1.335.1](https://github.com/hirosystems/explorer/compare/v1.335.0...v1.335.1) (2025-09-04)
+
+
+### Bug Fixes
+
+* fixed the recent blocks widget subcription issue ([1b2caa9](https://github.com/hirosystems/explorer/commit/1b2caa9a2ed55395260cc868d35d640227fa3387))
+
 # [1.335.0](https://github.com/hirosystems/explorer/compare/v1.334.0...v1.335.0) (2025-08-26)
 
 
