@@ -11,7 +11,7 @@ interface Subscription {
 export function useSubscribeBlocks(
   liveUpdates: boolean,
   handleBlock: (block: NakamotoBlock | Block) => void,
-  handleError?: (client: StacksApiSocketClient | null) => void
+  handleError?: (error: Error) => void
 ) {
   const subscription = useRef<Subscription | undefined>(undefined);
   const { stacksApiSocketClientInfo } = useGlobalContext();
@@ -44,5 +44,6 @@ export function useSubscribeBlocks(
     }
     return handleDisconnect;
   }, [handleBlock, connect, liveUpdates, handleDisconnect, handleError]);
+
   return subscription;
 }

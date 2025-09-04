@@ -16,8 +16,8 @@ export function getBlocksV2InfiniteQueryKey(limit: number, network: string) {
   return [BLOCKS_V2_INFINITE_QUERY_KEY, limit, network];
 }
 
-export function getBlocksV2ListQueryKey(limit: number, network: string) {
-  return [BLOCKS_V2_LIST_QUERY_KEY, limit, network];
+export function getBlocksV2ListQueryKey(limit: number, networkUrl: string) {
+  return [BLOCKS_V2_LIST_QUERY_KEY, limit, networkUrl];
 }
 
 export const useBlocksV2Infinite = (

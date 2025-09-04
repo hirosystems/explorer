@@ -15,23 +15,24 @@ import { RECENT_BTC_BLOCKS_COUNT, RECENT_STX_BLOCKS_COUNT } from './consts';
 export type RecentBlocksType = 'btc' | 'stx';
 
 const isNewStxBlock = (block: NakamotoBlock | Block, lastBlockHeight: number | undefined) => {
-  return block.height > (lastBlockHeight || 0);
+  if (lastBlockHeight == null) return false;
+  return block.height > lastBlockHeight;
 };
 
 const isNewBtcBlock = (block: NakamotoBlock | Block, lastBlockHeight: number | undefined) => {
-  return block.burn_block_height > (lastBlockHeight || 0);
+  if (lastBlockHeight == null) return false;
+  return block.burn_block_height > lastBlockHeight;
 };
 
 // Handle getting stx blocks data. If there is initial stx blocks data, set it in the cache and use it. Otherwise, query for the data
 const useStxBlocks = () => {
-  const { initialRecentBlocks } = useHomePageData();
   const activeNetwork = useGlobalContext().activeNetwork;
-
   const queryClient = useQueryClient();
 
+  const { initialRecentBlocks } = useHomePageData();
   const recentStxBlocks = initialRecentBlocks?.stxBlocks;
-  const isStxBlocksCacheSetWithInitialData = useRef(false);
 
+  const isStxBlocksCacheSetWithInitialData = useRef(false);
   useEffect(() => {
     if (isStxBlocksCacheSetWithInitialData.current === false && recentStxBlocks) {
       const queryKey = getBlocksV2ListQueryKey(RECENT_STX_BLOCKS_COUNT, activeNetwork.url);
@@ -40,9 +41,8 @@ const useStxBlocks = () => {
     }
   }, [recentStxBlocks, activeNetwork.url, queryClient]);
 
-  const { data: stxBlocksData, refetch: stxRefetch } = useBlocksV2List(RECENT_STX_BLOCKS_COUNT, {
-    enabled: false,
-  });
+  const { data: stxBlocksData, refetch: stxRefetch } = useBlocksV2List(RECENT_STX_BLOCKS_COUNT);
+
   const stxBlocks = stxBlocksData?.results || [];
   return { stxBlocks, stxRefetch };
 };
@@ -59,23 +59,14 @@ const useBtcBlocks = () => {
 
   useEffect(() => {
     if (isBtcBlocksCacheSetWithInitialData.current === false && recentBtcBlocks) {
-      const queryKey = getBurnBlocksQueryKey({
-        limit: RECENT_BTC_BLOCKS_COUNT,
-        networkUrl: activeNetwork.url,
-        queryKeyExtension: 'recent',
-      });
+      const queryKey = getBurnBlocksQueryKey(RECENT_BTC_BLOCKS_COUNT, 0, activeNetwork.url);
       queryClient.setQueryData(queryKey, recentBtcBlocks);
       isBtcBlocksCacheSetWithInitialData.current = true;
     }
   }, [recentBtcBlocks, activeNetwork.url, queryClient]);
 
-  const { data: btcBlocksData, refetch: btcRefetch } = useBurnBlocks(
-    RECENT_BTC_BLOCKS_COUNT,
-    undefined,
-    {
-      enabled: false,
-    }
-  );
+  const { data: btcBlocksData, refetch: btcRefetch } = useBurnBlocks(RECENT_BTC_BLOCKS_COUNT, 0);
+
   const btcBlocks = btcBlocksData?.results || [];
   return { btcBlocks, btcRefetch };
 };
@@ -138,7 +129,9 @@ export function useRecentBlocks(recentBlocksType: RecentBlocksType) {
   }, [recentBlocksType, btcRefetch, stxRefetch]);
 
   // Subscribe to new blocks
-  useSubscribeBlocks(socketEnabled, handleNewBlock);
+  useSubscribeBlocks(socketEnabled, handleNewBlock, error => {
+    console.log('Error subscribing to blocks', error);
+  });
 
   return {
     stxBlocks,
