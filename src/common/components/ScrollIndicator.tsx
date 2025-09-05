@@ -2,7 +2,11 @@ import { Box, BoxProps, Flex, Icon, VisuallyHidden } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
-export function ScrollIndicator({ children, ...rest }: BoxProps & { children: ReactNode }) {
+export function ScrollIndicator({
+  children,
+  scrollIndicatorPositionerProps,
+  ...rest
+}: BoxProps & { children: ReactNode; scrollIndicatorPositionerProps?: BoxProps }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
   const [isScrolledToEnd, setIsScrolledToEnd] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -57,7 +61,12 @@ export function ScrollIndicator({ children, ...rest }: BoxProps & { children: Re
   }, []);
 
   return (
-    <Box position="relative" className="scroll-indicator-positioner" w="full">
+    <Box
+      position="relative"
+      className="scroll-indicator-positioner"
+      w="full"
+      {...scrollIndicatorPositionerProps}
+    >
       <Box
         ref={divRef}
         overflowX={'auto'}

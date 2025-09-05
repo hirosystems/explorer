@@ -94,6 +94,15 @@ export const TEXT_STYLES = defineTextStyles({
       lineHeight: 'redesign.medium',
     },
   },
+  'text-medium-2xl': {
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: '2xl',
+      fontWeight: 'medium',
+      letterSpacing: 'normal',
+      lineHeight: 'redesign.medium',
+    },
+  },
 
   // Semi-bold Variants
   'text-semibold-xs': {

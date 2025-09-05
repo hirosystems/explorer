@@ -50,7 +50,13 @@ export function TokenTransferTxSummaryItems({
           label="Timestamp"
           value={formatBlockTime(tx.block_time)}
           valueRenderer={value => (
-            <Badge variant="solid" type="tag">
+            <Badge
+              variant="solid"
+              type="tag"
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            >
               <DefaultBadgeLabel label={value} fontFamily="matterMono" />
             </Badge>
           )}
@@ -69,7 +75,15 @@ export function TokenTransferTxSummaryItems({
           label="Block height"
           value={tx.block_height?.toString() || ''}
           showCopyButton
-          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+          valueRenderer={value => (
+            <BlockHeightBadge
+              blockType="stx"
+              blockHeight={Number(value)}
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            />
+          )}
         />
       )}
       {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
@@ -77,7 +91,15 @@ export function TokenTransferTxSummaryItems({
           label="Bitcoin Anchor"
           value={tx.burn_block_height?.toString() || ''}
           showCopyButton
-          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+          valueRenderer={value => (
+            <BlockHeightBadge
+              blockType="btc"
+              blockHeight={Number(value)}
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            />
+          )}
         />
       )}
     </>

@@ -45,6 +45,7 @@ export interface TxTableData {
   [TxTableColumns.Fee]: string;
   [TxTableColumns.Amount]: number;
   [TxTableColumns.BlockTime]: number;
+  [TxTableColumns.Events]: Transaction | MempoolTransaction;
 }
 
 export interface TxTableAddressColumnData {
@@ -143,6 +144,8 @@ export interface TxsTableProps {
   pageSize?: number;
   filters?: TxPageFilters;
   onTotalChange?: (total: number) => void;
+  tableContainer?: (table: JSX.Element) => JSX.Element;
+  disableBannerRow?: boolean;
 }
 
 const DEFAULT_FILTERS: TxPageFilters = {
@@ -151,7 +154,12 @@ const DEFAULT_FILTERS: TxPageFilters = {
   startTime: '',
   endTime: '',
   transactionType: [],
+  
 };
+
+export const defaultTableContainer = (table: JSX.Element) => (
+  <TableContainer minH="500px">{table}</TableContainer>
+);
 
 export function TxsTable({
   filters = DEFAULT_FILTERS,
@@ -160,6 +168,8 @@ export function TxsTable({
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
   onTotalChange,
+  tableContainer,
+  disableBannerRow = false,
 }: TxsTableProps) {
   const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
 
@@ -282,6 +292,7 @@ export function TxsTable({
           [TxTableColumns.Fee]: tx.fee_rate,
           [TxTableColumns.Amount]: amount,
           [TxTableColumns.BlockTime]: tx.block_time,
+          [TxTableColumns.Events]: tx,
         };
       }),
     [txs]
@@ -291,7 +302,7 @@ export function TxsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
+      tableContainerWrapper={tableContainer ? table => tableContainer(table) : undefined}
       scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
@@ -305,7 +316,7 @@ export function TxsTable({
             }
       }
       bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
+        !disableBannerRow && newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
             onClick={() => {
               setNewTxsAvailable(false);

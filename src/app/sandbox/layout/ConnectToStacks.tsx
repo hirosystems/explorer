@@ -1,11 +1,9 @@
 import { Flex, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { useAppDispatch } from '../../../common/state/hooks';
 import { Button } from '../../../ui/Button';
 import { Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
-import { setUserData } from '../sandbox-slice';
 
 export const ConnectToStacks: FC = () => {
   const { connect } = useUser();

@@ -1,7 +1,7 @@
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
-
+import { defaultTableContainer } from '@/common/components/table/table-examples/TxsTable';
 import { useTxTableFilters } from './useTxTableFilters';
 
 export function TxsTableWithFilters({
@@ -17,6 +17,7 @@ export function TxsTableWithFilters({
       initialData={initialData}
       filters={{ fromAddress, toAddress, startTime, endTime, transactionType }}
       onTotalChange={onTotalChange}
+      tableContainer={defaultTableContainer}
     />
   );
 }

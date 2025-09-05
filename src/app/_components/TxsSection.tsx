@@ -109,6 +109,7 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
         disablePagination
         pageSize={TXS_LIST_SIZE}
         columnDefinitions={columnDefinitions}
+        tableContainer={defaultTableContainer}
       />
       <ButtonLink
         href={buildUrl('/transactions', network)}

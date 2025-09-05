@@ -53,7 +53,12 @@ export const ContractCallTxSummaryItems = ({
             label="Timestamp"
             value={formatBlockTime(tx.block_time)}
             valueRenderer={value => (
-              <Badge variant="solid">
+              <Badge
+                variant="solid"
+                _groupHover={{
+                  bg: 'surfaceTertiary',
+                }}
+              >
                 <DefaultBadgeLabel label={value} fontFamily="matterMono" />
               </Badge>
             )}
@@ -66,12 +71,20 @@ export const ContractCallTxSummaryItems = ({
         valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
-      {'block_height' in tx && tx.block_height && (
+      {isConfirmedTx<ContractCallTransaction, MempoolContractCallTransaction>(tx) && (
         <SummaryItem
           label="Block height"
           value={tx.block_height?.toString() || ''}
           showCopyButton
-          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+          valueRenderer={value => (
+            <BlockHeightBadge
+              blockType="stx"
+              blockHeight={Number(value)}
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            />
+          )}
         />
       )}
       {isConfirmedTx<ContractCallTransaction, MempoolContractCallTransaction>(tx) &&
@@ -81,7 +94,7 @@ export const ContractCallTxSummaryItems = ({
             value={tx.block_hash?.toString() || ''}
             showCopyButton
             valueRenderer={value => (
-              <BlockLink hash={value} wordBreak="break-all">
+              <BlockLink hash={value} wordBreak="break-all" variant="tableLink">
                 {value}
               </BlockLink>
             )}
@@ -94,7 +107,13 @@ export const ContractCallTxSummaryItems = ({
             value={tx.burn_block_height?.toString() || ''}
             showCopyButton
             valueRenderer={value => (
-              <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />
+              <BlockHeightBadge
+                blockType="btc"
+                blockHeight={Number(value)}
+                _groupHover={{
+                  bg: 'surfaceTertiary',
+                }}
+              />
             )}
           />
         )}
