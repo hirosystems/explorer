@@ -82,7 +82,11 @@ export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
   );
 
   if (tooltip) {
-    return <Tooltip content={tooltip}>{content}</Tooltip>;
+    return (
+      <Tooltip content={tooltip} variant="redesignPrimary">
+        {content}
+      </Tooltip>
+    );
   }
 
   return content;
