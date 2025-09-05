@@ -7,7 +7,7 @@ import { Warning } from '@phosphor-icons/react';
 import React from 'react';
 
 import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
-import { IntCV, hexToCV } from '@stacks/transactions';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { AddressLink, TokenLink } from '../../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../../common/components/TwoColumnsListItem';
@@ -34,9 +34,16 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
 }) => {
   const { address, asset, contract } = getAssetNameParts(token);
   const contractId = `${address}.${contract}`;
-  const firstNftValue = !!holdings?.length
-    ? BigInt((hexToCV(holdings[0].value.hex) as IntCV).value)
-    : undefined;
+  const firstNftValue = (() => {
+    if (!holdings?.length) return undefined;
+    try {
+      const decoded = cvToJSON(hexToCV(holdings[0].value.hex));
+      if (decoded?.type === 'int' || decoded?.type === 'uint') {
+        return BigInt(decoded.value);
+      }
+    } catch {}
+    return undefined;
+  })();
 
   if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
 
