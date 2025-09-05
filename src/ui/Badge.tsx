@@ -17,10 +17,13 @@ import {
   Badge as CUIBadge,
   BadgeProps as CUIBadgeProps,
   Flex,
+  FlexProps,
   Icon,
+  IconProps,
   RecipeVariantProps,
   chakra,
 } from '@chakra-ui/react';
+import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { forwardRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -50,6 +53,12 @@ export const BlockHeightBadge = forwardRef<
 >(({ children, blockType, blockHeight, disableLink = false, ...rest }, ref) => {
   const network = useGlobalContext().activeNetwork;
 
+  const text = (
+    <Text textStyle="text-mono-sm" color="textPrimary" textDecoration="none">
+      #{blockHeight}
+    </Text>
+  );
+
   return (
     <Badge ref={ref} {...rest} variant="solid" type="blockHeight">
       <Flex alignItems="center" gap={1}>
@@ -58,9 +67,7 @@ export const BlockHeightBadge = forwardRef<
           color={blockType === 'stx' ? 'accent.stacks-500' : 'accent.bitcoin-500'}
         />
         {disableLink ? (
-          <Text textStyle="text-mono-sm" color="textPrimary" textDecoration="none">
-            #{blockHeight}
-          </Text>
+          text
         ) : (
           <NextLink
             href={buildUrl(
@@ -69,7 +76,7 @@ export const BlockHeightBadge = forwardRef<
             )}
             variant="tableLink"
           >
-            #{blockHeight}
+            {text}
           </NextLink>
         )}
       </Flex>
@@ -84,12 +91,12 @@ export const TransactionTypeBadge = forwardRef<
   return (
     <Badge
       ref={ref}
-      {...rest}
       variant="outline"
       content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
       type="transactionType"
+      {...rest}
     >
-      <Flex alignItems="center" gap={1}>
+      <Flex alignItems="center" gap={1.5}>
         <DefaultBadgeIcon icon={getTxTypeIcon(tx.tx_type)} bg={getTxTypeColor(tx.tx_type)} />
         {withoutLabel ? null : <DefaultBadgeLabel label={getTxTypeLabel(tx.tx_type)} />}
       </Flex>
@@ -104,16 +111,46 @@ export const TransactionStatusBadge = forwardRef<
   return (
     <Badge
       ref={ref}
-      {...rest}
       bg={getTxStatusBgColor(tx)}
       type="transactionStatus"
       content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
+      {...rest}
     >
       <Flex alignItems="center" gap={1}>
         <DefaultBadgeIcon icon={getTxStatusIcon(tx, true)} color={getTxStatusIconColor(tx)} />
         {withoutLabel ? null : <DefaultBadgeLabel label={getTxStatusLabel(tx)} />}
       </Flex>
     </Badge>
+  );
+});
+
+export const StatusBadge = forwardRef<
+  HTMLDivElement,
+  BadgeProps & { successLabel: string; failureLabel: string; success: boolean }
+>(({ successLabel, failureLabel, success, ...rest }, ref) => {
+  return (
+    <DefaultBadge
+      icon={
+        <DefaultBadgeIcon
+          size={3.5}
+          icon={success ? <CheckCircle weight="bold" /> : <XCircle weight="bold" />}
+          color={success ? 'feedback.green-500' : 'iconError'}
+        />
+      }
+      label={
+        success ? (
+          <DefaultBadgeLabel label={successLabel} />
+        ) : (
+          <DefaultBadgeLabel label={failureLabel} />
+        )
+      }
+      textStyle="text-medium-sm"
+      bg={success ? 'transactionStatus.confirmed' : 'transactionStatus.failed'}
+      border="none"
+      px={1.5}
+      py={1}
+      {...rest}
+    />
   );
 });
 
@@ -132,13 +169,13 @@ export const DefaultBadgeIcon = ({
 
   return bg ? (
     <Flex
-      alignItems="center"
-      justifyContent="center"
-      p={0.5}
-      borderRadius="redesign.sm"
-      bg={bg}
       h={4.5}
       w={4.5}
+      p={0.5}
+      alignItems="center"
+      justifyContent="center"
+      bg={bg}
+      borderRadius="redesign.sm"
     >
       <Icon h={iconSize} w={iconSize} color={color}>
         {icon}
@@ -170,13 +207,42 @@ export const DefaultBadge = forwardRef<
     <Badge
       ref={ref}
       variant="outline"
-      {...rest}
       content={label ? 'iconAndLabel' : 'iconOnly'}
       w="fit-content"
+      {...rest}
     >
-      <Flex alignItems="center" gap={1.5} w="fit-content">
+      <Flex alignItems="center" gap={1} w="fit-content">
         {icon}
         {label}
+      </Flex>
+    </Badge>
+  );
+});
+
+export const SimpleTag = forwardRef<
+  HTMLDivElement,
+  BadgeProps & {
+    icon?: React.ReactElement;
+    label?: React.ReactNode;
+    iconProps?: IconProps;
+    labelProps?: TextProps;
+    containerProps?: FlexProps;
+    children?: React.ReactNode;
+  }
+>(({ icon, label, iconProps, labelProps, containerProps, children, ...rest }, ref) => {
+  return (
+    <Badge ref={ref} variant="solid" type="tag" {...rest}>
+      <Flex alignItems="center" gap={1} w="fit-content" {...containerProps}>
+        {icon && (
+          <Icon h={3} w={3} {...iconProps}>
+            {icon}
+          </Icon>
+        )}
+        {label && (
+          <Text textStyle="text-mono-xs" color="textPrimary" {...labelProps}>
+            {label}
+          </Text>
+        )}
       </Flex>
     </Badge>
   );

@@ -46,7 +46,13 @@ export const CoinbaseTxSummaryItems = ({
           label="Timestamp"
           value={formatBlockTime(tx.block_time)}
           valueRenderer={value => (
-            <Badge variant="solid" type="tag">
+            <Badge
+              variant="solid"
+              type="tag"
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            >
               <DefaultBadgeLabel label={value} fontFamily="matterMono" />
             </Badge>
           )}
@@ -64,7 +70,15 @@ export const CoinbaseTxSummaryItems = ({
           label="Block height"
           value={tx.block_height?.toString() || ''}
           showCopyButton
-          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+          valueRenderer={value => (
+            <BlockHeightBadge
+              blockType="stx"
+              blockHeight={Number(value)}
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            />
+          )}
         />
       )}
       {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
@@ -84,7 +98,15 @@ export const CoinbaseTxSummaryItems = ({
           label="Bitcoin Anchor"
           value={tx.burn_block_height?.toString() || ''}
           showCopyButton
-          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+          valueRenderer={value => (
+            <BlockHeightBadge
+              blockType="btc"
+              blockHeight={Number(value)}
+              _groupHover={{
+                bg: 'surfaceTertiary',
+              }}
+            />
+          )}
         />
       )}
     </>

@@ -16,13 +16,12 @@ export const CopyButton = ({
   );
 };
 
-export type ExtendedIconProps = Omit<IconProps, '_hover'> & {
-  _hover?: ((copied: boolean) => IconProps['_hover']) | IconProps['_hover'];
+type CustomProps<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]?: ((copied: boolean) => T[P]) | T[P];
 };
 
-export type ExtendedButtonProps = Omit<ButtonProps, '_hover'> & {
-  _hover?: ((copied: boolean) => ButtonProps['_hover']) | ButtonProps['_hover'];
-};
+export type ExtendedIconProps = CustomProps<IconProps, '_hover' | '_groupHover' | 'color'>;
+export type ExtendedButtonProps = CustomProps<ButtonProps, '_hover' | '_groupHover' | 'bg'>;
 
 export const CopyButtonRedesign = ({
   initialValue,
@@ -42,6 +41,12 @@ export const CopyButtonRedesign = ({
     if (iconProps && '_hover' in iconProps && typeof iconProps._hover === 'function') {
       processedIconProps._hover = iconProps._hover(copied);
     }
+    if (iconProps && '_groupHover' in iconProps && typeof iconProps._groupHover === 'function') {
+      processedIconProps._groupHover = iconProps._groupHover(copied);
+    }
+    if (iconProps && 'color' in iconProps && typeof iconProps.color === 'function') {
+      processedIconProps.color = iconProps.color(copied);
+    }
     return processedIconProps as IconProps;
   }, [iconProps, copied]);
   const processedButtonProps = useMemo(() => {
@@ -49,16 +54,24 @@ export const CopyButtonRedesign = ({
     if (buttonProps && '_hover' in buttonProps && typeof buttonProps._hover === 'function') {
       processedButtonProps._hover = buttonProps._hover(copied);
     }
+    if (
+      buttonProps &&
+      '_groupHover' in buttonProps &&
+      typeof buttonProps._groupHover === 'function'
+    ) {
+      processedButtonProps._groupHover = buttonProps._groupHover(copied);
+    }
+    if (buttonProps && 'bg' in buttonProps && typeof buttonProps.bg === 'function') {
+      processedButtonProps.bg = buttonProps.bg(copied);
+    }
     return processedButtonProps as ButtonProps;
   }, [buttonProps, copied]);
 
   return (
     <Button
+      className="group"
       onClick={() => copy()}
       variant="unstyled"
-      bg={copied ? 'surfaceInvert' : 'transparent'}
-      _groupHover={{ bg: copied ? 'surfaceInvert' : 'surfaceTertiary' }}
-      _hover={{ bg: copied ? 'surfaceInvert' : 'surfaceFifth' }}
       borderRadius="redesign.sm"
       minWidth="0"
       h="fit-content"
@@ -68,11 +81,7 @@ export const CopyButtonRedesign = ({
       justifyContent="center"
       {...processedButtonProps}
     >
-      <Icon
-        color={copied ? 'iconInvert' : 'iconSecondary'}
-        _hover={{ color: copied ? 'iconInvert' : 'iconPrimary' }}
-        {...processedIconProps}
-      >
+      <Icon className="icon" {...processedIconProps}>
         {copied ? <Check /> : <CopySimple />}
       </Icon>
     </Button>

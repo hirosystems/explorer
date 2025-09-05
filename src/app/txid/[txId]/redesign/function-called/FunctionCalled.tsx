@@ -1,55 +1,43 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import { useUser } from '@/app/sandbox/hooks/useUser';
+import { useContractById } from '@/common/queries/useContractById';
 import { isConfirmedTx } from '@/common/utils/transactions';
-import { DefaultBadge, DefaultBadgeLabel } from '@/ui/Badge';
-import { ButtonLink } from '@/ui/ButtonLink';
+import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
-import { Function } from '@phosphor-icons/react';
+import { useState } from 'react';
 
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { ClarityAbiFunction, cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { TabsContentContainer } from '../TxTabs';
 import { FunctionArgsTable } from './FunctionArgsTable';
+import { FunctionCallForm } from './FunctionCallForm';
+import { FunctionListItem } from './FunctionListItem';
 import { FunctionResultNonTuple } from './FunctionResultNonTuple';
 import { FunctionResultStatus } from './FunctionResultStatus';
 import { FunctionResultsTable } from './FunctionResultTable';
 import { FunctionResultType } from './FunctionResultType';
 import { getContractCallTxFunctionArgs } from './utils';
 
-function FunctionTitle({ tx }: { tx: ContractCallTransaction | MempoolContractCallTransaction }) {
-  const contractCallName = tx.contract_call?.function_name;
+function FunctionTitle({
+  fnAbi,
+  setIsFunctionCallOpen,
+  isFunctionCallOpen,
+}: {
+  fnAbi: ClarityAbiFunction;
+  setIsFunctionCallOpen: (open: boolean) => void;
+  isFunctionCallOpen: boolean;
+}) {
   return (
     <TabsContentContainer>
-      <Flex justifyContent={'space-between'} alignItems={'center'}>
-        <Flex gap={2} alignItems={'center'}>
-          <DefaultBadge
-            label={<DefaultBadgeLabel label={contractCallName} />}
-            icon={<Function />}
-            variant="solid"
-          />
-          <CopyButtonRedesign
-            initialValue={contractCallName}
-            buttonProps={{
-              p: 1.5,
-            }}
-            iconProps={{
-              h: 3.5,
-              w: 3.5,
-            }}
-          />
-        </Flex>
-        <ButtonLink
-          href={'#'} // TODO: use the right link
-          buttonLinkSize="small"
-          aria-label="Call this function"
-        >
-          Call this function
-        </ButtonLink>
-      </Flex>
+      <FunctionListItem
+        functionAbi={fnAbi}
+        isOpen={isFunctionCallOpen}
+        setIsOpen={setIsFunctionCallOpen}
+      />
     </TabsContentContainer>
   );
 }
@@ -63,13 +51,13 @@ function FunctionResult({ tx }: { tx: ContractCallTransaction | MempoolContractC
   return (
     <TabsContentContainer px={6}>
       <Grid
-        templateColumns={{ base: 'minmax(0, 1fr)', md: 'auto minmax(0, 1fr)' }}
+        templateColumns={{ base: 'minmax(0, 1fr)', md: '80px minmax(0, 1fr)' }}
         gap={3}
         columnGap={12}
       >
         {type?.includes('tuple') ? (
           <>
-            <Box pt={4}>
+            <Box pt={5}>
               <Text textStyle="text-medium-sm" color="textSecondary">
                 Result
               </Text>
@@ -81,9 +69,11 @@ function FunctionResult({ tx }: { tx: ContractCallTransaction | MempoolContractC
           </>
         ) : (
           <>
-            <Text textStyle="text-medium-sm" color="textSecondary">
-              Result
-            </Text>
+            <Flex h="full" alignItems="center">
+              <Text textStyle="text-medium-sm" color="textSecondary">
+                Result
+              </Text>
+            </Flex>
             <Flex alignItems="center" gap={2}>
               <FunctionResultStatus tx={tx} />
               <FunctionResultNonTuple tx={tx} />
@@ -101,7 +91,7 @@ function FunctionArgs({ tx }: { tx: ContractCallTransaction | MempoolContractCal
   return (
     <TabsContentContainer px={6}>
       <Grid
-        templateColumns={{ base: 'minmax(0, 1fr)', md: 'auto minmax(0, 1fr)' }}
+        templateColumns={{ base: 'minmax(0, 1fr)', md: '80px minmax(0, 1fr)' }}
         gap={3}
         columnGap={12}
       >
@@ -121,11 +111,46 @@ export const FunctionCalled = ({
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) => {
+  const [isFunctionCallOpen, setIsFunctionCallOpen] = useState(false);
+  const contractCallName = tx.contract_call?.function_name;
+  const contractId = tx.contract_call?.contract_id;
+  const { data: contract } = useContractById(contractId);
+  const functionAbi = contract?.abi?.functions?.find(
+    fn => fn.name === contractCallName
+  ) as unknown as ClarityAbiFunction;
+  const { isConnected, connect } = useUser();
+
+  if (!contract) return null;
+
   return (
     <Stack gap={2}>
-      <FunctionTitle tx={tx} />
-      <FunctionResult tx={tx} />
-      <FunctionArgs tx={tx} />
+      <FunctionTitle
+        fnAbi={functionAbi}
+        setIsFunctionCallOpen={setIsFunctionCallOpen}
+        isFunctionCallOpen={isFunctionCallOpen}
+      />
+      {isFunctionCallOpen ? (
+        isConnected ? (
+          <TabsContentContainer>
+            <FunctionCallForm
+              contractId={contractId}
+              fnAbi={functionAbi}
+              handleCancel={() => setIsFunctionCallOpen(false)}
+            />
+          </TabsContentContainer>
+        ) : (
+          <TabsContentContainer alignItems="center">
+            <Button variant="redesignPrimary" onClick={connect} w="fit-content">
+              Connect Stacks Wallet
+            </Button>
+          </TabsContentContainer>
+        )
+      ) : (
+        <>
+          <FunctionResult tx={tx} />
+          <FunctionArgs tx={tx} />
+        </>
+      )}
     </Stack>
   );
 };

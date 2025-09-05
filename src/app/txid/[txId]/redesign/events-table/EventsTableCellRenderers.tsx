@@ -1,16 +1,14 @@
-import { AddressLink } from '@/common/components/ExplorerLinks';
-import { getContractName, truncateStxAddress } from '@/common/utils/utils';
-import { DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
+import { DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel, SimpleTag } from '@/ui/Badge';
 import { Text, TextProps } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
-import ClarityIcon from '@/ui/icons/ClarityIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
 
-import { TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
-
-import { EventsTableAddressColumnData } from './EventsTable';
-import { getAssetEventTypeIcon, getAssetEventTypeLabel } from './utils';
+import {
+  ExtendedTransactionEventAssetType,
+  getAssetEventTypeIcon,
+  getAssetEventTypeLabel,
+} from './utils';
 
 const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
   return (
@@ -29,7 +27,7 @@ const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } 
 export const AssetEventTypeCellRenderer = ({
   assetEventType,
 }: {
-  assetEventType: TransactionEventAssetType;
+  assetEventType: ExtendedTransactionEventAssetType;
 }) => {
   return (
     <DefaultBadge
@@ -47,33 +45,14 @@ export const AssetEventTypeCellRenderer = ({
 
 export const IndexCellRenderer = ({ index }: { index: number }) => {
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="center"
-      p={1.5}
-      borderRadius="redesign.sm"
-      bg="surfacePrimary"
-      _groupHover={{
-        bg: 'surfaceTertiary',
+    <SimpleTag
+      label={index.toString()}
+      containerProps={{
+        _groupHover: {
+          bg: 'surfaceTertiary',
+        },
       }}
-      w="fit-content"
-      h="fit-content"
-    >
-      <Text
-        textStyle="text-medium-xs"
-        color={'textPrimary'}
-        whiteSpace="nowrap"
-        fontFamily="var(--font-matter-mono)"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        h="full"
-        w="full"
-        aspectRatio={1}
-      >
-        {index}
-      </Text>
-    </Flex>
+    />
   );
 };
 

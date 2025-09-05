@@ -1,12 +1,12 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import { RowCopyButton } from '@/app/txid/[txId]/redesign/tx-summary/SummaryItem';
 import { Badge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 export function NameCellRenderer(value: string) {
   return (
-    <Badge variant="solid">
-      <DefaultBadgeLabel label={value} />
+    <Badge variant="solid" type="tag" _groupHover={{ bg: 'surfaceTertiary' }}>
+      <DefaultBadgeLabel label={value} textStyle="text-mono-xs" />
     </Badge>
   );
 }
@@ -23,16 +23,7 @@ export function ValueCellRenderer(value: string) {
       >
         {value}
       </Text>
-      <CopyButtonRedesign
-        initialValue={value}
-        iconProps={{
-          height: 3.5,
-          width: 3.5,
-        }}
-        buttonProps={{
-          p: 1.5,
-        }}
-      />
+      <RowCopyButton value={value} ariaLabel={`copy value`} />
     </Flex>
   );
 }

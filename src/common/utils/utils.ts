@@ -230,6 +230,7 @@ export const getUsdValue = (
 export const stacksToMicro = (amountInStacks: string | number) =>
   amountInStacks ? Math.floor(Number(amountInStacks) * MICROSTACKS_IN_STACKS) : 0;
 
+// TODO: Move to account/address utils file
 export const getContractName = (fullyRealizedName: string): string =>
   fullyRealizedName?.split('.')[1];
 

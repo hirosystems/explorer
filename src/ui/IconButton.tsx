@@ -33,4 +33,13 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonProps>(
   )
 );
 
+export const IconButtonBaseRedesign = forwardRef<HTMLButtonElement, IconButtonProps>(
+  ({ children, size, ...rest }, ref) => (
+    <CUIIconButton ref={ref} {...rest}>
+      {children}
+    </CUIIconButton>
+  )
+);
+
 export const IconButton = chakra(IconButtonBase, iconButtonRecipe);
+export const IconButtonRedesign = chakra(IconButtonBaseRedesign, iconButtonRecipe);

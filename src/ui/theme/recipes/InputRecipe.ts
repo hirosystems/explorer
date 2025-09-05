@@ -37,7 +37,7 @@ export const inputRecipe = defineRecipe({
       },
       redesignPrimary: {
         bg: 'surfaceTertiary',
-        borderColor: 'redesignBorderPrimary',
+        borderColor: 'redesignBorderSecondary',
         borderRadius: 'redesign.md',
         borderWidth: '1px',
         color: 'textPrimary',
