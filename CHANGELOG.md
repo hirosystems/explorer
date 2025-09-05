@@ -1,3 +1,10 @@
+## [1.335.2](https://github.com/hirosystems/explorer/compare/v1.335.1...v1.335.2) (2025-09-05)
+
+
+### Bug Fixes
+
+* fixing recent btc blocks shwoing updates bc last blk ht undefined ([1c9175f](https://github.com/hirosystems/explorer/commit/1c9175f473f5ab53162947ef64747d34e21628d5))
+
 ## [1.335.1](https://github.com/hirosystems/explorer/compare/v1.335.0...v1.335.1) (2025-09-04)
 
 
