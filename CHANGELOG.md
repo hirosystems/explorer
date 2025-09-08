@@ -1,3 +1,10 @@
+# [1.338.0](https://github.com/hirosystems/explorer/compare/v1.337.0...v1.338.0) (2025-09-08)
+
+
+### Features
+
+* added withdrawal deposits tab to sbtc token id page ([d4276b8](https://github.com/hirosystems/explorer/commit/d4276b83f485706895575ff5a76d44e70fb597ed))
+
 # [1.337.0](https://github.com/hirosystems/explorer/compare/v1.336.0...v1.337.0) (2025-09-08)
 
 
