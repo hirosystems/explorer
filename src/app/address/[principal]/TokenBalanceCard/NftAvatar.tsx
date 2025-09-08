@@ -12,8 +12,8 @@ interface NftAvatarProps {
 
 export function NftAvatar({ token, contractId, firstNftValue, asset }: NftAvatarProps) {
   const { data: tokenMetadata } = useNftMetadata(
-    { contractId, tokenId: Number(firstNftValue) },
-    { enabled: !!firstNftValue, retry: 1, retryDelay: 2000 }
+    { contractId, tokenId: firstNftValue !== undefined ? Number(firstNftValue) : undefined },
+    { enabled: firstNftValue !== undefined, retry: 1, retryDelay: 2000 }
   );
   return <TokenAvatar metadataImageUrl={tokenMetadata?.metadata?.cached_image} asset={asset} />;
 }

@@ -14,7 +14,7 @@ export const useNftMetadata = (
     retry: false,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
-    enabled: !!contractId && !!tokenId,
+    enabled: !!contractId && tokenId !== undefined && tokenId !== null,
     ...options,
   });
 };
