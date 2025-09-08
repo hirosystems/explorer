@@ -1,4 +1,8 @@
 export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string }> = {
+  '0x02f69ace2060f430b91f65d31f718d7dfaf911b3292c2801ff46ae94df3d63d46a': {
+    poolOperator: '',
+    name: 'Coinage x DAIC',
+  },
   '0x03e0df37e83e43847625a0320456cb9758050a61ce76c2c130bf50242f27ba6d54': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-alum-labs-v1',
     name: 'Alum Labs',
