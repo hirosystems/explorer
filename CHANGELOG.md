@@ -1,3 +1,10 @@
+# [1.336.0](https://github.com/hirosystems/explorer/compare/v1.335.2...v1.336.0) (2025-09-08)
+
+
+### Features
+
+* added the ui to call functions ([2577fe4](https://github.com/hirosystems/explorer/commit/2577fe472c1d9f11f72643678c44561f91123406))
+
 ## [1.335.2](https://github.com/hirosystems/explorer/compare/v1.335.1...v1.335.2) (2025-09-05)
 
 
