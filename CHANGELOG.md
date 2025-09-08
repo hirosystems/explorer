@@ -1,3 +1,15 @@
+# [1.337.0](https://github.com/hirosystems/explorer/compare/v1.336.0...v1.337.0) (2025-09-08)
+
+
+### Bug Fixes
+
+* collectibles ([#2503](https://github.com/hirosystems/explorer/issues/2503)) ([f0acc4e](https://github.com/hirosystems/explorer/commit/f0acc4e445045355c989ed0b3094510463bf70de))
+
+
+### Features
+
+* add new signer ([#2502](https://github.com/hirosystems/explorer/issues/2502)) ([8b5f9d3](https://github.com/hirosystems/explorer/commit/8b5f9d367ed29438ee4431373cdc4781da306208))
+
 # [1.336.0](https://github.com/hirosystems/explorer/compare/v1.335.2...v1.336.0) (2025-09-08)
 
 
