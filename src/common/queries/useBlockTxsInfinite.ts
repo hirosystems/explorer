@@ -16,44 +16,52 @@ import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
 export function useBlockTxsInfinite(
-  blockHash?: string,
+  blockHashOrHeight?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
   const apiClient = useApiClient();
   return useInfiniteQuery({
-    queryKey: ['blockTxsInfinite', blockHash],
+    queryKey: ['blockTxsInfinite', blockHashOrHeight],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
-      if (!blockHash) return undefined;
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/block/{block_hash}', {
-        params: {
-          path: { block_hash: blockHash },
-          query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
-        },
-      });
+      if (!blockHashOrHeight) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/blocks/{height_or_hash}/transactions',
+        {
+          params: {
+            path: { height_or_hash: blockHashOrHeight },
+            query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
+          },
+        }
+      );
     },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
-    enabled: !!blockHash,
+    enabled: !!blockHashOrHeight,
     ...options,
   });
 }
 
 export function useSuspenseBlockTxsInfinite(
-  blockHash: string,
+  blockHashOrHeight: string,
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
   const apiClient = useApiClient();
   return useSuspenseInfiniteQuery({
-    queryKey: ['blockTxsInfinite', blockHash],
+    queryKey: ['blockTxsInfinite', blockHashOrHeight],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
-      if (!blockHash) return undefined;
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/block/{block_hash}', {
-        params: {
-          path: { block_hash: blockHash },
-          query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
-        },
-      });
+      if (!blockHashOrHeight) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/blocks/{height_or_hash}/transactions',
+        {
+          params: {
+            path: { height_or_hash: blockHashOrHeight },
+            query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
+          },
+        }
+      );
     },
     getNextPageParam,
     initialPageParam: 0,

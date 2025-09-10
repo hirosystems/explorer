@@ -44,7 +44,7 @@
     "@sentry/nextjs": "9.32.0",
     "@sentry/profiling-node": "9.32.0",
     "@stacks/auth": "7.1.0",
-    "@stacks/blockchain-api-client": "8.11.6",
+    "@stacks/blockchain-api-client": "8.13.0",
     "@stacks/common": "7.0.2",
     "@stacks/connect": "8.1.9",
     "@stacks/connect-ui": "8.0.0",
