@@ -36,7 +36,7 @@ export const DEFAULT_BURN_BLOCKS_LIMIT = 2;
 export const BLOCKS_PAGE_SIZE = 30;
 export const DEFAULT_TX_EVENTS_LIMIT = 100;
 
-export const MAX_BLOCK_TRANSACTIONS_PER_CALL = 200;
+export const MAX_BLOCK_TRANSACTIONS_PER_CALL = 50;
 
 export const TransactionType = {
   SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
