@@ -1,3 +1,13 @@
+## [1.338.3](https://github.com/hirosystems/explorer/compare/v1.338.2...v1.338.3) (2025-09-10)
+
+
+### Reverts
+
+* Revert "fix: fixed fn call optional arg validation" ([cd65d62](https://github.com/hirosystems/explorer/commit/cd65d62c3faf0e28a3bb59d3e04e88f5000dd5a5))
+* Revert "fix: fixed fn call optional arg validation" ([579db37](https://github.com/hirosystems/explorer/commit/579db37de1876bda69f698b1990559859868e533))
+* Revert "fix: fixed fn call optional arg validation" ([8dde6dc](https://github.com/hirosystems/explorer/commit/8dde6dc71a1518810f20fb3005ad17be72545329))
+* Revert "chore(release): 1.338.2" ([4d5e688](https://github.com/hirosystems/explorer/commit/4d5e688f92dad0610e580bd6b786b62f4e08d730))
+
 ## [1.338.1](https://github.com/hirosystems/explorer/compare/v1.338.0...v1.338.1) (2025-09-10)
 
 
