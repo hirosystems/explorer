@@ -1,3 +1,10 @@
+## [1.338.1](https://github.com/hirosystems/explorer/compare/v1.338.0...v1.338.1) (2025-09-10)
+
+
+### Bug Fixes
+
+* fixed the blocks transaction query ([6040009](https://github.com/hirosystems/explorer/commit/604000962a850c8758c700a7bd92d28d01b0b93f))
+
 # [1.338.0](https://github.com/hirosystems/explorer/compare/v1.337.0...v1.338.0) (2025-09-08)
 
 
