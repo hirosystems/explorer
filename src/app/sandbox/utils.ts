@@ -38,8 +38,11 @@ export const encodeTuple = (
 ): ClarityValue => {
   const tupleData = tuple.reduce(
     (acc, tupleEntry) => {
-      const _type = tupleEntry.type;
-      acc[tupleEntry.name] = encodeAbiClarityValue(value[tupleEntry.name].toString(), _type);
+      const optionalType = isClarityAbiOptional(tupleEntry.type);
+      const type = tupleEntry.type;
+      acc[tupleEntry.name] = optionalType
+        ? noneCV()
+        : encodeAbiClarityValue(value[tupleEntry.name].toString(), type);
       return acc;
     },
     {} as Record<string, ClarityValue>
