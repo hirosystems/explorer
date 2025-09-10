@@ -1,5 +1,6 @@
 'use client';
 
+import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { Grid, GridProps, Stack } from '@chakra-ui/react';
 
 import { useSuspenseAccountBalance } from '../../../common/queries/useAccountBalance';
@@ -10,6 +11,7 @@ import { PageTitle } from '../../_components/PageTitle';
 import { AddressSummary } from './AddressSummary';
 import { StxBalance } from './StxBalance';
 import { TokenBalanceCard } from './TokenBalanceCard';
+import { AddressIdPageRedesign } from './redesign/AddressIdPageRedesign';
 
 export function AddressPageLayout(props: GridProps) {
   return (
@@ -27,8 +29,12 @@ export function AddressPageLayout(props: GridProps) {
 export default function AddressPage({ principal }: { principal: string }) {
   const { data: balance } = useSuspenseAccountBalance(principal);
   const { data: nonces } = useAddressNonces({ address: principal });
+  const isRedesign = useIsRedesignUrl();
 
   const hasTokenBalances = hasTokenBalance(balance);
+
+  return <AddressIdPageRedesign principal={principal} />;
+  if (isRedesign) return <AddressIdPageRedesign principal={principal} />;
 
   return (
     <>

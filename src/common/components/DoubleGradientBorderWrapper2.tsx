@@ -18,7 +18,7 @@ const outerBorderCommonStyle = {
 
 const outerBorderDefaultStyle = {
   ...outerBorderCommonStyle,
-  background: {
+  bg: {
     base: 'var(--stacks-colors-alpha-black-alpha-50)',
     _dark: 'var(--stacks-colors-alpha-sand-alpha-200)',
   },
@@ -26,7 +26,7 @@ const outerBorderDefaultStyle = {
 
 const gradientOuterBorderStyle = {
   ...outerBorderCommonStyle,
-  background: {
+  bg: {
     base: 'linear-gradient(0deg, var(--stacks-colors-accent-stacks-500) 0%, var(--stacks-colors-accent-bitcoin-500) 100%)',
     _dark:
       'linear-gradient(0deg, var(--stacks-colors-accent-stacks-600) 0%, var(--stacks-colors-accent-bitcoin-600) 100%)',
@@ -84,34 +84,23 @@ const visibleGradientBorderStyle = {
   },
 };
 
-export function DoubleGradientBorderWrapper({
+export function DoubleGradientBorderWrapper2({
   children,
   ...flexProps
 }: { children: ReactNode } & FlexProps) {
   return (
     <Flex
-      // className="border-highlight"
-      width={'full'}
-      borderRadius="redesign.lg"
-      _after={outerBorderDefaultStyle}
-      _before={innerBorderDefaultStyle}
-      flex="1"
-      _hover={visibleGradientBorderStyle}
-      _focusWithin={visibleGradientBorderStyle}
-      {...flexProps}
-    >
-      <Flex
-        position="absolute"
-        top={0}
-        left={0}
-        right={0}
+      position="absolute"
+      top={0}
+      left={0}
+      right={0}
         bottom={0}
         className="border-highlight"
         borderRadius="redesign.lg"
         _after={gradientOuterBorderStyle}
         _before={gradientInnerBorderStyle}
-      ></Flex>
-      {children}
-    </Flex>
+      >
+        {children}
+      </Flex>
   );
 }

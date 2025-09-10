@@ -9,7 +9,7 @@ import { useAppDispatch } from '../common/state/hooks';
 import { DialogContent } from '../components/ui/dialog';
 
 export type ModalProps = Omit<DialogRootProps, 'children'> & {
-  title: React.ReactNode;
+  title?: React.ReactNode;
   body: React.ReactNode;
   trigger?: React.ReactNode;
 };
@@ -38,9 +38,11 @@ export const RedesignModal: FC<ModalProps> = ({ open, title, body, trigger, ...r
           </Dialog.CloseTrigger>
         </Flex>
         <Stack gap={6}>
-          <Dialog.Header p={0} mb={0}>
-            <Dialog.Title>{title}</Dialog.Title>
-          </Dialog.Header>
+          {title && (
+            <Dialog.Header p={0} mb={0}>
+              <Dialog.Title>{title}</Dialog.Title>
+            </Dialog.Header>
+          )}
           <Dialog.Body>{body}</Dialog.Body>
         </Stack>
       </DialogContent>
