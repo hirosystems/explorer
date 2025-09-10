@@ -1,3 +1,10 @@
+## [1.338.4](https://github.com/hirosystems/explorer/compare/v1.338.3...v1.338.4) (2025-09-10)
+
+
+### Bug Fixes
+
+* fixed fn call optional arg validationwq ([077765c](https://github.com/hirosystems/explorer/commit/077765c8b14421ae8cee1aea8c7b813a79f930cc))
+
 ## [1.338.3](https://github.com/hirosystems/explorer/compare/v1.338.2...v1.338.3) (2025-09-10)
 
 
