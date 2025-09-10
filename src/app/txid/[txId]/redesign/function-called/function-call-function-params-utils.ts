@@ -26,7 +26,7 @@ import {
   isClarityAbiPrimitive,
   listCV,
   validateStacksAddress,
-} from '@stacks/transactions';
+} from '@stacks/transactions'; // TODO: remove this
 
 import { FunctionFormikState, FunctionParameters } from './FunctionCallForm';
 import {
