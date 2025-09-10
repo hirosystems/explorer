@@ -23,10 +23,9 @@ import {
   encodeAbiClarityValue,
   isClarityAbiList,
   isClarityAbiOptional,
-  isClarityAbiPrimitive,
   listCV,
-  validateStacksAddress,
 } from '@stacks/transactions';
+import { isClarityAbiPrimitive, validateStacksAddress } from '@stacks/transactions';
 
 import { FunctionFormikState, FunctionParameters } from './FunctionCallForm';
 import {
