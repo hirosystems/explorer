@@ -41,7 +41,9 @@ export const encodeTuple = (
       const optionalType = isClarityAbiOptional(tupleEntry.type);
       const type = tupleEntry.type;
       acc[tupleEntry.name] = optionalType
-        ? noneCV()
+        ? !!value[tupleEntry.name]
+          ? encodeAbiClarityValue(value[tupleEntry.name].toString(), type)
+          : noneCV()
         : encodeAbiClarityValue(value[tupleEntry.name].toString(), type);
       return acc;
     },
