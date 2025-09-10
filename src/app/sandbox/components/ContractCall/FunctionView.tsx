@@ -147,7 +147,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           const tuple = getTuple(type);
           const isList = isClarityAbiList(type);
           const optionalType = isClarityAbiOptional(type) ? type?.optional : undefined;
-
           if (tuple) {
             if (optionalType) {
               final[arg] = encodeOptionalTuple(tuple, values[arg] as TupleValueType);
