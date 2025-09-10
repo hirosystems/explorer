@@ -1,12 +1,3 @@
-## [1.338.2](https://github.com/hirosystems/explorer/compare/v1.338.1...v1.338.2) (2025-09-10)
-
-
-### Bug Fixes
-
-* fixed fn call optional arg validation ([f282551](https://github.com/hirosystems/explorer/commit/f282551c8236f7fba0c0a0f892339b56d6cc4b1e))
-* fixed fn call optional arg validation ([795ccb0](https://github.com/hirosystems/explorer/commit/795ccb03dd60522e9f3ab772dd6c2b49c9c74a3a))
-* fixed fn call optional arg validation ([453be0c](https://github.com/hirosystems/explorer/commit/453be0c8702da1f2e185c6b69d8165bf44e3d8fe))
-
 ## [1.338.1](https://github.com/hirosystems/explorer/compare/v1.338.0...v1.338.1) (2025-09-10)
 
 
