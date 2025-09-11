@@ -18,13 +18,14 @@ import {
   TransactionStatusBadge,
   TransactionTypeBadge,
 } from '@/ui/Badge';
+import { Button } from '@/ui/Button';
 import { IconButtonBaseRedesign } from '@/ui/IconButton';
 import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
-import { ArrowRight, QrCode } from '@phosphor-icons/react';
+import { ArrowRight, Copy, QrCode } from '@phosphor-icons/react';
 import { forwardRef, useMemo, useRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -136,14 +137,26 @@ const StacksAddressSpelledOut = ({ principal }: { principal: string }) => {
     <Stack>
       <Flex gap={3} alignItems="center">
         {firstHalf.map((part, index) => (
-          <Text key={index} textStyle="text-medium-md" whiteSpace="nowrap" fontFamily="matterMono">
+          <Text
+            key={index}
+            textStyle="text-regular-sm"
+            whiteSpace="nowrap"
+            fontFamily="matterMono"
+            color={index % 2 === 0 ? 'textPrimary' : 'textSecondary'}
+          >
             {part}
           </Text>
         ))}
       </Flex>
       <Flex gap={3} alignItems="center">
         {secondHalf.map((part, index) => (
-          <Text key={index} textStyle="text-medium-md" whiteSpace="nowrap" fontFamily="matterMono">
+          <Text
+            key={index}
+            textStyle="text-regular-sm"
+            whiteSpace="nowrap"
+            fontFamily="matterMono"
+            color={index % 2 === 0 ? 'textPrimary' : 'textSecondary'}
+          >
             {part}
           </Text>
         ))}
@@ -153,15 +166,29 @@ const StacksAddressSpelledOut = ({ principal }: { principal: string }) => {
 };
 
 const QRCodeModalBody = ({ principal }: { principal: string }) => {
+  const { copied, copy } = useClipboard({
+    value: principal,
+    timeout: 750,
+  });
   return (
     <Flex alignItems="center" justifyContent="center">
-      <Stack>
-        <DoubleGradientBorderWrapper2 w="fit-content">
-          <Flex p={7} alignItems="center" justifyContent="center" position="relative">
-            <QRcode2 address={principal} size={115} showLogo={false} />
+      <Stack alignItems="center" gap={8}>
+        <Stack alignItems="center" gap={10}>
+          <DoubleGradientBorderWrapper2 w="fit-content">
+            <Flex p={7} alignItems="center" justifyContent="center" position="relative">
+              <QRcode2 address={principal} size={115} showLogo={false} />
+            </Flex>
+          </DoubleGradientBorderWrapper2>
+          <StacksAddressSpelledOut principal={principal} />
+        </Stack>
+        <Button variant="redesignTertiary" onClick={() => copy()} size="small" w="fit-content">
+          <Flex alignItems="center" gap={1.5}>
+            <Text textStyle="text-medium-md">Copy address</Text>
+            <Icon h={3.5} w={3.5} color="iconSecondary">
+              <Copy />
+            </Icon>
           </Flex>
-        </DoubleGradientBorderWrapper2>
-        <StacksAddressSpelledOut principal={principal} />
+        </Button>
       </Stack>
     </Flex>
   );
