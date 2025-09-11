@@ -1,3 +1,10 @@
+# [1.339.0](https://github.com/hirosystems/explorer/compare/v1.338.4...v1.339.0) (2025-09-11)
+
+
+### Features
+
+* deploy main ([586d971](https://github.com/hirosystems/explorer/commit/586d9710bf3a67a9ee59949437bbfce2dd79fc7e))
+
 ## [1.338.4](https://github.com/hirosystems/explorer/compare/v1.338.3...v1.338.4) (2025-09-10)
 
 
