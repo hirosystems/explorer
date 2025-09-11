@@ -1,3 +1,10 @@
+# [1.340.0](https://github.com/hirosystems/explorer/compare/v1.339.0...v1.340.0) (2025-09-11)
+
+
+### Features
+
+* removed ci debug :wqsteps ([8de999a](https://github.com/hirosystems/explorer/commit/8de999ab11ffdc2cd042f68e6b3e90409fa6cd8f))
+
 # [1.339.0](https://github.com/hirosystems/explorer/compare/v1.338.4...v1.339.0) (2025-09-11)
 
 
