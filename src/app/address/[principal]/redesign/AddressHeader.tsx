@@ -1,4 +1,9 @@
+import { DoubleGradientBorderWrapper2 } from '@/common/components/DoubleGradientBorderWrapper2';
+import { openModal, useOpenedModal } from '@/common/components/modals/modal-slice';
+import { MODALS } from '@/common/constants/constants';
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
+import { useAppDispatch } from '@/common/state/hooks';
+import { splitStxAddressIntoParts } from '@/common/utils/string-utils';
 import { getToAddress } from '@/common/utils/transaction-utils';
 import { getTxTitle, getTxTypeColor } from '@/common/utils/transactions';
 import {
@@ -20,12 +25,11 @@ import { Tooltip } from '@/ui/Tooltip';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
 import { ArrowRight, QrCode } from '@phosphor-icons/react';
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useMemo, useRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { QRcode } from '../StxBalance/QRcode';
-import { DoubleGradientBorderWrapper2 } from '@/common/components/DoubleGradientBorderWrapper2';
+import { QRcode2 } from './QRcode2';
 
 const BORDER_WIDTH = 1;
 
@@ -102,18 +106,14 @@ const AddressLabelBadge = () => {
   );
 };
 
-const QRCodeBadge = ({
-  principal,
-  qrShowing,
-  toggleViewQrCode,
-}: {
-  principal: string;
-  qrShowing: boolean;
-  toggleViewQrCode: () => void;
-}) => {
+const QRCodeBadge = ({ principal }: { principal: string }) => {
+  const modal = useOpenedModal();
+  const qrShowing = useMemo(() => modal === MODALS.QR_CODE, [modal]);
+  const dispatch = useAppDispatch();
+
   return (
     <IconButtonBaseRedesign
-      onClick={toggleViewQrCode}
+      onClick={() => dispatch(openModal(MODALS.QR_CODE))}
       h={3}
       w={3}
       color="iconPrimary"
@@ -127,61 +127,80 @@ const QRCodeBadge = ({
   );
 };
 
-const QRCodeModalBody = ({ principal }: { principal: string }) => {
+const StacksAddressSpelledOut = ({ principal }: { principal: string }) => {
+  const stacksAddressParts = splitStxAddressIntoParts(principal);
+  const firstHalf = stacksAddressParts.slice(0, stacksAddressParts.length / 2);
+  const secondHalf = stacksAddressParts.slice(stacksAddressParts.length / 2);
+
   return (
-    <Flex>
-      <DoubleGradientBorderWrapper2 w="fit-content">
-        <QRcode address={principal} />
-      </DoubleGradientBorderWrapper2>
-    </Flex>
+    <Stack>
+      <Flex gap={3} alignItems="center">
+        {firstHalf.map((part, index) => (
+          <Text key={index} textStyle="text-medium-md" whiteSpace="nowrap" fontFamily="matterMono">
+            {part}
+          </Text>
+        ))}
+      </Flex>
+      <Flex gap={3} alignItems="center">
+        {secondHalf.map((part, index) => (
+          <Text key={index} textStyle="text-medium-md" whiteSpace="nowrap" fontFamily="matterMono">
+            {part}
+          </Text>
+        ))}
+      </Flex>
+    </Stack>
   );
 };
 
-const QRCodeModal = ({
-  qrShowing,
-  toggleViewQrCode,
-  principal,
-}: {
-  qrShowing: boolean;
-  toggleViewQrCode: () => void;
-  principal: string;
-}) => {
-  return <RedesignModal open={qrShowing} body={<QRCodeModalBody principal={principal} />} />;
-};
-
-export const AddressHeaderUnminimized = forwardRef<
-  HTMLDivElement,
-  { principal: string; qrShowing: boolean; toggleViewQrCode: () => void }
->(({ principal, qrShowing, toggleViewQrCode }, ref) => {
+const QRCodeModalBody = ({ principal }: { principal: string }) => {
   return (
-    <Flex
-      bg={`linear-gradient(to bottom, orange, var(--stacks-colors-surface-primary))`}
-      padding={`${BORDER_WIDTH}px`}
-      borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
-      boxShadow="elevation2"
-      ref={ref}
-    >
-      <Stack p={4} gap={3} w="full" borderRadius="redesign.xl" bg="surfaceSecondary">
-        <AddressLabelBadge />
-        <Flex gap={4} flexWrap="wrap">
-          <Flex gap={2} flexWrap="wrap" alignItems="flex-end">
-            <AddressBadge address={principal} />
-            <QRCodeBadge
-              principal={principal}
-              qrShowing={qrShowing}
-              toggleViewQrCode={toggleViewQrCode}
-            />
-            <QRCodeModal
-              qrShowing={qrShowing}
-              toggleViewQrCode={toggleViewQrCode}
-              principal={principal}
-            />
+    <Flex alignItems="center" justifyContent="center">
+      <Stack>
+        <DoubleGradientBorderWrapper2 w="fit-content">
+          <Flex p={7} alignItems="center" justifyContent="center" position="relative">
+            <QRcode2 address={principal} size={115} showLogo={false} />
           </Flex>
-        </Flex>
+        </DoubleGradientBorderWrapper2>
+        <StacksAddressSpelledOut principal={principal} />
       </Stack>
     </Flex>
   );
-});
+};
+
+const QRCodeModal = ({ principal }: { principal: string }) => {
+  const modal = useOpenedModal();
+  return (
+    <RedesignModal
+      open={modal === MODALS.QR_CODE}
+      body={<QRCodeModalBody principal={principal} />}
+    />
+  );
+};
+
+export const AddressHeaderUnminimized = forwardRef<HTMLDivElement, { principal: string }>(
+  ({ principal }, ref) => {
+    return (
+      <Flex
+        bg={`linear-gradient(to bottom, orange, var(--stacks-colors-surface-primary))`}
+        padding={`${BORDER_WIDTH}px`}
+        borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
+        boxShadow="elevation2"
+        ref={ref}
+      >
+        <Stack p={4} gap={3} w="full" borderRadius="redesign.xl" bg="surfaceSecondary">
+          <AddressLabelBadge />
+          <Flex gap={4} flexWrap="wrap">
+            <Flex gap={2} flexWrap="wrap" alignItems="flex-end">
+              <AddressBadge address={principal} />
+              <QRCodeBadge principal={principal} />
+              <QRCodeModal principal={principal} />
+            </Flex>
+          </Flex>
+        </Stack>
+      </Flex>
+    );
+  }
+);
 
 export const AddressHeaderMinimized = ({ principal }: { principal: string }) => {
   return (
@@ -219,17 +238,9 @@ export const AddressHeader = ({ principal }: { principal: string }) => {
   const txHeaderRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useIsInViewport(txHeaderRef);
 
-  const [qrShowing, setQrShowing] = useState(false);
-  const toggleViewQrCode = () => setQrShowing(v => !v);
-
   return (
     <>
-      <AddressHeaderUnminimized
-        principal={principal}
-        ref={txHeaderRef}
-        qrShowing={qrShowing}
-        toggleViewQrCode={toggleViewQrCode}
-      />
+      <AddressHeaderUnminimized principal={principal} ref={txHeaderRef} />
       {/* <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{

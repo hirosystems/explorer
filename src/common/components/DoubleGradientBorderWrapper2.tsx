@@ -1,27 +1,36 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 const transition = 'opacity 0.3s cubic-bezier(0.48, 0, 0.83, 0.67)';
-const outerBorderWidth = 5;
+const OUTER_BORDER_WIDTH = 5;
+const INNER_BORDER_WIDTH = 1;
+
+const CONTENT_Z_INDEX = 2;
+const INNER_BORDER_Z_INDEX = CONTENT_Z_INDEX - 1;
+const OUTER_BORDER_Z_INDEX = INNER_BORDER_Z_INDEX - 1;
 
 const outerBorderCommonStyle = {
   content: '""',
   position: 'absolute',
-  top: `-${outerBorderWidth}px`,
-  left: `-${outerBorderWidth}px`,
-  right: `-${outerBorderWidth}px`,
-  bottom: `-${outerBorderWidth}px`,
-  borderRadius: `calc(var(--stacks-radii-redesign-lg) + ${outerBorderWidth}px)`,
-  zIndex: 1,
+  top: `-${OUTER_BORDER_WIDTH}px`,
+  left: `-${OUTER_BORDER_WIDTH}px`,
+  right: `-${OUTER_BORDER_WIDTH}px`,
+  bottom: `-${OUTER_BORDER_WIDTH}px`,
+  borderRadius: `calc(var(--stacks-radii-redesign-lg) + ${OUTER_BORDER_WIDTH}px)`,
+  zIndex: OUTER_BORDER_Z_INDEX,
   transition,
 };
 
-const outerBorderDefaultStyle = {
-  ...outerBorderCommonStyle,
-  bg: {
-    base: 'var(--stacks-colors-alpha-black-alpha-50)',
-    _dark: 'var(--stacks-colors-alpha-sand-alpha-200)',
-  },
+const innerBorderCommonStyle = {
+  content: '""',
+  position: 'absolute',
+  top: `-${INNER_BORDER_WIDTH}px`,
+  left: `-${INNER_BORDER_WIDTH}px`,
+  right: `-${INNER_BORDER_WIDTH}px`,
+  bottom: `-${INNER_BORDER_WIDTH}px`,
+  borderRadius: `calc(var(--stacks-radii-redesign-lg) + ${INNER_BORDER_WIDTH}px)`,
+  zIndex: INNER_BORDER_Z_INDEX,
+  transition,
 };
 
 const gradientOuterBorderStyle = {
@@ -31,27 +40,10 @@ const gradientOuterBorderStyle = {
     _dark:
       'linear-gradient(0deg, var(--stacks-colors-accent-stacks-600) 0%, var(--stacks-colors-accent-bitcoin-600) 100%)',
   },
-  opacity: 0,
-};
-
-const innerBorderWidth = 1;
-
-const innerBorderCommonStyle = {
-  content: '""',
-  position: 'absolute',
-  top: `-${innerBorderWidth}px`,
-  left: `-${innerBorderWidth}px`,
-  right: `-${innerBorderWidth}px`,
-  bottom: `-${innerBorderWidth}px`,
-  borderRadius: `calc(var(--stacks-radii-redesign-lg) + ${innerBorderWidth}px)`,
-  zIndex: 2,
-  transition,
-};
-
-const innerBorderDefaultStyle = {
-  ...innerBorderCommonStyle,
-  background:
-    'linear-gradient(0deg, var(--stacks-colors-redesign-border-primary), var(--stacks-colors-redesign-border-primary) 100%)',
+  opacity: {
+    base: 0.15,
+    _dark: 0.3,
+  },
 };
 
 const gradientInnerBorderStyle = {
@@ -61,27 +53,6 @@ const gradientInnerBorderStyle = {
     _dark:
       'linear-gradient(0deg, var(--stacks-colors-accent-stacks-500) 0%, var(--stacks-colors-accent-bitcoin-600) 100%)',
   },
-  opacity: 0,
-};
-
-const visibleGradientBorderStyle = {
-  '&:after': {
-    opacity: 0,
-  },
-  '&:before': {
-    opacity: 0,
-  },
-  '& .border-highlight': {
-    '&:after': {
-      opacity: {
-        base: 0.15,
-        _dark: 0.3,
-      },
-    },
-    '&:before': {
-      opacity: 1,
-    },
-  },
 };
 
 export function DoubleGradientBorderWrapper2({
@@ -90,17 +61,20 @@ export function DoubleGradientBorderWrapper2({
 }: { children: ReactNode } & FlexProps) {
   return (
     <Flex
-      position="absolute"
+      position="relative"
       top={0}
       left={0}
       right={0}
-        bottom={0}
-        className="border-highlight"
-        borderRadius="redesign.lg"
-        _after={gradientOuterBorderStyle}
-        _before={gradientInnerBorderStyle}
-      >
+      bottom={0}
+      borderRadius="redesign.lg"
+      _after={gradientOuterBorderStyle}
+      _before={gradientInnerBorderStyle}
+      {...flexProps}
+      opacity={1}
+    >
+      <Box zIndex={CONTENT_Z_INDEX} bg="surfaceTertiary" borderRadius="redesign.lg">
         {children}
-      </Flex>
+      </Box>
+    </Flex>
   );
 }
