@@ -1,3 +1,10 @@
+## [1.340.1](https://github.com/hirosystems/explorer/compare/v1.340.0...v1.340.1) (2025-09-11)
+
+
+### Bug Fixes
+
+* fixed stx block time which was burn block time ([4c811d4](https://github.com/hirosystems/explorer/commit/4c811d4507778580d642abf699ec6e313ab8085f))
+
 # [1.340.0](https://github.com/hirosystems/explorer/compare/v1.339.0...v1.340.0) (2025-09-11)
 
 
