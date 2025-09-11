@@ -88,7 +88,7 @@ export function useStacksTableData(
           hash: block.hash || '',
           transactions: block.tx_count ?? 0,
           totalFees: (block.execution_cost_read_count ?? 0).toString(),
-          timestamp: block.burn_block_time || 0,
+          timestamp: block.block_time || 0,
         } as StacksBlockTableData);
       });
     });
