@@ -71,25 +71,6 @@ jobs:
             @semantic-release/changelog
             @semantic-release/git
 
-      # Add this step to determine if we should deploy
-      - name: Check if should deploy
-        id: check_deploy
-        run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
-          elif [[ "${{ steps.semantic.outputs.new_release_published }}" == "true" ]]; then
-            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_deploy=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Debug outputs
-        run: |
-          echo "New release published: '${{ steps.semantic.outputs.new_release_published }}'"
-          echo "Should deploy: '${{ steps.check_deploy.outputs.should_deploy }}'"
-          echo "Event name: '${{ github.event_name }}'"
-          echo "Ref: '${{ github.ref }}'"
-
       - name: Checkout tag
         if: steps.semantic.outputs.new_release_version != ''
         uses: actions/checkout@v3
