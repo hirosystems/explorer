@@ -40,6 +40,7 @@ export function processFunctionParameters(
   fnAbi: ClarityAbiFunction
 ): Record<string, ClarityValue> {
   const final: Record<string, ClarityValue> = {};
+  const removeThis = 'remove this';
 
   Object.keys(functionParameters).forEach(arg => {
     const type = fnAbi.args.find(({ name }) => name === arg)?.type;
