@@ -5,28 +5,21 @@ import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { useAppDispatch } from '@/common/state/hooks';
 import { splitStxAddressIntoParts } from '@/common/utils/string-utils';
 import { getToAddress } from '@/common/utils/transaction-utils';
-import { getTxTitle, getTxTypeColor } from '@/common/utils/transactions';
 import {
   truncateStxAddress,
   truncateStxContractId,
   validateStacksContractId,
 } from '@/common/utils/utils';
-import {
-  DefaultBadge,
-  DefaultBadgeIcon,
-  DefaultBadgeLabel,
-  TransactionStatusBadge,
-  TransactionTypeBadge,
-} from '@/ui/Badge';
+import { DefaultBadge, DefaultBadgeIcon, DefaultBadgeLabel } from '@/ui/Badge';
 import { Button } from '@/ui/Button';
-import { IconButtonBaseRedesign } from '@/ui/IconButton';
 import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
 import { Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
 import { ArrowRight, Copy, QrCode } from '@phosphor-icons/react';
-import { forwardRef, useMemo, useRef } from 'react';
+import { motion } from 'motion/react';
+import { forwardRef, useRef } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -52,7 +45,7 @@ const Badge = ({
     <Tooltip content={copiedText || 'Copied!'} open={copied} variant="redesignPrimary">
       <Flex
         px={3}
-        py={1}
+        py={1.5}
         bg="surfacePrimary"
         _hover={{
           bg: 'surfaceFifth',
@@ -62,7 +55,7 @@ const Badge = ({
         cursor="pointer"
         onClick={() => copy()}
       >
-        <Text textStyle="text-medium-md" whiteSpace="nowrap">
+        <Text textStyle="text-regular-2xl" color="textPrimary" whiteSpace="nowrap">
           {value}
         </Text>
       </Flex>
@@ -101,30 +94,29 @@ const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
 const AddressLabelBadge = () => {
   return (
     <DefaultBadge
-      icon={<DefaultBadgeIcon icon={<StacksIconBlock />} />}
+      icon={<DefaultBadgeIcon icon={<StacksIconBlock color="black" />} />}
       label={<DefaultBadgeLabel label={'Address'} />}
     />
   );
 };
 
-const QRCodeBadge = ({ principal }: { principal: string }) => {
-  const modal = useOpenedModal();
-  const qrShowing = useMemo(() => modal === MODALS.QR_CODE, [modal]);
+const QRCodeBadge = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <IconButtonBaseRedesign
+    <Button
       onClick={() => dispatch(openModal(MODALS.QR_CODE))}
-      h={3}
-      w={3}
-      color="iconPrimary"
-      p={2.5}
-      bg="surfacePrimary"
+      variant="unstyled"
       borderRadius="redesign.md"
-      variant="redesignPrimary"
+      bg="surfacePrimary"
+      h="fit-content"
+      w="fit-content"
+      p={2.5}
     >
-      <QrCode weight="bold" />
-    </IconButtonBaseRedesign>
+      <Icon h={3.5} w={3.5} color="iconPrimary">
+        <QrCode weight="bold" />
+      </Icon>
+    </Button>
   );
 };
 
@@ -208,7 +200,7 @@ export const AddressHeaderUnminimized = forwardRef<HTMLDivElement, { principal: 
   ({ principal }, ref) => {
     return (
       <Flex
-        bg={`linear-gradient(to bottom, orange, var(--stacks-colors-surface-primary))`}
+        bg={`linear-gradient(to bottom, var(--stacks-colors-border-primary), var(--stacks-colors-border-secondary))`}
         padding={`${BORDER_WIDTH}px`}
         borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
         boxShadow="elevation2"
@@ -219,7 +211,7 @@ export const AddressHeaderUnminimized = forwardRef<HTMLDivElement, { principal: 
           <Flex gap={4} flexWrap="wrap">
             <Flex gap={2} flexWrap="wrap" alignItems="flex-end">
               <AddressBadge address={principal} />
-              <QRCodeBadge principal={principal} />
+              <QRCodeBadge />
               <QRCodeModal principal={principal} />
             </Flex>
           </Flex>
@@ -232,7 +224,7 @@ export const AddressHeaderUnminimized = forwardRef<HTMLDivElement, { principal: 
 export const AddressHeaderMinimized = ({ principal }: { principal: string }) => {
   return (
     <Flex
-      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.tx_type)}, var(--stacks-colors-surface-primary))`}
+      bg={`linear-gradient(to bottom, var(--stacks-colors-border-primary), var(--stacks-colors-border-secondary))`}
       padding={`${BORDER_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
       boxShadow="elevation2"
@@ -246,15 +238,8 @@ export const AddressHeaderMinimized = ({ principal }: { principal: string }) => 
         alignItems="center"
       >
         <Flex gap={1} alignItems="center">
-          <TransactionTypeBadge tx={tx} withoutLabel />
-          <TransactionStatusBadge tx={tx} withoutLabel />
-        </Flex>
-        <Flex gap={3} alignItems="center">
-          <Text textStyle="text-medium-md">{getTxTitle(tx)}</Text>
-          <Flex alignItems="center" gap={2} hideBelow="md">
-            <TxIdBadge tx={tx} />
-            <FromToBadges tx={tx} />
-          </Flex>
+          <AddressLabelBadge />
+          <AddressBadge address={principal} />
         </Flex>
       </Flex>
     </Flex>
@@ -268,7 +253,7 @@ export const AddressHeader = ({ principal }: { principal: string }) => {
   return (
     <>
       <AddressHeaderUnminimized principal={principal} ref={txHeaderRef} />
-      {/* <motion.div
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{
           opacity: isHeaderInView ? 0 : 1,
@@ -287,7 +272,7 @@ export const AddressHeader = ({ principal }: { principal: string }) => {
         <Box borderRadius="redesign.xl" pt={3} px={6} bg="transparent">
           <AddressHeaderMinimized principal={principal} />
         </Box>
-      </motion.div> */}
+      </motion.div>
     </>
   );
 };
