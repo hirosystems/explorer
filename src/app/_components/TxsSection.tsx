@@ -12,6 +12,7 @@ import {
   TxTableAddressColumnData,
   TxTableData,
   TxsTable,
+  defaultTableContainer,
 } from '@/common/components/table/table-examples/TxsTable';
 import { TxTableColumns } from '@/common/components/table/table-examples/types';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
