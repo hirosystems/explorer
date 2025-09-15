@@ -15,6 +15,7 @@ export function TokenTransferTxSummaryItems({
 }: {
   tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
 }) {
+  const { stxPrice } = useTxIdPageData();
   return (
     <>
       <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
@@ -22,7 +23,7 @@ export function TokenTransferTxSummaryItems({
         <SummaryItem
           label="Amount"
           value={getAmount(tx).toString()}
-          valueRenderer={value => <PriceSummaryItemValue value={value} />}
+          valueRenderer={value => <PriceSummaryItemValue value={value} stxPrice={stxPrice} />}
         />
       )}
       <SummaryItem

@@ -75,8 +75,7 @@ export function SummaryItemValue({
   );
 }
 
-export function PriceSummaryItemValue({ value }: { value: string }) {
-  const { stxPrice } = useTxIdPageData();
+export function PriceSummaryItemValue({ value, stxPrice }: { value: string; stxPrice: number }) {
   const stxAmount = microToStacks(value);
   const usdValue = stxPrice * stxAmount;
   const formattedValue = microToStacksFormatted(value);

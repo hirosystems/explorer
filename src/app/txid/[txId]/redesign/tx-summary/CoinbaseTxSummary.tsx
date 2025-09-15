@@ -15,6 +15,7 @@ export const CoinbaseTxSummaryItems = ({
 }: {
   tx: CoinbaseTransaction | MempoolCoinbaseTransaction;
 }) => {
+  const { stxPrice } = useTxIdPageData();
   return (
     <>
       <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
@@ -62,7 +63,7 @@ export const CoinbaseTxSummaryItems = ({
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        valueRenderer={value => <PriceSummaryItemValue value={value} stxPrice={stxPrice} />}
       />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
       {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (

@@ -16,7 +16,7 @@ import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksIconBlock from '@/ui/icons/StacksIconBlock';
-import { Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
 import { ArrowRight, Copy, QrCode } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { forwardRef, useRef } from 'react';
