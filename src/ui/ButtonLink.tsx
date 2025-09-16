@@ -96,6 +96,7 @@ const ButtonLinkBase = forwardRef<HTMLElement, ButtonLinkProps>(
         ref={ref as React.Ref<HTMLAnchorElement>}
         variant="buttonLink"
         w="fit-content"
+        href={href}
         {...linkProps}
       >
         {content}
@@ -105,6 +106,7 @@ const ButtonLinkBase = forwardRef<HTMLElement, ButtonLinkProps>(
         ref={ref as React.Ref<HTMLAnchorElement>}
         variant="buttonLink"
         w="fit-content"
+        href={href}
         {...linkProps}
       >
         {content}
