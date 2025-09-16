@@ -1,3 +1,10 @@
+## [1.340.2](https://github.com/hirosystems/explorer/compare/v1.340.1...v1.340.2) (2025-09-16)
+
+
+### Bug Fixes
+
+* fixed links by adding href ([1d06431](https://github.com/hirosystems/explorer/commit/1d06431d553b7d74f591a50521e4dbf8e2cc57b1))
+
 ## [1.340.1](https://github.com/hirosystems/explorer/compare/v1.340.0...v1.340.1) (2025-09-11)
 
 
