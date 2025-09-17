@@ -8,6 +8,7 @@ import {
   TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { useTxIdPageData } from '../../TxIdPageContext';
 import { PriceSummaryItemValue, SummaryItem } from './SummaryItem';
 
 export function TokenTransferTxSummaryItems({
@@ -67,7 +68,7 @@ export function TokenTransferTxSummaryItems({
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
-        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        valueRenderer={value => <PriceSummaryItemValue value={value} stxPrice={stxPrice} />}
       />
       <SummaryItem label="Memo" value={tx.token_transfer.memo} showCopyButton />
       <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />

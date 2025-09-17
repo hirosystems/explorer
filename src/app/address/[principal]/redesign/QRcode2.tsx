@@ -3,7 +3,12 @@ import { Box, BoxProps, ClientOnly } from '@chakra-ui/react';
 import vkQr from '@vkontakte/vk-qr';
 import * as React from 'react';
 
-export const QRcode2 = ({ address, size, showLogo, ...rest }: { address: string; size?: number; showLogo?: boolean } & BoxProps) => {
+export const QRcode2 = ({
+  address,
+  size,
+  showLogo,
+  ...rest
+}: { address: string; size?: number; showLogo?: boolean } & BoxProps) => {
   const { colorMode } = useColorMode();
 
   const qrSvg = React.useMemo(

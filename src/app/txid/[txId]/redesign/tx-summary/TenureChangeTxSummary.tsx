@@ -9,6 +9,7 @@ import {
   TenureChangeTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { useTxIdPageData } from '../../TxIdPageContext';
 import { PriceSummaryItemValue, SummaryItem } from './SummaryItem';
 
 export const TenureChangeTxSummaryItems = ({

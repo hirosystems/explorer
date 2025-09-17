@@ -1,11 +1,15 @@
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
-import { compressMempoolTransaction, compressTransaction } from '@/app/transactions/utils';
+import {
+  CompressedTxAndMempoolTxTableData,
+  compressMempoolTransaction,
+  compressTransaction,
+} from '@/app/transactions/utils';
 import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
-import { isConfirmedTx } from '@/common/utils/transactions';
 
 import {
   AddressBalanceResponse,
@@ -29,6 +33,10 @@ import {
   fetchRecentTransactions,
 } from './page-data';
 
+function isConfirmedTx<T extends Transaction, U extends MempoolTransaction>(tx: T | U): tx is T {
+  return 'block_height' in tx && tx.block_height !== undefined;
+}
+
 export default async function Page(props: {
   params: Promise<{ principal: string }>;
   searchParams: Promise<CommonSearchParams>;
@@ -51,7 +59,9 @@ export default async function Page(props: {
   let initialAddressBNSNamesData: BnsNamesOwnByAddressResponse | undefined;
   let initialBurnChainRewardsData: BurnchainRewardsTotal | undefined;
   let initialPoxInfoData: CompressedPoxInfo | undefined;
-  let initialAddressRecentTransactionsData: (Transaction | MempoolTransaction)[] | undefined;
+  let initialAddressRecentTransactionsData:
+    | GenericResponseType<CompressedTxAndMempoolTxTableData>
+    | undefined;
   try {
     tokenPrice = await getTokenPrice();
     initialAddressBalancesData = await fetchAddressBalances(apiUrl, principal);
@@ -69,6 +79,8 @@ export default async function Page(props: {
         return compressMempoolTransaction(tx);
       }),
     };
+    console.log({ compressedRecentAddressTransactions });
+    initialAddressRecentTransactionsData = compressedRecentAddressTransactions;
 
     // TODO: compress this data
   } catch (error) {

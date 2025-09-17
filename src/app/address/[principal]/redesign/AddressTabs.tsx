@@ -7,6 +7,11 @@ import {
 } from '@/app/txid/[txId]/redesign/tx-summary/SummaryItem';
 import { Circle } from '@/common/components/Circle';
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
+import { AddressTxsTable } from '@/common/components/table/table-examples/AddressTxsTable';
+import {
+  ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT,
+  ADDRESS_ID_PAGE_RECENT_ADDRESS_TXS_LIMIT,
+} from '@/common/components/table/table-examples/consts';
 import { microToStacks } from '@/common/utils/utils';
 import { SimpleTag } from '@/ui/Badge';
 import { NextLink } from '@/ui/NextLink';
@@ -36,17 +41,20 @@ export const AddressOverview = () => {
     initialAddressBNSNamesData,
   } = useAddressIdPageData();
   const totalFees = initialAddressBalancesData?.stx.total_fees_sent || 0;
+  const bnsNames = initialAddressBNSNamesData?.names;
 
   return (
     <Table.Root w="full" h="fit-content">
       <Table.Body h="fit-content">
         <SummaryItem label="Address ID" value={principal} showCopyButton />
-        <SummaryItem
-          label="Associated BNS Name"
-          value={initialAddressBNSNamesData?.names[0]}
-          valueRenderer={value => <SimpleTag label={value} />}
-          showCopyButton
-        />
+        {bnsNames && (
+          <SummaryItem
+            label="Associated BNS Name"
+            value={bnsNames[0]}
+            valueRenderer={value => <SimpleTag label={value} />}
+            showCopyButton
+          />
+        )}
         <SummaryItem
           label="Total paid in fees"
           value={totalFees.toString()}
@@ -247,7 +255,6 @@ const StackingCard = () => {
     return null;
   }
 
-  const stxRewards = parseFloat(minerRewards || '0') + parseFloat(btcRewards || '0');
   return (
     <Stack
       px={5}
@@ -287,14 +294,6 @@ const StackingCard = () => {
             />
           }
         />
-        {/* <StackingCardItem
-          label="Stacking start cycle"
-          value={
-            <Text textStyle="text-regular-sm" color="textPrimary">
-              0 STX
-            </Text>
-          }
-        /> */}
         <StackingCardItem label="Current cycle" value={<CurrentCycleValue />} />
         <StackingCardItem
           label="BTC lock height"
@@ -312,30 +311,6 @@ const StackingCard = () => {
             </Text>
           }
         />
-        {/* <StackingCardItem
-          label="Method"
-          value={
-            <Text textStyle="text-regular-sm" color="textPrimary">
-              0 STX
-            </Text>
-          }
-        />
-        <StackingCardItem
-          label="Pool"
-          value={
-            <Text textStyle="text-regular-sm" color="textPrimary">
-              0 STX
-            </Text>
-          }
-        />
-        <StackingCardItem
-          label="Type"
-          value={
-            <Text textStyle="text-regular-sm" color="textPrimary">
-              0 STX
-            </Text>
-          }
-        /> */}
       </Stack>
     </Stack>
   );
@@ -393,6 +368,7 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
     initialPoxInfoData,
     initialAddressRecentTransactionsData,
   });
+  const totalAddressTransactions = initialAddressRecentTransactionsData?.total;
   return (
     <TabsRoot
       variant="primary"
@@ -414,7 +390,7 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
           />
           <TabTriggerComponent
             key={AddressIdPageTab.Transactions}
-            label={'Transactions'}
+            label={`Transactions (${totalAddressTransactions})`}
             value={AddressIdPageTab.Transactions}
             isActive={selectedTab === AddressIdPageTab.Transactions}
             onClick={() => setSelectedTab(AddressIdPageTab.Transactions)}
@@ -439,14 +415,20 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
       </ScrollIndicator>
       <TabsContent key={AddressIdPageTab.Overview} value={AddressIdPageTab.Overview} w="100%">
         <Grid templateColumns={{ base: '1fr', md: '75% 25%' }} gap={2}>
-          <Stack>
+          <Stack gap={8}>
             <TabsContentContainer h="fit-content">
               <AddressOverview />
             </TabsContentContainer>
-            <Stack>
-              <Text textStyle="text-medium-sm" color="textPrimary">
+            <Stack gap={3}>
+              <Text textStyle="heading-xs" color="textPrimary">
                 Recent transactions
               </Text>
+              <AddressTxsTable
+                principal={principal}
+                initialData={initialAddressRecentTransactionsData}
+                disablePagination
+                pageSize={ADDRESS_ID_PAGE_RECENT_ADDRESS_TXS_LIMIT}
+              />
             </Stack>
           </Stack>
           <Stack gap={2}>
@@ -455,6 +437,9 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
             <MinerCard />
           </Stack>
         </Grid>
+      </TabsContent>
+      <TabsContent key={AddressIdPageTab.Transactions} value={AddressIdPageTab.Transactions}>
+        <AddressTxsTable principal={principal} pageSize={ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT} />
       </TabsContent>
     </TabsRoot>
   );

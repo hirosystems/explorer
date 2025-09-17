@@ -1,29 +1,29 @@
 'use client';
 
-import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
-import { TxPageFilters } from '@/app/transactions/page';
-import { CompressedTxTableData } from '@/app/transactions/utils';
+import { CompressedTxAndMempoolTxTableData } from '@/app/transactions/utils';
+import { TxTableAddressColumnData } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
-import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
+import {
+  getAddressTxsQueryKey,
+  useAddressTxs,
+} from '@/common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
-import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
+import { getAmount, getToAddress, isConfirmedTx } from '@/common/utils/transaction-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
 import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
-import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { ScrollIndicator } from '../../ScrollIndicator';
 import { AddressLinkCellRenderer } from '../CommonTableCellRenderers';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
-import { UpdateTableBannerRow } from '../UpdateTableBannerRow';
 import {
   FeeCellRenderer,
   IconCellRenderer,
@@ -32,7 +32,7 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
-import { TX_TABLE_PAGE_SIZE } from './consts';
+import { ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT } from './consts';
 import { TxTableColumns } from './types';
 
 export interface TxTableData {
@@ -44,12 +44,7 @@ export interface TxTableData {
   [TxTableColumns.To]: TxTableAddressColumnData;
   [TxTableColumns.Fee]: string;
   [TxTableColumns.Amount]: number;
-  [TxTableColumns.BlockTime]: number;
-}
-
-export interface TxTableAddressColumnData {
-  address: string;
-  isContract: boolean;
+  [TxTableColumns.BlockTime]: number | undefined;
 }
 
 export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
@@ -137,32 +132,21 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
 ];
 
 export interface TxsTableProps {
-  initialData: GenericResponseType<CompressedTxTableData> | undefined;
+  principal: string;
+  initialData?: GenericResponseType<CompressedTxAndMempoolTxTableData> | undefined;
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<TxTableData>[];
-  pageSize?: number;
-  filters?: TxPageFilters;
+  pageSize: number;
   onTotalChange?: (total: number) => void;
 }
 
-const DEFAULT_FILTERS: TxPageFilters = {
-  fromAddress: '',
-  toAddress: '',
-  startTime: '',
-  endTime: '',
-  transactionType: [],
-};
-
-export function TxsTable({
-  filters = DEFAULT_FILTERS,
+export function AddressTxsTable({
+  principal,
   initialData,
   disablePagination = false,
   columnDefinitions,
-  pageSize = TX_TABLE_PAGE_SIZE,
-  onTotalChange,
+  pageSize,
 }: TxsTableProps) {
-  const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -179,9 +163,6 @@ export function TxsTable({
   const queryClient = useQueryClient();
 
   const isCacheSetWithInitialData = useRef(false);
-
-  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
-
   /**
    * HACK: react query's cache is taking precedence over the initial data, which is causing hydration errors
    * Setting the gcTime to 0 prevents this from happening but it also prevents us from caching requests as the user paginates through the table
@@ -189,76 +170,39 @@ export function TxsTable({
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = [
-      'confirmedTransactions',
+    console.log('setting cache', {
+      queryKey: getAddressTxsQueryKey(
+        principal,
+        pagination.pageSize,
+        pagination.pageIndex * pagination.pageSize
+      ),
+    });
+    const queryKey = getAddressTxsQueryKey(
+      principal,
       pagination.pageSize,
-      pagination.pageIndex * pagination.pageSize,
-      ...(fromAddress ? [{ fromAddress }] : []),
-      ...(toAddress ? [{ toAddress }] : []),
-      ...(startTime ? [{ startTime }] : []),
-      ...(endTime ? [{ endTime }] : []),
-      ...(activeConfirmedTxsOrder ? [{ order: activeConfirmedTxsOrder }] : []),
-      ...(activeConfirmedTxsSort ? [{ sortBy: activeConfirmedTxsSort }] : []),
-      ...(transactionType ? [{ transactionType }] : []),
-    ];
+      pagination.pageIndex * pagination.pageSize
+    );
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
 
   // fetch data
-  let { data, refetch, isFetching, isLoading } = useConfirmedTransactions(
+  let { data, isFetching, isLoading } = useAddressTxs(
+    principal,
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
-    {
-      ...filters,
-      order: activeConfirmedTxsOrder,
-      sortBy: activeConfirmedTxsSort,
-    },
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
     }
   );
 
-  // Reset pagination when filters change
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  }, [filters]);
-
   const { total, results: txs = [] } = data || {};
-  const isTableFiltered = Object.values(filters).some(
-    filterValue => filterValue != null && filterValue !== '' && filterValue?.length !== 0
-  );
-
-  useEffect(() => {
-    if (onTotalChange && typeof total === 'number') {
-      onTotalChange(total);
-    }
-  }, [total, onTotalChange]);
-
-  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
-
-  const [newTxsAvailable, setNewTxsAvailable] = useState(false);
-
-  useSubscribeTxs(isSubscriptionActive, tx => {
-    // Waiting 5 seconds to let the API catch up to the websocket
-    setTimeout(() => {
-      setNewTxsAvailable(true);
-    }, 5000);
-    setIsSubscriptionActive(false);
-  });
-  useEffect(() => {
-    if (!newTxsAvailable) {
-      setIsSubscriptionActive(true);
-    }
-  }, [newTxsAvailable]);
 
   const rowData: TxTableData[] = useMemo(
     () =>
       txs.map(tx => {
+        const isConfirmed = isConfirmedTx<Transaction, MempoolTransaction>(tx);
         const to = getToAddress(tx);
         const amount = getAmount(tx);
 
@@ -281,7 +225,7 @@ export function TxsTable({
           },
           [TxTableColumns.Fee]: tx.fee_rate,
           [TxTableColumns.Amount]: amount,
-          [TxTableColumns.BlockTime]: tx.block_time,
+          [TxTableColumns.BlockTime]: isConfirmed ? tx.block_time : undefined,
         };
       }),
     [txs]
@@ -291,7 +235,7 @@ export function TxsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
+      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
       scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
@@ -304,21 +248,8 @@ export function TxsTable({
               onPageChange: handlePageChange,
             }
       }
-      bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
-          <UpdateTableBannerRow
-            onClick={() => {
-              setNewTxsAvailable(false);
-              refetch();
-            }}
-            colSpan={Object.keys(TxTableColumns).length}
-            message="New transactions have come in. Update list"
-          />
-        ) : null
-      }
       isLoading={isLoading}
       isFetching={isFetching}
-      isFiltered={isTableFiltered}
     />
   );
 }

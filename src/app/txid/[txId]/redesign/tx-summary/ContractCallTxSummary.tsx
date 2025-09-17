@@ -8,6 +8,7 @@ import {
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
+import { useTxIdPageData } from '../../TxIdPageContext';
 import { PriceSummaryItemValue, SummaryItem } from './SummaryItem';
 
 export const ContractCallTxSummaryItems = ({

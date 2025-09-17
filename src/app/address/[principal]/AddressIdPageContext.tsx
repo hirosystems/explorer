@@ -1,19 +1,16 @@
 'use client';
 
 import { CompressedPoxInfo } from '@/app/address/[principal]/page-data';
+import { CompressedTxAndMempoolTxTableData } from '@/app/transactions/utils';
 import { ReactNode, createContext, useContext } from 'react';
-
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import {
   AddressBalanceResponse,
   AddressNonces,
-  AddressTransaction,
+  AddressTransactionsListResponse,
   BnsNamesOwnByAddressResponse,
   BurnchainRewardsTotal,
-  MempoolTransaction,
-  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
-import { CompressedTxAndMempoolTxTableData } from '@/app/transactions/utils';
 
 interface AddressIdPageDataContextType {
   stxPrice: number;
@@ -22,7 +19,9 @@ interface AddressIdPageDataContextType {
   initialAddressLatestNonceData?: AddressNonces;
   initialAddressBNSNamesData?: BnsNamesOwnByAddressResponse;
   initialBurnChainRewardsData?: BurnchainRewardsTotal;
-  initialAddressRecentTransactionsData?: (CompressedTxAndMempoolTxTableData)[];
+  initialAddressRecentTransactionsData?:
+    | AddressTransactionsListResponse
+    | GenericResponseType<CompressedTxAndMempoolTxTableData>;
   initialPoxInfoData?: CompressedPoxInfo;
   principal: string;
 }
@@ -52,7 +51,9 @@ interface AddressIdPageDataProviderProps {
   initialAddressBNSNamesData?: BnsNamesOwnByAddressResponse;
   initialBurnChainRewardsData?: BurnchainRewardsTotal;
   initialPoxInfoData?: CompressedPoxInfo;
-  initialAddressRecentTransactionsData?: GenericResponseType<CompressedTxAndMempoolTxTableData>;
+  initialAddressRecentTransactionsData?:
+    | AddressTransactionsListResponse
+    | GenericResponseType<CompressedTxAndMempoolTxTableData>;
   principal: string;
 }
 

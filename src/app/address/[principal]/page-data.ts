@@ -5,11 +5,11 @@ import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import {
   AddressBalanceResponse,
   AddressNonces,
+  AddressTransactionsListResponse,
   BnsNamesOwnByAddressResponse,
   BurnchainRewardsTotal,
   MempoolTransaction,
   Transaction,
-  AddressTransactionsListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 
 export const getAddressBalancesTag = (principal: string) => `address-balances-${principal}`;
