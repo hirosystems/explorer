@@ -1,15 +1,31 @@
 import { stacksAPIFetch } from '@/api/stacksAPIFetch';
+import { NUM_TEN_MINUTES_IN_DAY } from '@/app/_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 
 import {
   AddressBalanceResponse,
   AddressNonces,
   BnsNamesOwnByAddressResponse,
+  BurnchainRewardsTotal,
+  MempoolTransaction,
+  Transaction,
+  AddressTransactionsListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 
 export const getAddressBalancesTag = (principal: string) => `address-balances-${principal}`;
 export const getAddressLatestNonceTag = (principal: string) => `address-latest-nonce-${principal}`;
 export const getAddressBNSNamesTag = (principal: string) => `address-bns-names-${principal}`;
+export const getAddressBurnChainRewardsTag = (principal: string) =>
+  `address-burn-chain-rewards-${principal}`;
+export const getPoxInfoTag = () => `pox-info`;
+export const getAddressRecentTransactionsTag = (principal: string) =>
+  `address-recent-transactions-${principal}`;
+
 const ADDRESS_BALANCES_REVALIDATION_TIMEOUT_IN_SECONDS = 3; // 3 seconds
+const POX_INFO_REVALIDATION_TIMEOUT_IN_SECONDS = 3; // 3 seconds
+const RECENT_TRANSACTIONS_REVALIDATION_TIMEOUT_IN_SECONDS = 3; // 3 seconds
+
+const ADDRESS_RECENT_TRANSACTIONS_LIMIT = 3; // 3 seconds
 
 export async function fetchAddressBalances(
   apiUrl: string,
@@ -59,18 +75,77 @@ export async function fetchAddressBNSNames(
   return bnsNamesResponse;
 }
 
-export async function fetchAddressStackingInfo(
+export async function fetchAddressBurnChainRewards(
   apiUrl: string,
   principal: string
-): Promise<AddressStackingInfo> {
-  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/address/${principal}/stacking-info`, {
+): Promise<BurnchainRewardsTotal> {
+  const response = await stacksAPIFetch(
+    `${apiUrl}/extended/v1/burnchain/rewards/${principal}/total`,
+    {
+      cache: 'default',
+      next: {
+        revalidate: ADDRESS_BALANCES_REVALIDATION_TIMEOUT_IN_SECONDS,
+        tags: [getAddressBurnChainRewardsTag(principal)],
+      },
+    }
+  );
+
+  const burnChainRewardsResponse: BurnchainRewardsTotal = await response.json();
+  return burnChainRewardsResponse;
+}
+
+export async function fetchPoxInfoRaw(apiUrl: string): Promise<PoxInfo> {
+  const response = await stacksAPIFetch(`${apiUrl}/v2/pox`, {
     cache: 'default',
     next: {
-      revalidate: ADDRESS_BALANCES_REVALIDATION_TIMEOUT_IN_SECONDS,
-      tags: [getAddressStackingInfoTag(principal)],
+      revalidate: POX_INFO_REVALIDATION_TIMEOUT_IN_SECONDS,
+      tags: [getPoxInfoTag()],
     },
   });
 
-  const stackingInfoResponse: AddressStackingInfo = await response.json();
-  return stackingInfoResponse;
+  const poxInfoResponse: PoxInfo = await response.json();
+  return poxInfoResponse;
+}
+
+export type CompressedPoxInfo = {
+  currentCycleId: number;
+  currentCycleProgressPercentage: number;
+  approximateDaysTilNextCycle: number;
+};
+
+export function compressPoxInfo(poxInfo: PoxInfo): CompressedPoxInfo {
+  const {
+    current_cycle: { id: currentCycleId = 0 } = ({} = {}),
+    next_reward_cycle_in,
+    reward_cycle_length,
+  } = poxInfo;
+  const currentCycleProgressPercentage =
+    (reward_cycle_length - next_reward_cycle_in) / reward_cycle_length;
+  const blocksTilNextCycle = next_reward_cycle_in || 0;
+  const approximateDaysTilNextCycle = Math.floor(blocksTilNextCycle / NUM_TEN_MINUTES_IN_DAY);
+
+  return {
+    currentCycleId,
+    currentCycleProgressPercentage,
+    approximateDaysTilNextCycle,
+  };
+}
+
+export async function fetchRecentTransactions(
+  apiUrl: string,
+  principal: string
+): Promise<AddressTransactionsListResponse> {
+  const response = await stacksAPIFetch(
+    `${apiUrl}/extended/v1/address/${principal}/transactions?limit=${ADDRESS_RECENT_TRANSACTIONS_LIMIT}`,
+    {
+      cache: 'default',
+      next: {
+        revalidate: RECENT_TRANSACTIONS_REVALIDATION_TIMEOUT_IN_SECONDS,
+        tags: [getAddressRecentTransactionsTag(principal)],
+      },
+    }
+  );
+
+  const recentTransactionsResponse: AddressTransactionsListResponse = await response.json();
+  return recentTransactionsResponse;
 }

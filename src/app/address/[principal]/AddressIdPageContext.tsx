@@ -1,12 +1,19 @@
 'use client';
 
+import { CompressedPoxInfo } from '@/app/address/[principal]/page-data';
 import { ReactNode, createContext, useContext } from 'react';
 
 import {
   AddressBalanceResponse,
   AddressNonces,
+  AddressTransaction,
   BnsNamesOwnByAddressResponse,
+  BurnchainRewardsTotal,
+  MempoolTransaction,
+  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { CompressedTxAndMempoolTxTableData } from '@/app/transactions/utils';
 
 interface AddressIdPageDataContextType {
   stxPrice: number;
@@ -14,6 +21,9 @@ interface AddressIdPageDataContextType {
   initialAddressBalancesData?: AddressBalanceResponse;
   initialAddressLatestNonceData?: AddressNonces;
   initialAddressBNSNamesData?: BnsNamesOwnByAddressResponse;
+  initialBurnChainRewardsData?: BurnchainRewardsTotal;
+  initialAddressRecentTransactionsData?: (CompressedTxAndMempoolTxTableData)[];
+  initialPoxInfoData?: CompressedPoxInfo;
   principal: string;
 }
 
@@ -23,6 +33,9 @@ const DEFAULT_ADDRESS_ID_PAGE_DATA: AddressIdPageDataContextType = {
   initialAddressBalancesData: undefined,
   initialAddressLatestNonceData: undefined,
   initialAddressBNSNamesData: undefined,
+  initialBurnChainRewardsData: undefined,
+  initialAddressRecentTransactionsData: undefined,
+  initialPoxInfoData: undefined,
   principal: '',
 };
 
@@ -37,6 +50,9 @@ interface AddressIdPageDataProviderProps {
   initialAddressBalancesData?: AddressBalanceResponse;
   initialAddressLatestNonceData?: AddressNonces;
   initialAddressBNSNamesData?: BnsNamesOwnByAddressResponse;
+  initialBurnChainRewardsData?: BurnchainRewardsTotal;
+  initialPoxInfoData?: CompressedPoxInfo;
+  initialAddressRecentTransactionsData?: GenericResponseType<CompressedTxAndMempoolTxTableData>;
   principal: string;
 }
 
@@ -47,6 +63,9 @@ export function AddressIdPageDataProvider({
   initialAddressBalancesData,
   initialAddressLatestNonceData,
   initialAddressBNSNamesData,
+  initialBurnChainRewardsData,
+  initialPoxInfoData,
+  initialAddressRecentTransactionsData,
   principal,
 }: AddressIdPageDataProviderProps) {
   const contextValue = {
@@ -55,6 +74,9 @@ export function AddressIdPageDataProvider({
     initialAddressBalancesData,
     initialAddressLatestNonceData,
     initialAddressBNSNamesData,
+    initialBurnChainRewardsData,
+    initialPoxInfoData,
+    initialAddressRecentTransactionsData,
     principal,
   };
 

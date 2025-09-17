@@ -1,7 +1,7 @@
 import { useSuspensePoxInfoRaw } from '../../../../common/queries/usePoxInforRaw';
 import { MICROSTACKS_IN_STACKS } from '../../../../common/utils/utils';
 
-const NUM_TEN_MINUTES_IN_DAY = (24 * 60) / 10;
+export const NUM_TEN_MINUTES_IN_DAY = (24 * 60) / 10;
 
 export function useSuspenseCurrentStackingCycle() {
   const { data: poxData } = useSuspensePoxInfoRaw();

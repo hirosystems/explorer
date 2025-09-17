@@ -1,19 +1,33 @@
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
+import { compressMempoolTransaction, compressTransaction } from '@/app/transactions/utils';
 import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
+import { isConfirmedTx } from '@/common/utils/transactions';
 
 import {
   AddressBalanceResponse,
   AddressNonces,
   BnsNamesOwnByAddressResponse,
+  BurnchainRewardsTotal,
+  MempoolTransaction,
+  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
 import { AddressIdPageDataProvider } from './AddressIdPageContext';
 import AddressPage from './PageClient';
-import { fetchAddressBNSNames, fetchAddressBalances, fetchAddressLatestNonce } from './page-data';
+import {
+  CompressedPoxInfo,
+  compressPoxInfo,
+  fetchAddressBNSNames,
+  fetchAddressBalances,
+  fetchAddressBurnChainRewards,
+  fetchAddressLatestNonce,
+  fetchPoxInfoRaw,
+  fetchRecentTransactions,
+} from './page-data';
 
 export default async function Page(props: {
   params: Promise<{ principal: string }>;
@@ -35,11 +49,28 @@ export default async function Page(props: {
   let initialAddressBalancesData: AddressBalanceResponse | undefined;
   let initialAddressLatestNonceData: AddressNonces | undefined;
   let initialAddressBNSNamesData: BnsNamesOwnByAddressResponse | undefined;
+  let initialBurnChainRewardsData: BurnchainRewardsTotal | undefined;
+  let initialPoxInfoData: CompressedPoxInfo | undefined;
+  let initialAddressRecentTransactionsData: (Transaction | MempoolTransaction)[] | undefined;
   try {
     tokenPrice = await getTokenPrice();
     initialAddressBalancesData = await fetchAddressBalances(apiUrl, principal);
     initialAddressLatestNonceData = await fetchAddressLatestNonce(apiUrl, principal);
     initialAddressBNSNamesData = await fetchAddressBNSNames(apiUrl, principal);
+    initialBurnChainRewardsData = await fetchAddressBurnChainRewards(apiUrl, principal);
+    initialPoxInfoData = compressPoxInfo(await fetchPoxInfoRaw(apiUrl));
+    const recentAddressTransactions = await fetchRecentTransactions(apiUrl, principal);
+    const compressedRecentAddressTransactions = {
+      ...recentAddressTransactions,
+      results: recentAddressTransactions.results.map(tx => {
+        if (isConfirmedTx<Transaction, MempoolTransaction>(tx)) {
+          return compressTransaction(tx);
+        }
+        return compressMempoolTransaction(tx);
+      }),
+    };
+
+    // TODO: compress this data
   } catch (error) {
     logError(
       error as Error,
@@ -55,6 +86,9 @@ export default async function Page(props: {
       initialAddressBalancesData={initialAddressBalancesData}
       initialAddressLatestNonceData={initialAddressLatestNonceData}
       initialAddressBNSNamesData={initialAddressBNSNamesData}
+      initialBurnChainRewardsData={initialBurnChainRewardsData}
+      initialPoxInfoData={initialPoxInfoData}
+      initialAddressRecentTransactionsData={initialAddressRecentTransactionsData}
       principal={principal}
     >
       <AddressPage principal={principal} />

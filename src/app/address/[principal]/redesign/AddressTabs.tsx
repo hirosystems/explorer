@@ -9,11 +9,13 @@ import { Circle } from '@/common/components/Circle';
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { microToStacks } from '@/common/utils/utils';
 import { SimpleTag } from '@/ui/Badge';
+import { NextLink } from '@/ui/NextLink';
 import { TabsContent, TabsList, TabsRoot } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
+import BitcoinIcon from '@/ui/icons/BitcoinIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import SBTCIcon from '@/ui/icons/sBTCIcon';
-import { Flex, Grid, Icon, Stack, Table } from '@chakra-ui/react';
+import { Flex, Grid, Icon, IconProps, Stack, Table } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
 import { useAddressIdPageData } from '../AddressIdPageContext';
@@ -108,7 +110,15 @@ const BalanceCard = () => {
   const sbtcBalanceUsdValue = isSbtcBalanceDefined ? sbtcBalanceNumber * btcPrice : 0;
 
   return (
-    <Stack px={5} py={5} gap={4} bg="surfaceSecondary" borderRadius="redesign.xl" border="1px solid" borderColor="borderSecondary">
+    <Stack
+      px={5}
+      py={5}
+      gap={4}
+      bg="surfaceSecondary"
+      borderRadius="redesign.xl"
+      border="1px solid"
+      borderColor="borderSecondary"
+    >
       <Text textStyle="text-medium-sm" color="textPrimary">
         Total balance
       </Text>
@@ -141,33 +151,248 @@ const StackingCardItem = ({ label, value }: { label: string; value: ReactNode })
   );
 };
 
+export function CryptoStackingCard({
+  tokenBalance,
+  tokenPrice,
+  tokenIcon,
+  tokenTicker,
+  iconProps,
+}: {
+  tokenBalance: number;
+  tokenPrice: number;
+  tokenIcon: ReactNode;
+  tokenTicker: string;
+  iconProps?: IconProps;
+}) {
+  const tokenBalanceValue = tokenBalance * tokenPrice;
+
+  return (
+    <Flex gap={1.5} alignItems="center">
+      <Icon h={3.5} w={3.5} color="iconPrimary" {...iconProps}>
+        {tokenIcon}
+      </Icon>
+      {tokenBalance} {tokenTicker}
+      <RowCopyButton value={tokenBalance.toString()} ariaLabel={`copy ${tokenTicker} balance`} />
+      <Text textStyle="text-regular-sm" color="textSecondary">
+        /
+      </Text>
+      <Text textStyle="text-regular-sm" color="textSecondary">
+        {tokenBalanceValue}
+      </Text>
+      <RowCopyButton
+        value={tokenBalanceValue.toString()}
+        ariaLabel={`copy ${tokenTicker} balance USD value`}
+      />
+    </Flex>
+  );
+}
+
+export function CurrentCycleValue() {
+  const { initialPoxInfoData } = useAddressIdPageData();
+  const { currentCycleId, currentCycleProgressPercentage, approximateDaysTilNextCycle } =
+    initialPoxInfoData || {};
+  const countdownText =
+    approximateDaysTilNextCycle === 0
+      ? 'Ends today'
+      : `Ends in ${approximateDaysTilNextCycle} ${approximateDaysTilNextCycle === 1 ? 'day' : 'days'}`;
+  console.log('CurrentCycleValue', {
+    currentCycleId,
+    currentCycleProgressPercentage,
+    approximateDaysTilNextCycle,
+    countdownText,
+  });
+  return (
+    <Stack gap={1}>
+      <NextLink
+        href={`/stacking/cycle/${currentCycleId}`}
+        textStyle="text-regular-sm"
+        color="textSecondary"
+        w="fit-content"
+      >
+        {currentCycleId}
+      </NextLink>
+      <Flex gap={1.5} alignItems="center">
+        <Flex bg="surfaceFifth" borderRadius="redesign.xl" w="50%" h={1} alignItems="center">
+          <Flex
+            bg="accent.stacks-500"
+            borderRadius="redesign.xl"
+            w={currentCycleProgressPercentage ? `${currentCycleProgressPercentage * 100}%` : '0%'}
+            h="full"
+          />
+        </Flex>
+        <Text textStyle="text-medium-sm" color="textSecondary">
+          {currentCycleProgressPercentage
+            ? `${(currentCycleProgressPercentage * 100).toFixed(0)}%`
+            : '0%'}
+        </Text>
+      </Flex>
+      <Text textStyle="text-medium-sm" color="textSecondary">
+        {countdownText}
+      </Text>
+    </Stack>
+  );
+}
+
 const StackingCard = () => {
-  const { initialAddressBalancesData } = useAddressIdPageData();
+  const { initialAddressBalancesData, stxPrice, btcPrice, initialBurnChainRewardsData } =
+    useAddressIdPageData();
   const burnChainLockHeight = initialAddressBalancesData?.stx.burnchain_lock_height;
   const burnChainUnlockHeight = initialAddressBalancesData?.stx.burnchain_unlock_height;
   const lockedSTX = initialAddressBalancesData?.stx.locked;
+  const lockedSTXFormatted = microToStacks(lockedSTX || '0');
+  const minerRewards = initialAddressBalancesData?.stx.total_miner_rewards_received;
+  const btcRewards = parseFloat(initialBurnChainRewardsData?.reward_amount || '0');
+
+  if (!lockedSTX || lockedSTX === '0') {
+    return null;
+  }
+
+  const stxRewards = parseFloat(minerRewards || '0') + parseFloat(btcRewards || '0');
   return (
-    <Stack px={5} py={5} gap={4} bg="surfaceSecondary" borderRadius="redesign.xl" border="1px solid" borderColor="borderSecondary">
+    <Stack
+      px={5}
+      py={5}
+      gap={4}
+      bg="surfaceSecondary"
+      borderRadius="redesign.xl"
+      border="1px solid"
+      borderColor="borderSecondary"
+    >
       <Text textStyle="text-medium-sm" color="textPrimary">
         Stacking
       </Text>
       <Stack gap={4}>
-        <StackingCardItem label="Locked" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="BTC Rewards" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="Stacking start cycle" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="Current cycle" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="Method" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="Pool" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
-        <StackingCardItem label="Type" value={<Text textStyle="text-regular-sm" color="textPrimary">0 STX</Text>} />
+        <StackingCardItem
+          label="Locked"
+          value={
+            <CryptoStackingCard
+              tokenBalance={lockedSTXFormatted}
+              tokenPrice={stxPrice}
+              tokenIcon={<StacksIconThin />}
+              tokenTicker="STX"
+            />
+          }
+        />
+        <StackingCardItem
+          label="BTC Rewards"
+          value={
+            <CryptoStackingCard
+              tokenBalance={btcRewards}
+              tokenPrice={btcPrice}
+              tokenIcon={<BitcoinIcon />}
+              tokenTicker="BTC"
+              iconProps={{
+                color: 'accent.bitcoin-500',
+              }}
+            />
+          }
+        />
+        {/* <StackingCardItem
+          label="Stacking start cycle"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              0 STX
+            </Text>
+          }
+        /> */}
+        <StackingCardItem label="Current cycle" value={<CurrentCycleValue />} />
+        <StackingCardItem
+          label="BTC lock height"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              {burnChainLockHeight}
+            </Text>
+          }
+        />
+        <StackingCardItem
+          label="BTC unlock height"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              {burnChainUnlockHeight}
+            </Text>
+          }
+        />
+        {/* <StackingCardItem
+          label="Method"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              0 STX
+            </Text>
+          }
+        />
+        <StackingCardItem
+          label="Pool"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              0 STX
+            </Text>
+          }
+        />
+        <StackingCardItem
+          label="Type"
+          value={
+            <Text textStyle="text-regular-sm" color="textPrimary">
+              0 STX
+            </Text>
+          }
+        /> */}
       </Stack>
     </Stack>
   );
 };
 
+export function MinerCard() {
+  const { initialAddressBalancesData, stxPrice } = useAddressIdPageData();
+  const minerRewards = initialAddressBalancesData?.stx.total_miner_rewards_received;
+
+  if (!minerRewards || minerRewards === '0') {
+    return null;
+  }
+
+  return (
+    <Stack
+      px={5}
+      py={5}
+      gap={4}
+      bg="surfaceSecondary"
+      borderRadius="redesign.xl"
+      border="1px solid"
+      borderColor="borderSecondary"
+    >
+      <Text textStyle="text-medium-sm" color="textPrimary">
+        Miner rewards
+      </Text>
+      <CryptoStackingCard
+        tokenBalance={parseFloat(minerRewards)}
+        tokenPrice={stxPrice}
+        tokenIcon={<StacksIconThin />}
+        tokenTicker="STX"
+      />
+    </Stack>
+  );
+}
+
 export const AddressTabs = ({ principal }: { principal: string }) => {
   const [selectedTab, setSelectedTab] = useState(AddressIdPageTab.Overview);
-  const { initialAddressBalancesData, initialAddressLatestNonceData } = useAddressIdPageData();
-  console.log('AddressTabs', { initialAddressBalancesData, initialAddressLatestNonceData });
+  const {
+    initialAddressBalancesData,
+    initialAddressLatestNonceData,
+    initialBurnChainRewardsData,
+    stxPrice,
+    btcPrice,
+    initialPoxInfoData,
+    initialAddressRecentTransactionsData,
+  } = useAddressIdPageData();
+  console.log('AddressTabs', {
+    initialAddressBalancesData,
+    initialAddressLatestNonceData,
+    initialBurnChainRewardsData,
+    principal,
+    stxPrice,
+    btcPrice,
+    initialPoxInfoData,
+    initialAddressRecentTransactionsData,
+  });
   return (
     <TabsRoot
       variant="primary"
@@ -214,12 +439,20 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
       </ScrollIndicator>
       <TabsContent key={AddressIdPageTab.Overview} value={AddressIdPageTab.Overview} w="100%">
         <Grid templateColumns={{ base: '1fr', md: '75% 25%' }} gap={2}>
-          <TabsContentContainer h="fit-content">
-            <AddressOverview />
-          </TabsContentContainer>
+          <Stack>
+            <TabsContentContainer h="fit-content">
+              <AddressOverview />
+            </TabsContentContainer>
+            <Stack>
+              <Text textStyle="text-medium-sm" color="textPrimary">
+                Recent transactions
+              </Text>
+            </Stack>
+          </Stack>
           <Stack gap={2}>
             <BalanceCard />
             <StackingCard />
+            <MinerCard />
           </Stack>
         </Grid>
       </TabsContent>
