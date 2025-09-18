@@ -83,7 +83,7 @@ describe('getTxTypeColor', () => {
 
   test('should return correct color for smart_contract', () => {
     expect(getTxTypeColor('smart_contract')).toBe(
-      'var(--stacks-colors-transaction-types-smart-contract)'
+      'var(--stacks-colors-transaction-types-contract-deploy)'
     );
   });
 

@@ -115,7 +115,7 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
     const isSBTC = getIsSBTC(tokenId);
 
     const name = tokenInfoResponse?.data?.name || basicTokenInfo.name || null;
-    const symbol = tokenInfoResponse?.data?.symbol || basicTokenInfo.symbol || null;
+    const symbol = basicTokenInfo.symbol || tokenInfoResponse?.data?.symbol || null;
     const categories: string[] = [];
 
     const totalSupply = basicTokenInfo.totalSupply || null;
