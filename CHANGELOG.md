@@ -1,3 +1,10 @@
+## [1.340.3](https://github.com/hirosystems/explorer/compare/v1.340.2...v1.340.3) (2025-09-18)
+
+
+### Bug Fixes
+
+* fixed token symbol on token page ([bbbdb77](https://github.com/hirosystems/explorer/commit/bbbdb77f0af06b9994863cca99a24d4babb3b86f))
+
 ## [1.340.2](https://github.com/hirosystems/explorer/compare/v1.340.1...v1.340.2) (2025-09-16)
 
 
