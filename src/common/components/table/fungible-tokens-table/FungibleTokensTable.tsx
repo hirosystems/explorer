@@ -116,7 +116,6 @@ export function FungibleTokensTable({
   disablePagination = false,
   columnDefinitions,
   pageSize = ADDRESS_ID_PAGE_FUNGIBLE_TOKENS_LIMIT,
-  onTotalChange,
 }: FungibleTokensTableProps) {
   const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
 

@@ -1,6 +1,7 @@
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useAccountBalance } from '@/common/queries/useAccountBalance';
 import { useFungibleTokensMetadata } from '@/common/queries/useFtMetadata';
+import { isRiskyToken } from '@/common/utils/fungible-token-utils';
 import { getAssetNameParts } from '@/common/utils/utils';
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 // TOOD: This type is horribly out of date
@@ -66,44 +67,84 @@ function paginateBalances(balances: FtBalanceWithAssetId[], limit: number, offse
   return balances.slice(offset, offset + limit);
 }
 
-function removeZeroBalanceData(balances: FtBalanceWithAssetId[]): FtBalanceWithAssetId[] {
-  return balances.filter(ftBalance => parseFloat(ftBalance?.balance || '0') > 0);
+function removeZeroBalanceData(balances: Record<string, FtBalance>): Record<string, FtBalance> {
+  const filtered: Record<string, FtBalance> = {};
+  Object.entries(balances).forEach(([assetId, ftBalance]) => {
+    if (parseFloat(ftBalance?.balance || '0') > 0) {
+      filtered[assetId] = ftBalance;
+    }
+  });
+  return filtered;
 }
 
-function formatBalances(
+function filterBalancesBySearchTerm(
+  balances: Record<string, FtBalance>,
+  searchTerm: string
+): Record<string, FtBalance> {
+  if (!searchTerm) return balances;
+
+  const filtered: Record<string, FtBalance> = {};
+  Object.entries(balances).forEach(([assetId, ftBalance]) => {
+    if (assetId?.toLowerCase().includes(searchTerm.toLowerCase())) {
+      filtered[assetId] = ftBalance;
+    }
+  });
+  return filtered;
+}
+
+function filterBalancesBySuspiciousTokens(
+  balances: Record<string, FtBalance>,
+  hideSuspiciousTokens: boolean
+): Record<string, FtBalance> {
+  if (!hideSuspiciousTokens) return balances;
+
+  const filtered: Record<string, FtBalance> = {};
+  Object.entries(balances).forEach(([assetId, ftBalance]) => {
+    const { address, contract } = getAssetNameParts(assetId);
+    const tokenId = `${address}.${contract}`;
+    if (isRiskyToken(tokenId)) return;
+    filtered[assetId] = ftBalance;
+  });
+  return filtered;
+}
+
+const filterBalances = (
+  balances: Record<string, FtBalance>,
+  searchTerm: string,
+  hideSuspiciousTokens: boolean
+): Record<string, FtBalance> => {
+  const filteredBySearchTerm = filterBalancesBySearchTerm(balances, searchTerm);
+  const filteredBySuspiciousTokens = filterBalancesBySuspiciousTokens(
+    filteredBySearchTerm,
+    hideSuspiciousTokens
+  );
+  return filteredBySuspiciousTokens;
+};
+
+const formatBalances = (
   balances: Record<string, FtBalance | undefined>,
   limit: number,
-  offset: number
-): FtBalanceWithAssetId[] {
-  return removeZeroBalanceData(
-    paginateBalances(
-      convertBalancesToArrayWithAssetId(removeUndefinedFromBalances(balances)),
-      limit,
-      offset
-    )
+  offset: number,
+  searchTerm: string,
+  hideSuspiciousTokens: boolean
+): FtBalanceWithAssetId[] => {
+  return paginateBalances(
+    convertBalancesToArrayWithAssetId(
+      removeZeroBalanceData(
+        filterBalances(removeUndefinedFromBalances(balances), searchTerm, hideSuspiciousTokens)
+      )
+    ),
+    limit,
+    offset
   );
-}
-
-function filterBalancesBySearchTerm(balances: FtBalanceWithAssetId[], searchTerm: string) {
-  return balances.filter(ftBalance => {
-    const { name, ticker } = ftBalance;
-    return name?.toLowerCase().includes(searchTerm.toLowerCase()) || ticker?.toLowerCase().includes(searchTerm.toLowerCase());
-  });
-}
-
-function filterBalancesBySuspiciousTokens(balances: FtBalanceWithAssetId[], hideSuspiciousTokens: boolean) {
-  return balances.filter(ftBalance => {
-    const { name, ticker } = ftBalance;
-    return name?.toLowerCase().includes(searchTerm.toLowerCase()) || ticker?.toLowerCase().includes(searchTerm.toLowerCase());
-  });
-}
+};
 
 export function useFungibleTokensTableData(
   principal: string,
   limit: number,
   offset: number,
-  searchTerm?: string,
-  hideSuspiciousTokens?: boolean,
+  searchTerm?: string | undefined,
+  hideSuspiciousTokens?: boolean | undefined,
   options?: Omit<UseQueryOptions<FtMetadataResponse, Error>, 'queryKey' | 'queryFn'>
 ) {
   let {
@@ -115,16 +156,17 @@ export function useFungibleTokensTableData(
     gcTime: THIRTY_SECONDS,
     ...options,
   });
-  const filteredBalances = useMemo(() => {
-    if (!balances) return [];
-    return Object.entries(balances.fungible_tokens || {}).filter(([_, ftBalance]) => {
-      return ftBalance.balance !== '0';
-    });
-  }, [balances]);
-  // format balances. memoize to prevent inconsistent pagination
+  console.log('useFungibleTokensTableData', { balances });
   const formattedBalances = useMemo(
-    () => formatBalances(balances?.fungible_tokens || {}, limit, offset),
-    [balances, limit, offset]
+    () =>
+      formatBalances(
+        balances?.fungible_tokens || {},
+        limit,
+        offset,
+        searchTerm || '',
+        hideSuspiciousTokens || false
+      ),
+    [balances?.fungible_tokens, limit, offset, searchTerm, hideSuspiciousTokens]
   );
 
   // extract token ids from the formatted balances
@@ -169,6 +211,6 @@ export function useFungibleTokensTableData(
     data: fungibleTokenWithMetadata,
     isLoading: isLoading || isLoadingMetadata,
     isFetching: isFetching || isFetchingMetadata,
-    total: fungibleTokenWithMetadata.length,
+    total: Object.keys(balances?.fungible_tokens || {}).length,
   };
 }

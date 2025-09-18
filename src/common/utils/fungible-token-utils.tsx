@@ -17,12 +17,12 @@ export const deriveTokenTickerFromAssetId = (assetId: string) => {
   return ticker;
 };
 
-export function isVerifiedToken(tokenAddress: string) {
-  return VERIFIED_TOKENS.includes(tokenAddress);
+export function isVerifiedToken(tokenId: string) {
+  return VERIFIED_TOKENS.includes(tokenId);
 }
 
-export function isRiskyToken(tokenAddress: string) {
-  return RISKY_TOKENS.includes(tokenAddress);
+export function isRiskyToken(tokenId: string) {
+  return RISKY_TOKENS.includes(tokenId);
 }
 
 export function getTokenImageUrlFromTokenMetadata(tokenMetadata: Metadata) {
