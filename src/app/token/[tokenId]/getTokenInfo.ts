@@ -75,6 +75,8 @@ async function getBasicTokenInfoFromStacksApi(
     const tokenMetadataResponse = await fetch(`${apiUrl}/metadata/v1/ft/${tokenId}`);
     const tokenMetadata: FtMetadataResponse = await tokenMetadataResponse.json();
 
+    console.log({tokenMetadata})
+
     const tokenName = tokenMetadata?.name;
     const tokenSymbol = tokenMetadata?.symbol;
     const tokenDecimals = tokenMetadata?.decimals;

@@ -7,9 +7,11 @@ import {
 } from '@/app/txid/[txId]/redesign/tx-summary/SummaryItem';
 import { Circle } from '@/common/components/Circle';
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
+import { FungibleTokenTable } from '@/common/components/table/fungible-tokens-table/FungibleTokensTable';
 import { AddressTxsTable } from '@/common/components/table/table-examples/AddressTxsTable';
 import {
   ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT,
+  ADDRESS_ID_PAGE_FUNGIBLE_TOKENS_LIMIT,
   ADDRESS_ID_PAGE_RECENT_ADDRESS_TXS_LIMIT,
 } from '@/common/components/table/table-examples/consts';
 import { microToStacks } from '@/common/utils/utils';
@@ -24,6 +26,7 @@ import { Flex, Grid, Icon, IconProps, Stack, Table } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
 import { useAddressIdPageData } from '../AddressIdPageContext';
+import { FungibleTokensTableWithFilters } from '@/common/components/table/fungible-tokens-table/FungibleTokensTableWithFilters';
 
 enum AddressIdPageTab {
   Overview = 'overview',
@@ -360,13 +363,6 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
   } = useAddressIdPageData();
   console.log('AddressTabs', {
     initialAddressBalancesData,
-    initialAddressLatestNonceData,
-    initialBurnChainRewardsData,
-    principal,
-    stxPrice,
-    btcPrice,
-    initialPoxInfoData,
-    initialAddressRecentTransactionsData,
   });
   const totalAddressTransactions = initialAddressRecentTransactionsData?.total;
   return (
@@ -378,6 +374,7 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
       rowGap={2}
       borderRadius="redesign.xl"
       w="full"
+      lazyMount // needed to reduce the number of requests made to the API
     >
       <ScrollIndicator>
         <TabsList>
@@ -440,6 +437,12 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
       </TabsContent>
       <TabsContent key={AddressIdPageTab.Transactions} value={AddressIdPageTab.Transactions}>
         <AddressTxsTable principal={principal} pageSize={ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT} />
+      </TabsContent>
+      <TabsContent key={AddressIdPageTab.Tokens} value={AddressIdPageTab.Tokens}>
+        <FungibleTokensTableWithFilters
+          principal={principal}
+          pageSize={ADDRESS_ID_PAGE_FUNGIBLE_TOKENS_LIMIT}
+        />
       </TabsContent>
     </TabsRoot>
   );

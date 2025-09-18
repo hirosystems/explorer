@@ -79,7 +79,6 @@ export default async function Page(props: {
         return compressMempoolTransaction(tx);
       }),
     };
-    console.log({ compressedRecentAddressTransactions });
     initialAddressRecentTransactionsData = compressedRecentAddressTransactions;
 
     // TODO: compress this data

@@ -32,7 +32,6 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
-import { ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT } from './consts';
 import { TxTableColumns } from './types';
 
 export interface TxTableData {
@@ -56,17 +55,17 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
     enableSorting: false,
   },
   {
-    id: TxTableColumns.TxId,
-    header: 'ID',
-    accessorKey: TxTableColumns.TxId,
-    cell: info => TxLinkCellRenderer(info.getValue() as string),
-    enableSorting: false,
-  },
-  {
     id: TxTableColumns.TxType,
     header: 'Type',
     accessorKey: TxTableColumns.TxType,
     cell: info => <TxTypeCellRenderer txType={info.getValue() as string} />,
+    enableSorting: false,
+  },
+  {
+    id: TxTableColumns.TxId,
+    header: 'ID',
+    accessorKey: TxTableColumns.TxId,
+    cell: info => TxLinkCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
@@ -170,13 +169,6 @@ export function AddressTxsTable({
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
   if (isCacheSetWithInitialData.current === false && initialData) {
-    console.log('setting cache', {
-      queryKey: getAddressTxsQueryKey(
-        principal,
-        pagination.pageSize,
-        pagination.pageIndex * pagination.pageSize
-      ),
-    });
     const queryKey = getAddressTxsQueryKey(
       principal,
       pagination.pageSize,

@@ -38,7 +38,6 @@ export function useAddressTxs(
   options: any = {}
 ): UseQueryResult<AddressTransactionsListResponse> {
   const apiClient = useApiClient();
-  console.log({ getAddressTxsQueryKey: getAddressTxsQueryKey(principal, limit, offset) });
   return useQuery({
     queryKey: getAddressTxsQueryKey(principal, limit, offset),
     queryFn: async () => {

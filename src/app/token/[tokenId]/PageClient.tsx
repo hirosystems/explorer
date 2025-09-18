@@ -82,6 +82,7 @@ export default function PageClient({
     return null;
   }, [hasSBTCInName, isRisky, isSBTC, tokenId]);
 
+  console.log({ name, symbol });
   return (
     <>
       <Stack gap={2}>
