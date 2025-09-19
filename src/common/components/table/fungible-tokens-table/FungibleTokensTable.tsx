@@ -7,12 +7,13 @@ import { getFTMetadataQueryKey } from '@/common/queries/useFtMetadata';
 import {
   calculateHoldingPercentage,
   deriveTokenTickerFromAssetId,
+  formatHoldingPercentage,
   getTokenImageUrlFromTokenMetadata,
 } from '@/common/utils/fungible-token-utils';
 import { ftDecimals, getAssetNameParts } from '@/common/utils/utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { ColumnDef, PaginationState, SortingState } from '@tanstack/react-table';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { TokenLink } from '../../ExplorerLinks';
@@ -35,14 +36,14 @@ export type FungibleTokenTableTokenColumnData = {
   name: string;
   ticker: string;
   tokenId: string;
-  imageUrl: string;
+  imageUrl: string | undefined;
 };
 
 export interface FungibleTokenTableData {
   [FungibleTokenTableColumns.Token]: FungibleTokenTableTokenColumnData;
   [FungibleTokenTableColumns.TokenId]: string;
   [FungibleTokenTableColumns.Balance]: string;
-  [FungibleTokenTableColumns.Holding]: string;
+  [FungibleTokenTableColumns.Holding]: number | undefined;
 }
 
 export const defaultColumnDefinitions: ColumnDef<FungibleTokenTableData>[] = [
@@ -84,7 +85,7 @@ export const defaultColumnDefinitions: ColumnDef<FungibleTokenTableData>[] = [
     id: FungibleTokenTableColumns.Holding,
     header: 'Holding',
     accessorKey: FungibleTokenTableColumns.Holding,
-    cell: info => <EllipsisText fontSize="sm">{info.getValue() as string}</EllipsisText>,
+    cell: info => <EllipsisText fontSize="sm">{formatHoldingPercentage(info.getValue() as number | undefined)}</EllipsisText>,
     enableSorting: true,
   },
 ];
@@ -109,6 +110,8 @@ const DEFAULT_FILTERS: FungibleTokenTableFilters = {
   hideSuspiciousTokens: false,
 };
 
+
+
 export function FungibleTokensTable({
   principal,
   filters = DEFAULT_FILTERS,
@@ -119,11 +122,24 @@ export function FungibleTokensTable({
 }: FungibleTokensTableProps) {
   const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
 
+
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
   });
 
+  const [sortColumn, setSortColumn] = useState<string | undefined>(FungibleTokenTableColumns.Balance);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | undefined>('desc');
+  const onSort = useCallback((sort: SortingState) => {
+    setSortColumn(sort[0]?.id);
+    setSortDirection(sort[0]?.desc ? 'desc' : 'asc');
+  }, []);
+  useEffect(() => {
+    console.log({sortColumn, sortDirection});
+  }, [sortColumn, sortDirection]);
+
+  // Sorting is now handled automatically by the Table component via sorting state
   const handlePageChange = useCallback((page: PaginationState) => {
     setPagination(prev => ({
       ...prev,
@@ -166,6 +182,8 @@ export function FungibleTokensTable({
     pagination.pageIndex * pagination.pageSize,
     searchTerm,
     hideSuspiciousTokens,
+    sortColumn,
+    sortDirection,
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
@@ -223,6 +241,7 @@ export function FungibleTokensTable({
       }
       isLoading={isLoading}
       isFetching={isFetching}
+      onSort={onSort}
     />
   );
 }

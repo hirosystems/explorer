@@ -5,12 +5,11 @@ import { TokenAvatar } from './TokenAvatar';
 
 interface NftAvatarProps {
   asset: string;
-  token: string;
   contractId: string;
   firstNftValue?: bigint;
 }
 
-export function NftAvatar({ token, contractId, firstNftValue, asset }: NftAvatarProps) {
+export function NftAvatar({ contractId, firstNftValue, asset }: NftAvatarProps) {
   const { data: tokenMetadata } = useNftMetadata(
     { contractId, tokenId: Number(firstNftValue) },
     { enabled: !!firstNftValue, retry: 1, retryDelay: 2000 }

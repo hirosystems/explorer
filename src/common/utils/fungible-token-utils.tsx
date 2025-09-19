@@ -25,20 +25,24 @@ export function isRiskyToken(tokenId: string) {
   return RISKY_TOKENS.includes(tokenId);
 }
 
-export function getTokenImageUrlFromTokenMetadata(tokenMetadata: Metadata) {
+export function getTokenImageUrlFromTokenMetadata(tokenMetadata: Metadata): string | undefined {
   const cachedThumbnailImage =
     'cached_thumbnail_image' in tokenMetadata ? tokenMetadata.cached_thumbnail_image : undefined;
   const cachedImage = 'cached_image' in tokenMetadata ? tokenMetadata.cached_image : undefined;
   const image = 'image' in tokenMetadata ? tokenMetadata.image : undefined;
-  return cachedThumbnailImage || cachedImage || image;
+  const result = cachedThumbnailImage || cachedImage || image;
+  return typeof result === 'string' ? result : undefined;
 }
 
 export function calculateHoldingPercentage(
   balance: string,
   totalSupply: string | undefined
-): string {
-  if (!totalSupply) return '-';
+): number | undefined {
+  if (!totalSupply) return undefined;
+  return (parseFloat(balance) / parseFloat(totalSupply)) * 100;
+}
 
-  const percentage = (parseFloat(balance) / parseFloat(totalSupply)) * 100;
+export function formatHoldingPercentage(percentage: number | undefined): string {
+  if (!percentage) return '-';
   return percentage < 0.0001 && percentage > 0 ? '<0.0001%' : `${percentage.toFixed(4)}%`;
 }

@@ -8,7 +8,8 @@ import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { UseQueryOptions } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { FtBalance } from '@stacks/stacks-blockchain-api-types';
+import { FtBalance, NftBalance } from '@stacks/stacks-blockchain-api-types';
+import { NftBalanceWithAssetId } from '@/app/address/[principal]/redesign/NFTTable';
 
 type FtBalanceWithAssetId = FtBalance & { asset_identifier: string };
 
@@ -40,10 +41,10 @@ const emptyFungibleTokenWithMetadata: FungibleTokenWithMetadata = {
   ...emptyMetadata,
 };
 
-function removeUndefinedFromBalances(
-  balances: Record<string, FtBalance | undefined>
-): Record<string, FtBalance> {
-  const newBalances: Record<string, FtBalance> = {};
+export function removeUndefinedFromBalances<T extends FtBalance | NftBalance>(
+  balances: Record<string, T | undefined>
+): Record<string, T> {
+  const newBalances: Record<string, T> = {};
   Object.entries(balances).forEach(([key, value]) => {
     if (value) {
       newBalances[key] = value;
@@ -52,26 +53,29 @@ function removeUndefinedFromBalances(
   return newBalances;
 }
 
-function convertBalancesToArrayWithAssetId(
-  balances: Record<string, FtBalance>
-): (FtBalance & { asset_identifier: string })[] {
-  return Object.entries(balances).map(([assetId, ftBalance]) => {
+export function convertBalancesToArrayWithAssetId<T extends FtBalance | NftBalance>(
+  balances: Record<string, T>
+): (T & { asset_identifier: string })[] {
+  return Object.entries(balances).map(([assetId, balance]) => {
     return {
-      ...ftBalance,
+      ...balance,
       asset_identifier: assetId,
     };
   });
 }
 
-function paginateBalances(balances: FtBalanceWithAssetId[], limit: number, offset: number) {
+export function paginateBalances<T extends FtBalanceWithAssetId | NftBalanceWithAssetId>(balances: T[], limit: number, offset: number) {
   return balances.slice(offset, offset + limit);
 }
 
-function removeZeroBalanceData(balances: Record<string, FtBalance>): Record<string, FtBalance> {
-  const filtered: Record<string, FtBalance> = {};
-  Object.entries(balances).forEach(([assetId, ftBalance]) => {
-    if (parseFloat(ftBalance?.balance || '0') > 0) {
-      filtered[assetId] = ftBalance;
+export function removeZeroBalanceData<T extends FtBalance | NftBalance>(
+  balances: Record<string, T>
+): Record<string, T> {
+  const filtered: Record<string, T> = {};
+  Object.entries(balances).forEach(([assetId, balance]) => {
+    const balanceOrCount = 'balance' in balance ? balance.balance : balance.count;
+    if (parseFloat(balanceOrCount || '0') > 0) {
+      filtered[assetId] = balance;
     }
   });
   return filtered;
@@ -121,6 +125,26 @@ const filterBalances = (
   return filteredBySuspiciousTokens;
 };
 
+const sortBalances = (
+  balances: FtBalanceWithAssetId[],
+  columnId: string,
+  sortDirection: 'asc' | 'desc'
+): FtBalanceWithAssetId[] => {
+  return balances.sort((a, b) => {
+    if (columnId === 'balance') {
+      const aValue = parseFloat(a.balance);
+      const bValue = parseFloat(b.balance);
+      return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+    if (columnId === 'holding') {
+      const aValue = parseFloat(a.holding);
+      const bValue = parseFloat(b.holding);
+      return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+    return 0;
+  });
+};
+
 const formatBalances = (
   balances: Record<string, FtBalance | undefined>,
   limit: number,
@@ -130,8 +154,12 @@ const formatBalances = (
 ): FtBalanceWithAssetId[] => {
   return paginateBalances(
     convertBalancesToArrayWithAssetId(
-      removeZeroBalanceData(
-        filterBalances(removeUndefinedFromBalances(balances), searchTerm, hideSuspiciousTokens)
+      removeZeroBalanceData<FtBalance>(
+        filterBalances(
+          removeUndefinedFromBalances<FtBalance>(balances),
+          searchTerm,
+          hideSuspiciousTokens
+        )
       )
     ),
     limit,
@@ -139,12 +167,21 @@ const formatBalances = (
   );
 };
 
+// TODO: I should probably split all of this out.
+// 1. Fetch the balances
+// 2. Sort the balances
+// 3. Paginate the balances
+// 4. Fetch the metadata
+// 5. Merge balances and metadata
+// 6. Return the result
 export function useFungibleTokensTableData(
   principal: string,
   limit: number,
   offset: number,
   searchTerm?: string | undefined,
   hideSuspiciousTokens?: boolean | undefined,
+  sortColumn?: string | undefined,
+  sortDirection?: 'asc' | 'desc' | undefined,
   options?: Omit<UseQueryOptions<FtMetadataResponse, Error>, 'queryKey' | 'queryFn'>
 ) {
   let {

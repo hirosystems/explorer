@@ -7,7 +7,7 @@ import {
 } from '@/app/txid/[txId]/redesign/tx-summary/SummaryItem';
 import { Circle } from '@/common/components/Circle';
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
-import { FungibleTokenTable } from '@/common/components/table/fungible-tokens-table/FungibleTokensTable';
+import { FungibleTokensTableWithFilters } from '@/common/components/table/fungible-tokens-table/FungibleTokensTableWithFilters';
 import { AddressTxsTable } from '@/common/components/table/table-examples/AddressTxsTable';
 import {
   ADDRESS_ID_PAGE_ADDRESS_TXS_LIMIT,
@@ -26,7 +26,13 @@ import { Flex, Grid, Icon, IconProps, Stack, Table } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
 import { useAddressIdPageData } from '../AddressIdPageContext';
-import { FungibleTokensTableWithFilters } from '@/common/components/table/fungible-tokens-table/FungibleTokensTableWithFilters';
+import { NFTTable } from './NFTTable';
+import { useBnsNames } from '../TokenBalanceCard/useBnsNames';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { useSuspenseNftHoldings } from '@/common/queries/useNftHoldings';
+import { useAccountBalance } from '@/common/queries/useAccountBalance';
+import { NftBalance } from '../TokenBalanceCard/NftBalance';
+import { TokenBalanceCard } from '../TokenBalanceCard';
 
 enum AddressIdPageTab {
   Overview = 'overview',
@@ -319,6 +325,18 @@ const StackingCard = () => {
   );
 };
 
+const NftBalanceComponent = ({ address }: { address: string }) => {
+  const { data: balance } = useAccountBalance(address);
+  const { data: { results: nftHoldings } } = useSuspenseNftHoldings(address, { refetchOnWindowFocus: true });
+  const { activeNetwork } = useGlobalContext();
+
+  const { bnsNames } = useBnsNames(nftHoldings, activeNetwork.mode);
+
+  return (
+    <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsNames} />
+  );
+};
+
 export function MinerCard() {
   const { initialAddressBalancesData, stxPrice } = useAddressIdPageData();
   const minerRewards = initialAddressBalancesData?.stx.total_miner_rewards_received;
@@ -443,6 +461,11 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
           principal={principal}
           pageSize={ADDRESS_ID_PAGE_FUNGIBLE_TOKENS_LIMIT}
         />
+      </TabsContent>
+      <TabsContent key={AddressIdPageTab.Collectibles} value={AddressIdPageTab.Collectibles}>
+        {/* <NFTTable /> */}
+        <NftBalanceComponent address={principal} />
+        <TokenBalanceCard address={principal} />
       </TabsContent>
     </TabsRoot>
   );

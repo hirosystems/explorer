@@ -37,6 +37,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   const firstNftValue = !!holdings?.length
     ? BigInt((hexToCV(holdings[0].value.hex) as IntCV).value)
     : undefined;
+    console.log({ firstNftValue, holdings, token });
 
   if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
 
@@ -44,12 +45,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
     <TwoColsListItem
       icon={
         tokenType === 'non_fungible_tokens' ? (
-          <NftAvatar
-            asset={asset}
-            token={token}
-            contractId={contractId}
-            firstNftValue={firstNftValue}
-          />
+          <NftAvatar asset={asset} contractId={contractId} firstNftValue={firstNftValue} />
         ) : (
           <FtAvatar token={token} contractId={contractId} />
         )
