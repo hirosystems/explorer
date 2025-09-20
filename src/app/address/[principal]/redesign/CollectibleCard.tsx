@@ -83,6 +83,7 @@ export function CollectibleCard({
       border="1px solid"
       borderColor="redesignBorderSecondary"
       borderRadius="redesign.xl"
+      w="fit-content"
     >
       {nftImage}
       <TokenLink tokenId={contractId} textStyle="text-regular-sm" color="textPrimary">

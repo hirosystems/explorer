@@ -25,6 +25,7 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
 
   if (!balance) return null;
 
+  console.log('TokenBalanceCardBase', { balance, nftHoldings, bnsNames });
   return (
     <Section title={'Holdings'} {...rest}>
       <Tabs.Root lazyMount defaultValue="tokens">

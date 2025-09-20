@@ -37,7 +37,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   const firstNftValue = !!holdings?.length
     ? BigInt((hexToCV(holdings[0].value.hex) as IntCV).value)
     : undefined;
-    console.log({ firstNftValue, holdings, token });
+  console.log({ firstNftValue, holdings, token });
 
   if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
 

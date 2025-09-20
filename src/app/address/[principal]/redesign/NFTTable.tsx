@@ -1,4 +1,3 @@
-import { TableContainer } from '@/common/components/table/TableContainer';
 import { TablePaginationControls } from '@/common/components/table/TablePaginationControls';
 import {
   convertBalancesToArrayWithAssetId,
@@ -8,7 +7,7 @@ import {
 } from '@/common/components/table/fungible-tokens-table/useFungibleTokens';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { useSuspenseNftHoldings } from '@/common/queries/useNftHoldings';
-import { Box, Grid } from '@chakra-ui/react';
+import { Box, Flex, Grid } from '@chakra-ui/react';
 import { NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { PaginationState } from '@tanstack/react-table';
 import { useCallback, useState } from 'react';
@@ -19,8 +18,9 @@ import { cvToJSON, hexToCV } from '@stacks/transactions';
 import { useAddressIdPageData } from '../AddressIdPageContext';
 import { useBnsNames } from '../TokenBalanceCard/useBnsNames';
 import { CollectibleCard } from './CollectibleCard';
+import { Card } from '@/common/components/Card';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 export type NftBalanceWithAssetId = NftBalance & { asset_identifier: string };
 
@@ -104,8 +104,14 @@ export function NFTTable() {
 
   return (
     <Box>
-      <TableContainer>
-        <Grid templateColumns="repeat(auto-fill, minmax( 1fr))" gap={4} p={4}>
+      <Card
+        h="full"
+        w="full"
+        p={3}
+        borderColor="redesignBorderSecondary"
+        bg="transparent"
+      >
+        <Grid templateColumns="repeat(auto-fill, 162px);" gap={4} p={4}>
           {formattedBalances.map(item => {
             const holdings = nftHoldings?.results.filter(
               nftHolding => nftHolding.asset_identifier === item.asset_identifier
@@ -118,7 +124,7 @@ export function NFTTable() {
             console.log({ json });
             const value = json.value;
             console.log({ value });
-            const firstNftValue = BigInt(value);
+            const firstNftValue = typeof value === 'string' ? BigInt(value) : value;
             console.log({ firstNftValue });
             return (
               <CollectibleCard
@@ -130,13 +136,15 @@ export function NFTTable() {
             );
           })}
         </Grid>
-      </TableContainer>
-      <TablePaginationControls
-        pageIndex={pagination.pageIndex}
-        pageSize={pagination.pageSize}
-        totalRows={Object.keys(initialAddressBalancesData?.non_fungible_tokens || {}).length}
-        onPageChange={handlePageChange}
-      />
+      </Card>
+      <Flex justifyContent="center">
+        <TablePaginationControls
+          pageIndex={pagination.pageIndex}
+          pageSize={pagination.pageSize}
+          totalRows={Object.keys(initialAddressBalancesData?.non_fungible_tokens || {}).length}
+          onPageChange={handlePageChange}
+        />
+      </Flex>
     </Box>
   );
 }

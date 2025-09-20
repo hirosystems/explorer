@@ -463,9 +463,7 @@ export const AddressTabs = ({ principal }: { principal: string }) => {
         />
       </TabsContent>
       <TabsContent key={AddressIdPageTab.Collectibles} value={AddressIdPageTab.Collectibles}>
-        {/* <NFTTable /> */}
-        <NftBalanceComponent address={principal} />
-        <TokenBalanceCard address={principal} />
+        <NFTTable />
       </TabsContent>
     </TabsRoot>
   );
