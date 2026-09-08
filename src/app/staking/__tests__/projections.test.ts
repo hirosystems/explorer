@@ -131,44 +131,26 @@ describe('getTimelineTicks', () => {
   });
 });
 
-describe('formatTermDuration', () => {
-  test('describes a mainnet bond term in months', () => {
-    expect(formatTermDuration(12 * 2100)).toBe('6 months');
-  });
-
-  test('drops to days on a fast network', () => {
-    expect(formatTermDuration(12 * 20)).toBe('2 days');
-  });
-
-  test('uses hours for anything under a day', () => {
-    expect(formatTermDuration(6)).toBe('1 hour');
-    expect(formatTermDuration(72)).toBe('12 hours');
-  });
-
-  test('is empty for a bond with no term', () => {
-    expect(formatTermDuration(0)).toBe('');
-  });
+test.each([
+  [12 * 2100, '6 months'],
+  [12 * 20, '2 days'],
+  [6, '1 hour'],
+  [72, '12 hours'],
+  [0, ''],
+])('formatTermDuration(%s) displays %s', (blocks, expected) => {
+  expect(formatTermDuration(blocks)).toBe(expected);
 });
 
-describe('formatTimeRemaining', () => {
-  test('counts down in minutes when the window is short', () => {
-    expect(formatTimeRemaining(2)).toBe('20 min');
-    expect(formatTimeRemaining(6)).toBe('60 min');
-  });
-
-  test('switches to hours once minutes stop being useful', () => {
-    expect(formatTimeRemaining(12)).toBe('2 hours');
-    expect(formatTimeRemaining(6 * 24)).toBe('24 hours');
-  });
-
-  test('switches to days beyond a couple of days', () => {
-    expect(formatTimeRemaining(6 * 24 * 7)).toBe('7 days');
-  });
-
-  test('is empty when nothing is left to wait for', () => {
-    expect(formatTimeRemaining(0)).toBe('');
-    expect(formatTimeRemaining(-5)).toBe('');
-  });
+test.each([
+  [2, '20 min'],
+  [6, '60 min'],
+  [12, '2 hours'],
+  [6 * 24, '24 hours'],
+  [6 * 24 * 7, '7 days'],
+  [0, ''],
+  [-5, ''],
+])('formatTimeRemaining(%s) displays %s', (blocks, expected) => {
+  expect(formatTimeRemaining(blocks)).toBe(expected);
 });
 
 const GENESIS = {
@@ -177,15 +159,14 @@ const GENESIS = {
   rewardCycleLength: 2100,
   prepareCycleLength: 100,
 };
+const schedule = getBondSchedule(
+  GENESIS.activationHeight,
+  GENESIS.termEndHeight,
+  GENESIS.rewardCycleLength,
+  GENESIS.prepareCycleLength
+);
 
 describe('getBondSchedule', () => {
-  const schedule = getBondSchedule(
-    GENESIS.activationHeight,
-    GENESIS.termEndHeight,
-    GENESIS.rewardCycleLength,
-    GENESIS.prepareCycleLength
-  );
-
   test('derives every lifecycle milestone', () => {
     expect(schedule.enrollmentOpensHeight).toBe(962_150);
     expect(schedule.enrollmentClosesHeight).toBe(966_250);
@@ -196,13 +177,6 @@ describe('getBondSchedule', () => {
 });
 
 describe('getBondLifecycleState', () => {
-  const schedule = getBondSchedule(
-    GENESIS.activationHeight,
-    GENESIS.termEndHeight,
-    GENESIS.rewardCycleLength,
-    GENESIS.prepareCycleLength
-  );
-
   test('walks through every state as heights pass', () => {
     const at = (h: number) => getBondLifecycleState(schedule, h, true);
     expect(at(960_000)).toBe('scheduled');
@@ -219,12 +193,6 @@ describe('getBondLifecycleState', () => {
 
 describe('getBondProgress', () => {
   test('counts scheduled intervals and days from the design example', () => {
-    const schedule = getBondSchedule(
-      GENESIS.activationHeight,
-      GENESIS.termEndHeight,
-      GENESIS.rewardCycleLength,
-      GENESIS.prepareCycleLength
-    );
     const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
     expect(progress.elapsedDistributions).toBe(3);
     expect(progress.total).toBe(24);
@@ -233,12 +201,6 @@ describe('getBondProgress', () => {
   });
 
   test('never reports more distributions than a term contains', () => {
-    const schedule = getBondSchedule(
-      GENESIS.activationHeight,
-      GENESIS.termEndHeight,
-      GENESIS.rewardCycleLength,
-      GENESIS.prepareCycleLength
-    );
     const progress = getBondProgress(schedule, 1_500_000, GENESIS.rewardCycleLength);
     expect(progress.elapsedDistributions).toBe(24);
     expect(progress.elapsedRatio).toBe(1);

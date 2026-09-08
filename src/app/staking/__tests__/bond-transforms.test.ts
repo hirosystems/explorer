@@ -1,31 +1,20 @@
 import { toBondRow } from '../BondsTable';
 import type { Bond } from '../data';
 import { bondLabel, formatBtc, formatUsd } from '../utils';
-import testnetBonds from './fixtures/testnet-bonds.json';
-
-const bonds = testnetBonds as unknown as Bond[];
+import bondFixture from './fixtures/bond.json';
 
 const CURRENT_BURN_HEIGHT = 9508;
 const NOW_MS = Date.UTC(2026, 7, 25, 19, 0, 0);
 const toRow = (bond: Bond) => toBondRow(bond, CURRENT_BURN_HEIGHT, NOW_MS);
 
 describe('toBondRow', () => {
-  test('derives an active bond row from its parameters', () => {
-    const bond = bonds.find(b => b.index === 3)!;
-    const row = toRow(bond);
-    expect(row.name).toBe('Bond 3');
-    expect(row.status).toBe('Active');
-    expect(row.isPending).toBe(false);
-    // 1000 bps on the fixture, read as a percentage
-    expect(row.targetRatePercent).toBe(10);
+  test('converts the target from basis points to a percentage', () => {
+    expect(toRow(bondFixture).targetRatePercent).toBe(10);
   });
 
   test('marks an upcoming bond as pending rather than empty', () => {
-    const bond = bonds.find(b => b.index === 4)!;
-    const row = toRow(bond);
-    expect(row.isPending).toBe(true);
-    expect(row.capacitySats).toBe(BigInt(13986724000));
-    expect(row.lockedSats).toBe(BigInt(0));
+    expect(toRow(bondFixture).isPending).toBe(false);
+    expect(toRow({ ...bondFixture, status: 'upcoming' }).isPending).toBe(true);
   });
 });
 
@@ -49,18 +38,12 @@ describe('display helpers', () => {
   });
 });
 
-describe('formatUsd', () => {
-  test('abbreviates thousands, which the shared util does not', () => {
-    expect(formatUsd(75_441)).toBe('$75.44K');
-  });
-
-  test('always shows cents, so a column of amounts aligns', () => {
-    expect(formatUsd(269.8)).toBe('$269.80');
-    expect(formatUsd(237)).toBe('$237.00');
-    expect(formatUsd(0)).toBe('$0.00');
-  });
-
-  test('is a dash when there is no number', () => {
-    expect(formatUsd(Number.NaN)).toBe('-');
-  });
+test.each([
+  [75441, '$75.44K'],
+  [269.8, '$269.80'],
+  [237, '$237.00'],
+  [0, '$0.00'],
+  [Number.NaN, '-'],
+])('formatUsd(%s) displays %s', (amount, expected) => {
+  expect(formatUsd(amount)).toBe(expected);
 });

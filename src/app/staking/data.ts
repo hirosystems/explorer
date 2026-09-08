@@ -434,14 +434,12 @@ function describeContractCall(
   const repr = find(fn);
   const index = repr ? readUint(repr, 'bond-index') : undefined;
   const bondIndex = index !== undefined ? Number(index) : undefined;
-  // A registration reports the BTC it bonds. An early exit reports the BTC it frees.
   const sats = repr
     ? (readUint(repr, 'sats-total') ??
       readUint(repr, 'amount-sats-released') ??
       readUint(repr, 'amount-sats') ??
       readUint(repr, 'amount-withdrawn-sats'))
     : undefined;
-  // Only a registration pairs STX with the BTC it bonds.
   const pairedMicroStx = repr ? readUint(repr, 'amount-ustx') : undefined;
   return {
     text: joinDetail(
@@ -518,7 +516,6 @@ export async function fetchStakingActivity(
     try {
       return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');
     } catch {
-      // Retry once after a short pause before marking this transaction unavailable.
       await new Promise(resolve => setTimeout(resolve, 300));
       try {
         return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');

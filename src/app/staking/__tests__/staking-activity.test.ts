@@ -28,7 +28,6 @@ function respond(body: unknown) {
   return { ok: true, status: 200, json: async () => body } as unknown as Response;
 }
 
-/** Serves the three endpoints the activity feed reads, from a list of stub transactions. */
 function serveChain(txs: TxStub[], { failingFunction }: { failingFunction?: string } = {}) {
   const byId = new Map(txs.map(tx => [tx.txId, tx]));
 

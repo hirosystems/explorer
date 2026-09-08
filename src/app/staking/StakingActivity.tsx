@@ -242,7 +242,6 @@ function NoActivity({
   txWindow?: number;
   group?: ActivityGroup;
 }) {
-  // The row icons carry each group's glyph; an empty state shows the same one, muted.
   const glyph = group ? GROUP_ICONS[group].icon : <ClockCounterClockwise />;
   const badge = (
     <Flex

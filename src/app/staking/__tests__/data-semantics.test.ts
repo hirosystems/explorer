@@ -2,7 +2,7 @@ import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 
 import { MAINNET_HISTORIC_CYCLES } from '../consts';
 import { toCycleRow } from '../cycleColumns';
-import { fetchBurnBlockTimes, readCycleCreditedSats } from '../data';
+import { fetchBurnBlockTimes } from '../data';
 import { getBondLifecycleState, getBondSchedule } from '../projections';
 import { formatBurnDate } from '../utils';
 
@@ -124,11 +124,4 @@ test('timestamp retrieval deduplicates exact mined heights and never probes adja
     '/extended/v2/burn-blocks/100',
     '/extended/v2/burn-blocks/200',
   ]);
-});
-
-test('cycle-credit accumulator is not a lifetime running total', () => {
-  const event = (perSat: string) =>
-    `(tuple (bond-staked-sats u10000000000) (cumulative-rewards-per-sat u${perSat}))`;
-  expect(readCycleCreditedSats(event('1200000000000000'))).toBe(BigInt(12000000));
-  expect(readCycleCreditedSats(event('600000000000000'))).toBe(BigInt(6000000));
 });

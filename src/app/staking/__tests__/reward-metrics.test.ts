@@ -4,12 +4,15 @@ import {
   getRealizedBondRate,
   projectCycleRewards,
 } from '../reward-metrics';
-import testnetBonds from './fixtures/testnet-bonds.json';
+import bondFixture from './fixtures/bond.json';
 
-const bond = {
-  ...testnetBonds[0],
-  schedule: { activation: { bitcoin_height: 1000 }, unlock: { bitcoin_height: 26200 } },
-} as unknown as Bond;
+const bond: Bond = {
+  ...bondFixture,
+  schedule: {
+    activation: { bitcoin_height: 1000, pox_cycle: 0 },
+    unlock: { bitcoin_height: 26200, pox_cycle: 12 },
+  },
+};
 const history = (): BondRewards['settlementsByBond'][number] =>
   Array.from({ length: 24 }, (_, index) => ({
     calculationHeight: 1000 + (index + 1) * 1050 - 1,
