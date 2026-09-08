@@ -6,26 +6,30 @@ import { useCallback } from 'react';
 
 import { BondsTable } from '../BondsTable';
 import { SubpageHeader } from '../SubpageHeader';
-import { Bond } from '../data';
+import { Bond, BondRewards } from '../data';
 
 export interface BondsPageData {
   bonds: Bond[];
+  unavailable?: boolean;
   total: number;
   pageIndex: number;
   pageSize: number;
   rewardsByBond?: Record<number, bigint>;
-  rewardCycleLength: number;
+  settlementsByBond?: BondRewards['settlementsByBond'];
+  burnBlockTimes: Record<number, number>;
   currentBurnHeight: number;
   nowMs: number;
 }
 
 export function BondsPageClient({
   bonds,
+  unavailable,
   total,
   pageIndex,
   pageSize,
   rewardsByBond,
-  rewardCycleLength,
+  settlementsByBond,
+  burnBlockTimes,
   currentBurnHeight,
   nowMs,
 }: BondsPageData) {
@@ -52,10 +56,12 @@ export function BondsPageClient({
 
       <BondsTable
         bonds={bonds}
+        unavailable={unavailable}
         currentBurnHeight={currentBurnHeight}
         nowMs={nowMs}
         rewardsByBond={rewardsByBond}
-        rewardCycleLength={rewardCycleLength}
+        settlementsByBond={settlementsByBond}
+        burnBlockTimes={burnBlockTimes}
         limit={pageSize}
         fullPage
         pagination={{

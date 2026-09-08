@@ -34,19 +34,18 @@ export default async function StakingActivityPage(props: {
           chain,
           api,
           ACTIVITY_PAGE_LIMIT,
-          selectedActivityGroup
+          selectedActivityGroup,
+          bondIndex
         ),
         'Activity page: fetch activity',
         chain
       )
     : undefined;
-  const events = (all ?? []).filter(
-    event => bondIndex === undefined || event.bondIndex === bondIndex
-  );
 
   return (
     <ActivityPageClient
-      events={events}
+      events={all?.events ?? []}
+      unavailable={all === undefined || all.incomplete}
       selectedGroup={selectedActivityGroup}
       bondIndex={bondIndex}
     />

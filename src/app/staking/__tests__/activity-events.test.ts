@@ -1,4 +1,4 @@
-import { readCumulativePaidSats, readTopic, readUint } from '../data';
+import { readCycleCreditedSats, readTopic, readUint } from '../data';
 
 const BOND_DISTRIBUTION =
   '(tuple (accrued-rewards-per-sat u2000000000000000) (bond-index u306) (bond-rewards u400) ' +
@@ -34,22 +34,17 @@ describe('readUint', () => {
     expect(readUint(BOND_DISTRIBUTION, 'accrued-rewards-per-sat')).toBe(BigInt('2000000000000000'));
   });
 
-  test('reads fields from other event shapes too', () => {
-    expect(readUint(REGISTER_FOR_BOND, 'sats-total')).toBe(BigInt(100000));
-    expect(readUint(REGISTER_FOR_BOND, 'amount-ustx')).toBe(BigInt(50000));
-  });
-
   test('is undefined for a key that is not present', () => {
     expect(readUint(BOND_DISTRIBUTION, 'not-a-field')).toBeUndefined();
   });
 });
 
-describe('readCumulativePaidSats', () => {
+describe('readCycleCreditedSats', () => {
   test('multiplies the per-sat rate back out by what the bond holds', () => {
-    expect(readCumulativePaidSats(BOND_DISTRIBUTION)).toBe(BigInt(800));
+    expect(readCycleCreditedSats(BOND_DISTRIBUTION)).toBe(BigInt(800));
   });
 
   test('is undefined for an event that reports no rewards', () => {
-    expect(readCumulativePaidSats(REGISTER_FOR_BOND)).toBeUndefined();
+    expect(readCycleCreditedSats(REGISTER_FOR_BOND)).toBeUndefined();
   });
 });

@@ -22,10 +22,10 @@ export function AnnotatedValue({ value, note }: { value: string; note?: string }
         variant="redesignPrimary"
         size="lg"
         portalled
-        contentProps={{ maxW: '20rem', whiteSpace: 'normal' }}
+        contentProps={{ maxW: '20rem', whiteSpace: 'normal', textAlign: 'left' }}
         content={note}
       >
-        <Icon w={3.5} h={3.5} color="iconSecondary" cursor="help">
+        <Icon w={3.5} h={3.5} color="iconSecondary" cursor="help" tabIndex={0} aria-label={note}>
           <Info />
         </Icon>
       </Tooltip>

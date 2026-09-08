@@ -15,12 +15,13 @@ export const GLOSSARY = {
   rewardDistribution: {
     term: 'Reward distribution',
     definition:
-      'Bitcoin rewards are paid on a fixed schedule, once every half reward cycle. Because a bond runs 12 cycles, it receives 24 distributions over its term.',
+      'A bond has 24 scheduled reward intervals over 12 cycles. Credits are recorded by successful reward calculations; onward payment is separate.',
     docsUrl: `${DOCS_GLOSSARY}#distribution-cycle`,
   },
   targetRewardRate: {
     term: 'Protocol Yield Target',
-    definition: 'The annual rate a bond aims to pay on the BTC bonded to it.',
+    definition:
+      'The annual target rate set for this bond. Each scheduled distribution targets one fiftieth of that annual rate; actual credits can be lower if rewards fall short.',
     docsUrl: `${DOCS_GLOSSARY}#apy-target`,
   },
   stxPairing: {

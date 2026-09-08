@@ -423,7 +423,7 @@ export function Table<T>({
                     {header.column.columnDef.meta?.tooltip && (
                       <Tooltip
                         content={header.column.columnDef.meta.tooltip}
-                        contentProps={{ maxW: '20rem', whiteSpace: 'normal' }}
+                        contentProps={{ maxW: '20rem', whiteSpace: 'normal', textAlign: 'left' }}
                       >
                         <Icon h={3.5} w={3.5} flexShrink={0} color="iconSecondary">
                           <Info />

@@ -30,15 +30,15 @@ const REST_TOLERANCE = 4;
 
 const VIEW_MARGIN = 8;
 
-export const SEGMENT_PAID_BG = 'accent.stacks-500';
+export const SEGMENT_ELAPSED_BG = 'accent.stacks-500';
 export const SEGMENT_REMAINING_BG = 'accent.stacks-300';
 
 function Bar({
   state,
-  distributionsPaid,
+  elapsedDistributions,
 }: {
   state: BondTimelineState;
-  distributionsPaid: number;
+  elapsedDistributions: number;
 }) {
   if (state === 'upcoming') {
     return (
@@ -57,7 +57,7 @@ function Bar({
         <Box
           key={index}
           flex="1 1 0"
-          bg={index < distributionsPaid ? SEGMENT_PAID_BG : SEGMENT_REMAINING_BG}
+          bg={index < elapsedDistributions ? SEGMENT_ELAPSED_BG : SEGMENT_REMAINING_BG}
         />
       ))}
     </Flex>
@@ -68,7 +68,7 @@ export interface TimelineRow {
   index: number;
   label: string;
   state: BondTimelineState;
-  distributionsPaid: number;
+  elapsedDistributions: number;
   leftPercent: number;
   widthPercent: number;
 }
@@ -230,7 +230,7 @@ const TimelineRows = memo(function TimelineRows({
               data-bond-index={row.index}
               role="img"
               tabIndex={0}
-              aria-label={`${row.label}, ${row.state}, ${row.distributionsPaid} of ${DISTRIBUTIONS_PER_BOND} reward distributions completed`}
+              aria-label={`${row.label}, ${row.state}, ${row.elapsedDistributions} of ${DISTRIBUTIONS_PER_BOND} scheduled intervals elapsed`}
               onFocus={event => onBondFocus(row.index, event.currentTarget)}
               position="absolute"
               left={`${row.leftPercent}%`}
@@ -252,7 +252,7 @@ const TimelineRows = memo(function TimelineRows({
               transition="transform 150ms ease-out, outline-color 150ms ease-out"
               _motionReduce={{ transition: 'none' }}
             >
-              <Bar state={row.state} distributionsPaid={row.distributionsPaid} />
+              <Bar state={row.state} elapsedDistributions={row.elapsedDistributions} />
             </Box>
           </Box>
         </Flex>
@@ -489,11 +489,10 @@ export function TimelinePlot({
     const atMs = bounds.startMs + (pointerPercent / 100) * span;
     const height = approximateBurnHeightAt(atMs, currentBurnHeight, nowMs);
     const cycle = burnHeightToRewardCycle(height, firstBurnchainBlockHeight, rewardCycleLength);
-    const prefix = height > currentBurnHeight ? '~' : '';
     return [
       cycle !== undefined ? `cycle ${cycle}` : undefined,
       `#${height.toLocaleString()}`,
-      `${prefix}${formatDateWithYear(atMs)}`,
+      `~${formatDateWithYear(atMs)}`,
     ]
       .filter(Boolean)
       .join(' · ');
@@ -516,6 +515,28 @@ export function TimelinePlot({
       pt={PLOT_TOP}
       onMouseMove={trackCursor}
       onMouseLeave={clearCursor}
+      onKeyDown={event => {
+        const bar = event.currentTarget.querySelector<HTMLElement>(
+          `[data-bond-index="${hover?.bondIndex}"]`
+        );
+        if (event.key === 'Escape') {
+          if (cardRef.current?.contains(event.target as Node)) bar?.focus();
+          clearCursor();
+        }
+        if (event.key !== 'Tab' || !interactive) return;
+        const links = cardRef.current?.querySelectorAll<HTMLAnchorElement>('a[href]');
+        if (!links?.length) return;
+        if (!event.shiftKey && event.target === bar) {
+          event.preventDefault();
+          links[0].focus();
+        } else if (event.shiftKey && event.target === links[0]) {
+          event.preventDefault();
+          bar?.focus();
+        } else if (!event.shiftKey && event.target === links[links.length - 1]) {
+          bar?.focus();
+          clearCursor();
+        }
+      }}
       onBlurCapture={event => {
         const next = event.relatedTarget as Node | null;
         if (!event.currentTarget.contains(next) && !cardRef.current?.contains(next)) clearCursor();
@@ -579,8 +600,7 @@ export function TimelinePlot({
             {expanded ? (
               <BondTooltip
                 bond={hoveredRow.tooltip}
-                distributionsPaid={hoveredRow.distributionsPaid}
-                rewardCycleLength={rewardCycleLength}
+                elapsedDistributions={hoveredRow.elapsedDistributions}
                 currentBurnHeight={currentBurnHeight}
                 nowMs={nowMs}
               />

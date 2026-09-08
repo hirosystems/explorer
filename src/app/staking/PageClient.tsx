@@ -19,11 +19,13 @@ import type {
   PoxCycle,
   StakingActivityEvent,
 } from './data';
-import { DailyPrices } from './prices';
+import type { DailyPrices } from './prices';
 import { getFeaturedBondIndex, projectScheduledBonds } from './projections';
+import type { CurrentCycleEstimate } from './reward-estimate';
 
 export interface StakingPageData {
   bonds: Bond[];
+  bondsUnavailable?: boolean;
   poxInfo?: PoxInfo;
   cycles: PoxCycle[];
   cycleRewards: Record<number, CycleRewards>;
@@ -33,17 +35,19 @@ export interface StakingPageData {
   rewardCycleLength: number;
   prepareCycleLength: number;
   firstBurnchainBlockHeight: number;
-  enrollments: EnrollmentShare[];
+  enrollments?: EnrollmentShare[];
   activity: StakingActivityEvent[];
+  activityUnavailable?: boolean;
   rewarded?: BondRewards;
   selectedActivityGroup?: ActivityGroup;
-  currentCycleAccruedSats?: string;
+  burnBlockTimes: Record<number, number>;
   prices?: DailyPrices;
-  cycleEndTimes?: Record<number, number>;
+  currentCycleEstimate?: CurrentCycleEstimate;
 }
 
 export function StakingPageClient({
   bonds,
+  bondsUnavailable,
   poxInfo,
   cycles,
   cycleRewards,
@@ -55,11 +59,12 @@ export function StakingPageClient({
   firstBurnchainBlockHeight,
   enrollments,
   activity,
+  activityUnavailable,
   rewarded,
   selectedActivityGroup,
-  currentCycleAccruedSats,
+  burnBlockTimes,
   prices,
-  cycleEndTimes,
+  currentCycleEstimate,
 }: StakingPageData) {
   const featuredIndex = getFeaturedBondIndex(bonds);
   const featuredBond = bonds.find(bond => bond.index === featuredIndex);
@@ -94,44 +99,71 @@ export function StakingPageClient({
     <Stack gap={{ base: 16, md: 18, lg: 20, xl: 24 }}>
       <Stack gap={{ base: 10, lg: 12 }}>
         <Text textStyle="heading-md">Bitcoin Staking</Text>
-        <Stack gap={4}>
-          <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
-            <Text textStyle="heading-xs">Current bond</Text>
-            <HowToParticipateButton />
-          </Flex>
-          <StakingStats
-            featuredBond={featuredBond}
-            rewardCycleLength={rewardCycleLength}
-            prepareCycleLength={prepareCycleLength}
-            currentBurnHeight={currentBurnHeight}
-            nowMs={nowMs}
-            rewardsByBond={rewarded?.byBondIndex}
-          />
-          <CurrentBond
-            featuredBond={featuredBond}
-            nextBond={nextBond}
-            enrollments={enrollments}
-            rewardCycleLength={rewardCycleLength}
-            prepareCycleLength={prepareCycleLength}
-            currentBurnHeight={currentBurnHeight}
-            nowMs={nowMs}
-          />
-        </Stack>
-        <PeriodsOverview
-          bonds={bonds}
-          featuredIndex={featuredIndex}
-          rewardsByBond={rewarded?.byBondIndex}
-          scheduledBonds={scheduledBonds}
-          rewardCycleLength={rewardCycleLength}
-          prepareCycleLength={prepareCycleLength}
-          firstBurnchainBlockHeight={firstBurnchainBlockHeight}
-          currentBurnHeight={currentBurnHeight}
-          nowMs={nowMs}
+        {bondsUnavailable || !poxInfo ? (
+          <Text role="status" textStyle="text-regular-sm" color="textSecondary">
+            Some staking data could not be loaded. Refresh the page to try again.
+          </Text>
+        ) : bonds.length === 0 ? (
+          <Text textStyle="text-regular-sm" color="textSecondary">
+            No bonds yet. Bonds appear here once they are created on-chain.
+          </Text>
+        ) : null}
+        {poxInfo && (
+          <>
+            <Stack gap={4}>
+              <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
+                <Text textStyle="heading-xs">Current bond</Text>
+                <HowToParticipateButton />
+              </Flex>
+              <StakingStats
+                featuredBond={featuredBond}
+                rewardCycleLength={rewardCycleLength}
+                prepareCycleLength={prepareCycleLength}
+                currentBurnHeight={currentBurnHeight}
+                nowMs={nowMs}
+                rewardsByBond={rewarded?.byBondIndex}
+              />
+              <CurrentBond
+                featuredBond={featuredBond}
+                nextBond={nextBond}
+                burnBlockTimes={burnBlockTimes}
+                settlements={
+                  featuredIndex !== undefined && rewarded
+                    ? (rewarded.settlementsByBond[featuredIndex] ?? [])
+                    : undefined
+                }
+                enrollments={enrollments}
+                rewardCycleLength={rewardCycleLength}
+                prepareCycleLength={prepareCycleLength}
+                currentBurnHeight={currentBurnHeight}
+                nowMs={nowMs}
+              />
+            </Stack>
+            <PeriodsOverview
+              settlementsByBond={rewarded?.settlementsByBond}
+              burnBlockTimes={burnBlockTimes}
+              bonds={bonds}
+              featuredIndex={featuredIndex}
+              rewardsByBond={rewarded?.byBondIndex}
+              scheduledBonds={scheduledBonds}
+              rewardCycleLength={rewardCycleLength}
+              prepareCycleLength={prepareCycleLength}
+              firstBurnchainBlockHeight={firstBurnchainBlockHeight}
+              currentBurnHeight={currentBurnHeight}
+              nowMs={nowMs}
+            />
+          </>
+        )}
+        <StakingActivity
+          events={activity}
+          selectedGroup={selectedActivityGroup}
+          unavailable={activityUnavailable}
         />
-        <StakingActivity events={activity} selectedGroup={selectedActivityGroup} />
       </Stack>
       {poxInfo && (
         <StackingOverview
+          currentCycleEstimate={currentCycleEstimate}
+          prices={prices}
           poxInfo={poxInfo}
           cycles={cycles}
           cycleRewards={cycleRewards}
@@ -139,10 +171,8 @@ export function StakingPageClient({
           firstBurnchainBlockHeight={firstBurnchainBlockHeight}
           currentBurnHeight={currentBurnHeight}
           nowMs={nowMs}
-          currentCycleAccruedSats={currentCycleAccruedSats}
-          bondRewardsByCycle={rewarded?.byCycle}
-          prices={prices}
-          cycleEndTimes={cycleEndTimes}
+          burnBlockTimes={burnBlockTimes}
+          lastCalculationHeightByCycle={rewarded?.lastCalculationHeightByCycle}
         />
       )}
     </Stack>

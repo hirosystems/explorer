@@ -1,7 +1,13 @@
 import { NetworkModes } from '@/common/types/network';
 
 import { BONDS_PAGE_SIZE } from '../consts';
-import { fetchBondRewards, fetchBondsPage, fetchHighestBondIndex, fetchPoxInfo } from '../data';
+import {
+  fetchBondRewards,
+  fetchBondsPage,
+  fetchBurnBlockTimes,
+  fetchHighestBondIndex,
+  fetchPoxInfo,
+} from '../data';
 import { load } from '../load';
 import { BondsPageClient } from './PageClient';
 
@@ -51,14 +57,26 @@ export default async function StakingBondsPage(props: {
       )
     : undefined;
 
+  const burnBlockTimes = await fetchBurnBlockTimes(
+    (bondsPage?.bonds ?? []).flatMap(bond => [
+      bond.schedule.activation.bitcoin_height,
+      bond.schedule.unlock.bitcoin_height,
+    ]),
+    poxInfo?.current_burnchain_block_height ?? 0,
+    chain,
+    api
+  );
+
   return (
     <BondsPageClient
       bonds={bondsPage?.bonds ?? []}
+      unavailable={bondsPage === undefined || poxInfo === undefined}
       total={bondsPage?.total ?? 0}
       pageIndex={pageIndex}
       pageSize={BONDS_PAGE_SIZE}
       rewardsByBond={rewarded?.byBondIndex}
-      rewardCycleLength={poxInfo?.reward_cycle_length ?? 0}
+      settlementsByBond={rewarded?.settlementsByBond}
+      burnBlockTimes={burnBlockTimes}
       currentBurnHeight={poxInfo?.current_burnchain_block_height ?? 0}
       nowMs={Date.now()}
     />

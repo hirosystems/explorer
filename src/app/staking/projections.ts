@@ -5,7 +5,6 @@ import {
   BOND_TERM_CYCLES,
   DISTRIBUTIONS_PER_BOND,
   MINUTES_PER_BLOCK,
-  RESERVE_RATIO_PERCENT,
   REWARDS_PRECISION,
   SATS_IN_BTC,
 } from './consts';
@@ -45,11 +44,11 @@ export function bpsToPercent(bps: number): number {
   return bps / 100;
 }
 
-const MINUTES_IN_YEAR = 365 * 24 * 60;
-
 export function getCycleRewardsPerStx(rewardsPerMicroStx: bigint): number {
   return (Number(rewardsPerMicroStx) * MICROSTACKS_IN_STACKS) / Number(REWARDS_PRECISION);
 }
+
+const MINUTES_IN_YEAR = 365 * 24 * 60;
 
 export function getCyclesPerYear(rewardCycleLength: number): number {
   const minutesPerCycle = rewardCycleLength * MINUTES_PER_BLOCK;
@@ -105,15 +104,6 @@ export function getCycleStackerRewardsSatsBigInt(
 ): bigint {
   if (stakedMicroStx <= BigInt(0)) return BigInt(0);
   return (rewardsPerMicroStx * stakedMicroStx) / REWARDS_PRECISION;
-}
-
-export function applyStackingRewardWaterfall(
-  grossRewardsSats: bigint,
-  bondRewardsSats: bigint
-): bigint {
-  const afterBonds =
-    grossRewardsSats > bondRewardsSats ? grossRewardsSats - bondRewardsSats : BigInt(0);
-  return (afterBonds * BigInt(100 - RESERVE_RATIO_PERCENT)) / BigInt(100);
 }
 
 export type BondTimelineState = 'complete' | 'active' | 'upcoming';
@@ -252,7 +242,13 @@ export function formatTimeRemaining(blocks: number): string {
   return plural(Math.round(hours / 24), 'day');
 }
 
-export type BondLifecycleState = 'scheduled' | 'enrolling' | 'active' | 'maturity' | 'closed';
+export type BondLifecycleState =
+  | 'scheduled'
+  | 'enrolling'
+  | 'awaitingActivation'
+  | 'active'
+  | 'maturity'
+  | 'closed';
 
 export interface BondSchedule {
   enrollmentOpensHeight: number;
@@ -286,12 +282,13 @@ export function getBondLifecycleState(
   if (currentBurnHeight >= schedule.termEndHeight) return 'closed';
   if (currentBurnHeight >= schedule.l1UnlockHeight) return 'maturity';
   if (currentBurnHeight >= schedule.activationHeight) return 'active';
+  if (currentBurnHeight >= schedule.enrollmentClosesHeight) return 'awaitingActivation';
   if (currentBurnHeight >= schedule.enrollmentOpensHeight) return 'enrolling';
   return 'scheduled';
 }
 
 export interface BondProgress {
-  paid: number;
+  elapsedDistributions: number;
   total: number;
   dayOfTerm: number;
   termDays: number;
@@ -308,26 +305,13 @@ export function getBondProgress(
   const termBlocks = Math.max(schedule.termEndHeight - schedule.activationHeight, 1);
   const minutesPerDay = 24 * 60;
   return {
-    paid: Math.min(Math.floor(blocksElapsed / cadence), DISTRIBUTIONS_PER_BOND),
+    elapsedDistributions:
+      cadence > 0 ? Math.min(Math.floor(blocksElapsed / cadence), DISTRIBUTIONS_PER_BOND) : 0,
     total: DISTRIBUTIONS_PER_BOND,
     dayOfTerm: Math.floor((blocksElapsed * MINUTES_PER_BLOCK) / minutesPerDay),
     termDays: Math.round((termBlocks * MINUTES_PER_BLOCK) / minutesPerDay),
     elapsedRatio: Math.min(blocksElapsed / termBlocks, 1),
   };
-}
-
-export function getRealizedRatePercent(
-  paidSats: bigint,
-  bondedSats: bigint,
-  termBlocks: number,
-  rewardCycleLength: number
-): number | undefined {
-  if (bondedSats <= BigInt(0) || termBlocks <= 0) return undefined;
-  if (!isCycleLengthPlausible(rewardCycleLength)) return undefined;
-  const cyclesInTerm = termBlocks / rewardCycleLength;
-  const yearsInTerm = cyclesInTerm / getCyclesPerYear(rewardCycleLength);
-  if (yearsInTerm <= 0) return undefined;
-  return (Number(paidSats) / Number(bondedSats) / yearsInTerm) * 100;
 }
 
 export function projectScheduledBonds(

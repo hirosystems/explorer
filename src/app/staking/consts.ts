@@ -24,12 +24,11 @@ export const GENESIS_BOND_INDEX = 1;
 export const BOND_GAP_CYCLES = 2;
 export const DISTRIBUTIONS_PER_BOND = 24;
 
-export const RESERVE_RATIO_PERCENT = 15;
-
 export const REWARDS_PRECISION = BigInt('1000000000000000000');
 
 export const SCHEDULED_BONDS_AHEAD = TIMELINE_BONDS_AFTER + 1;
 
+// Historical mainnet figures from https://www.stacking-tracker.com/.
 export const MAINNET_HISTORIC_CYCLES: Record<number, { rewardsBtc: number; apyPercent: number }> = {
   140: { rewardsBtc: 2.72, apyPercent: 7.72 },
   139: { rewardsBtc: 2.79, apyPercent: 5.76 },

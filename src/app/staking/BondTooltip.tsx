@@ -1,6 +1,5 @@
 'use client';
 
-import { formatDateShort } from '@/common/utils/date-utils';
 import { Text } from '@/ui/Text';
 import { Badge, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
@@ -9,16 +8,16 @@ import { DISTRIBUTIONS_PER_BOND, STAKING_LINKS } from './consts';
 import {
   BondLifecycleState,
   BondSchedule,
-  burnHeightToApproximateTimestamp,
   formatTermDuration,
   formatTimeRemaining,
-  getRealizedRatePercent,
 } from './projections';
-import { formatBtc, formatRatePercent, satsToBtc } from './utils';
+import type { RealizedBondRate } from './reward-metrics';
+import { formatBtc, formatBurnDate, formatRatePercent, formatSbtc } from './utils';
 
 const STATE_LABELS: Record<BondLifecycleState, string> = {
   scheduled: 'scheduled',
   enrolling: 'enrolling',
+  awaitingActivation: 'enrollment closed',
   active: 'active',
   maturity: 'maturity',
   closed: 'closed',
@@ -27,6 +26,7 @@ const STATE_LABELS: Record<BondLifecycleState, string> = {
 const STATE_BADGES: Record<BondLifecycleState, { bg: string; color: string }> = {
   scheduled: { bg: 'neutral.sand-500', color: 'neutral.sand-50' },
   enrolling: { bg: 'accent.bitcoin-500', color: 'neutral.sand-950' },
+  awaitingActivation: { bg: 'neutral.sand-500', color: 'neutral.sand-50' },
   active: { bg: 'feedback.green-200', color: 'feedback.green-600' },
   maturity: { bg: 'neutral.sand-300', color: 'neutral.sand-950' },
   closed: { bg: 'neutral.sand-500', color: 'neutral.sand-50' },
@@ -39,9 +39,7 @@ export const hasBondActions = (state: BondLifecycleState) =>
 
 export function bondSummary(bond: BondTooltipData, currentBurnHeight: number, nowMs: number) {
   const date = (height: number) =>
-    `${height > currentBurnHeight ? '~' : ''}${formatDateShort(
-      burnHeightToApproximateTimestamp(height, currentBurnHeight, nowMs)
-    )}`;
+    formatBurnDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes);
   return `${bond.label} · ${STATE_LABELS[bond.state]} · ${date(bond.schedule.activationHeight)} → ${date(bond.schedule.termEndHeight)}`;
 }
 
@@ -53,6 +51,8 @@ export interface BondTooltipData {
   lockedSats: bigint;
   rewardedSats?: bigint;
   targetRateBps?: number;
+  realizedRate?: RealizedBondRate;
+  burnBlockTimes?: Record<number, number>;
 }
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -99,22 +99,18 @@ function TooltipAction({
 
 export function BondTooltip({
   bond,
-  distributionsPaid,
-  rewardCycleLength,
+  elapsedDistributions,
   currentBurnHeight,
   nowMs,
 }: {
   bond: BondTooltipData;
-  distributionsPaid: number;
-  rewardCycleLength: number;
+  elapsedDistributions: number;
   currentBurnHeight: number;
   nowMs: number;
 }) {
   const { label, state, schedule, capacitySats, lockedSats, rewardedSats, targetRateBps } = bond;
-  const at = (height: number) =>
-    formatDateShort(burnHeightToApproximateTimestamp(height, currentBurnHeight, nowMs));
-
-  const date = (height: number) => `${height > currentBurnHeight ? '~' : ''}${at(height)}`;
+  const date = (height: number) =>
+    formatBurnDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes);
 
   const termBlocks = schedule.termEndHeight - schedule.activationHeight;
   const remainingBlocks =
@@ -128,18 +124,8 @@ export function BondTooltip({
         ? `in ${formatTimeRemaining(remainingBlocks)}`
         : '';
 
-  const rewarded =
-    rewardedSats !== undefined
-      ? `${formatBtc(rewardedSats)} · ${distributionsPaid} of ${DISTRIBUTIONS_PER_BOND}`
-      : `${distributionsPaid} of ${DISTRIBUTIONS_PER_BOND}`;
-  const bonded =
-    capacitySats && capacitySats > BigInt(0)
-      ? `${satsToBtc(lockedSats).toLocaleString(undefined, { maximumFractionDigits: 4 })} / ${formatBtc(capacitySats, 0)}`
-      : formatBtc(lockedSats);
-  const realizedRate =
-    rewardedSats !== undefined
-      ? getRealizedRatePercent(rewardedSats, lockedSats, termBlocks, rewardCycleLength)
-      : undefined;
+  const rewarded = rewardedSats === undefined ? 'Unavailable' : formatSbtc(rewardedSats);
+  const bonded = formatBtc(lockedSats);
 
   return (
     <Stack gap={2.5} minW="14rem">
@@ -169,26 +155,49 @@ export function BondTooltip({
         <Stack gap={1.5}>
           {state === 'enrolling' ? (
             capacitySats !== undefined && (
-              <Row label="Offering" value={formatBtc(capacitySats, 0)} />
+              <Row label="Capacity" value={formatBtc(capacitySats, 0)} />
             )
           ) : (
             <Row label="Bonded" value={bonded} />
           )}
-          {state === 'closed'
-            ? realizedRate !== undefined && (
-                <Row label="Realized rate" value={`${realizedRate.toFixed(3)}%`} />
-              )
-            : state !== 'maturity' &&
-              targetRateBps !== undefined && (
-                <Row label="Protocol Yield Target" value={formatRatePercent(targetRateBps)} />
-              )}
-          {state !== 'enrolling' && <Row label="Rewarded" value={rewarded} />}
+          {targetRateBps !== undefined && (
+            <Row label="Protocol Yield Target" value={formatRatePercent(targetRateBps)} />
+          )}
+          {state !== 'enrolling' && <Row label="Rewards credited" value={rewarded} />}
+          {state === 'closed' && (
+            <>
+              <Row
+                label="Realized rate"
+                value={
+                  bond.realizedRate?.percent === undefined
+                    ? 'Unavailable'
+                    : `${bond.realizedRate.percent.toFixed(2)}%`
+                }
+              />
+              <Text textStyle="text-regular-xs" color="neutral.sand-300">
+                {bond.realizedRate?.note ??
+                  'Complete reward and eligible-principal history is not yet available.'}
+              </Text>
+            </>
+          )}
+          {state !== 'enrolling' && (
+            <>
+              <Row
+                label="Scheduled intervals elapsed"
+                value={`${elapsedDistributions} of ${DISTRIBUTIONS_PER_BOND}`}
+              />
+              <Text textStyle="text-regular-xs" color="neutral.sand-300">
+                Credits are contract allocations. Onward payment is separate.
+              </Text>
+            </>
+          )}
         </Stack>
       )}
 
       {state === 'scheduled' && (
         <Text textStyle="text-regular-xs" color="neutral.sand-300">
-          Offering and rate publish {date(schedule.enrollmentOpensHeight)}.
+          Earliest setup window: {date(schedule.enrollmentOpensHeight)}. Terms appear after on-chain
+          setup.
         </Text>
       )}
       {state === 'enrolling' && (

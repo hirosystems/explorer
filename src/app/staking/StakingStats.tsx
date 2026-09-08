@@ -100,12 +100,12 @@ export function StakingStats({
 
   const cadence = getDistributionCadence(rewardCycleLength);
   const nextRewardsHeight =
-    progress.paid < progress.total
-      ? schedule.activationHeight + (progress.paid + 1) * cadence
+    progress.elapsedDistributions < progress.total
+      ? schedule.activationHeight + (progress.elapsedDistributions + 1) * cadence
       : undefined;
   const nextRewards =
     nextRewardsHeight !== undefined
-      ? `Next rewards ~${formatDateShort(
+      ? `Next scheduled ~${formatDateShort(
           burnHeightToApproximateTimestamp(nextRewardsHeight, currentBurnHeight, nowMs)
         )}`
       : undefined;
@@ -114,7 +114,7 @@ export function StakingStats({
   const join = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(' · ') || undefined;
 
   return (
-    <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} gap={3}>
+    <Grid templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={3}>
       <OverviewCard
         title={<GlossaryTerm entry="targetRewardRate" />}
         stat={<Figure value={formatRatePercent(featuredBond.parameters?.target_rate_bps ?? 0)} />}
@@ -131,13 +131,13 @@ export function StakingStats({
         caption={join(usd(bondedBtc, btcPrice), 'total of confirmed enrollments')}
       />
       <OverviewCard
-        title="BTC rewarded"
+        title="Rewards credited"
         stat={
           <Figure
             value={
               rewardedSats === undefined ? '—' : formatBtc(rewardedSats, 4).replace(' BTC', '')
             }
-            unit={rewardedSats === undefined ? undefined : 'BTC'}
+            unit={rewardedSats === undefined ? undefined : 'sBTC'}
           />
         }
         caption={join(

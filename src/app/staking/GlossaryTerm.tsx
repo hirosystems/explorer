@@ -20,6 +20,7 @@ export function GlossaryTerm({
       variant="redesignPrimary"
       size="lg"
       portalled
+      interactive
       closeDelay={300}
       positioning={{ placement: 'top', gutter: 2 }}
       contentProps={{ maxW: '22rem', whiteSpace: 'normal' }}
@@ -48,6 +49,7 @@ export function GlossaryTerm({
     >
       <Box
         as="span"
+        tabIndex={0}
         borderBottom="1px dotted"
         borderColor="redesignBorderSecondary"
         cursor="help"

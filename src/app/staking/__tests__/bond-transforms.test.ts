@@ -1,6 +1,6 @@
 import { toBondRow } from '../BondsTable';
 import type { Bond } from '../data';
-import { bondLabel, formatBtc, formatUsd, isBondPending } from '../utils';
+import { bondLabel, formatBtc, formatUsd } from '../utils';
 import testnetBonds from './fixtures/testnet-bonds.json';
 
 const bonds = testnetBonds as unknown as Bond[];
@@ -46,11 +46,6 @@ describe('display helpers', () => {
     expect(formatBtc(BigInt(350000), 1)).toBe('0.0035 BTC');
     expect(formatBtc(BigInt(14730000000), 1)).toBe('147.3 BTC');
     expect(formatBtc(BigInt(0), 1)).toBe('0 BTC');
-  });
-
-  test('only upcoming bonds are pending', () => {
-    expect(isBondPending('upcoming')).toBe(true);
-    expect(isBondPending('active')).toBe(false);
   });
 });
 

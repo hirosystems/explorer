@@ -57,18 +57,15 @@ export async function fetchDailyPrices(startMs: number, endMs: number): Promise<
   }
 }
 
-function priceOn(prices: Map<string, number>, timestampMs: number): number | undefined {
+export function getCyclePrices(prices: DailyPrices, endedMs: number): CyclePrices {
   const MAX_LOOKBACK_DAYS = 4;
   for (let back = 0; back <= MAX_LOOKBACK_DAYS; back++) {
-    const price = prices.get(priceDayKey(timestampMs - back * 24 * 60 * 60 * 1000));
-    if (price !== undefined) return price;
+    const key = priceDayKey(endedMs - back * 24 * 60 * 60 * 1000);
+    const btcPriceUsd = prices.btc.get(key);
+    const stxPriceUsd = prices.stx.get(key);
+    if (btcPriceUsd !== undefined && stxPriceUsd !== undefined) {
+      return { btcPriceUsd, stxPriceUsd };
+    }
   }
-  return undefined;
-}
-
-export function getCyclePrices(prices: DailyPrices, endedMs: number): CyclePrices {
-  return {
-    btcPriceUsd: priceOn(prices.btc, endedMs),
-    stxPriceUsd: priceOn(prices.stx, endedMs),
-  };
+  return {};
 }

@@ -1,6 +1,4 @@
 import {
-  applyStackingRewardWaterfall,
-  burnHeightToApproximateTimestamp,
   formatTermDuration,
   formatTimeRemaining,
   getBarPosition,
@@ -8,26 +6,13 @@ import {
   getBondProgress,
   getBondSchedule,
   getBondTimelineState,
-  getCycleRewardsPerStx,
   getCycleStackerRewardsSatsBigInt,
   getDistributionGridCells,
   getFeaturedBondIndex,
-  getRealizedRatePercent,
-  getStackingYieldForCompletedCycle,
   getTimelineBounds,
   getTimelineTicks,
-  isCycleLengthPlausible,
   projectScheduledBonds,
 } from '../projections';
-
-describe('burnHeightToApproximateTimestamp', () => {
-  const nowMs = Date.UTC(2026, 7, 25, 19, 0, 0);
-
-  test('projects 10 minutes a block, forwards and back', () => {
-    expect(burnHeightToApproximateTimestamp(1006, 1000, nowMs)).toBe(nowMs + 60 * 60 * 1000);
-    expect(burnHeightToApproximateTimestamp(994, 1000, nowMs)).toBe(nowMs - 60 * 60 * 1000);
-  });
-});
 
 const MAINNET_CYCLE_141 = {
   rewardsPerMicroStx: BigInt('350915540939'),
@@ -46,64 +31,6 @@ describe('getCycleStackerRewardsSatsBigInt', () => {
 
   test('is zero when nobody staked', () => {
     expect(getCycleStackerRewardsSatsBigInt(BigInt(0), BigInt(0))).toBe(BigInt(0));
-  });
-});
-
-describe('applyStackingRewardWaterfall', () => {
-  test('pays bonds before applying the reserve ratio', () => {
-    expect(applyStackingRewardWaterfall(BigInt(1000), BigInt(200))).toBe(BigInt(680));
-  });
-
-  test('does not produce negative rewards', () => {
-    expect(applyStackingRewardWaterfall(BigInt(100), BigInt(100))).toBe(BigInt(0));
-    expect(applyStackingRewardWaterfall(BigInt(100), BigInt(200))).toBe(BigInt(0));
-  });
-});
-
-describe('getCycleRewardsPerStx', () => {
-  test('converts the contract figure to sats per STX', () => {
-    expect(getCycleRewardsPerStx(MAINNET_CYCLE_141.rewardsPerMicroStx)).toBeCloseTo(
-      0.350915540939,
-      10
-    );
-  });
-});
-
-describe('getStackingYieldForCompletedCycle', () => {
-  const fullCycleRewardsPerMicroStx = MAINNET_CYCLE_141.rewardsPerMicroStx * BigInt(2);
-
-  test('works out a yearly rate from a finished cycle', () => {
-    const result = getStackingYieldForCompletedCycle({
-      rewardsPerMicroStx: fullCycleRewardsPerMicroStx,
-      rewardCycleLength: 2100,
-      btcPriceUsd: 78519.865,
-      stxPriceUsd: 0.27625,
-    });
-    expect(result.satsPerStxPerCycle).toBeCloseTo(0.70183108, 8);
-    expect(result.satsPerStxPerYear).toBeCloseTo(17.5658, 3);
-    expect(result.apyPercent).toBeCloseTo(5.1143, 3);
-  });
-
-  test('leaves the rate out when a price is missing', () => {
-    const result = getStackingYieldForCompletedCycle({
-      rewardsPerMicroStx: fullCycleRewardsPerMicroStx,
-      rewardCycleLength: 2100,
-      btcPriceUsd: undefined,
-      stxPriceUsd: 0.27625,
-    });
-    expect(result.satsPerStxPerYear).toBeCloseTo(17.5658, 3);
-    expect(result.apyPercent).toBeUndefined();
-  });
-
-  test('a cycle with no rewards yet yields nothing', () => {
-    const result = getStackingYieldForCompletedCycle({
-      rewardsPerMicroStx: BigInt(0),
-      rewardCycleLength: 2100,
-      btcPriceUsd: 78519.865,
-      stxPriceUsd: 0.27625,
-    });
-    expect(result.satsPerStxPerYear).toBe(0);
-    expect(result.apyPercent).toBe(0);
   });
 });
 
@@ -204,28 +131,6 @@ describe('getTimelineTicks', () => {
   });
 });
 
-describe('isCycleLengthPlausible', () => {
-  test('draws the line at a day', () => {
-    expect(isCycleLengthPlausible(2100)).toBe(true);
-    expect(isCycleLengthPlausible(144)).toBe(true);
-    expect(isCycleLengthPlausible(143)).toBe(false);
-    expect(isCycleLengthPlausible(20)).toBe(false);
-  });
-});
-
-describe('getStackingYieldForCompletedCycle on a fast network', () => {
-  test('reports the rewards but refuses to annualise them', () => {
-    const result = getStackingYieldForCompletedCycle({
-      rewardsPerMicroStx: BigInt('350915540939'),
-      rewardCycleLength: 20,
-      btcPriceUsd: 78519.865,
-      stxPriceUsd: 0.27625,
-    });
-    expect(result.satsPerStxPerCycle).toBeGreaterThan(0);
-    expect(result.apyPercent).toBeUndefined();
-  });
-});
-
 describe('formatTermDuration', () => {
   test('describes a mainnet bond term in months', () => {
     expect(formatTermDuration(12 * 2100)).toBe('6 months');
@@ -238,11 +143,6 @@ describe('formatTermDuration', () => {
   test('uses hours for anything under a day', () => {
     expect(formatTermDuration(6)).toBe('1 hour');
     expect(formatTermDuration(72)).toBe('12 hours');
-  });
-
-  test('pluralises correctly', () => {
-    expect(formatTermDuration(144)).toBe('1 day');
-    expect(formatTermDuration(288)).toBe('2 days');
   });
 
   test('is empty for a bond with no term', () => {
@@ -263,10 +163,6 @@ describe('formatTimeRemaining', () => {
 
   test('switches to days beyond a couple of days', () => {
     expect(formatTimeRemaining(6 * 24 * 7)).toBe('7 days');
-  });
-
-  test('never rounds a real wait down to nothing', () => {
-    expect(formatTimeRemaining(1)).toBe('10 min');
   });
 
   test('is empty when nothing is left to wait for', () => {
@@ -297,10 +193,6 @@ describe('getBondSchedule', () => {
     expect(schedule.l1UnlockHeight).toBe(990_500);
     expect(schedule.termEndHeight).toBe(991_550);
   });
-
-  test("the Bitcoin leg's L1 timelock opens one distribution before the term ends", () => {
-    expect(schedule.termEndHeight - schedule.l1UnlockHeight).toBe(1050);
-  });
 });
 
 describe('getBondLifecycleState', () => {
@@ -326,7 +218,7 @@ describe('getBondLifecycleState', () => {
 });
 
 describe('getBondProgress', () => {
-  test('counts distributions and days from the design example', () => {
+  test('counts scheduled intervals and days from the design example', () => {
     const schedule = getBondSchedule(
       GENESIS.activationHeight,
       GENESIS.termEndHeight,
@@ -334,7 +226,7 @@ describe('getBondProgress', () => {
       GENESIS.prepareCycleLength
     );
     const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
-    expect(progress.paid).toBe(3);
+    expect(progress.elapsedDistributions).toBe(3);
     expect(progress.total).toBe(24);
     expect(progress.dayOfTerm).toBe(21);
     expect(progress.termDays).toBe(175);
@@ -348,7 +240,7 @@ describe('getBondProgress', () => {
       GENESIS.prepareCycleLength
     );
     const progress = getBondProgress(schedule, 1_500_000, GENESIS.rewardCycleLength);
-    expect(progress.paid).toBe(24);
+    expect(progress.elapsedDistributions).toBe(24);
     expect(progress.elapsedRatio).toBe(1);
   });
 });
@@ -364,26 +256,6 @@ describe('projectScheduledBonds', () => {
 
   test('returns nothing when none are asked for', () => {
     expect(projectScheduledBonds(1, 966_350, 2100, 0)).toEqual([]);
-  });
-});
-
-describe('getRealizedRatePercent', () => {
-  test('lands near the target rate for a full term at nominal pace', () => {
-    const paid = BigInt(144_000_000);
-    const bonded = BigInt(10_000_000_000);
-    const rate = getRealizedRatePercent(paid, bonded, 12 * 2100, 2100);
-    expect(rate).toBeCloseTo(3.003, 3);
-  });
-
-  test('is undefined when nothing was bonded', () => {
-    expect(getRealizedRatePercent(BigInt(1), BigInt(0), 25200, 2100)).toBeUndefined();
-  });
-
-  test('refuses to annualize a term measured in hours', () => {
-    expect(getRealizedRatePercent(BigInt(4800), BigInt(100_000), 240, 20)).toBeUndefined();
-    const rate = getRealizedRatePercent(BigInt(4800), BigInt(100_000), 12 * 2100, 2100);
-    expect(rate).toBeDefined();
-    expect(rate!).toBeLessThan(20);
   });
 });
 

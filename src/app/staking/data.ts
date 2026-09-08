@@ -1,9 +1,10 @@
 import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 import type { PoxInfo } from '@/common/queries/usePoxInforRaw';
+import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
 
 import { DISTRIBUTIONS_PER_BOND, REWARDS_PRECISION } from './consts';
-import { bondLabel, formatBtc, formatStx, toBigInt } from './utils';
+import { bondLabel, formatBtc, formatSbtc, formatStx, toBigInt } from './utils';
 
 export type BondStatus = 'upcoming' | 'active' | (string & {});
 
@@ -70,8 +71,6 @@ export interface BondsPage {
 
 const MAX_PAGE_LIMIT = 50;
 
-const MAX_PAGE_LIMIT_REWARDS = 250;
-
 export async function fetchBondsPage(
   chain: string,
   api?: string,
@@ -96,6 +95,18 @@ export async function fetchBondsPage(
   };
 }
 
+export async function fetchBond(index: number, chain: string, api?: string): Promise<Bond> {
+  const response = await stacksAPIFetch(
+    `${getApiUrl(chain, api)}/extended/v3/staking/bonds/${index}`,
+    {
+      cache: 'default',
+      next: { revalidate: REVALIDATE_SECONDS, tags: [`staking-bond-${index}`] },
+    }
+  );
+  if (!response.ok) throw new Error(`Failed to fetch bond ${index}: ${response.status}`);
+  return response.json();
+}
+
 export async function fetchHighestBondIndex(
   chain: string,
   api?: string
@@ -110,18 +121,33 @@ export async function fetchBondRegistrations(
   api?: string
 ): Promise<BondRegistration[]> {
   const apiUrl = getApiUrl(chain, api);
-  const response = await stacksAPIFetch(
-    `${apiUrl}/extended/v3/staking/bonds/${index}/registrations?limit=${MAX_PAGE_LIMIT}`,
-    {
-      cache: 'default',
-      next: { revalidate: REVALIDATE_SECONDS, tags: [`staking-bond-${index}-registrations`] },
+  const registrations: BondRegistration[] = [];
+  const seenCursors = new Set<string>();
+  let cursor: string | null = null;
+  do {
+    const params = new URLSearchParams({ limit: String(MAX_PAGE_LIMIT) });
+    if (cursor !== null) params.set('cursor', cursor);
+    const response = await stacksAPIFetch(
+      `${apiUrl}/extended/v3/staking/bonds/${index}/registrations?${params}`,
+      {
+        cache: 'default',
+        next: { revalidate: REVALIDATE_SECONDS, tags: [`staking-bond-${index}-registrations`] },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch registrations for bond ${index}: ${response.status}`);
     }
-  );
-  if (!response.ok) {
-    throw new Error(`Failed to fetch registrations for bond ${index}: ${response.status}`);
-  }
-  const data: CursorPaginated<BondRegistration> = await response.json();
-  return data.results ?? [];
+    const data: CursorPaginated<BondRegistration> = await response.json();
+    registrations.push(...data.results);
+    cursor = data.cursor.next;
+    if (cursor !== null) {
+      if (seenCursors.has(cursor) || data.results.length === 0) {
+        throw new Error(`Incomplete registrations for bond ${index}`);
+      }
+      seenCursors.add(cursor);
+    }
+  } while (cursor !== null);
+  return registrations;
 }
 
 export async function fetchPoxInfo(chain: string, api?: string): Promise<PoxInfo> {
@@ -258,6 +284,7 @@ export interface StakingActivityEvent {
   detail?: string;
   bondIndex?: number;
   amount?: string;
+  amountUnavailable?: boolean;
   cumulative?: string;
 }
 
@@ -265,6 +292,7 @@ interface RawTx {
   tx_id: string;
   tx_status: string;
   burn_block_time: number;
+  block_time?: number;
   block_height: number;
   contract_call?: { function_name?: string };
 }
@@ -276,20 +304,28 @@ async function fetchTxsByFunction(
   limit: number,
   offset = 0
 ): Promise<RawTx[]> {
-  const params = new URLSearchParams({
-    limit: String(Math.min(limit, MAX_PAGE_LIMIT)),
-    offset: String(offset),
-    contract_id: poxContractId,
-    function_name: functionName,
-  });
-  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx?${params}`, {
-    cache: 'no-store',
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${functionName} transactions: ${response.status}`);
+  const transactions: RawTx[] = [];
+  while (transactions.length < limit) {
+    const pageLimit = Math.min(limit - transactions.length, MAX_PAGE_LIMIT);
+    const params = new URLSearchParams({
+      limit: String(pageLimit),
+      offset: String(offset + transactions.length),
+      contract_id: poxContractId,
+      function_name: functionName,
+    });
+    const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx?${params}`, {
+      cache: 'default',
+      next: { revalidate: REVALIDATE_SECONDS, tags: ['staking-transactions'] },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${functionName} transactions: ${response.status}`);
+    }
+    const data: { results?: RawTx[] } = await response.json();
+    const rows = data.results ?? [];
+    transactions.push(...rows);
+    if (rows.length < pageLimit) break;
   }
-  const data: { results?: RawTx[] } = await response.json();
-  return data.results ?? [];
+  return transactions;
 }
 
 export function readUint(repr: string, key: string): bigint | undefined {
@@ -302,24 +338,43 @@ export function readTopic(repr: string): string | undefined {
 }
 
 async function fetchTxEvents(apiUrl: string, txId: string, settled = false): Promise<string[]> {
-  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx/${txId}`, {
-    cache: 'default',
-    next: {
-      revalidate: settled ? SETTLED_REVALIDATE_SECONDS : REVALIDATE_SECONDS,
-      tags: [`staking-tx-${txId}`],
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch transaction ${txId}: ${response.status}`);
+  const eventLimit = 100;
+  const reprs: string[] = [];
+  let offset = 0;
+  while (true) {
+    const params = new URLSearchParams({
+      event_limit: String(eventLimit),
+      event_offset: String(offset),
+    });
+    const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx/${txId}?${params}`, {
+      cache: 'default',
+      next: {
+        revalidate: settled ? SETTLED_REVALIDATE_SECONDS : REVALIDATE_SECONDS,
+        tags: [`staking-tx-${txId}`],
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch transaction ${txId}: ${response.status}`);
+    }
+    const data: {
+      event_count?: number;
+      events?: { contract_log?: { value?: { repr?: string } } }[];
+    } = await response.json();
+    const events = data.events ?? [];
+    reprs.push(
+      ...events
+        .map(event => event.contract_log?.value?.repr)
+        .filter((repr): repr is string => !!repr)
+    );
+    offset += events.length;
+    if (data.event_count !== undefined ? offset >= data.event_count : events.length < eventLimit) {
+      return reprs;
+    }
+    if (events.length === 0) throw new Error(`Incomplete events for transaction ${txId}`);
   }
-  const data: { events?: { contract_log?: { value?: { repr?: string } } }[] } =
-    await response.json();
-  return (data.events ?? [])
-    .map(event => event.contract_log?.value?.repr)
-    .filter((repr): repr is string => !!repr);
 }
 
-export function readCumulativePaidSats(repr: string): bigint | undefined {
+export function readCycleCreditedSats(repr: string): bigint | undefined {
   const perSat = readUint(repr, 'cumulative-rewards-per-sat');
   const staked = readUint(repr, 'bond-staked-sats');
   if (perSat === undefined || staked === undefined) return undefined;
@@ -369,19 +424,22 @@ function describeContractCall(
       ),
       bondIndex,
       amount:
-        bondIndex !== undefined
+        bondIndex !== undefined &&
+        bondsByIndex.get(bondIndex)?.parameters?.btc_capacity !== undefined
           ? formatBtc(toBigInt(bondsByIndex.get(bondIndex)?.parameters?.btc_capacity))
           : undefined,
     };
   }
 
-  const repr =
-    find('register-for-bond') ?? find('update-bond-registration') ?? find('announce-l1-early-exit');
+  const repr = find(fn);
   const index = repr ? readUint(repr, 'bond-index') : undefined;
   const bondIndex = index !== undefined ? Number(index) : undefined;
   // A registration reports the BTC it bonds. An early exit reports the BTC it frees.
   const sats = repr
-    ? (readUint(repr, 'sats-total') ?? readUint(repr, 'amount-sats-released'))
+    ? (readUint(repr, 'sats-total') ??
+      readUint(repr, 'amount-sats-released') ??
+      readUint(repr, 'amount-sats') ??
+      readUint(repr, 'amount-withdrawn-sats'))
     : undefined;
   // Only a registration pairs STX with the BTC it bonds.
   const pairedMicroStx = repr ? readUint(repr, 'amount-ustx') : undefined;
@@ -391,102 +449,85 @@ function describeContractCall(
       pairedMicroStx !== undefined ? `${formatStx(pairedMicroStx, 0)} paired` : undefined
     ),
     bondIndex,
-    amount: sats !== undefined ? formatBtc(sats) : undefined,
+    amount:
+      sats !== undefined ? (fn === 'unstake-sbtc' ? formatSbtc(sats) : formatBtc(sats)) : undefined,
   };
 }
 
 const SETTLED_REVALIDATE_SECONDS = 24 * 60 * 60;
 
-async function fetchBurnBlockTimeMs(
-  height: number,
-  chain: string,
-  api?: string
-): Promise<number | undefined> {
-  const MAX_PROBES = 5;
-  const apiUrl = getApiUrl(chain, api);
-  for (let offset = 0; offset < MAX_PROBES; offset++) {
-    const response = await stacksAPIFetch(`${apiUrl}/extended/v2/burn-blocks/${height + offset}`, {
-      cache: 'default',
-      next: { revalidate: SETTLED_REVALIDATE_SECONDS, tags: [`burn-block-${height + offset}`] },
-    }).catch(() => undefined);
-    if (!response?.ok) continue;
-    const data: { burn_block_time?: number } = await response.json();
-    if (typeof data.burn_block_time === 'number') return data.burn_block_time * 1000;
-  }
-  return undefined;
-}
-
-export async function fetchCycleEndTimes(
-  cycleNumbers: number[],
-  firstBurnchainBlockHeight: number,
-  rewardCycleLength: number,
+export async function fetchBurnBlockTimes(
+  heights: number[],
+  currentBurnHeight: number,
   chain: string,
   api?: string
 ): Promise<Record<number, number>> {
-  if (!rewardCycleLength) return {};
-  const entries = await Promise.all(
-    cycleNumbers.map(async cycleNumber => {
-      const endHeight = firstBurnchainBlockHeight + (cycleNumber + 1) * rewardCycleLength;
-      const endedMs = await fetchBurnBlockTimeMs(endHeight, chain, api);
-      return [cycleNumber, endedMs] as const;
-    })
+  const times: Record<number, number> = {};
+  const mined = Array.from(new Set(heights)).filter(
+    height => height > 0 && height <= currentBurnHeight
   );
-  const byCycle: Record<number, number> = {};
-  for (const [cycleNumber, endedMs] of entries) {
-    if (endedMs !== undefined) byCycle[cycleNumber] = endedMs;
+  // Bound concurrency on pages containing many historical bonds. Never substitute a nearby block.
+  for (let start = 0; start < mined.length; start += 8) {
+    await Promise.all(
+      mined.slice(start, start + 8).map(async height => {
+        try {
+          const response = await stacksAPIFetch(
+            `${getApiUrl(chain, api)}/extended/v2/burn-blocks/${height}`,
+            {
+              cache: 'default',
+              next: { revalidate: SETTLED_REVALIDATE_SECONDS, tags: [`burn-block-${height}`] },
+            }
+          );
+          if (!response.ok) return;
+          const data: { burn_block_time?: number } = await response.json();
+          if (typeof data.burn_block_time === 'number') times[height] = data.burn_block_time * 1000;
+        } catch {
+          // The presentation layer supplies a marked date estimate when this lookup fails.
+        }
+      })
+    );
   }
-  return byCycle;
-}
-
-const MAX_ACCRUAL_PAGES = 12;
-
-export async function fetchCycleAccruedSats(
-  cycleStartHeight: number,
-  chain: string,
-  api?: string
-): Promise<bigint | undefined> {
-  if (!cycleStartHeight) return undefined;
-  const apiUrl = getApiUrl(chain, api);
-  let total = BigInt(0);
-  try {
-    for (let page = 0; page < MAX_ACCRUAL_PAGES; page++) {
-      const params = new URLSearchParams({
-        limit: String(MAX_PAGE_LIMIT_REWARDS),
-        offset: String(page * MAX_PAGE_LIMIT_REWARDS),
-      });
-      const response = await stacksAPIFetch(`${apiUrl}/extended/v1/burnchain/rewards?${params}`, {
-        cache: 'default',
-        next: { revalidate: REVALIDATE_SECONDS, tags: ['staking-cycle-accrual'] },
-      });
-      if (!response.ok) return undefined;
-      const data: { results?: { burn_block_height: number; reward_amount: string }[] } =
-        await response.json();
-      const rows = data.results ?? [];
-      if (rows.length === 0) return total;
-      for (const row of rows) {
-        if (row.burn_block_height < cycleStartHeight) return total;
-        total += toBigInt(row.reward_amount);
-      }
-      if (rows.length < MAX_PAGE_LIMIT_REWARDS) return total;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
+  return times;
 }
 
 const TX_WINDOW_PER_ROW = 3;
+
+export interface StakingActivityResult {
+  events: StakingActivityEvent[];
+  incomplete: boolean;
+}
 
 export async function fetchStakingActivity(
   poxContractId: string,
   chain: string,
   api?: string,
   limit = 12,
-  group?: ActivityGroup
-): Promise<StakingActivityEvent[]> {
+  group?: ActivityGroup,
+  bondIndex?: number
+): Promise<StakingActivityResult> {
   const apiUrl = getApiUrl(chain, api);
   const groups = group ? [group] : (Object.keys(ACTIVITY_GROUP_FUNCTIONS) as ActivityGroup[]);
-  const txWindow = Math.min(limit * TX_WINDOW_PER_ROW, MAX_PAGE_LIMIT);
+  const txWindow = Math.max(limit, Math.min(limit * TX_WINDOW_PER_ROW, MAX_PAGE_LIMIT));
+  let incomplete = false;
+  const activityFailure = (error: Error) => {
+    incomplete = true;
+    logError(error, 'Staking activity: partial fetch failure', { chain }, 'error');
+    return [];
+  };
+  const readActivityEvents = async (tx: RawTx): Promise<string[] | undefined> => {
+    try {
+      return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');
+    } catch {
+      // Retry once after a short pause before marking this transaction unavailable.
+      await new Promise(resolve => setTimeout(resolve, 300));
+      try {
+        return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');
+      } catch (error) {
+        activityFailure(error as Error);
+        return undefined;
+      }
+    }
+  };
 
   const bondsByIndex = new Map<number, Bond>();
   const page = await fetchBondsPage(chain, api).catch(() => undefined);
@@ -498,7 +539,7 @@ export async function fetchStakingActivity(
     groups.flatMap(activityGroup =>
       ACTIVITY_GROUP_FUNCTIONS[activityGroup].map(async functionName => {
         const txs = await fetchTxsByFunction(apiUrl, poxContractId, functionName, txWindow).catch(
-          () => []
+          activityFailure
         );
         return txs.map(tx => ({ tx, activityGroup }));
       })
@@ -511,74 +552,94 @@ export async function fetchStakingActivity(
     )
     .slice(0, txWindow);
 
-  const rows = await Promise.all(
-    txs.map(async ({ tx, activityGroup }): Promise<StakingActivityEvent[]> => {
-      const base = {
-        txId: tx.tx_id,
-        txStatus: tx.tx_status,
-        blockHeight: tx.block_height,
-        burnBlockTime: tx.burn_block_time,
-        group: activityGroup,
-      };
+  const rows: StakingActivityEvent[][] = [];
+  // Avoid bursting up to 60 transaction-detail requests at the API at once.
+  for (let start = 0; start < txs.length; start += 4) {
+    rows.push(
+      ...(await Promise.all(
+        txs
+          .slice(start, start + 4)
+          .map(async ({ tx, activityGroup }): Promise<StakingActivityEvent[]> => {
+            const base = {
+              txId: tx.tx_id,
+              txStatus: tx.tx_status,
+              blockHeight: tx.block_height,
+              burnBlockTime: tx.burn_block_time,
+              group: activityGroup,
+            };
 
-      const settled = tx.tx_status === 'success';
+            const settled = tx.tx_status === 'success';
 
-      if (tx.contract_call?.function_name === 'calculate-rewards') {
-        const reprs = await fetchTxEvents(apiUrl, tx.tx_id, settled).catch(() => []);
-        const calculationHeight = reprs
-          .filter(repr => readTopic(repr) === 'calculate-rewards')
-          .map(repr => readUint(repr, 'calculation-height'))
-          .find(height => height !== undefined);
-        return reprs
-          .filter(repr => readTopic(repr) === 'bond-distribution')
-          .flatMap(repr => {
-            const bondIndex = readUint(repr, 'bond-index');
-            const rewards = readUint(repr, 'bond-rewards');
-            if (bondIndex === undefined || rewards === undefined) return [];
-            const cumulativeSats = readCumulativePaidSats(repr);
-            const index = Number(bondIndex);
-            const bond = bondsByIndex.get(index);
-            const ordinal = describeDistribution(bond, calculationHeight);
+            if (tx.contract_call?.function_name === 'calculate-rewards') {
+              const reprs = await readActivityEvents(tx);
+              if (!reprs) return [];
+              const summary = reprs.find(repr => readTopic(repr) === 'calculate-rewards');
+              const calculationHeight = summary
+                ? readUint(summary, 'calculation-height')
+                : undefined;
+              const cycle = summary ? readUint(summary, 'stx-cycle') : undefined;
+              return reprs
+                .filter(repr => readTopic(repr) === 'bond-distribution')
+                .flatMap(repr => {
+                  const bondIndex = readUint(repr, 'bond-index');
+                  const rewards = readUint(repr, 'bond-rewards');
+                  if (bondIndex === undefined || rewards === undefined) return [];
+                  const cumulativeSats = readCycleCreditedSats(repr);
+                  const index = Number(bondIndex);
+                  const bond = bondsByIndex.get(index);
+                  const ordinal = describeDistribution(bond, calculationHeight);
+                  return [
+                    {
+                      ...base,
+                      label: 'Rewards credited',
+                      detail: joinDetail(
+                        optionalBondLabel(index),
+                        ordinal,
+                        cycle !== undefined ? `cycle ${cycle}` : undefined
+                      ),
+                      bondIndex: index,
+                      amount: formatSbtc(rewards),
+                      cumulative:
+                        cumulativeSats !== undefined ? formatSbtc(cumulativeSats) : undefined,
+                    },
+                  ];
+                });
+            }
+
+            const fn = tx.contract_call?.function_name ?? '';
+            const labels: Record<string, string> = {
+              'register-for-bond': 'Enrolled',
+              'update-bond-registration': 'Registration updated',
+              'unstake-sbtc': 'sBTC unstaked',
+              'announce-l1-early-exit': 'Bitcoin released early',
+              'setup-bond': 'Bond created',
+            };
+
+            const reprs = await readActivityEvents(tx);
+            const detail = describeContractCall(fn, reprs ?? [], bondsByIndex);
             return [
               {
                 ...base,
-                label: 'Reward distribution',
-                detail: joinDetail(optionalBondLabel(index), ordinal),
-                bondIndex: index,
-                amount: formatBtc(rewards),
-                cumulative: cumulativeSats !== undefined ? formatBtc(cumulativeSats) : undefined,
+                label: labels[fn] ?? 'Contract call',
+                detail: detail.text,
+                bondIndex: detail.bondIndex,
+                amount: detail.amount,
+                amountUnavailable: settled && detail.amount === undefined,
               },
             ];
-          });
-      }
+          })
+      ))
+    );
+  }
 
-      const fn = tx.contract_call?.function_name ?? '';
-      const labels: Record<string, string> = {
-        'register-for-bond': 'Enrolled',
-        'update-bond-registration': 'Registration updated',
-        'unstake-sbtc': 'sBTC unstaked',
-        'announce-l1-early-exit': 'Bitcoin released early',
-        'setup-bond': 'Bond created',
-      };
-
-      const reprs = await fetchTxEvents(apiUrl, tx.tx_id, settled).catch(() => []);
-      const detail = describeContractCall(fn, reprs, bondsByIndex);
-      return [
-        {
-          ...base,
-          label: labels[fn] ?? 'Contract call',
-          detail: detail.text,
-          bondIndex: detail.bondIndex,
-          amount: detail.amount,
-        },
-      ];
-    })
-  );
-
-  return rows
-    .flat()
-    .sort((a, b) => b.burnBlockTime - a.burnBlockTime || b.blockHeight - a.blockHeight)
-    .slice(0, limit);
+  return {
+    events: rows
+      .flat()
+      .filter(event => bondIndex === undefined || event.bondIndex === bondIndex)
+      .sort((a, b) => b.burnBlockTime - a.burnBlockTime || b.blockHeight - a.blockHeight)
+      .slice(0, limit),
+    incomplete,
+  };
 }
 
 const DISTRIBUTION_TX_PAGE = MAX_PAGE_LIMIT;
@@ -587,6 +648,16 @@ const MAX_DISTRIBUTION_PAGES = 4;
 export interface BondRewards {
   byBondIndex: Record<number, bigint>;
   byCycle: Record<number, bigint>;
+  lastCalculationHeightByCycle: Record<number, number>;
+  settlementsByBond: Record<
+    number,
+    {
+      calculationHeight: number;
+      timestampMs: number;
+      principalSats?: bigint;
+      rewardedSats?: bigint;
+    }[]
+  >;
 }
 
 export async function fetchBondRewards(
@@ -613,8 +684,9 @@ export async function fetchBondRewards(
   }
   if (!historyComplete) return undefined;
 
-  const settled = txs.filter(tx => tx.tx_status === 'success');
-  if (settled.length === 0) return { byBondIndex: {}, byCycle: {} };
+  const settled = Array.from(
+    new Map(txs.filter(tx => tx.tx_status === 'success').map(tx => [tx.tx_id, tx])).values()
+  );
 
   const perTx = await Promise.all(
     settled.map(async tx => {
@@ -623,14 +695,19 @@ export async function fetchBondRewards(
       if (!summary) return undefined;
       const total = readUint(summary, 'total-bond-rewards');
       const cycle = readUint(summary, 'stx-cycle');
-      if (total === undefined || cycle === undefined) return undefined;
+      const calculationHeight = readUint(summary, 'calculation-height');
+      if (total === undefined || cycle === undefined || calculationHeight === undefined)
+        return undefined;
 
       const perBond: Record<number, bigint> = {};
+      const principalByBond: Record<number, bigint | undefined> = {};
       for (const repr of reprs.filter(repr => readTopic(repr) === 'bond-distribution')) {
         const index = readUint(repr, 'bond-index');
         const rewarded = readUint(repr, 'bond-rewards');
         if (index === undefined || rewarded === undefined) return undefined;
         const key = Number(index);
+        if (perBond[key] !== undefined) return undefined;
+        principalByBond[key] = readUint(repr, 'bond-staked-sats');
         perBond[key] = (perBond[key] ?? BigInt(0)) + rewarded;
       }
 
@@ -638,6 +715,9 @@ export async function fetchBondRewards(
         total,
         cycle,
         perBond,
+        principalByBond,
+        calculationHeight: Number(calculationHeight),
+        timestampMs: (tx.block_time ?? tx.burn_block_time) * 1000,
       };
     })
   );
@@ -645,14 +725,26 @@ export async function fetchBondRewards(
 
   const byBondIndex: Record<number, bigint> = {};
   const byCycle: Record<number, bigint> = {};
+  const lastCalculationHeightByCycle: Record<number, number> = {};
+  const settlementsByBond: BondRewards['settlementsByBond'] = {};
   perTx.forEach(entry => {
     if (!entry) return;
     const cycle = Number(entry.cycle);
+    lastCalculationHeightByCycle[cycle] = Math.max(
+      lastCalculationHeightByCycle[cycle] ?? 0,
+      entry.calculationHeight
+    );
     byCycle[cycle] = (byCycle[cycle] ?? BigInt(0)) + entry.total;
     Object.entries(entry.perBond).forEach(([index, sats]) => {
       const key = Number(index);
       byBondIndex[key] = (byBondIndex[key] ?? BigInt(0)) + sats;
+      (settlementsByBond[key] ??= []).push({
+        calculationHeight: entry.calculationHeight,
+        timestampMs: entry.timestampMs,
+        principalSats: entry.principalByBond[key],
+        rewardedSats: sats,
+      });
     });
   });
-  return { byBondIndex, byCycle };
+  return { byBondIndex, byCycle, lastCalculationHeightByCycle, settlementsByBond };
 }

@@ -13,9 +13,15 @@ export interface ActivityPageData {
   events: StakingActivityEvent[];
   selectedGroup?: ActivityGroup;
   bondIndex?: number;
+  unavailable?: boolean;
 }
 
-export function ActivityPageClient({ events, selectedGroup, bondIndex }: ActivityPageData) {
+export function ActivityPageClient({
+  events,
+  selectedGroup,
+  bondIndex,
+  unavailable,
+}: ActivityPageData) {
   return (
     <Stack gap={6}>
       <SubpageHeader
@@ -28,6 +34,7 @@ export function ActivityPageClient({ events, selectedGroup, bondIndex }: Activit
       <Stack gap={3}>
         <StakingActivity
           events={events}
+          unavailable={unavailable}
           selectedGroup={selectedGroup}
           pageSize={ACTIVITY_PAGE_SIZE}
           standalone

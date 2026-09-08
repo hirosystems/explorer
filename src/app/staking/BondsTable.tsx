@@ -3,7 +3,6 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
-import { formatDateShort } from '@/common/utils/date-utils';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -12,15 +11,13 @@ import { useMemo } from 'react';
 import { AnnotatedValue, NO_VALUE } from './AnnotatedValue';
 import { BondStateBadge } from './BondStateBadge';
 import { BONDS_TABLE_LIMIT } from './consts';
-import type { Bond } from './data';
-import {
-  bpsToPercent,
-  burnHeightToApproximateTimestamp,
-  getRealizedRatePercent,
-} from './projections';
+import type { Bond, BondRewards } from './data';
+import { bpsToPercent } from './projections';
+import { RealizedBondRate, getRealizedBondRate } from './reward-metrics';
 import {
   bondLabel,
   formatBtc,
+  formatBurnDate,
   formatSbtc,
   getBondStatusLabel,
   isBondPending,
@@ -40,12 +37,11 @@ export interface BondRow {
   lockedSats: bigint;
   rewardedSats?: bigint;
   targetRatePercent: number;
-  realizedRatePercent?: number;
-  realizedRateUnavailable?: 'running' | 'nothingBonded' | 'outOfHistory' | 'cycleTooShort';
+  realizedRate: RealizedBondRate;
   registeredCount: number;
   allowedCount: number;
-  activationMs: number;
-  unlockMs: number;
+  activationDate: string;
+  unlockDate: string;
 }
 
 export function toBondRow(
@@ -53,26 +49,17 @@ export function toBondRow(
   currentBurnHeight: number,
   nowMs: number,
   rewardsByBond?: Record<number, bigint>,
-  rewardCycleLength?: number
+  burnBlockTimes: Record<number, number> = {},
+  settlementsByBond?: BondRewards['settlementsByBond']
 ): BondRow {
   const capacitySats = toBigInt(bond.parameters?.btc_capacity);
   const lockedSats = toBigInt(bond.balances?.locked?.btc);
   const activationHeight = bond.schedule?.activation?.bitcoin_height ?? 0;
   const unlockHeight = bond.schedule?.unlock?.bitcoin_height ?? 0;
   const rewardedSats = rewardsByBond ? (rewardsByBond[bond.index] ?? BigInt(0)) : undefined;
-  const hasClosed = unlockHeight > 0 && currentBurnHeight >= unlockHeight;
-  const realizedRate =
-    hasClosed && rewardedSats !== undefined && rewardCycleLength
-      ? getRealizedRatePercent(
-          rewardedSats,
-          lockedSats,
-          unlockHeight - activationHeight,
-          rewardCycleLength
-        )
-      : undefined;
   return {
-    activationMs: burnHeightToApproximateTimestamp(activationHeight, currentBurnHeight, nowMs),
-    unlockMs: burnHeightToApproximateTimestamp(unlockHeight, currentBurnHeight, nowMs),
+    activationDate: formatBurnDate(activationHeight, currentBurnHeight, nowMs, burnBlockTimes),
+    unlockDate: formatBurnDate(unlockHeight, currentBurnHeight, nowMs, burnBlockTimes),
     index: bond.index,
     name: bondLabel(bond.index),
     status: getBondStatusLabel(bond.status),
@@ -84,35 +71,14 @@ export function toBondRow(
     capacitySats,
     lockedSats,
     rewardedSats,
+    realizedRate: getRealizedBondRate(bond, currentBurnHeight, settlementsByBond?.[bond.index]),
     targetRatePercent: bpsToPercent(bond.parameters?.target_rate_bps ?? 0),
-    realizedRatePercent: realizedRate,
-    realizedRateUnavailable:
-      realizedRate !== undefined
-        ? undefined
-        : !hasClosed
-          ? 'running'
-          : rewardedSats === undefined
-            ? 'outOfHistory'
-            : lockedSats <= BigInt(0)
-              ? 'nothingBonded'
-              : 'cycleTooShort',
     registeredCount: bond.registrations?.registered_count ?? 0,
     allowedCount: bond.registrations?.allowed_count ?? 0,
   };
 }
 
-function reasonNote(reason?: string): string | undefined {
-  return reason ? UNAVAILABLE_REASONS[reason] : undefined;
-}
-
-const UNAVAILABLE_REASONS: Record<string, string> = {
-  running: 'The bond is still paying out. A realized rate is only final once its term ends.',
-  nothingBonded: 'Nothing was bonded, so there is no principal to measure a return against.',
-  outOfHistory:
-    'This bond closed before the distribution history the page reads, so its rewards cannot be totalled.',
-  cycleTooShort:
-    'Reward cycles on this network are shorter than a day, so a term returns its full rate too quickly for an annual figure to mean anything.',
-};
+const REWARD_HISTORY_UNAVAILABLE = 'Complete reward allocation history is unavailable.';
 
 function PendingOr({ isPending, children }: { isPending: boolean; children: React.ReactNode }) {
   if (isPending) {
@@ -170,7 +136,7 @@ const bondColumns: ColumnDef<BondRow>[] = [
             whiteSpace="nowrap"
             suppressHydrationWarning
           >
-            ~{formatDateShort(row.activationMs)} &rarr; ~{formatDateShort(row.unlockMs)}
+            {row.activationDate} &rarr; {row.unlockDate}
           </Text>
         </Stack>
       );
@@ -182,7 +148,11 @@ const bondColumns: ColumnDef<BondRow>[] = [
     accessorKey: 'capacitySats',
     enableSorting: false,
     size: 120,
-    meta: { textAlign: 'right' },
+    meta: {
+      textAlign: 'right',
+      tooltip:
+        'Sum of participant allowlist caps. An upper bound, not a separately approved offering size.',
+    },
     cell: info => (
       <Text textStyle="text-regular-sm" whiteSpace="nowrap">
         {formatBtc(info.row.original.capacitySats, 2)}
@@ -220,21 +190,19 @@ const bondColumns: ColumnDef<BondRow>[] = [
   {
     id: 'realizedRate',
     header: 'Realized rate',
-    accessorKey: 'realizedRatePercent',
     enableSorting: false,
-    size: 110,
+    size: 130,
     meta: { textAlign: 'right' },
-    cell: info => {
-      const row = info.row.original;
-      if (row.realizedRatePercent !== undefined) {
-        return (
-          <Text textStyle="text-regular-sm" whiteSpace="nowrap">
-            {row.realizedRatePercent.toFixed(2)}%
-          </Text>
-        );
-      }
-      return <AnnotatedValue value={NO_VALUE} note={reasonNote(row.realizedRateUnavailable)} />;
-    },
+    cell: info => (
+      <AnnotatedValue
+        value={
+          info.row.original.realizedRate.percent === undefined
+            ? NO_VALUE
+            : `${info.row.original.realizedRate.percent.toFixed(2)}%`
+        }
+        note={info.row.original.realizedRate.note}
+      />
+    ),
   },
   {
     id: 'registrations',
@@ -254,7 +222,7 @@ const bondColumns: ColumnDef<BondRow>[] = [
   },
   {
     id: 'rewarded',
-    header: 'Rewarded',
+    header: 'Rewards credited',
     accessorKey: 'rewardedSats',
     enableSorting: false,
     size: 110,
@@ -266,7 +234,7 @@ const bondColumns: ColumnDef<BondRow>[] = [
             {formatSbtc(info.row.original.rewardedSats)}
           </Text>
         ) : (
-          <AnnotatedValue value={NO_VALUE} note={UNAVAILABLE_REASONS.outOfHistory} />
+          <AnnotatedValue value={NO_VALUE} note={REWARD_HISTORY_UNAVAILABLE} />
         )}
       </PendingOr>
     ),
@@ -288,19 +256,23 @@ function NoBondsYet() {
 
 export function BondsTable({
   bonds,
+  unavailable,
   currentBurnHeight,
   nowMs,
   rewardsByBond,
-  rewardCycleLength,
+  settlementsByBond,
+  burnBlockTimes = {},
   limit = BONDS_TABLE_LIMIT,
   pagination,
   fullPage = false,
 }: {
   bonds: Bond[];
+  unavailable?: boolean;
   currentBurnHeight: number;
   nowMs: number;
   rewardsByBond?: Record<number, bigint>;
-  rewardCycleLength?: number;
+  settlementsByBond?: BondRewards['settlementsByBond'];
+  burnBlockTimes?: Record<number, number>;
   limit?: number;
   pagination?: React.ComponentProps<typeof Table>['pagination'];
   fullPage?: boolean;
@@ -310,12 +282,24 @@ export function BondsTable({
       [...bonds]
         .sort((a, b) => b.index - a.index)
         .slice(0, limit)
-        .map(bond => toBondRow(bond, currentBurnHeight, nowMs, rewardsByBond, rewardCycleLength)),
-    [bonds, currentBurnHeight, nowMs, rewardsByBond, rewardCycleLength, limit]
+        .map(bond =>
+          toBondRow(
+            bond,
+            currentBurnHeight,
+            nowMs,
+            rewardsByBond,
+            burnBlockTimes,
+            settlementsByBond
+          )
+        ),
+    [bonds, currentBurnHeight, nowMs, rewardsByBond, burnBlockTimes, settlementsByBond, limit]
   );
   return (
     <Table
-      data={data}
+      data={unavailable ? [] : data}
+      error={
+        unavailable ? 'Bond data could not be loaded. Refresh the page to try again.' : undefined
+      }
       columns={bondColumns}
       emptyTableUi={<NoBondsYet />}
       pagination={pagination}

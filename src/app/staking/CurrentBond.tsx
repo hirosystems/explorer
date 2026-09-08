@@ -14,7 +14,7 @@ import { BondStateBadge } from './BondStateBadge';
 import type { BondStateTone } from './BondStateBadge';
 import { GlossaryTerm } from './GlossaryTerm';
 import { GENESIS_BOND_INDEX } from './consts';
-import type { Bond, EnrollmentShare } from './data';
+import type { Bond, BondRewards, EnrollmentShare } from './data';
 import {
   BondLifecycleState,
   burnHeightToApproximateTimestamp,
@@ -23,7 +23,7 @@ import {
   getBondSchedule,
   getDistributionCadence,
 } from './projections';
-import { bondLabel, formatBtc, formatDateWithYear, toBigInt } from './utils';
+import { bondLabel, formatBtc, formatBurnDate, formatDateWithYear, toBigInt } from './utils';
 
 const BAR_HEIGHT = 2;
 
@@ -32,6 +32,7 @@ const PULSE_MS = 2400;
 const STATE_LABELS: Record<BondLifecycleState, string> = {
   scheduled: 'Scheduled',
   enrolling: 'Enrolling',
+  awaitingActivation: 'Enrollment closed',
   active: 'Active',
   maturity: 'Maturity',
   closed: 'Closed',
@@ -40,6 +41,7 @@ const STATE_LABELS: Record<BondLifecycleState, string> = {
 const STATE_TONES: Record<BondLifecycleState, BondStateTone> = {
   scheduled: 'pending',
   enrolling: 'enrolling',
+  awaitingActivation: 'pending',
   active: 'active',
   maturity: 'maturity',
   closed: 'closed',
@@ -84,13 +86,13 @@ interface Milestone {
   id: string;
   label: React.ReactNode;
   height: number;
-  timestamp: number;
+  date: string;
   isPast: boolean;
   isCurrent?: boolean;
 }
 
 function LifecycleRow({ milestone, live }: { milestone: Milestone; live: boolean }) {
-  const { label, height, timestamp, isPast, isCurrent } = milestone;
+  const { label, height, date, isPast, isCurrent } = milestone;
   const reached = isPast || isCurrent;
   return (
     <Flex justify="space-between" gap={3} align="center" flexWrap="wrap">
@@ -134,7 +136,7 @@ function LifecycleRow({ milestone, live }: { milestone: Milestone; live: boolean
           textAlign="right"
           suppressHydrationWarning
         >
-          {reached ? formatDateShort(timestamp) : `~${formatDateShort(timestamp)}`}
+          {date}
         </Text>
       </Flex>
     </Flex>
@@ -145,6 +147,8 @@ export function CurrentBond({
   featuredBond,
   nextBond,
   enrollments,
+  burnBlockTimes,
+  settlements,
   rewardCycleLength,
   prepareCycleLength,
   currentBurnHeight,
@@ -152,7 +156,9 @@ export function CurrentBond({
 }: {
   featuredBond?: Bond;
   nextBond?: { index: number; activationHeight: number; termEndHeight: number };
-  enrollments: EnrollmentShare[];
+  enrollments?: EnrollmentShare[];
+  burnBlockTimes: Record<number, number>;
+  settlements?: BondRewards['settlementsByBond'][number];
   rewardCycleLength: number;
   prepareCycleLength: number;
   currentBurnHeight: number;
@@ -175,7 +181,7 @@ export function CurrentBond({
   const cadence = getDistributionCadence(rewardCycleLength);
   const distributionHeight = (n: number) => schedule.activationHeight + n * cadence;
 
-  const enrolledSats = enrollments.reduce(
+  const enrolledSats = enrollments?.reduce(
     (total, enrollment) => total + toBigInt(enrollment.btc),
     BigInt(0)
   );
@@ -184,34 +190,23 @@ export function CurrentBond({
   const past = (height: number) => currentBurnHeight >= height;
 
   const milestones: Milestone[] = [
-    { id: 'enrollment-opened', label: 'Enrollment opened', height: schedule.enrollmentOpensHeight },
+    {
+      id: 'enrollment-opened',
+      label: featuredBond.transaction ? 'Enrollment opened' : 'Earliest setup window',
+      height: featuredBond.transaction?.bitcoin_block.height ?? schedule.enrollmentOpensHeight,
+    },
     {
       id: 'enrollment-closed',
       label: 'Enrollment closed',
       height: schedule.enrollmentClosesHeight,
     },
     { id: 'bond-started', label: 'Bond started · Day 0', height: schedule.activationHeight },
-    ...(progress.paid > 0
-      ? [
-          {
-            id: 'latest-distribution',
-            label: (
-              <>
-                <GlossaryTerm entry="rewardDistribution">Latest distribution</GlossaryTerm> ·{' '}
-                {progress.paid} of {progress.total}
-              </>
-            ),
-            height: distributionHeight(progress.paid),
-            isCurrent: true,
-          },
-        ]
-      : []),
-    ...(progress.paid < progress.total
+    ...(progress.elapsedDistributions < progress.total
       ? [
           {
             id: 'next-distribution',
-            label: `Next distribution · ${progress.paid + 1} of ${progress.total}`,
-            height: distributionHeight(progress.paid + 1),
+            label: `Next scheduled distribution · ${progress.elapsedDistributions + 1} of ${progress.total}`,
+            height: distributionHeight(progress.elapsedDistributions + 1),
           },
         ]
       : []),
@@ -220,12 +215,24 @@ export function CurrentBond({
   ]
     .map(m => ({
       ...m,
-      timestamp: at(m.height),
-      isPast: past(m.height) && !m.isCurrent,
-      isCurrent: !!m.isCurrent && past(m.height),
+      date:
+        m.id === 'enrollment-opened' && featuredBond.transaction
+          ? formatDateShort(featuredBond.transaction.bitcoin_block.time * 1000)
+          : formatBurnDate(m.height, currentBurnHeight, nowMs, burnBlockTimes),
+      isPast: past(m.height),
+      isCurrent:
+        (state === 'enrolling' && m.id === 'enrollment-opened') ||
+        (state === 'awaitingActivation' && m.id === 'enrollment-closed') ||
+        (state === 'active' && m.id === 'bond-started') ||
+        (state === 'maturity' && m.id === 'l1-unlock'),
     }))
     .sort((a, b) => a.height - b.height);
 
+  const latestCredit = settlements?.reduce<(typeof settlements)[number] | undefined>(
+    (latest, entry) =>
+      !latest || entry.calculationHeight > latest.calculationHeight ? entry : latest,
+    undefined
+  );
   const name = bondLabel(featuredBond.index);
   const cycleRange = `cycles ${featuredBond.schedule?.activation?.pox_cycle ?? '?'}–${
     (featuredBond.schedule?.unlock?.pox_cycle ?? 1) - 1
@@ -279,13 +286,16 @@ export function CurrentBond({
             <Flex justify="space-between" gap={3} flexWrap="wrap" align="baseline">
               <Text textStyle="text-medium-sm">Confirmed bond enrollments</Text>
               <Text textStyle="text-medium-sm" whiteSpace="nowrap">
-                {formatBtc(enrolledSats)}
+                {enrolledSats === undefined ? 'Unavailable' : formatBtc(enrolledSats)}
               </Text>
             </Flex>
-            <EnrollmentBar enrollments={enrollments} totalSats={enrolledSats} />
+            {enrollments && enrolledSats !== undefined && (
+              <EnrollmentBar enrollments={enrollments} totalSats={enrolledSats} />
+            )}
             <Text textStyle="text-regular-xs" color="textSecondary">
-              Confirmed on-chain enrollments within this bond. Bond parameters are set by the Stacks
-              Endowment.
+              {enrollments === undefined
+                ? 'Enrollment data could not be loaded. Refresh the page to try again.'
+                : 'Confirmed on-chain enrollments within this bond. Bond parameters are set by the Stacks Endowment.'}
             </Text>
           </Stack>
 
@@ -319,9 +329,17 @@ export function CurrentBond({
               href={buildUrl(`/staking/activity?bond=${featuredBond.index}`, network)}
               buttonLinkSize="big"
             >
-              View all bond transactions
+              View bond activity
             </ButtonLink>
           </Flex>
+          <Text textStyle="text-regular-xs" color="textSecondary">
+            {latestCredit
+              ? `Latest credit recorded ${formatDateShort(latestCredit.timestampMs)}.`
+              : settlements === undefined
+                ? 'Credit history unavailable.'
+                : 'No reward credits recorded yet.'}{' '}
+            Distribution dates below are scheduled. Credits require a successful reward calculation.
+          </Text>
           <Stack gap={0}>
             {milestones.map((milestone, index) => (
               <Box

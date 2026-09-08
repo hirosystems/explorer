@@ -1,7 +1,9 @@
+import { formatDateShort } from '@/common/utils/date-utils';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 
 import { GENESIS_BOND_INDEX, SATS_IN_BTC } from './consts';
 import type { BondStatus } from './data';
+import { burnHeightToApproximateTimestamp } from './projections';
 import { bpsToPercent } from './projections';
 
 export function toBigInt(value: string | undefined | null): bigint {
@@ -66,8 +68,12 @@ export function formatUsd(amount: number): string {
   }).format(amount);
 }
 
-export function formatSbtc(sats: bigint, decimals = 4): string {
-  return formatBtc(sats, decimals).replace('BTC', 'sBTC');
+export function formatSbtc(sats: bigint, decimals?: number): string {
+  if (decimals === undefined) return formatBtc(sats).replace('BTC', 'sBTC');
+  return `${satsToBtc(sats).toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })} sBTC`;
 }
 
 export function formatDateWithYear(timestamp: number): string {
@@ -76,4 +82,18 @@ export function formatDateWithYear(timestamp: number): string {
     month: 'short',
     year: 'numeric',
   });
+}
+
+export function formatBurnDate(
+  height: number,
+  currentBurnHeight: number,
+  nowMs: number,
+  times: Record<number, number> = {},
+  formatDate: (timestamp: number) => string = formatDateShort
+): string {
+  if (height <= 0) return 'Unavailable';
+  if (height <= currentBurnHeight && times[height] !== undefined) {
+    return formatDate(times[height]);
+  }
+  return `~${formatDate(burnHeightToApproximateTimestamp(height, currentBurnHeight, nowMs))}`;
 }

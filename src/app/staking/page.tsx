@@ -1,14 +1,13 @@
 import { NetworkModes } from '@/common/types/network';
 
 import { StakingPageClient } from './PageClient';
-import { ACTIVITY_FEED_LIMIT } from './consts';
-import type { CycleRewards } from './data';
+import { ACTIVITY_FEED_LIMIT, PREVIOUS_CYCLES_LIMIT } from './consts';
 import {
+  fetchBond,
   fetchBondRegistrations,
   fetchBondRewards,
   fetchBondsPage,
-  fetchCycleAccruedSats,
-  fetchCycleEndTimes,
+  fetchBurnBlockTimes,
   fetchCycleRewards,
   fetchPoxCycles,
   fetchPoxInfo,
@@ -17,7 +16,12 @@ import {
 } from './data';
 import { load } from './load';
 import { fetchDailyPrices } from './prices';
-import { burnHeightToApproximateTimestamp, getFeaturedBondIndex } from './projections';
+import {
+  burnHeightToApproximateTimestamp,
+  getBondSchedule,
+  getFeaturedBondIndex,
+} from './projections';
+import { fetchCurrentCycleEstimate } from './reward-estimate';
 
 interface StakingSearchParams {
   chain?: string;
@@ -29,90 +33,66 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
   const { chain = NetworkModes.Mainnet, api, activity: activityGroup } = await props.searchParams;
   const selectedActivityGroup = parseActivityGroup(activityGroup);
   const nowMs = Date.now();
-
   const [bondsPage, poxInfo, poxCycles] = await Promise.all([
     load(fetchBondsPage(chain, api), 'Staking page: fetch bonds', chain),
     load(fetchPoxInfo(chain, api), 'Staking page: fetch pox info', chain),
     load(fetchPoxCycles(chain, api), 'Staking page: fetch pox cycles', chain),
   ]);
-
   const bonds = bondsPage?.bonds ?? [];
-  const cycles = poxCycles ?? [];
+  const cycles = (poxCycles ?? [])
+    .filter(cycle => cycle.cycle_number <= (poxInfo?.current_cycle.id ?? -1))
+    .sort((a, b) => b.cycle_number - a.cycle_number)
+    .slice(0, PREVIOUS_CYCLES_LIMIT + 1);
   const pox5FirstCycleId = poxInfo?.contract_versions?.find(
     version => version.contract_id.split('.')[1] === 'pox-5'
   )?.first_reward_cycle_id;
-  const pricedCycles = cycles
-    .map(cycle => cycle.cycle_number)
-    .filter(
-      cycleNumber =>
-        pox5FirstCycleId !== undefined &&
-        cycleNumber >= pox5FirstCycleId &&
-        (poxInfo?.current_cycle?.id === undefined || cycleNumber <= poxInfo.current_cycle.id)
-    );
-
-  const firstBurnchainBlockHeight = poxInfo?.first_burnchain_block_height ?? 0;
   const rewardCycleLength = poxInfo?.reward_cycle_length ?? 0;
-  const currentCycleId = poxInfo?.current_cycle?.id;
-  const currentCycleStart =
-    rewardCycleLength && currentCycleId !== undefined
-      ? firstBurnchainBlockHeight + currentCycleId * rewardCycleLength
-      : undefined;
-  const pricesStart =
-    cycles.length > 0 && rewardCycleLength
-      ? burnHeightToApproximateTimestamp(
-          firstBurnchainBlockHeight +
-            Math.min(...cycles.map(cycle => cycle.cycle_number)) * rewardCycleLength,
-          poxInfo?.current_burnchain_block_height ?? 0,
-          nowMs
-        )
-      : undefined;
-  const featuredBondIndex = getFeaturedBondIndex(bonds);
-
+  const prepareCycleLength = poxInfo?.prepare_phase_block_length ?? 0;
+  const firstBurnchainBlockHeight = poxInfo?.first_burnchain_block_height ?? 0;
+  const currentBurnHeight = poxInfo?.current_burnchain_block_height ?? 0;
+  const currentCycleId = poxInfo?.current_cycle.id;
+  const rewardCycles = Array.from(
+    new Set([
+      ...cycles.map(c => c.cycle_number),
+      ...(currentCycleId === undefined ? [] : [currentCycleId]),
+    ])
+  ).filter(cycle => pox5FirstCycleId !== undefined && cycle >= pox5FirstCycleId);
+  const featuredIndex = getFeaturedBondIndex(bonds);
+  const heights = bonds.flatMap(bond =>
+    Object.values(
+      getBondSchedule(
+        bond.schedule.activation.bitcoin_height,
+        bond.schedule.unlock.bitcoin_height,
+        rewardCycleLength,
+        prepareCycleLength
+      )
+    )
+  );
+  heights.push(
+    ...cycles.flatMap(cycle => [
+      firstBurnchainBlockHeight + cycle.cycle_number * rewardCycleLength,
+      firstBurnchainBlockHeight + (cycle.cycle_number + 1) * rewardCycleLength,
+    ])
+  );
   const [
-    loadedCycleRewards,
-    loadedCycleEndTimes,
-    currentCycleAccrued,
-    prices,
+    cycleRewards,
     rewarded,
     activity,
     enrollments,
+    featuredDetail,
+    burnBlockTimes,
+    prices,
+    currentCycleEstimate,
   ] = await Promise.all([
-    poxInfo?.contract_id && pricedCycles.length > 0
+    poxInfo?.contract_id && rewardCycles.length
       ? load(
-          fetchCycleRewards(pricedCycles, poxInfo.contract_id, chain, api),
-          'Staking page: fetch cycle rewards',
+          fetchCycleRewards(rewardCycles, poxInfo.contract_id, chain, api),
+          'Staking page: cycle rewards',
           chain
         )
-      : undefined,
-    pricedCycles.length > 0 && rewardCycleLength
-      ? load(
-          fetchCycleEndTimes(
-            pricedCycles,
-            firstBurnchainBlockHeight,
-            rewardCycleLength,
-            chain,
-            api
-          ),
-          'Staking page: fetch cycle end times',
-          chain
-        )
-      : undefined,
-    currentCycleStart !== undefined
-      ? load(
-          fetchCycleAccruedSats(currentCycleStart, chain, api),
-          'Staking page: fetch cycle accrual',
-          chain
-        )
-      : undefined,
-    pricesStart !== undefined
-      ? load(fetchDailyPrices(pricesStart, nowMs), 'Staking page: fetch daily prices', chain)
       : undefined,
     poxInfo?.contract_id
-      ? load(
-          fetchBondRewards(poxInfo.contract_id, chain, api),
-          'Staking page: fetch bond rewards',
-          chain
-        )
+      ? load(fetchBondRewards(poxInfo.contract_id, chain, api), 'Staking page: bond rewards', chain)
       : undefined,
     poxInfo?.contract_id
       ? load(
@@ -123,41 +103,59 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
             ACTIVITY_FEED_LIMIT,
             selectedActivityGroup
           ),
-          'Staking page: fetch activity',
+          'Staking page: activity',
           chain
         )
       : undefined,
-    featuredBondIndex !== undefined
+    featuredIndex !== undefined
+      ? load(fetchBondRegistrations(featuredIndex, chain, api), 'Staking page: enrollments', chain)
+      : undefined,
+    featuredIndex !== undefined
+      ? load(fetchBond(featuredIndex, chain, api), 'Staking page: bond setup', chain)
+      : undefined,
+    fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
+    cycles.length && rewardCycleLength
       ? load(
-          fetchBondRegistrations(featuredBondIndex, chain, api),
-          'Staking page: fetch enrollments',
+          fetchDailyPrices(
+            burnHeightToApproximateTimestamp(
+              firstBurnchainBlockHeight +
+                Math.min(...cycles.map(cycle => cycle.cycle_number)) * rewardCycleLength,
+              currentBurnHeight,
+              nowMs
+            ),
+            nowMs
+          ),
+          'Staking page: daily prices',
+          chain
+        )
+      : undefined,
+    poxInfo?.contract_id.split('.')[1] === 'pox-5' && rewardCycles.length
+      ? load(
+          fetchCurrentCycleEstimate(poxInfo, bonds, chain, api),
+          'Staking page: reward estimate',
           chain
         )
       : undefined,
   ]);
-
-  const cycleRewards: Record<number, CycleRewards> = loadedCycleRewards ?? {};
-  const cycleEndTimes = loadedCycleEndTimes ?? {};
-
   return (
     <StakingPageClient
-      bonds={bonds}
+      currentCycleEstimate={currentCycleEstimate}
+      prices={prices}
+      bonds={bonds.map(bond => (bond.index === featuredDetail?.index ? featuredDetail : bond))}
+      bondsUnavailable={bondsPage === undefined}
       poxInfo={poxInfo}
       cycles={cycles}
-      cycleRewards={cycleRewards}
+      cycleRewards={cycleRewards ?? {}}
       pox5FirstCycleId={pox5FirstCycleId}
-      currentBurnHeight={poxInfo?.current_burnchain_block_height ?? 0}
+      currentBurnHeight={currentBurnHeight}
       rewardCycleLength={rewardCycleLength}
-      prepareCycleLength={poxInfo?.prepare_phase_block_length ?? 0}
+      prepareCycleLength={prepareCycleLength}
       firstBurnchainBlockHeight={firstBurnchainBlockHeight}
       nowMs={nowMs}
-      currentCycleAccruedSats={currentCycleAccrued?.toString()}
-      prices={prices}
-      cycleEndTimes={cycleEndTimes}
-      enrollments={(enrollments ?? []).map(enrollment => ({
-        btc: enrollment.balances?.btc ?? '0',
-      }))}
-      activity={activity ?? []}
+      burnBlockTimes={burnBlockTimes}
+      enrollments={enrollments?.map(enrollment => ({ btc: enrollment.balances.btc }))}
+      activity={activity?.events ?? []}
+      activityUnavailable={activity === undefined || activity.incomplete}
       rewarded={rewarded}
       selectedActivityGroup={selectedActivityGroup}
     />

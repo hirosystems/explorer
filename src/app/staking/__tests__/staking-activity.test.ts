@@ -45,6 +45,12 @@ function serveChain(txs: TxStub[], { failingFunction }: { failingFunction?: stri
       return respond({
         results: txs
           .filter(tx => tx.functionName === requestedFunction)
+          .sort((a, b) => b.blockHeight - a.blockHeight)
+          .slice(
+            Number(new URL(url).searchParams.get('offset') ?? 0),
+            Number(new URL(url).searchParams.get('offset') ?? 0) +
+              Number(new URL(url).searchParams.get('limit'))
+          )
           .map(tx => ({
             tx_id: tx.txId,
             tx_status: tx.status ?? 'success',
@@ -76,10 +82,53 @@ beforeEach(() => {
 });
 
 describe('fetchStakingActivity', () => {
+  test('paginates past the API limit to inspect the advertised 60 transactions', async () => {
+    serveChain(Array.from({ length: 65 }, (_, index) => enrollmentTx(index + 1, 100_000)));
+
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      60,
+      'enrollments'
+    );
+
+    expect(incomplete).toBe(false);
+    expect(events).toHaveLength(60);
+    expect(events.at(-1)?.blockHeight).toBe(8_900_006);
+    expect(fetchMock.mock.calls.some(([url]) => url.includes('offset=50'))).toBe(true);
+  });
+
+  test('filters a bond before capping expanded distribution events', async () => {
+    serveChain([
+      {
+        txId: '0xfeed',
+        functionName: 'calculate-rewards',
+        burnBlockTime: 1_788_999_999,
+        blockHeight: 8_999_999,
+        events: [1, 2, 3].map(
+          index => `(tuple (bond-index u${index}) (bond-rewards u100) (topic "bond-distribution"))`
+        ),
+      },
+    ]);
+
+    const { events } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      1,
+      'distributions',
+      3
+    );
+
+    expect(events).toHaveLength(1);
+    expect(events[0].bondIndex).toBe(3);
+  });
+
   test('reads the bonded BTC and the paired STX off an enrollment', async () => {
     serveChain([enrollmentTx(1, 2_500_000_000)]);
 
-    const events = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
+    const { events } = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
 
     expect(events).toHaveLength(1);
     expect(events[0].label).toBe('Enrolled');
@@ -102,7 +151,7 @@ describe('fetchStakingActivity', () => {
       ...[1, 2, 3, 4, 5].map(seq => enrollmentTx(seq, 100_000)),
     ]);
 
-    const events = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
+    const { events } = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
 
     expect(events).toHaveLength(5);
     expect(events.every(event => event.label === 'Enrolled')).toBe(true);
@@ -123,8 +172,14 @@ describe('fetchStakingActivity', () => {
       { failingFunction: 'register-for-bond' }
     );
 
-    const events = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5
+    );
 
+    expect(incomplete).toBe(true);
     expect(events).toHaveLength(1);
     expect(events[0].label).toBe('Bond created');
   });
@@ -132,9 +187,93 @@ describe('fetchStakingActivity', () => {
   test('returns the newest rows first, capped at the limit', async () => {
     serveChain([1, 2, 3, 4, 5, 6, 7, 8].map(seq => enrollmentTx(seq, 100_000)));
 
-    const events = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 3);
+    const { events } = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 3);
 
     expect(events.map(event => event.blockHeight)).toEqual([8_900_008, 8_900_007, 8_900_006]);
+  });
+
+  test.each([
+    ['update-bond-registration', 'amount-sats', '25 BTC'],
+    ['unstake-sbtc', 'amount-withdrawn-sats', '25 sBTC'],
+  ])('reads the amount and bond from %s events', async (functionName, amountField, expected) => {
+    serveChain([
+      {
+        ...enrollmentTx(1, 0),
+        functionName,
+        events: [`(tuple (topic "${functionName}") (bond-index u1) (${amountField} u2500000000))`],
+      },
+    ]);
+    const { events } = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5);
+    expect(events[0].amount).toBe(expected);
+    expect(events[0].bondIndex).toBe(1);
+    expect(events[0].amountUnavailable).toBe(false);
+  });
+
+  test('recovers the amount after a transient transaction-detail failure', async () => {
+    serveChain([enrollmentTx(1, 2500000000)]);
+    const serve = fetchMock.getMockImplementation()!;
+    let detailRequests = 0;
+    fetchMock.mockImplementation(async (url, options) => {
+      if (url.includes('/extended/v1/tx/0x') && ++detailRequests === 1) {
+        return { ok: false, status: 429 } as Response;
+      }
+      return serve(url, options);
+    });
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5
+    );
+    expect(detailRequests).toBe(2);
+    expect(incomplete).toBe(false);
+    expect(events[0].amount).toBe('25 BTC');
+  });
+
+  test('identifies a persistently unavailable amount instead of an unexplained dash', async () => {
+    serveChain([enrollmentTx(1, 2500000000)]);
+    const serve = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation(async (url, options) =>
+      url.includes('/extended/v1/tx/0x')
+        ? ({ ok: false, status: 503 } as Response)
+        : serve(url, options)
+    );
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5
+    );
+    expect(incomplete).toBe(true);
+    expect(events).toHaveLength(1);
+    expect(events[0].amount).toBeUndefined();
+    expect(events[0].amountUnavailable).toBe(true);
+  });
+
+  test('limits concurrent detail requests while preserving all amounts and ordering', async () => {
+    serveChain(Array.from({ length: 12 }, (_, index) => enrollmentTx(index + 1, 2500000000)));
+    const serve = fetchMock.getMockImplementation()!;
+    let active = 0;
+    let peak = 0;
+    fetchMock.mockImplementation(async (url, options) => {
+      if (!url.includes('/extended/v1/tx/0x')) return serve(url, options);
+      active++;
+      peak = Math.max(peak, active);
+      await new Promise(resolve => setTimeout(resolve, 5));
+      active--;
+      return serve(url, options);
+    });
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      12
+    );
+    expect(peak).toBeLessThanOrEqual(4);
+    expect(incomplete).toBe(false);
+    expect(events).toHaveLength(12);
+    expect(events.every(event => event.amount === '25 BTC')).toBe(true);
+    expect(events[0].blockHeight).toBe(8900012);
   });
 
   test('reads only the requested group when one is given', async () => {
@@ -149,7 +288,13 @@ describe('fetchStakingActivity', () => {
       },
     ]);
 
-    const events = await fetchStakingActivity(POX_CONTRACT, 'mainnet', undefined, 5, 'enrollments');
+    const { events } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5,
+      'enrollments'
+    );
 
     expect(events.map(event => event.label)).toEqual(['Enrolled']);
     const requested = fetchMock.mock.calls

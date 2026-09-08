@@ -30,6 +30,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { AnnotatedValue } from './AnnotatedValue';
 import type { ActivityGroup, StakingActivityEvent } from './data';
 import { bondLabel } from './utils';
 
@@ -104,19 +105,29 @@ const activityColumns: ColumnDef<StakingActivityEvent>[] = [
     enableSorting: false,
     size: 120,
     meta: { textAlign: 'right' },
-    cell: info => (
-      <Text textStyle="text-regular-sm" whiteSpace="nowrap">
-        {(info.getValue() as string) ?? '—'}
-      </Text>
-    ),
+    cell: info =>
+      info.row.original.amountUnavailable ? (
+        <AnnotatedValue
+          value="Unavailable"
+          note="Transaction details could not be loaded completely. Refresh to retry, or open the transaction."
+        />
+      ) : (
+        <Text textStyle="text-regular-sm" whiteSpace="nowrap">
+          {(info.getValue() as string) ?? '—'}
+        </Text>
+      ),
   },
   {
     id: 'cumulative',
-    header: 'Cumulative rewarded',
+    header: 'Credited this cycle',
     accessorKey: 'cumulative',
     enableSorting: false,
     size: 140,
-    meta: { textAlign: 'right' },
+    meta: {
+      textAlign: 'right',
+      tooltip:
+        'Cumulative contract credits for this bond within the reward cycle shown on the event. Resets each cycle; not a lifetime total or proof of onward payment.',
+    },
     cell: info => (
       <Text textStyle="text-regular-sm" color="textSecondary" whiteSpace="nowrap">
         {(info.getValue() as string) ?? '—'}
@@ -277,8 +288,10 @@ export function StakingActivity({
   standalone = false,
   bondIndex,
   txWindow,
+  unavailable,
 }: {
   events: StakingActivityEvent[];
+  unavailable?: boolean;
   selectedGroup?: ActivityGroup;
   pageSize?: number;
   standalone?: boolean;
@@ -313,17 +326,32 @@ export function StakingActivity({
               buttonLinkSize="big"
               display={{ base: 'none', md: 'inline' }}
             >
-              View all transactions
+              View recent activity
             </ButtonLink>
           )}
         </Flex>
       )}
       <ActionFilter selected={selectedGroup} />
+      <Text textStyle="text-regular-xs" color="textSecondary">
+        Reward amounts are sBTC credited by the contract. Onward payment by signer-managers is
+        separate.
+      </Text>
+      {unavailable && (
+        <Text role="status" textStyle="text-regular-sm" color="textSecondary">
+          Some activity could not be loaded. Refresh the page to try again.
+        </Text>
+      )}
       <Table
         data={page}
         columns={activityColumns}
         emptyTableUi={
-          <NoActivity bondIndex={bondIndex} txWindow={txWindow} group={selectedGroup} />
+          unavailable ? (
+            <Text textStyle="text-regular-sm" color="textSecondary">
+              Activity unavailable
+            </Text>
+          ) : (
+            <NoActivity bondIndex={bondIndex} txWindow={txWindow} group={selectedGroup} />
+          )
         }
         tableContainerWrapper={table => (
           <TableContainer
@@ -354,7 +382,7 @@ export function StakingActivity({
           buttonLinkSize="big"
           display={{ base: 'inline', md: 'none' }}
         >
-          View all transactions
+          View recent activity
         </ButtonLink>
       )}
     </Stack>

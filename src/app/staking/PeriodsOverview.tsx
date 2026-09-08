@@ -3,7 +3,6 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
-import { formatDateShort } from '@/common/utils/date-utils';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { TabsLabel, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -14,20 +13,14 @@ import type { BondTooltipData } from './BondTooltip';
 import { BondsTable } from './BondsTable';
 import {
   ROW_LABEL_WIDTH,
-  SEGMENT_PAID_BG,
+  SEGMENT_ELAPSED_BG,
   SEGMENT_REMAINING_BG,
   TimelinePlot,
 } from './TimelinePlot';
-import {
-  BOND_GAP_CYCLES,
-  DISTRIBUTIONS_PER_BOND,
-  TIMELINE_BONDS_AFTER,
-  TIMELINE_BONDS_BEFORE,
-} from './consts';
-import type { Bond } from './data';
+import { DISTRIBUTIONS_PER_BOND, TIMELINE_BONDS_AFTER, TIMELINE_BONDS_BEFORE } from './consts';
+import type { Bond, BondRewards } from './data';
 import {
   burnHeightToApproximateTimestamp,
-  formatTermDuration,
   getBarPosition,
   getBondLifecycleState,
   getBondSchedule,
@@ -37,6 +30,7 @@ import {
   getTimelineBounds,
   getTimelineTicks,
 } from './projections';
+import { getRealizedBondRate } from './reward-metrics';
 import { bondLabel, toBigInt } from './utils';
 
 function LegendKey({ swatch, label }: { swatch: React.ReactNode; label: string }) {
@@ -67,6 +61,8 @@ export function PeriodsOverview({
   bonds,
   featuredIndex,
   rewardsByBond,
+  settlementsByBond,
+  burnBlockTimes,
   scheduledBonds = [],
   rewardCycleLength,
   prepareCycleLength,
@@ -77,6 +73,8 @@ export function PeriodsOverview({
   bonds: Bond[];
   featuredIndex?: number;
   rewardsByBond?: Record<number, bigint>;
+  settlementsByBond?: BondRewards['settlementsByBond'];
+  burnBlockTimes: Record<number, number>;
   scheduledBonds?: { index: number; activationHeight: number; termEndHeight: number }[];
   rewardCycleLength: number;
   prepareCycleLength: number;
@@ -90,7 +88,7 @@ export function PeriodsOverview({
 
   const { rows, bounds, ticks, todayPercent, cells } = useMemo(() => {
     const cadence = getDistributionCadence(rewardCycleLength);
-    const countDistributionsPaid = (activationHeight: number) =>
+    const countElapsedDistributions = (activationHeight: number) =>
       cadence > 0
         ? Math.min(
             Math.max(Math.floor((currentBurnHeight - activationHeight) / cadence), 0),
@@ -124,15 +122,21 @@ export function PeriodsOverview({
           startMs: burnHeightToApproximateTimestamp(activationHeight, currentBurnHeight, nowMs),
           endMs: burnHeightToApproximateTimestamp(unlockHeight, currentBurnHeight, nowMs),
           state: getBondTimelineState(activationHeight, unlockHeight, currentBurnHeight),
-          distributionsPaid: countDistributionsPaid(activationHeight),
+          elapsedDistributions: countElapsedDistributions(activationHeight),
           tooltip: {
+            burnBlockTimes,
             label: bondLabel(bond.index),
             state: getBondLifecycleState(schedule, currentBurnHeight, true),
             schedule,
             capacitySats: toBigInt(bond.parameters?.btc_capacity),
             lockedSats: toBigInt(bond.balances?.locked?.btc),
-            rewardedSats: rewardsByBond?.[bond.index],
+            rewardedSats: rewardsByBond ? (rewardsByBond[bond.index] ?? BigInt(0)) : undefined,
             targetRateBps: bond.parameters?.target_rate_bps,
+            realizedRate: getRealizedBondRate(
+              bond,
+              currentBurnHeight,
+              settlementsByBond?.[bond.index]
+            ),
           } satisfies BondTooltipData,
         };
       }),
@@ -152,7 +156,7 @@ export function PeriodsOverview({
             nowMs
           ),
           state: 'upcoming' as const,
-          distributionsPaid: 0,
+          elapsedDistributions: 0,
           tooltip: {
             label: bondLabel(scheduled.index),
             state: 'scheduled' as const,
@@ -198,6 +202,8 @@ export function PeriodsOverview({
     bonds,
     featuredIndex,
     rewardsByBond,
+    settlementsByBond,
+    burnBlockTimes,
     scheduledBonds,
     rewardCycleLength,
     prepareCycleLength,
@@ -207,19 +213,6 @@ export function PeriodsOverview({
   ]);
 
   if (rows.length === 0) return null;
-
-  const nextBond = rows.find(row => row.tooltip.state === 'scheduled');
-  const leadTime = formatTermDuration(BOND_GAP_CYCLES * rewardCycleLength);
-  const nextBondNote =
-    nextBond && leadTime
-      ? `Next bond's offering & target rate drop ~${leadTime} before start · ${nextBond.label} details expected ~${formatDateShort(
-          burnHeightToApproximateTimestamp(
-            nextBond.tooltip.schedule.enrollmentOpensHeight,
-            currentBurnHeight,
-            nowMs
-          )
-        )}`
-      : undefined;
 
   const statesShown = new Set(rows.map(row => row.state));
   return (
@@ -252,11 +245,6 @@ export function PeriodsOverview({
             </TabsList>
           </Flex>
         </TabsRoot>
-        {nextBondNote && (
-          <Text textStyle="text-regular-xs" color="textSecondary">
-            {nextBondNote}
-          </Text>
-        )}
       </Flex>
       {view === 'table' ? (
         <BondsTable
@@ -264,10 +252,15 @@ export function PeriodsOverview({
           currentBurnHeight={currentBurnHeight}
           nowMs={nowMs}
           rewardsByBond={rewardsByBond}
-          rewardCycleLength={rewardCycleLength}
+          settlementsByBond={settlementsByBond}
+          burnBlockTimes={burnBlockTimes}
         />
       ) : (
         <Stack gap={4} bg="surfaceSecondary" borderRadius="redesign.xl" px={[4, 6]} py={[4, 5]}>
+          <Text textStyle="text-regular-xs" color="textSecondary">
+            Projected calendar at ten minutes per block. Shading shows elapsed scheduled intervals,
+            not confirmed credits.
+          </Text>
           <ScrollIndicator>
             <Box minW="32rem">
               <Flex>
@@ -330,18 +323,18 @@ export function PeriodsOverview({
 
           <Flex gap={5} flexWrap="wrap" pl={{ base: 0, md: ROW_LABEL_WIDTH }}>
             <LegendKey
-              swatch={<Swatch bg={SEGMENT_PAID_BG} />}
-              label="Completed reward distribution"
+              swatch={<Swatch bg={SEGMENT_ELAPSED_BG} />}
+              label="Elapsed scheduled interval"
             />
             <LegendKey
               swatch={<Swatch bg={SEGMENT_REMAINING_BG} />}
-              label="Upcoming reward distribution"
+              label="Upcoming scheduled interval"
             />
             <LegendKey
               swatch={
                 <Box w={4} h={3} borderRadius="redesign.xs" bg="surfaceFifth" opacity={0.3} />
               }
-              label="One reward distribution"
+              label="One scheduled interval"
             />
             {statesShown.has('upcoming') && (
               <LegendKey swatch={<Swatch dashed />} label="Scheduled · not yet started" />
