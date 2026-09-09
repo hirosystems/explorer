@@ -108,7 +108,7 @@ export function LeftSection() {
         </Stack>
         <Stack gap={2}>
           <Text fontSize="xs" as="p">
-            The sandbox only supports Clarity 4 deployments. To deploy using a different version,
+            The sandbox only supports deploying in the latest Clarity version. To deploy using a different version,
             please use{' '}
             <TextLink
               display="inline"
