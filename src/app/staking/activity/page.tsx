@@ -1,8 +1,8 @@
+import { handleSettledResult } from '@/app/address/[principal]/page-data';
 import { NetworkModes } from '@/common/types/network';
 
 import { ACTIVITY_PAGE_LIMIT } from '../consts';
 import { fetchPoxInfo, fetchStakingActivity, parseActivityGroup } from '../data';
-import { load } from '../load';
 import { ActivityPageClient } from './PageClient';
 
 interface ActivitySearchParams {
@@ -26,21 +26,21 @@ export default async function StakingActivityPage(props: {
   const bondIndex = Number.isFinite(parsedBond) ? parsedBond : undefined;
   const selectedActivityGroup = parseActivityGroup(activityGroup);
 
-  const poxInfo = await load(fetchPoxInfo(chain, api), 'Activity page: fetch pox info', chain);
-  const all = poxInfo?.contract_id
-    ? await load(
-        fetchStakingActivity(
+  const [poxInfoResult] = await Promise.allSettled([fetchPoxInfo(chain, api)]);
+  const poxInfo = handleSettledResult(poxInfoResult, 'Activity page: fetch pox info');
+  const [activityResult] = await Promise.allSettled([
+    poxInfo?.contract_id
+      ? fetchStakingActivity(
           poxInfo.contract_id,
           chain,
           api,
           ACTIVITY_PAGE_LIMIT,
           selectedActivityGroup,
           bondIndex
-        ),
-        'Activity page: fetch activity',
-        chain
-      )
-    : undefined;
+        )
+      : undefined,
+  ]);
+  const all = handleSettledResult(activityResult, 'Activity page: fetch activity');
 
   return (
     <ActivityPageClient

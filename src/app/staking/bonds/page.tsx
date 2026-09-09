@@ -1,3 +1,4 @@
+import { handleSettledResult } from '@/app/address/[principal]/page-data';
 import { NetworkModes } from '@/common/types/network';
 
 import { BONDS_PAGE_SIZE } from '../consts';
@@ -8,7 +9,6 @@ import {
   fetchHighestBondIndex,
   fetchPoxInfo,
 } from '../data';
-import { load } from '../load';
 import { BondsPageClient } from './PageClient';
 
 interface BondsSearchParams {
@@ -27,11 +27,8 @@ export default async function StakingBondsPage(props: {
 
   let cursor: string | undefined;
   if (pageIndex > 0) {
-    const head = await load(
-      fetchHighestBondIndex(chain, api),
-      'Bonds page: fetch bond index head',
-      chain
-    );
+    const [headResult] = await Promise.allSettled([fetchHighestBondIndex(chain, api)]);
+    const head = handleSettledResult(headResult, 'Bonds page: fetch bond index head');
     if (head?.highestIndex === undefined) {
       pageIndex = 0;
     } else {
@@ -44,18 +41,17 @@ export default async function StakingBondsPage(props: {
     }
   }
 
-  const [poxInfo, bondsPage] = await Promise.all([
-    load(fetchPoxInfo(chain, api), 'Bonds page: fetch pox info', chain),
-    load(fetchBondsPage(chain, api, BONDS_PAGE_SIZE, cursor), 'Bonds page: fetch bonds', chain),
+  const [poxInfoResult, bondsPageResult] = await Promise.allSettled([
+    fetchPoxInfo(chain, api),
+    fetchBondsPage(chain, api, BONDS_PAGE_SIZE, cursor),
   ]);
+  const poxInfo = handleSettledResult(poxInfoResult, 'Bonds page: fetch pox info');
+  const bondsPage = handleSettledResult(bondsPageResult, 'Bonds page: fetch bonds');
 
-  const rewarded = poxInfo?.contract_id
-    ? await load(
-        fetchBondRewards(poxInfo.contract_id, chain, api),
-        'Bonds page: fetch bond rewards',
-        chain
-      )
-    : undefined;
+  const [rewardedResult] = await Promise.allSettled([
+    poxInfo?.contract_id ? fetchBondRewards(poxInfo.contract_id, chain, api) : undefined,
+  ]);
+  const rewarded = handleSettledResult(rewardedResult, 'Bonds page: fetch bond rewards');
 
   const burnBlockTimes = await fetchBurnBlockTimes(
     (bondsPage?.bonds ?? []).flatMap(bond => [

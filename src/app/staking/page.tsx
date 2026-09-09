@@ -1,3 +1,4 @@
+import { handleSettledResult } from '@/app/address/[principal]/page-data';
 import { NetworkModes } from '@/common/types/network';
 
 import { StakingPageClient } from './PageClient';
@@ -14,7 +15,6 @@ import {
   fetchStakingActivity,
   parseActivityGroup,
 } from './data';
-import { load } from './load';
 import { fetchDailyPrices } from './prices';
 import {
   burnHeightToApproximateTimestamp,
@@ -33,11 +33,14 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
   const { chain = NetworkModes.Mainnet, api, activity: activityGroup } = await props.searchParams;
   const selectedActivityGroup = parseActivityGroup(activityGroup);
   const nowMs = Date.now();
-  const [bondsPage, poxInfo, poxCycles] = await Promise.all([
-    load(fetchBondsPage(chain, api), 'Staking page: fetch bonds', chain),
-    load(fetchPoxInfo(chain, api), 'Staking page: fetch pox info', chain),
-    load(fetchPoxCycles(chain, api), 'Staking page: fetch pox cycles', chain),
+  const [bondsPageResult, poxInfoResult, poxCyclesResult] = await Promise.allSettled([
+    fetchBondsPage(chain, api),
+    fetchPoxInfo(chain, api),
+    fetchPoxCycles(chain, api),
   ]);
+  const bondsPage = handleSettledResult(bondsPageResult, 'Staking page: fetch bonds');
+  const poxInfo = handleSettledResult(poxInfoResult, 'Staking page: fetch pox info');
+  const poxCycles = handleSettledResult(poxCyclesResult, 'Staking page: fetch pox cycles');
   const bonds = bondsPage?.bonds ?? [];
   const cycles = (poxCycles ?? [])
     .filter(cycle => cycle.cycle_number <= (poxInfo?.current_cycle.id ?? -1))
@@ -75,68 +78,60 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
     ])
   );
   const [
-    cycleRewards,
-    rewarded,
-    activity,
-    enrollments,
-    featuredDetail,
-    burnBlockTimes,
-    prices,
-    currentCycleEstimate,
-  ] = await Promise.all([
+    cycleRewardsResult,
+    rewardedResult,
+    activityResult,
+    enrollmentsResult,
+    featuredDetailResult,
+    burnBlockTimesResult,
+    pricesResult,
+    currentCycleEstimateResult,
+  ] = await Promise.allSettled([
     poxInfo?.contract_id && rewardCycles.length
-      ? load(
-          fetchCycleRewards(rewardCycles, poxInfo.contract_id, chain, api),
-          'Staking page: cycle rewards',
-          chain
+      ? fetchCycleRewards(rewardCycles, poxInfo.contract_id, chain, api)
+      : undefined,
+    poxInfo?.contract_id ? fetchBondRewards(poxInfo.contract_id, chain, api) : undefined,
+    poxInfo?.contract_id
+      ? fetchStakingActivity(
+          poxInfo.contract_id,
+          chain,
+          api,
+          ACTIVITY_FEED_LIMIT,
+          selectedActivityGroup
         )
       : undefined,
-    poxInfo?.contract_id
-      ? load(fetchBondRewards(poxInfo.contract_id, chain, api), 'Staking page: bond rewards', chain)
-      : undefined,
-    poxInfo?.contract_id
-      ? load(
-          fetchStakingActivity(
-            poxInfo.contract_id,
-            chain,
-            api,
-            ACTIVITY_FEED_LIMIT,
-            selectedActivityGroup
-          ),
-          'Staking page: activity',
-          chain
-        )
-      : undefined,
-    featuredIndex !== undefined
-      ? load(fetchBondRegistrations(featuredIndex, chain, api), 'Staking page: enrollments', chain)
-      : undefined,
-    featuredIndex !== undefined
-      ? load(fetchBond(featuredIndex, chain, api), 'Staking page: bond setup', chain)
-      : undefined,
+    featuredIndex !== undefined ? fetchBondRegistrations(featuredIndex, chain, api) : undefined,
+    featuredIndex !== undefined ? fetchBond(featuredIndex, chain, api) : undefined,
     fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
     cycles.length && rewardCycleLength
-      ? load(
-          fetchDailyPrices(
-            burnHeightToApproximateTimestamp(
-              firstBurnchainBlockHeight +
-                Math.min(...cycles.map(cycle => cycle.cycle_number)) * rewardCycleLength,
-              currentBurnHeight,
-              nowMs
-            ),
+      ? fetchDailyPrices(
+          burnHeightToApproximateTimestamp(
+            firstBurnchainBlockHeight +
+              Math.min(...cycles.map(cycle => cycle.cycle_number)) * rewardCycleLength,
+            currentBurnHeight,
             nowMs
           ),
-          'Staking page: daily prices',
-          chain
+          nowMs
         )
       : undefined,
     poxInfo?.contract_id.split('.')[1] === 'pox-5' && rewardCycles.length
-      ? load(
-          fetchCurrentCycleEstimate(poxInfo, bonds, chain, api),
-          'Staking page: reward estimate',
-          chain
-        )
+      ? fetchCurrentCycleEstimate(poxInfo, bonds, chain, api)
       : undefined,
   ]);
+  const cycleRewards = handleSettledResult(cycleRewardsResult, 'Staking page: cycle rewards');
+  const rewarded = handleSettledResult(rewardedResult, 'Staking page: bond rewards');
+  const activity = handleSettledResult(activityResult, 'Staking page: activity');
+  const enrollments = handleSettledResult(enrollmentsResult, 'Staking page: enrollments');
+  const featuredDetail = handleSettledResult(featuredDetailResult, 'Staking page: bond setup');
+  const burnBlockTimes = handleSettledResult(
+    burnBlockTimesResult,
+    'Staking page: burn block times'
+  );
+  const prices = handleSettledResult(pricesResult, 'Staking page: daily prices');
+  const currentCycleEstimate = handleSettledResult(
+    currentCycleEstimateResult,
+    'Staking page: reward estimate'
+  );
   return (
     <StakingPageClient
       currentCycleEstimate={currentCycleEstimate}
@@ -152,7 +147,7 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
       prepareCycleLength={prepareCycleLength}
       firstBurnchainBlockHeight={firstBurnchainBlockHeight}
       nowMs={nowMs}
-      burnBlockTimes={burnBlockTimes}
+      burnBlockTimes={burnBlockTimes ?? {}}
       enrollments={enrollments?.map(enrollment => ({ btc: enrollment.balances.btc }))}
       activity={activity?.events ?? []}
       activityUnavailable={activity === undefined || activity.incomplete}
