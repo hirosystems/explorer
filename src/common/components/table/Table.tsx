@@ -8,6 +8,7 @@ import {
   Icon,
   Spinner,
   Stack,
+  chakra,
 } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info, WarningOctagon } from '@phosphor-icons/react';
 import {
@@ -56,7 +57,7 @@ export const getCommonPinningStyles = <T,>(column: Column<T>) => {
   }
 
   return {
-    bg: 'surface',
+    bg: 'surfaceTertiary',
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     opacity: 1,
@@ -420,10 +421,27 @@ export function Table<T>({
                       flexRender(header.column.columnDef.header, header.getContext())
                     )}
                     {header.column.columnDef.meta?.tooltip && (
-                      <Tooltip content={header.column.columnDef.meta.tooltip}>
-                        <Icon h={4} w={4} color="iconSecondary">
-                          <Info />
-                        </Icon>
+                      <Tooltip
+                        content={header.column.columnDef.meta.tooltip}
+                        contentProps={{ maxW: '20rem', whiteSpace: 'normal', textAlign: 'left' }}
+                      >
+                        <chakra.button
+                          type="button"
+                          aria-label={
+                            typeof header.column.columnDef.header === 'string'
+                              ? `About ${header.column.columnDef.header}`
+                              : 'About this column'
+                          }
+                          display="inline-flex"
+                          flexShrink={0}
+                          cursor="help"
+                          focusVisibleRing="outside"
+                          onClick={event => event.stopPropagation()}
+                        >
+                          <Icon h={3.5} w={3.5} color="iconSecondary">
+                            <Info />
+                          </Icon>
+                        </chakra.button>
                       </Tooltip>
                     )}
                     <SortIcon
