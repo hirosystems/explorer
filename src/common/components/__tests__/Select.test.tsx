@@ -24,7 +24,7 @@ describe('Select', () => {
 
   it('supports a controlled value', () => {
     const { getByRole, rerender } = renderWithChakraProviders(
-      <Select items={items} label="Test select" value={['first']} />
+      <Select items={items} label="Test select" defaultValue={['second']} value={['first']} />
     );
 
     expect(getByRole('combobox', { name: 'Test select' })).toHaveTextContent('First option');

@@ -65,7 +65,7 @@ export function Select<V extends string, L extends string>({
   return (
     <SelectRoot
       collection={list}
-      defaultValue={defaultValue}
+      defaultValue={value === undefined ? defaultValue : undefined}
       value={value}
       onOpenChange={details => {
         setOpen(details.open);
