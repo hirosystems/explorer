@@ -1,6 +1,28 @@
+import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import { Column, ColumnDef } from '@tanstack/react-table';
+import { fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { getColumnPinningState, getCommonPinningStyles } from './Table';
+import { Table, getColumnPinningState, getCommonPinningStyles } from './Table';
+
+test('header help is keyboard-focusable and activation does not sort the column', async () => {
+  const user = userEvent.setup();
+  const onSort = jest.fn(async () => [{ amount: 1 }]);
+  renderWithChakraProviders(
+    <Table
+      data={[{ amount: 1 }]}
+      columns={[{ accessorKey: 'amount', header: 'Amount', meta: { tooltip: 'Amount in BTC.' } }]}
+      onSort={onSort}
+    />
+  );
+  const trigger = screen.getByRole('button', { name: 'About Amount' });
+  await user.tab();
+  expect(trigger).toHaveFocus();
+  await user.keyboard('{Enter}');
+  expect(onSort).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByText('Amount', { exact: true }));
+  expect(onSort).toHaveBeenCalledWith('amount', 'desc');
+});
 
 describe('getCommonPinningStyles', () => {
   const createMockColumn = (isPinned: 'left' | 'right' | false, isLastColumn: boolean = false) => {

@@ -8,6 +8,7 @@ import {
   Icon,
   Spinner,
   Stack,
+  chakra,
 } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info, WarningOctagon } from '@phosphor-icons/react';
 import {
@@ -424,9 +425,23 @@ export function Table<T>({
                         content={header.column.columnDef.meta.tooltip}
                         contentProps={{ maxW: '20rem', whiteSpace: 'normal', textAlign: 'left' }}
                       >
-                        <Icon h={3.5} w={3.5} flexShrink={0} color="iconSecondary">
-                          <Info />
-                        </Icon>
+                        <chakra.button
+                          type="button"
+                          aria-label={
+                            typeof header.column.columnDef.header === 'string'
+                              ? `About ${header.column.columnDef.header}`
+                              : 'About this column'
+                          }
+                          display="inline-flex"
+                          flexShrink={0}
+                          cursor="help"
+                          focusVisibleRing="outside"
+                          onClick={event => event.stopPropagation()}
+                        >
+                          <Icon h={3.5} w={3.5} color="iconSecondary">
+                            <Info />
+                          </Icon>
+                        </chakra.button>
                       </Tooltip>
                     )}
                     <SortIcon
