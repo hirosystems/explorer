@@ -1,5 +1,5 @@
 import { renderWithProviders } from '@/common/utils/test-utils/render-utils';
-import { waitFor } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ClarityAbiFunction, FungibleConditionCode, PostConditionType } from '@stacks/transactions';
@@ -79,9 +79,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 1 condition code'),
       String(FungibleConditionCode.Equal)
     );
-    await user.clear(getAllByLabelText('Principal')[0]);
-    await user.type(getAllByLabelText('Principal')[0], address);
-    await user.type(getAllByLabelText('Amount')[0], '100');
+    fireEvent.change(getAllByLabelText('Principal')[0], { target: { value: address } });
+    fireEvent.change(getAllByLabelText('Amount')[0], { target: { value: '100' } });
 
     await user.click(getByRole('button', { name: 'Add post-condition' }));
     await user.selectOptions(
@@ -92,9 +91,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 2 condition code'),
       String(FungibleConditionCode.LessEqual)
     );
-    await user.clear(getAllByLabelText('Principal')[1]);
-    await user.type(getAllByLabelText('Principal')[1], address);
-    await user.type(getAllByLabelText('Amount')[1], '200');
+    fireEvent.change(getAllByLabelText('Principal')[1], { target: { value: address } });
+    fireEvent.change(getAllByLabelText('Amount')[1], { target: { value: '200' } });
 
     await user.click(getByRole('button', { name: 'Call function' }));
 
@@ -143,9 +141,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 1 condition code'),
       String(FungibleConditionCode.Equal)
     );
-    await user.clear(getAllByLabelText('Principal')[0]);
-    await user.type(getAllByLabelText('Principal')[0], address);
-    await user.type(getAllByLabelText('Amount')[0], '100');
+    fireEvent.change(getAllByLabelText('Principal')[0], { target: { value: address } });
+    fireEvent.change(getAllByLabelText('Amount')[0], { target: { value: '100' } });
     await user.click(getByRole('button', { name: 'Call function' }));
 
     await waitFor(() => {
