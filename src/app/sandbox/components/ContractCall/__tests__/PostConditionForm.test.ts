@@ -15,12 +15,20 @@ import {
   getPostConditions,
 } from '../PostConditionForm';
 
-Object.assign(global, {
-  TextEncoder: class TextEncoder {
-    encode(value: string) {
-      return Uint8Array.from(Buffer.from(value));
-    }
-  },
+const originalTextEncoder = global.TextEncoder;
+
+beforeAll(() => {
+  Object.assign(global, {
+    TextEncoder: class TextEncoder {
+      encode(value: string) {
+        return Uint8Array.from(Buffer.from(value));
+      }
+    },
+  });
+});
+
+afterAll(() => {
+  Object.assign(global, { TextEncoder: originalTextEncoder });
 });
 
 const address = 'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7';
