@@ -24,7 +24,6 @@ describe('getCommonPinningStyles', () => {
 
     expect(styles).toEqual({
       bg: 'surfaceTertiary',
-      _groupHover: { bg: 'surfaceSecondary' },
       left: '100px',
       right: undefined,
       opacity: 1,
@@ -39,7 +38,6 @@ describe('getCommonPinningStyles', () => {
 
     expect(styles).toEqual({
       bg: 'surfaceTertiary',
-      _groupHover: { bg: 'surfaceSecondary' },
       left: undefined,
       right: '200px',
       opacity: 1,
@@ -54,7 +52,6 @@ describe('getCommonPinningStyles', () => {
 
     expect(styles).toEqual({
       bg: 'surfaceTertiary',
-      _groupHover: { bg: 'surfaceSecondary' },
       left: '100px',
       right: undefined,
       opacity: 1,

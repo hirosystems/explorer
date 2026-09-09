@@ -78,7 +78,6 @@ test('does not mix a pending previous-cycle pool into the current cycle', async 
   expect(result.estimatedSats).toBeUndefined();
   expect(result.projectedTotalSats).toBeUndefined();
   expect(result.creditedSats).toBe(BigInt(100));
-  expect(result.note).toContain('previous cycle');
 });
 
 test('keeps confirmed credits when calculations are delayed by multiple intervals', async () => {
@@ -86,7 +85,7 @@ test('keeps confirmed credits when calculations are delayed by multiple interval
   const result = await fetchCurrentCycleEstimate(pox, bonds, 'mainnet');
   expect(result.estimatedSats).toBeUndefined();
   expect(result.projectedTotalSats).toBeUndefined();
-  expect(result.note).toContain('delayed');
+  expect(result.creditedSats).toBe(BigInt(100));
 });
 
 test('omits the forecast when the pinned block has no burn height', async () => {

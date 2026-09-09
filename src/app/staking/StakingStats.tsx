@@ -140,12 +140,16 @@ export function StakingStats({
             unit={rewardedSats === undefined ? undefined : 'sBTC'}
           />
         }
-        caption={join(
-          rewardedSats === undefined
-            ? 'Reward history unavailable'
-            : usd(satsToBtc(rewardedSats), btcPrice),
-          nextRewards
-        )}
+        caption={
+          <span suppressHydrationWarning>
+            {join(
+              rewardedSats === undefined
+                ? 'Reward history unavailable'
+                : usd(satsToBtc(rewardedSats), btcPrice),
+              nextRewards
+            )}
+          </span>
+        }
       />
       <OverviewCard
         title="STX paired"

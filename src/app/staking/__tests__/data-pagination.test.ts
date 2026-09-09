@@ -1,6 +1,6 @@
 import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 
-import { fetchBondRegistrations, fetchBondRewards } from '../data';
+import { fetchBondRegistrations, fetchBondRewards, fetchPoxInfo } from '../data';
 
 jest.mock('@/api/stacksAPIFetch');
 const fetchMock = stacksAPIFetch as jest.MockedFunction<typeof stacksAPIFetch>;
@@ -10,6 +10,83 @@ function respond(body: unknown) {
 }
 
 beforeEach(() => fetchMock.mockReset());
+
+test('rejects PoX data without a current cycle so the page can use its unavailable state', async () => {
+  fetchMock.mockResolvedValue(respond({ contract_id: 'SP000000000000000000002Q6VF78.pox-5' }));
+  await expect(fetchPoxInfo('mainnet')).rejects.toThrow('missing the current cycle');
+});
+
+test.each([200, 201, 3028])(
+  'reads all %i reward transactions with bounded concurrency',
+  async count => {
+    let active = 0;
+    let peak = 0;
+    fetchMock.mockImplementation(async (url, options) => {
+      const params = new URL(url).searchParams;
+      if (params.has('function_name')) {
+        const offset = Number(params.get('offset'));
+        return respond({
+          results: Array.from({ length: Math.min(50, count - offset) }, (_, i) => ({
+            tx_id: `0x${offset + i}`,
+            tx_status: 'success',
+            burn_block_time: 1700000000,
+          })),
+        });
+      }
+      active++;
+      peak = Math.max(peak, active);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      active--;
+      expect(options?.next?.revalidate).toBe(86400);
+      return respond({
+        events: [
+          {
+            contract_log: {
+              value: {
+                repr: '(tuple (topic "calculate-rewards") (total-bond-rewards u1) (stx-cycle u143) (calculation-height u967399))',
+              },
+            },
+          },
+          {
+            contract_log: {
+              value: {
+                repr: '(tuple (topic "bond-distribution") (bond-index u1) (bond-rewards u1) (bond-staked-sats u10000))',
+              },
+            },
+          },
+        ],
+      });
+    });
+    const rewards = await fetchBondRewards('SP000000000000000000002Q6VF78.pox-5', 'mainnet');
+    expect(rewards?.byCycle[143]).toBe(BigInt(count));
+    expect(rewards?.byBondIndex[1]).toBe(BigInt(count));
+    expect(rewards?.settlementsByBond[1]).toHaveLength(count);
+    expect(peak).toBeLessThanOrEqual(4);
+  }
+);
+
+test('rejects a repeating reward-history page rather than looping or returning partial totals', async () => {
+  fetchMock.mockResolvedValue(
+    respond({ results: Array.from({ length: 50 }, (_, i) => ({ tx_id: `0x${i}` })) })
+  );
+  await expect(fetchBondRewards('SP000000000000000000002Q6VF78.pox-5', 'mainnet')).rejects.toThrow(
+    'pagination did not advance'
+  );
+  expect(fetchMock).toHaveBeenCalledTimes(2);
+});
+
+test('rejects a later reward-history page failure instead of returning the earlier totals', async () => {
+  fetchMock.mockImplementation(async url => {
+    const offset = Number(new URL(url).searchParams.get('offset'));
+    if (offset >= 200) return { ok: false, status: 503 } as Response;
+    return respond({
+      results: Array.from({ length: 50 }, (_, i) => ({ tx_id: `0x${offset + i}` })),
+    });
+  });
+  await expect(fetchBondRewards('SP000000000000000000002Q6VF78.pox-5', 'mainnet')).rejects.toThrow(
+    '503'
+  );
+});
 
 test('includes every registration using the returned opaque cursor', async () => {
   fetchMock

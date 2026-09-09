@@ -43,7 +43,7 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
   const poxCycles = handleSettledResult(poxCyclesResult, 'Staking page: fetch pox cycles');
   const bonds = bondsPage?.bonds ?? [];
   const cycles = (poxCycles ?? [])
-    .filter(cycle => cycle.cycle_number <= (poxInfo?.current_cycle.id ?? -1))
+    .filter(cycle => cycle.cycle_number <= (poxInfo?.current_cycle?.id ?? -1))
     .sort((a, b) => b.cycle_number - a.cycle_number)
     .slice(0, PREVIOUS_CYCLES_LIMIT + 1);
   const pox5FirstCycleId = poxInfo?.contract_versions?.find(
@@ -53,7 +53,7 @@ export default async function StakingPage(props: { searchParams: Promise<Staking
   const prepareCycleLength = poxInfo?.prepare_phase_block_length ?? 0;
   const firstBurnchainBlockHeight = poxInfo?.first_burnchain_block_height ?? 0;
   const currentBurnHeight = poxInfo?.current_burnchain_block_height ?? 0;
-  const currentCycleId = poxInfo?.current_cycle.id;
+  const currentCycleId = poxInfo?.current_cycle?.id;
   const rewardCycles = Array.from(
     new Set([
       ...cycles.map(c => c.cycle_number),

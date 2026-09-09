@@ -23,7 +23,6 @@ export interface CurrentCycleEstimate {
   creditedSats: bigint;
   estimatedSats?: bigint;
   projectedTotalSats?: bigint;
-  note?: string;
 }
 
 export function getPendingCalculationHeight(
@@ -80,7 +79,7 @@ export async function fetchCurrentCycleEstimate(
     return BigInt(repr.slice(1));
   }
   const cycleNumber = Number(await readUintValue('current-pox-reward-cycle'));
-  if (cycleNumber !== poxInfo.current_cycle.id)
+  if (cycleNumber !== poxInfo.current_cycle?.id)
     throw new Error('Reward estimate crossed a cycle boundary');
   const args = [uintCV(cycleNumber), noneCV()];
   const [creditedPerToken, shares, incoming, distributionIndex, lastCalculation] =
@@ -101,17 +100,9 @@ export async function fetchCurrentCycleEstimate(
     firstBurnHeight,
     cycleLength
   );
-  if (calculationHeight === undefined)
-    return {
-      ...base,
-      note: 'Pending reward calculations are delayed. Showing confirmed credits until the estimate can be reconciled.',
-    };
+  if (calculationHeight === undefined) return base;
   const pendingCycle = Math.floor((calculationHeight - firstBurnHeight) / cycleLength);
-  if (pendingCycle !== cycleNumber)
-    return {
-      ...base,
-      note: 'The previous cycle’s calculation is pending. Showing this cycle’s confirmed credits without mixing cycles.',
-    };
+  if (pendingCycle !== cycleNumber) return base;
 
   const active = bonds.filter(
     bond =>

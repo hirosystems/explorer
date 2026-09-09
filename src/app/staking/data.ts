@@ -159,7 +159,11 @@ export async function fetchPoxInfo(chain: string, api?: string): Promise<PoxInfo
   if (!response.ok) {
     throw new Error(`Failed to fetch PoX info: ${response.status}`);
   }
-  return response.json();
+  const data: PoxInfo = await response.json();
+  if (!Number.isSafeInteger(data.current_cycle?.id)) {
+    throw new Error('PoX info is missing the current cycle');
+  }
+  return data;
 }
 
 export interface PoxCycle {
@@ -527,6 +531,7 @@ export async function fetchStakingActivity(
   };
 
   const bondsByIndex = new Map<number, Bond>();
+  const bondRequests = new Map<number, Promise<Bond | undefined>>();
   const page = await fetchBondsPage(chain, api).catch(() => undefined);
   if (page) {
     for (const bond of page.bonds) bondsByIndex.set(bond.index, bond);
@@ -613,6 +618,26 @@ export async function fetchStakingActivity(
             };
 
             const reprs = await readActivityEvents(tx);
+            let bondLookupFailed = false;
+            if (fn === 'setup-bond') {
+              const setup = reprs?.find(repr => readTopic(repr) === 'setup-bond');
+              const index = setup ? readUint(setup, 'bond-index') : undefined;
+              if (index !== undefined && !bondsByIndex.has(Number(index))) {
+                const key = Number(index);
+                if (!bondRequests.has(key)) {
+                  bondRequests.set(
+                    key,
+                    fetchBond(key, chain, api).catch(error => {
+                      activityFailure(error);
+                      return undefined;
+                    })
+                  );
+                }
+                const bond = await bondRequests.get(key);
+                if (bond) bondsByIndex.set(key, bond);
+                else bondLookupFailed = true;
+              }
+            }
             const detail = describeContractCall(fn, reprs ?? [], bondsByIndex);
             return [
               {
@@ -621,7 +646,7 @@ export async function fetchStakingActivity(
                 detail: detail.text,
                 bondIndex: detail.bondIndex,
                 amount: detail.amount,
-                amountUnavailable: settled && detail.amount === undefined,
+                amountUnavailable: settled && (reprs === undefined || bondLookupFailed),
               },
             ];
           })
@@ -640,7 +665,6 @@ export async function fetchStakingActivity(
 }
 
 const DISTRIBUTION_TX_PAGE = MAX_PAGE_LIMIT;
-const MAX_DISTRIBUTION_PAGES = 4;
 
 export interface BondRewards {
   byBondIndex: Record<number, bigint>;
@@ -664,60 +688,66 @@ export async function fetchBondRewards(
 ): Promise<BondRewards | undefined> {
   const apiUrl = getApiUrl(chain, api);
   const txs: RawTx[] = [];
-  let historyComplete = false;
-  for (let page = 0; page < MAX_DISTRIBUTION_PAGES; page++) {
+  const seenTxIds = new Set<string>();
+  for (let offset = 0; ; offset += DISTRIBUTION_TX_PAGE) {
     const batch = await fetchTxsByFunction(
       apiUrl,
       poxContractId,
       'calculate-rewards',
       DISTRIBUTION_TX_PAGE,
-      page * DISTRIBUTION_TX_PAGE
+      offset
     );
-    txs.push(...batch);
-    if (batch.length < DISTRIBUTION_TX_PAGE) {
-      historyComplete = true;
-      break;
+    if (batch.length && batch.every(tx => seenTxIds.has(tx.tx_id))) {
+      throw new Error('Reward transaction history pagination did not advance');
     }
+    batch.forEach(tx => seenTxIds.add(tx.tx_id));
+    txs.push(...batch);
+    if (batch.length < DISTRIBUTION_TX_PAGE) break;
   }
-  if (!historyComplete) return undefined;
 
   const settled = Array.from(
     new Map(txs.filter(tx => tx.tx_status === 'success').map(tx => [tx.tx_id, tx])).values()
   );
 
-  const perTx = await Promise.all(
-    settled.map(async tx => {
-      const reprs = await fetchTxEvents(apiUrl, tx.tx_id, true);
-      const summary = reprs.find(repr => readTopic(repr) === 'calculate-rewards');
-      if (!summary) return undefined;
-      const total = readUint(summary, 'total-bond-rewards');
-      const cycle = readUint(summary, 'stx-cycle');
-      const calculationHeight = readUint(summary, 'calculation-height');
-      if (total === undefined || cycle === undefined || calculationHeight === undefined)
-        return undefined;
+  const perTx = [];
+  // Settled event responses are cached for 24 hours; bound cold-cache reads as history grows.
+  for (let start = 0; start < settled.length; start += 4) {
+    perTx.push(
+      ...(await Promise.all(
+        settled.slice(start, start + 4).map(async tx => {
+          const reprs = await fetchTxEvents(apiUrl, tx.tx_id, true);
+          const summary = reprs.find(repr => readTopic(repr) === 'calculate-rewards');
+          if (!summary) return undefined;
+          const total = readUint(summary, 'total-bond-rewards');
+          const cycle = readUint(summary, 'stx-cycle');
+          const calculationHeight = readUint(summary, 'calculation-height');
+          if (total === undefined || cycle === undefined || calculationHeight === undefined)
+            return undefined;
 
-      const perBond: Record<number, bigint> = {};
-      const principalByBond: Record<number, bigint | undefined> = {};
-      for (const repr of reprs.filter(repr => readTopic(repr) === 'bond-distribution')) {
-        const index = readUint(repr, 'bond-index');
-        const rewarded = readUint(repr, 'bond-rewards');
-        if (index === undefined || rewarded === undefined) return undefined;
-        const key = Number(index);
-        if (perBond[key] !== undefined) return undefined;
-        principalByBond[key] = readUint(repr, 'bond-staked-sats');
-        perBond[key] = (perBond[key] ?? BigInt(0)) + rewarded;
-      }
+          const perBond: Record<number, bigint> = {};
+          const principalByBond: Record<number, bigint | undefined> = {};
+          for (const repr of reprs.filter(repr => readTopic(repr) === 'bond-distribution')) {
+            const index = readUint(repr, 'bond-index');
+            const rewarded = readUint(repr, 'bond-rewards');
+            if (index === undefined || rewarded === undefined) return undefined;
+            const key = Number(index);
+            if (perBond[key] !== undefined) return undefined;
+            principalByBond[key] = readUint(repr, 'bond-staked-sats');
+            perBond[key] = (perBond[key] ?? BigInt(0)) + rewarded;
+          }
 
-      return {
-        total,
-        cycle,
-        perBond,
-        principalByBond,
-        calculationHeight: Number(calculationHeight),
-        timestampMs: (tx.block_time ?? tx.burn_block_time) * 1000,
-      };
-    })
-  );
+          return {
+            total,
+            cycle,
+            perBond,
+            principalByBond,
+            calculationHeight: Number(calculationHeight),
+            timestampMs: (tx.block_time ?? tx.burn_block_time) * 1000,
+          };
+        })
+      ))
+    );
+  }
   if (perTx.some(entry => entry === undefined)) return undefined;
 
   const byBondIndex: Record<number, bigint> = {};

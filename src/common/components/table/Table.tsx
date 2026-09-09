@@ -57,7 +57,6 @@ export const getCommonPinningStyles = <T,>(column: Column<T>) => {
 
   return {
     bg: 'surfaceTertiary',
-    _groupHover: { bg: 'surfaceSecondary' },
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     opacity: 1,

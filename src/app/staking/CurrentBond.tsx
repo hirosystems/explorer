@@ -71,8 +71,9 @@ function EnrollmentBar({
             content={`${formatBtc(sats)} · ${(share * 100).toFixed(1)}% of confirmed`}
           >
             <Box
-              flexBasis={`${share * 100}%`}
-              flexShrink={0}
+              flexBasis={0}
+              flexGrow={share}
+              minW={0.5}
               bg={index % 2 === 0 ? 'accent.stacks-400' : 'accent.stacks-200'}
             />
           </Tooltip>
@@ -332,7 +333,7 @@ export function CurrentBond({
               View bond activity
             </ButtonLink>
           </Flex>
-          <Text textStyle="text-regular-xs" color="textSecondary">
+          <Text textStyle="text-regular-xs" color="textSecondary" suppressHydrationWarning>
             {latestCredit
               ? `Latest credit recorded ${formatDateShort(latestCredit.timestampMs)}.`
               : settlements === undefined

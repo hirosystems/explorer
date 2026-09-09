@@ -1,6 +1,7 @@
 import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 
 import { fetchStakingActivity } from '../data';
+import bondFixture from './fixtures/bond.json';
 
 jest.mock('@/api/stacksAPIFetch');
 
@@ -32,6 +33,8 @@ function serveChain(txs: TxStub[], { failingFunction }: { failingFunction?: stri
   const byId = new Map(txs.map(tx => [tx.txId, tx]));
 
   fetchMock.mockImplementation(async (url: string) => {
+    const bondIndex = /\/extended\/v3\/staking\/bonds\/(\d+)$/.exec(url)?.[1];
+    if (bondIndex) return respond({ ...bondFixture, index: Number(bondIndex) });
     if (url.includes('/extended/v3/staking/bonds')) {
       return respond({ results: [], total: 0 });
     }
@@ -81,6 +84,65 @@ beforeEach(() => {
 });
 
 describe('fetchStakingActivity', () => {
+  test('loads capacity for a setup bond absent from the first page', async () => {
+    serveChain([
+      {
+        ...enrollmentTx(1, 0),
+        functionName: 'setup-bond',
+        events: ['(tuple (topic "setup-bond") (bond-index u100))'],
+      },
+    ]);
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5,
+      'bonds'
+    );
+    expect(incomplete).toBe(false);
+    expect(events[0].amount).toBe('136.8672 BTC');
+    expect(events[0].amountUnavailable).toBe(false);
+    expect(fetchMock.mock.calls.some(([url]) => url.endsWith('/bonds/100'))).toBe(true);
+  });
+
+  test('marks an actual setup-bond lookup failure as unavailable', async () => {
+    serveChain([
+      {
+        ...enrollmentTx(1, 0),
+        functionName: 'setup-bond',
+        events: ['(tuple (topic "setup-bond") (bond-index u100))'],
+      },
+    ]);
+    const serve = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation(async (url, options) =>
+      url.endsWith('/bonds/100') ? ({ ok: false, status: 503 } as Response) : serve(url, options)
+    );
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5,
+      'bonds'
+    );
+    expect(incomplete).toBe(true);
+    expect(events[0].amount).toBeUndefined();
+    expect(events[0].amountUnavailable).toBe(true);
+  });
+
+  test('does not claim a fetch failed when a successful event has no amount', async () => {
+    serveChain([
+      { ...enrollmentTx(1, 0), events: ['(tuple (topic "register-for-bond") (bond-index u1))'] },
+    ]);
+    const { events, incomplete } = await fetchStakingActivity(
+      POX_CONTRACT,
+      'mainnet',
+      undefined,
+      5
+    );
+    expect(incomplete).toBe(false);
+    expect(events[0].amount).toBeUndefined();
+    expect(events[0].amountUnavailable).toBe(false);
+  });
   test('paginates past the API limit to inspect the advertised 60 transactions', async () => {
     serveChain(Array.from({ length: 65 }, (_, index) => enrollmentTx(index + 1, 100_000)));
 
