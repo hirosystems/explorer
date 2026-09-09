@@ -1,9 +1,17 @@
 import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import { Column, ColumnDef } from '@tanstack/react-table';
-import { fireEvent, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Table, getColumnPinningState, getCommonPinningStyles } from './Table';
+
+beforeAll(() => {
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
+});
 
 test('header help is keyboard-focusable and activation does not sort the column', async () => {
   const user = userEvent.setup();
@@ -18,9 +26,12 @@ test('header help is keyboard-focusable and activation does not sort the column'
   const trigger = screen.getByRole('button', { name: 'About Amount' });
   await user.tab();
   expect(trigger).toHaveFocus();
+  expect(await screen.findByRole('tooltip')).toHaveTextContent('Amount in BTC.');
   await user.keyboard('{Enter}');
   expect(onSort).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByText('Amount', { exact: true }));
+  await user.keyboard('{Escape}');
+  await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument());
+  await user.click(screen.getByText('Amount', { exact: true }));
   expect(onSort).toHaveBeenCalledWith('amount', 'desc');
 });
 
