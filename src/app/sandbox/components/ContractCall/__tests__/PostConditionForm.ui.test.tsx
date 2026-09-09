@@ -69,14 +69,21 @@ describe('PostConditionForm', () => {
       getByLabelText('Post-condition 1 type'),
       String(PostConditionType.STX)
     );
-    await user.type(getByLabelText('Address'), 'first-address');
+    expect(getByLabelText('Principal')).toHaveValue('origin');
+    await user.clear(getByLabelText('Principal'));
+    await user.type(getByLabelText('Principal'), 'first-address');
+
+    const amount = getByLabelText('Amount');
+    expect(amount).toHaveAttribute('type', 'text');
+    expect(amount).toHaveAttribute('inputmode', 'numeric');
 
     await user.click(getByRole('button', { name: 'Add post-condition' }));
     await user.selectOptions(
       getByLabelText('Post-condition 2 type'),
       String(PostConditionType.PoX)
     );
-    await user.type(getAllByLabelText('Address')[1], 'second-address');
+    await user.clear(getAllByLabelText('Principal')[1]);
+    await user.type(getAllByLabelText('Principal')[1], 'second-address');
 
     expect(
       getPostConditionState().map(condition => ({
@@ -93,7 +100,7 @@ describe('PostConditionForm', () => {
     expect(getPostConditionState()).toHaveLength(1);
     expect(getPostConditionState()[0]).toMatchObject({ postConditionType: PostConditionType.PoX });
     expect(getByLabelText('Post-condition 1 type')).toHaveValue(String(PostConditionType.PoX));
-    expect(getByLabelText('Address')).toHaveValue('second-address');
+    expect(getByLabelText('Principal')).toHaveValue('second-address');
     expect(queryByText('Post-condition 2')).not.toBeInTheDocument();
   });
 });

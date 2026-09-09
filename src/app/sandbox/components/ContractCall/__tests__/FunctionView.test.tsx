@@ -36,6 +36,10 @@ jest.mock('@/common/context/useGlobalContext', () => ({
   }),
 }));
 
+jest.mock('@/common/utils/error-utils', () => ({
+  logError: jest.fn(),
+}));
+
 jest.mock('../../../utils/walletTransactions', () => ({
   callContract: jest.fn(),
 }));
@@ -75,7 +79,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 1 condition code'),
       String(FungibleConditionCode.Equal)
     );
-    await user.type(getAllByLabelText('Address')[0], address);
+    await user.clear(getAllByLabelText('Principal')[0]);
+    await user.type(getAllByLabelText('Principal')[0], address);
     await user.type(getAllByLabelText('Amount')[0], '100');
 
     await user.click(getByRole('button', { name: 'Add post-condition' }));
@@ -87,7 +92,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 2 condition code'),
       String(FungibleConditionCode.LessEqual)
     );
-    await user.type(getAllByLabelText('Address')[1], address);
+    await user.clear(getAllByLabelText('Principal')[1]);
+    await user.type(getAllByLabelText('Principal')[1], address);
     await user.type(getAllByLabelText('Amount')[1], '200');
 
     await user.click(getByRole('button', { name: 'Call function' }));
@@ -137,7 +143,8 @@ describe('FunctionView post-condition submission', () => {
       getByLabelText('Post-condition 1 condition code'),
       String(FungibleConditionCode.Equal)
     );
-    await user.type(getAllByLabelText('Address')[0], address);
+    await user.clear(getAllByLabelText('Principal')[0]);
+    await user.type(getAllByLabelText('Principal')[0], address);
     await user.type(getAllByLabelText('Amount')[0], '100');
     await user.click(getByRole('button', { name: 'Call function' }));
 
@@ -156,5 +163,21 @@ describe('FunctionView post-condition submission', () => {
         })
       );
     });
+  });
+
+  it('shows wallet preparation errors to the user', async () => {
+    mockedCallContract.mockRejectedValueOnce(new Error('Unable to serialize post-conditions'));
+    const user = userEvent.setup();
+    const { findByText, getByRole } = renderWithProviders(
+      <FunctionView
+        fn={publicFunction}
+        contractId={`${address}.example-contract`}
+        cancelButton={<button type="button">Cancel</button>}
+      />
+    );
+
+    await user.click(getByRole('button', { name: 'Call function' }));
+
+    expect(await findByText('Unable to serialize post-conditions')).toBeVisible();
   });
 });

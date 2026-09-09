@@ -4,6 +4,7 @@ import { Box, Flex, Stack, chakra } from '@chakra-ui/react';
 import { Field, FieldArray, FormikErrors } from 'formik';
 
 import {
+  AssetString,
   Cl,
   ClarityAbiFunction,
   FungibleComparator,
@@ -21,10 +22,12 @@ import {
   StxPostCondition,
   isClarityAbiOptional,
   isClarityAbiPrimitive,
+  isClarityName,
   validateStacksAddress,
 } from '@stacks/transactions';
 
 import { isUint128 } from '../../../../common/utils/number-utils';
+import { validateAssettId, validateStacksContractId } from '../../../../common/utils/utils';
 import { Input } from '../../../../ui/Input';
 import { Text } from '../../../../ui/Text';
 import { Caption } from '../../../../ui/typography';
@@ -112,10 +115,9 @@ export interface PostConditionParameters {
   postConditionType?: PostConditionType;
   postConditionAddress?: string;
   postConditionConditionCode?: PostConditionConditionCode;
-  postConditionAmount?: number | string;
-  postConditionAssetAddress?: string;
-  postConditionAssetContractName?: string;
-  postConditionAssetName?: string;
+  postConditionAmount?: string;
+  postConditionAsset?: string;
+  postConditionAssetId?: string;
 }
 
 export type PostConditionParameterKeys = keyof PostConditionParameters;
@@ -130,16 +132,13 @@ export const postConditionParameterMap: Record<PostConditionType, PostConditionP
     'postConditionAddress',
     'postConditionConditionCode',
     'postConditionAmount',
-    'postConditionAssetAddress',
-    'postConditionAssetContractName',
-    'postConditionAssetName',
+    'postConditionAsset',
   ],
   [PostConditionType.NonFungible]: [
     'postConditionAddress',
     'postConditionConditionCode',
-    'postConditionAssetAddress',
-    'postConditionAssetContractName',
-    'postConditionAssetName',
+    'postConditionAsset',
+    'postConditionAssetId',
   ],
   [PostConditionType.Staking]: [
     'postConditionAddress',
@@ -150,12 +149,11 @@ export const postConditionParameterMap: Record<PostConditionType, PostConditionP
 };
 
 export const postConditionParameterLabels: Record<string, string> = {
-  postConditionAddress: 'Address',
+  postConditionAddress: 'Principal',
   postConditionConditionCode: 'Condition Code',
   postConditionAmount: 'Amount',
-  postConditionAssetAddress: 'Asset Address',
-  postConditionAssetContractName: 'Asset Contract Name',
-  postConditionAssetName: 'Asset Name',
+  postConditionAsset: 'Asset identifier',
+  postConditionAssetId: 'NFT identifier',
 };
 
 export const PostConditionOptions = [
@@ -168,118 +166,146 @@ export const PostConditionOptions = [
 
 export const emptyPostCondition: PostConditionParameters = {
   postConditionType: undefined,
-  postConditionAddress: '',
+  postConditionAddress: 'origin',
   postConditionAmount: '',
   postConditionConditionCode: undefined,
-  postConditionAssetName: '',
-  postConditionAssetAddress: '',
-  postConditionAssetContractName: '',
+  postConditionAsset: '',
+  postConditionAssetId: '',
 };
 
-export function getPostCondition(
-  postConditionParameters: PostConditionParameters
-): PostCondition[] {
+const MAX_POST_CONDITION_AMOUNT = BigInt('18446744073709551615');
+
+function normalized(value: string | undefined): string {
+  return value?.trim() ?? '';
+}
+
+function isPostConditionAmount(value: string | undefined): boolean {
+  const amount = normalized(value);
+  if (!/^\d+$/.test(amount)) return false;
+  try {
+    return BigInt(amount) <= MAX_POST_CONDITION_AMOUNT;
+  } catch {
+    return false;
+  }
+}
+
+function isPostConditionPrincipal(value: string | undefined): boolean {
+  const principal = normalized(value);
+  return (
+    principal === 'origin' ||
+    validateStacksAddress(principal) ||
+    validateStacksContractId(principal)
+  );
+}
+
+function isAssetIdentifier(value: string | undefined): value is AssetString {
+  const asset = normalized(value);
+  if (!validateAssettId(asset)) return false;
+  const tokenName = asset.split('::')[1];
+  return !!tokenName && isClarityName(tokenName);
+}
+
+function parseNftIdentifier(value: string | undefined) {
+  return Cl.parse(normalized(value));
+}
+
+export function getPostCondition(postConditionParameters: PostConditionParameters): PostCondition {
   const {
     postConditionType,
-    postConditionAddress,
     postConditionConditionCode,
-    postConditionAmount,
-    postConditionAssetAddress,
-    postConditionAssetContractName,
-    postConditionAssetName,
+    postConditionAmount: rawAmount,
+    postConditionAsset: rawAsset,
+    postConditionAssetId,
   } = postConditionParameters;
-  let postCondition;
+  const postConditionAddress = normalized(postConditionParameters.postConditionAddress);
+  const postConditionAmount = normalized(rawAmount);
+  const postConditionAsset = normalized(rawAsset);
 
   if (
     postConditionType === PostConditionType.STX &&
-    postConditionAddress &&
+    isPostConditionPrincipal(postConditionAddress) &&
     postConditionConditionCode != null &&
-    postConditionAmount != null &&
-    isUint128(postConditionAmount) &&
+    isPostConditionAmount(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
   ) {
-    postCondition = {
+    return {
       type: 'stx-postcondition',
       address: postConditionAddress,
       condition: fungibleConditionCodeToComparator(postConditionConditionCode),
-      amount: postConditionAmount.toString(),
-    } as StxPostCondition;
-  } else if (
+      amount: postConditionAmount,
+    } satisfies StxPostCondition;
+  }
+  if (
     postConditionType === PostConditionType.Fungible &&
-    postConditionAddress &&
-    postConditionAssetAddress &&
-    postConditionAssetContractName &&
-    postConditionAssetName &&
+    isPostConditionPrincipal(postConditionAddress) &&
+    isAssetIdentifier(postConditionAsset) &&
     postConditionConditionCode != null &&
-    postConditionAmount != null &&
-    isUint128(postConditionAmount) &&
+    isPostConditionAmount(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
   ) {
-    postCondition = {
+    return {
       type: 'ft-postcondition',
       address: postConditionAddress,
       condition: fungibleConditionCodeToComparator(postConditionConditionCode),
-      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
-      amount: postConditionAmount.toString(),
-    } as FungiblePostCondition;
-  } else if (
+      asset: postConditionAsset,
+      amount: postConditionAmount,
+    } satisfies FungiblePostCondition;
+  }
+  if (
     postConditionType === PostConditionType.NonFungible &&
-    postConditionAddress &&
-    postConditionAssetAddress &&
-    postConditionAssetContractName &&
-    postConditionAssetName &&
+    isPostConditionPrincipal(postConditionAddress) &&
+    isAssetIdentifier(postConditionAsset) &&
     postConditionConditionCode != null &&
     isNonFungibleConditionCode(postConditionConditionCode)
   ) {
-    postCondition = {
-      type: 'nft-postcondition',
-      address: postConditionAddress,
-      condition: nonFungibleConditionCodeToComparator(postConditionConditionCode),
-      asset: `${postConditionAssetAddress}.${postConditionAssetContractName}::${postConditionAssetName}`,
-      assetId: Cl.stringUtf8(postConditionAssetName),
-    } as NonFungiblePostCondition;
-  } else if (
+    try {
+      return {
+        type: 'nft-postcondition',
+        address: postConditionAddress,
+        condition: nonFungibleConditionCodeToComparator(postConditionConditionCode),
+        asset: postConditionAsset,
+        assetId: parseNftIdentifier(postConditionAssetId),
+      } satisfies NonFungiblePostCondition;
+    } catch {
+      // The validation error below is surfaced to the user before submission.
+    }
+  }
+  if (
     postConditionType === PostConditionType.Staking &&
-    postConditionAddress &&
+    isPostConditionPrincipal(postConditionAddress) &&
     postConditionConditionCode != null &&
-    postConditionAmount != null &&
-    isUint128(postConditionAmount) &&
+    isPostConditionAmount(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
   ) {
-    postCondition = {
+    return {
       type: 'staking-postcondition',
       address: postConditionAddress,
       condition: fungibleConditionCodeToComparator(postConditionConditionCode),
-      amount: postConditionAmount.toString(),
-    } as StakingPostCondition;
-  } else if (
+      amount: postConditionAmount,
+    } satisfies StakingPostCondition;
+  }
+  if (
     postConditionType === PostConditionType.PoX &&
-    postConditionAddress &&
+    isPostConditionPrincipal(postConditionAddress) &&
     postConditionConditionCode != null &&
     isPoxConditionCode(postConditionConditionCode)
   ) {
-    postCondition = {
+    return {
       type: 'pox-postcondition',
       address: postConditionAddress,
       condition: poxConditionCodeToComparator(postConditionConditionCode),
-    } as PoxPostCondition;
-  } else if (
-    postConditionType !== PostConditionType.STX &&
-    postConditionType !== PostConditionType.Fungible &&
-    postConditionType !== PostConditionType.NonFungible &&
-    postConditionType !== PostConditionType.Staking &&
-    postConditionType !== PostConditionType.PoX
-  ) {
-    throw new Error(`There is no post condition type that matches ${postConditionType}`);
+    } satisfies PoxPostCondition;
   }
 
-  return postCondition ? [postCondition as PostCondition] : [];
+  throw new Error(
+    `Invalid ${PostConditionOptions.find(({ value }) => value === postConditionType)?.label ?? 'post-condition'} configuration`
+  );
 }
 
 export function getPostConditions(
   postConditionParameters: PostConditionParameters[]
 ): PostCondition[] {
-  return postConditionParameters.flatMap(getPostCondition);
+  return postConditionParameters.map(getPostCondition);
 }
 
 export const checkFunctionParameters = (fn: ClarityAbiFunction, values: FunctionFormikState) => {
@@ -324,12 +350,20 @@ export const checkPostConditionParameters = (
       errors[key] = `${postConditionParameterLabels[key]} is required`;
       return;
     }
-    if (
-      (key === 'postConditionAddress' || key === 'postConditionAssetAddress') &&
-      typeof value === 'string' &&
-      !validateStacksAddress(value.split('.')[0])
-    ) {
-      errors[key] = 'Invalid Stacks address';
+    if (key === 'postConditionAddress' && !isPostConditionPrincipal(value as string)) {
+      errors[key] = 'Enter origin, a Stacks address, or a contract principal';
+      return;
+    }
+    if (key === 'postConditionAsset' && !isAssetIdentifier(value as string)) {
+      errors[key] = 'Enter an asset identifier in address.contract::token format';
+      return;
+    }
+    if (key === 'postConditionAssetId') {
+      try {
+        parseNftIdentifier(value as string);
+      } catch {
+        errors[key] = 'Enter a valid Clarity value, such as u1';
+      }
       return;
     }
     if (
@@ -343,8 +377,8 @@ export const checkPostConditionParameters = (
       return;
     }
     if (key === 'postConditionAmount') {
-      if (!isUint128(value as number | string)) {
-        errors[key] = 'Invalid amount';
+      if (!isPostConditionAmount(value as string)) {
+        errors[key] = 'Enter an integer from 0 to 18446744073709551615';
         return;
       }
     }
@@ -398,25 +432,54 @@ function getPostConditionConditionCodeOptions(
       },
     ];
   }
+  const action = postConditionType === PostConditionType.Staking ? 'Locks' : 'Sends';
   return [
     {
-      label: 'Equal',
+      label: `${action} exactly`,
       value: FungibleConditionCode.Equal,
     },
     {
-      label: 'Greater',
+      label: `${action} more than`,
       value: FungibleConditionCode.Greater,
     },
     {
-      label: 'GreaterEqual',
+      label: `${action} at least`,
       value: FungibleConditionCode.GreaterEqual,
     },
-    { label: 'Less', value: FungibleConditionCode.Less },
+    { label: `${action} less than`, value: FungibleConditionCode.Less },
     {
-      label: 'LessEqual',
+      label: `${action} at most`,
       value: FungibleConditionCode.LessEqual,
     },
   ];
+}
+
+function getParameterHint(
+  postConditionType: PostConditionType,
+  parameter: PostConditionParameterKeys
+): string | undefined {
+  if (parameter === 'postConditionAddress') {
+    return 'Use origin for the transaction sender, or enter an address or contract principal.';
+  }
+  if (parameter === 'postConditionAmount') {
+    return postConditionType === PostConditionType.Fungible
+      ? "Enter the amount in the token's smallest unit."
+      : 'Enter the amount in micro-STX.';
+  }
+  if (parameter === 'postConditionAsset') {
+    return 'Use the fully qualified identifier: address.contract::token.';
+  }
+  if (parameter === 'postConditionAssetId') {
+    return 'Enter the NFT instance as a Clarity value, for example u1 or "name".';
+  }
+  return undefined;
+}
+
+function getParameterPlaceholder(parameter: PostConditionParameterKeys): string | undefined {
+  if (parameter === 'postConditionAddress') return 'origin or SP…(.contract)';
+  if (parameter === 'postConditionAsset') return 'SP….contract::token';
+  if (parameter === 'postConditionAssetId') return 'u1';
+  return undefined;
 }
 
 const postConditionTypeSelectOptions = PostConditionOptions.map(option => ({
@@ -528,6 +591,7 @@ export function PostConditionForm({
                     <Stack gap={4}>
                       {postConditionParameterMap[postConditionType].map(parameter => {
                         const fieldName = `postConditions.${index}.${parameter}`;
+                        const hint = getParameterHint(postConditionType, parameter);
                         return (
                           <Box key={parameter}>
                             {parameter !== 'postConditionConditionCode' ? (
@@ -544,12 +608,20 @@ export function PostConditionForm({
                                 </chakra.label>
                                 <Box width="100%">
                                   <Field
-                                    type={parameter === 'postConditionAmount' ? 'number' : 'text'}
+                                    type="text"
+                                    inputMode={
+                                      parameter === 'postConditionAmount' ? 'numeric' : undefined
+                                    }
+                                    pattern={
+                                      parameter === 'postConditionAmount' ? '[0-9]*' : undefined
+                                    }
+                                    placeholder={getParameterPlaceholder(parameter)}
                                     name={fieldName}
                                     id={`post-condition-${index}-${parameter}`}
                                     as={Input}
                                   />
                                 </Box>
+                                {hint && <Caption color="textSubdued">{hint}</Caption>}
                                 {indexedErrors[parameter] && (
                                   <Caption color="error">{indexedErrors[parameter]}</Caption>
                                 )}

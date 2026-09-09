@@ -74,6 +74,7 @@ export type FunctionFormikState = FormType & {
 
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
+  const [submitError, setSubmitError] = useState<string>();
   const network = useGlobalContext().activeNetwork;
   const queryClient = useQueryClient();
   const isReadOnly = fn.access === 'read_only';
@@ -184,6 +185,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         const submittedPostConditionMode = values.postConditionMode ?? PostConditionMode.Deny;
 
         if (fn.access === 'public') {
+          setSubmitError(undefined);
           try {
             await callContract({
               contract: contractId,
@@ -195,6 +197,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             });
             void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
           } catch (error) {
+            setSubmitError(
+              error instanceof Error ? error.message : 'Unable to prepare the contract call.'
+            );
             logError(error as Error, 'Error submitting sandbox contract call', {
               contractId,
               functionName: fn.name,
@@ -272,6 +277,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                           formikSetFieldValue={setFieldValue}
                         />
                       </Stack>
+                    )}
+                    {submitError && (
+                      <Alert
+                        status="error"
+                        title="Could not prepare contract call"
+                        description={submitError}
+                      />
                     )}
                     <Stack alignItems="center" justifyContent="center">
                       <Button
