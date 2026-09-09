@@ -1,7 +1,7 @@
-import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
-import { CaretDown } from '@phosphor-icons/react';
-import { Field, FormikErrors } from 'formik';
-import { useState } from 'react';
+import { Select } from '@/common/components/Select';
+import { Button } from '@/ui/Button';
+import { Box, Flex, Stack, chakra } from '@chakra-ui/react';
+import { Field, FieldArray, FormikErrors } from 'formik';
 
 import {
   Cl,
@@ -13,7 +13,6 @@ import {
   NonFungibleConditionCode,
   NonFungiblePostCondition,
   PostCondition,
-  PostConditionMode,
   PostConditionType,
   PoxComparator,
   PoxConditionCode,
@@ -26,7 +25,6 @@ import {
 } from '@stacks/transactions';
 
 import { isUint128 } from '../../../../common/utils/number-utils';
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../../components/ui/menu';
 import { Input } from '../../../../ui/Input';
 import { Text } from '../../../../ui/Text';
 import { Caption } from '../../../../ui/typography';
@@ -111,11 +109,10 @@ function nonFungibleConditionCodeToComparator(
 }
 
 export interface PostConditionParameters {
-  postConditionMode?: PostConditionMode;
   postConditionType?: PostConditionType;
   postConditionAddress?: string;
   postConditionConditionCode?: PostConditionConditionCode;
-  postConditionAmount?: number;
+  postConditionAmount?: number | string;
   postConditionAssetAddress?: string;
   postConditionAssetContractName?: string;
   postConditionAssetName?: string;
@@ -152,20 +149,6 @@ export const postConditionParameterMap: Record<PostConditionType, PostConditionP
   [PostConditionType.PoX]: ['postConditionAddress', 'postConditionConditionCode'],
 };
 
-export function isPostConditionParameter(key: string): key is keyof PostConditionParameters {
-  const postConditionKeys: Array<keyof PostConditionParameters> = [
-    'postConditionMode',
-    'postConditionType',
-    'postConditionAddress',
-    'postConditionConditionCode',
-    'postConditionAmount',
-    'postConditionAssetAddress',
-    'postConditionAssetContractName',
-    'postConditionAssetName',
-  ];
-  return postConditionKeys.includes(key as keyof PostConditionParameters);
-}
-
 export const postConditionParameterLabels: Record<string, string> = {
   postConditionAddress: 'Address',
   postConditionConditionCode: 'Condition Code',
@@ -182,6 +165,16 @@ export const PostConditionOptions = [
   { label: 'Staking Post Condition', value: PostConditionType.Staking },
   { label: 'PoX Post Condition', value: PostConditionType.PoX },
 ];
+
+export const emptyPostCondition: PostConditionParameters = {
+  postConditionType: undefined,
+  postConditionAddress: '',
+  postConditionAmount: '',
+  postConditionConditionCode: undefined,
+  postConditionAssetName: '',
+  postConditionAssetAddress: '',
+  postConditionAssetContractName: '',
+};
 
 export function getPostCondition(
   postConditionParameters: PostConditionParameters
@@ -200,7 +193,7 @@ export function getPostCondition(
   if (
     postConditionType === PostConditionType.STX &&
     postConditionAddress &&
-    postConditionConditionCode &&
+    postConditionConditionCode != null &&
     postConditionAmount != null &&
     isUint128(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
@@ -217,7 +210,7 @@ export function getPostCondition(
     postConditionAssetAddress &&
     postConditionAssetContractName &&
     postConditionAssetName &&
-    postConditionConditionCode &&
+    postConditionConditionCode != null &&
     postConditionAmount != null &&
     isUint128(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
@@ -235,7 +228,7 @@ export function getPostCondition(
     postConditionAssetAddress &&
     postConditionAssetContractName &&
     postConditionAssetName &&
-    postConditionConditionCode &&
+    postConditionConditionCode != null &&
     isNonFungibleConditionCode(postConditionConditionCode)
   ) {
     postCondition = {
@@ -248,7 +241,7 @@ export function getPostCondition(
   } else if (
     postConditionType === PostConditionType.Staking &&
     postConditionAddress &&
-    postConditionConditionCode &&
+    postConditionConditionCode != null &&
     postConditionAmount != null &&
     isUint128(postConditionAmount) &&
     isFungibleConditionCode(postConditionConditionCode)
@@ -262,7 +255,7 @@ export function getPostCondition(
   } else if (
     postConditionType === PostConditionType.PoX &&
     postConditionAddress &&
-    postConditionConditionCode &&
+    postConditionConditionCode != null &&
     isPoxConditionCode(postConditionConditionCode)
   ) {
     postCondition = {
@@ -283,12 +276,16 @@ export function getPostCondition(
   return postCondition ? [postCondition as PostCondition] : [];
 }
 
+export function getPostConditions(
+  postConditionParameters: PostConditionParameters[]
+): PostCondition[] {
+  return postConditionParameters.flatMap(getPostCondition);
+}
+
 export const checkFunctionParameters = (fn: ClarityAbiFunction, values: FunctionFormikState) => {
   const errors: Record<string, string> = {};
-  Object.keys(values).forEach(arg => {
-    if (isPostConditionParameter(arg as PostConditionParameterKeys)) return;
-    const type = fn.args.find(({ name }) => name === arg)?.type;
-    const isOptional = type && isClarityAbiOptional(type);
+  fn.args.forEach(({ name: arg, type }) => {
+    const isOptional = isClarityAbiOptional(type);
     const optionalTypeIsPrincipal =
       isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
     if (!isOptional && (values[arg] == null || values[arg] === '')) {
@@ -313,21 +310,24 @@ export const checkFunctionParameters = (fn: ClarityAbiFunction, values: Function
 };
 
 export const checkPostConditionParameters = (
-  formikState: FunctionFormikState
-): Record<string, string> => {
+  formikState: PostConditionParameters
+): FormikErrors<PostConditionParameters> => {
   const errors: Record<string, string> = {};
-  if (formikState.postConditionMode === PostConditionMode.Allow) return errors;
-  if (formikState.postConditionType == null) return errors;
+  if (formikState.postConditionType == null) {
+    return { postConditionType: 'Post-condition type is required' };
+  }
   const postConditionParameters =
     postConditionParameterMap[formikState.postConditionType as PostConditionType];
   postConditionParameters?.forEach(key => {
-    if (formikState[key] == null) {
+    const value = formikState[key];
+    if (value == null || (typeof value === 'string' && value.trim() === '')) {
       errors[key] = `${postConditionParameterLabels[key]} is required`;
       return;
     }
     if (
       (key === 'postConditionAddress' || key === 'postConditionAssetAddress') &&
-      !validateStacksAddress(formikState[key].split('.')[0])
+      typeof value === 'string' &&
+      !validateStacksAddress(value.split('.')[0])
     ) {
       errors[key] = 'Invalid Stacks address';
       return;
@@ -336,18 +336,14 @@ export const checkPostConditionParameters = (
       key === 'postConditionConditionCode' &&
       !isConditionCodeValidForType(
         formikState.postConditionType as PostConditionType,
-        formikState[key]
+        value as PostConditionConditionCode
       )
     ) {
       errors[key] = 'Condition code does not match the selected post condition type';
       return;
     }
     if (key === 'postConditionAmount') {
-      if (
-        typeof formikState[key] !== 'number' ||
-        !Number.isFinite(formikState[key]) ||
-        (formikState[key] as number) < 0
-      ) {
+      if (!isUint128(value as number | string)) {
         errors[key] = 'Invalid amount';
         return;
       }
@@ -355,6 +351,12 @@ export const checkPostConditionParameters = (
   });
   return errors;
 };
+
+export function checkPostConditions(
+  postConditions: PostConditionParameters[]
+): FormikErrors<PostConditionParameters>[] {
+  return postConditions.map(checkPostConditionParameters);
+}
 
 interface Option<T> {
   label: string;
@@ -417,166 +419,180 @@ function getPostConditionConditionCodeOptions(
   ];
 }
 
-export function PostConditionConditionCodeMenu({
-  onChange,
-  postConditionType,
-}: {
-  onChange: (option: any) => void;
-  postConditionType: PostConditionType;
-}) {
-  const [selectedOption, setSelectedOption] = useState<
-    Option<PostConditionConditionCode | undefined>
-  >({
-    label: 'Select a condition code',
-    value: undefined,
-  });
-  const options = getPostConditionConditionCodeOptions(postConditionType);
+const postConditionTypeSelectOptions = PostConditionOptions.map(option => ({
+  label: option.label,
+  value: String(option.value),
+}));
 
-  return (
-    <MenuRoot>
-      <MenuTrigger
-        type="button"
-        onClick={e => {
-          e.stopPropagation();
-        }}
-      >
-        <Flex gap={1}>
-          <Text>{selectedOption.label}</Text>
-          <Icon>
-            <CaretDown />
-          </Icon>
-        </Flex>
-      </MenuTrigger>
-      <MenuContent>
-        {options.map(option => (
-          <MenuItem
-            key={option.label}
-            onClick={e => {
-              e.stopPropagation();
-              setSelectedOption(option);
-              onChange(option);
-            }}
-            value={option.label}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </MenuContent>
-    </MenuRoot>
-  );
-}
-
-export function PostConditionTypeMenu({ onChange }: { onChange: (option: any) => void }) {
-  const [selectedOption, setSelectedOption] = useState<Option<PostConditionType | undefined>>({
-    label: 'Select a post condition',
-    value: undefined,
-  });
-  return (
-    <MenuRoot>
-      <Flex gap={2} alignItems="center">
-        <MenuTrigger
-          type="button"
-          onClick={e => {
-            e.stopPropagation();
-          }}
-        >
-          <Flex gap={1}>
-            <Text>{selectedOption.label}</Text>
-            <Icon>
-              <CaretDown />
-            </Icon>
-          </Flex>
-        </MenuTrigger>
-      </Flex>
-      <MenuContent>
-        {PostConditionOptions.map(option => (
-          <MenuItem
-            key={option.label}
-            onClick={e => {
-              e.stopPropagation();
-              setSelectedOption(option);
-              onChange(option);
-            }}
-            value={option.label}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </MenuContent>
-    </MenuRoot>
-  );
+function getIndexedPostConditionErrors(
+  errors: FormikErrors<FunctionFormikState>,
+  index: number
+): FormikErrors<PostConditionParameters> {
+  if (!Array.isArray(errors.postConditions)) return {};
+  const indexedErrors = errors.postConditions[index];
+  return indexedErrors && typeof indexedErrors === 'object' ? indexedErrors : {};
 }
 
 export function PostConditionForm({
   values,
   errors,
   formikSetFieldValue,
-  handleChange,
 }: {
   values: FunctionFormikState;
   errors: FormikErrors<FunctionFormikState>;
   formikSetFieldValue: FormikSetFieldValueFunction;
-  handleChange: any;
 }) {
   return (
-    <>
-      {values.postConditionMode !== PostConditionMode.Allow && (
+    <FieldArray name="postConditions">
+      {({ push, remove }) => (
         <Stack gap={4}>
-          <Stack gap={2}>
-            <PostConditionTypeMenu
-              onChange={(option: Option<PostConditionType>) => {
-                formikSetFieldValue('postConditionType', option.value);
-              }}
-            />
-            {errors && <Caption color="error">{errors.postConditionType}</Caption>}
-          </Stack>
-          {values.postConditionType != null && (
-            <Stack gap={4}>
-              {postConditionParameterMap[values.postConditionType].map(parameter => (
-                <Box key={parameter}>
-                  {parameter !== 'postConditionMode' &&
-                  parameter !== 'postConditionType' &&
-                  parameter !== 'postConditionConditionCode' ? (
-                    <Stack gap={2}>
-                      <Text
-                        fontSize="12px"
-                        fontWeight="500"
-                        display="block"
-                        color="text"
-                        mb="tight"
-                      >
-                        {postConditionParameterLabels[parameter]}
-                      </Text>
-                      <Box width="100%">
-                        <Field
-                          type={parameter === 'postConditionAmount' ? 'number' : 'text'}
-                          name={parameter}
-                          id={parameter}
-                          component={Input}
-                          onChange={handleChange}
-                        />
-                      </Box>
-                      {errors[parameter] && <Caption color="error">{errors[parameter]}</Caption>}
-                    </Stack>
-                  ) : (
-                    <Stack gap={2}>
-                      <PostConditionConditionCodeMenu
-                        onChange={(option: Option<PostConditionConditionCode>) => {
-                          formikSetFieldValue('postConditionConditionCode', option.value);
-                        }}
-                        postConditionType={values.postConditionType as PostConditionType}
-                      />
-                      {errors.postConditionConditionCode && (
-                        <Caption color="error">{errors.postConditionConditionCode}</Caption>
-                      )}
+          <Flex justifyContent="space-between" alignItems="center" gap={3} flexWrap="wrap">
+            <Box>
+              <Text fontSize="sm" fontWeight="semibold">
+                Conditions
+              </Text>
+              <Caption color="textSubdued">
+                {values.postConditions.length === 0
+                  ? 'No post-conditions added'
+                  : `${values.postConditions.length} post-condition${
+                      values.postConditions.length === 1 ? '' : 's'
+                    } added`}
+              </Caption>
+            </Box>
+            <Button
+              type="button"
+              variant="secondary"
+              size="small"
+              onClick={() => push({ ...emptyPostCondition })}
+            >
+              Add post-condition
+            </Button>
+          </Flex>
+
+          {values.postConditions.map((postCondition, index) => {
+            const indexedErrors = getIndexedPostConditionErrors(errors, index);
+            const postConditionType = postCondition.postConditionType;
+            const conditionCodeOptions =
+              postConditionType == null
+                ? []
+                : getPostConditionConditionCodeOptions(postConditionType).map(option => ({
+                    label: option.label,
+                    value: String(option.value),
+                  }));
+
+            return (
+              <Box
+                key={index}
+                borderWidth="1px"
+                borderColor="borderSecondary"
+                borderRadius="md"
+                p={4}
+              >
+                <Stack gap={4}>
+                  <Flex justifyContent="space-between" alignItems="center" gap={3}>
+                    <Text fontSize="sm" fontWeight="semibold">
+                      Post-condition {index + 1}
+                    </Text>
+                    <Button
+                      type="button"
+                      variant="text"
+                      aria-label={`Remove post-condition ${index + 1}`}
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </Button>
+                  </Flex>
+
+                  <Stack gap={2}>
+                    <Select
+                      placeholder="Post-condition type"
+                      items={postConditionTypeSelectOptions}
+                      label={`Post-condition ${index + 1} type`}
+                      value={postConditionType == null ? [] : [String(postConditionType)]}
+                      onValueChange={details => {
+                        const value = details.value[0];
+                        if (value == null) return;
+                        void formikSetFieldValue(`postConditions.${index}`, {
+                          ...emptyPostCondition,
+                          postConditionType: Number(value) as PostConditionType,
+                        });
+                      }}
+                      size="sm"
+                    />
+                    {indexedErrors.postConditionType && (
+                      <Caption color="error">{indexedErrors.postConditionType}</Caption>
+                    )}
+                  </Stack>
+
+                  {postConditionType != null && (
+                    <Stack gap={4}>
+                      {postConditionParameterMap[postConditionType].map(parameter => {
+                        const fieldName = `postConditions.${index}.${parameter}`;
+                        return (
+                          <Box key={parameter}>
+                            {parameter !== 'postConditionConditionCode' ? (
+                              <Stack gap={2}>
+                                <chakra.label
+                                  htmlFor={`post-condition-${index}-${parameter}`}
+                                  fontSize="12px"
+                                  fontWeight="500"
+                                  display="block"
+                                  color="text"
+                                  mb="tight"
+                                >
+                                  {postConditionParameterLabels[parameter]}
+                                </chakra.label>
+                                <Box width="100%">
+                                  <Field
+                                    type={parameter === 'postConditionAmount' ? 'number' : 'text'}
+                                    name={fieldName}
+                                    id={`post-condition-${index}-${parameter}`}
+                                    as={Input}
+                                  />
+                                </Box>
+                                {indexedErrors[parameter] && (
+                                  <Caption color="error">{indexedErrors[parameter]}</Caption>
+                                )}
+                              </Stack>
+                            ) : (
+                              <Stack gap={2}>
+                                <Select
+                                  placeholder="Condition code"
+                                  items={conditionCodeOptions}
+                                  label={`Post-condition ${index + 1} condition code`}
+                                  value={
+                                    postCondition.postConditionConditionCode == null
+                                      ? []
+                                      : [String(postCondition.postConditionConditionCode)]
+                                  }
+                                  onValueChange={details => {
+                                    const value = details.value[0];
+                                    if (value == null) return;
+                                    void formikSetFieldValue(
+                                      fieldName,
+                                      Number(value) as PostConditionConditionCode
+                                    );
+                                  }}
+                                  size="sm"
+                                />
+                                {indexedErrors.postConditionConditionCode && (
+                                  <Caption color="error">
+                                    {indexedErrors.postConditionConditionCode}
+                                  </Caption>
+                                )}
+                              </Stack>
+                            )}
+                          </Box>
+                        );
+                      })}
                     </Stack>
                   )}
-                </Box>
-              ))}
-            </Stack>
-          )}
+                </Stack>
+              </Box>
+            );
+          })}
         </Stack>
       )}
-    </>
+    </FieldArray>
   );
 }
