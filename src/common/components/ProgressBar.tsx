@@ -20,8 +20,8 @@ function ProgressKnob({ diameter, ...boxProps }: { diameter: number } & BoxProps
 }
 
 export function ProgressBar({ percentage = 0 }: { percentage?: number }) {
-  const progress = Math.min(Math.max(percentage, 0), 100);
-
+  const safePercentage = Number.isFinite(percentage) ? percentage : 0;
+  const progress = Math.min(Math.max(safePercentage, 0), 100);
   return (
     <Stack
       bg={{

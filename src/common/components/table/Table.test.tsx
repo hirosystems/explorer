@@ -5,12 +5,18 @@ import userEvent from '@testing-library/user-event';
 
 import { Table, getColumnPinningState, getCommonPinningStyles } from './Table';
 
+const originalResizeObserver = globalThis.ResizeObserver;
+
 beforeAll(() => {
-  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  (globalThis as any).ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
     disconnect: jest.fn(),
   }));
+});
+
+afterAll(() => {
+  globalThis.ResizeObserver = originalResizeObserver;
 });
 
 test('header help is keyboard-focusable and activation does not sort the column', async () => {
