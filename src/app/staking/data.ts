@@ -138,6 +138,12 @@ export async function fetchBondRegistrations(
       throw new Error(`Failed to fetch registrations for bond ${index}: ${response.status}`);
     }
     const data: CursorPaginated<BondRegistration> = await response.json();
+    if (
+      !Array.isArray(data?.results) ||
+      (data?.cursor?.next !== null && typeof data?.cursor?.next !== 'string')
+    ) {
+      throw new Error(`Invalid registrations page for bond ${index}`);
+    }
     registrations.push(...data.results);
     cursor = data.cursor.next;
     if (cursor !== null) {

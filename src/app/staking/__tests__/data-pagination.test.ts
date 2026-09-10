@@ -124,6 +124,33 @@ test('does not return a partial enrollment total when a later page fails', async
   await expect(fetchBondRegistrations(1, 'mainnet')).rejects.toThrow('503');
 });
 
+test.each([
+  null,
+  { cursor: { next: null } },
+  { results: {}, cursor: { next: null } },
+  { results: [] },
+  { results: [], cursor: {} },
+  { results: [], cursor: { next: 123 } },
+])('rejects a malformed later registration page: %j', async page => {
+  fetchMock
+    .mockResolvedValueOnce(
+      respond({
+        results: [{ staker: 'first', balances: { btc: '100', stx: '200' } }],
+        cursor: { next: '123:0:4' },
+      })
+    )
+    .mockResolvedValueOnce(respond(page));
+
+  await expect(fetchBondRegistrations(1, 'mainnet')).rejects.toThrow(
+    'Invalid registrations page for bond 1'
+  );
+});
+
+test('accepts a complete empty registration page', async () => {
+  fetchMock.mockResolvedValue(respond({ results: [], cursor: { next: null } }));
+  await expect(fetchBondRegistrations(1, 'mainnet')).resolves.toEqual([]);
+});
+
 test('includes distributions beyond the first transaction event page', async () => {
   const log = (repr: string) => ({ contract_log: { value: { repr } } });
   fetchMock.mockImplementation(async url => {
