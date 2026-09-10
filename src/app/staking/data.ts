@@ -306,7 +306,8 @@ async function fetchTxsByFunction(
   poxContractId: string,
   functionName: string,
   limit: number,
-  offset = 0
+  offset = 0,
+  cache: 'default' | 'no-store' = 'default'
 ): Promise<RawTx[]> {
   const transactions: RawTx[] = [];
   while (transactions.length < limit) {
@@ -318,8 +319,11 @@ async function fetchTxsByFunction(
       function_name: functionName,
     });
     const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx?${params}`, {
-      cache: 'default',
-      next: { revalidate: REVALIDATE_SECONDS, tags: ['staking-transactions'] },
+      cache,
+      next:
+        cache === 'no-store'
+          ? undefined
+          : { revalidate: REVALIDATE_SECONDS, tags: ['staking-transactions'] },
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch ${functionName} transactions: ${response.status}`);
@@ -540,9 +544,14 @@ export async function fetchStakingActivity(
   const pages = await Promise.all(
     groups.flatMap(activityGroup =>
       ACTIVITY_GROUP_FUNCTIONS[activityGroup].map(async functionName => {
-        const txs = await fetchTxsByFunction(apiUrl, poxContractId, functionName, txWindow).catch(
-          activityFailure
-        );
+        const txs = await fetchTxsByFunction(
+          apiUrl,
+          poxContractId,
+          functionName,
+          txWindow,
+          0,
+          'no-store'
+        ).catch(activityFailure);
         return txs.map(tx => ({ tx, activityGroup }));
       })
     )

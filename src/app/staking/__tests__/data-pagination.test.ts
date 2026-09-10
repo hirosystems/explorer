@@ -24,6 +24,8 @@ test.each([200, 201, 3028])(
     fetchMock.mockImplementation(async (url, options) => {
       const params = new URL(url).searchParams;
       if (params.has('function_name')) {
+        expect(options?.cache).toBe('default');
+        expect(options?.next?.revalidate).toBe(60);
         const offset = Number(params.get('offset'));
         return respond({
           results: Array.from({ length: Math.min(50, count - offset) }, (_, i) => ({
