@@ -19,20 +19,25 @@ afterAll(() => {
   globalThis.ResizeObserver = originalResizeObserver;
 });
 
-test('header help is keyboard-focusable and activation does not sort the column', async () => {
+test.each([
+  { header: 'Amount', name: 'About Amount' },
+  { header: () => 'Amount', name: 'About amount' },
+])('header help "$name" opens outside the table without sorting', async ({ header, name }) => {
   const user = userEvent.setup();
   const onSort = jest.fn(async () => [{ amount: 1 }]);
-  renderWithChakraProviders(
+  const { container } = renderWithChakraProviders(
     <Table
       data={[{ amount: 1 }]}
-      columns={[{ accessorKey: 'amount', header: 'Amount', meta: { tooltip: 'Amount in BTC.' } }]}
+      columns={[{ accessorKey: 'amount', header, meta: { tooltip: 'Amount in BTC.' } }]}
       onSort={onSort}
     />
   );
-  const trigger = screen.getByRole('button', { name: 'About Amount' });
+  const trigger = screen.getByRole('button', { name });
   await user.tab();
   expect(trigger).toHaveFocus();
-  expect(await screen.findByRole('tooltip')).toHaveTextContent('Amount in BTC.');
+  const tooltip = await screen.findByRole('tooltip');
+  expect(tooltip).toHaveTextContent('Amount in BTC.');
+  expect(container).not.toContainElement(tooltip);
   await user.keyboard('{Enter}');
   expect(onSort).not.toHaveBeenCalled();
   await user.keyboard('{Escape}');
