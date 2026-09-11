@@ -67,6 +67,7 @@ const REVALIDATE_SECONDS = 60;
 export interface BondsPage {
   bonds: Bond[];
   total: number;
+  nextCursor: string | null;
 }
 
 const MAX_PAGE_LIMIT = 50;
@@ -92,6 +93,7 @@ export async function fetchBondsPage(
   return {
     bonds,
     total: data.total ?? bonds.length,
+    nextCursor: data.cursor?.next ?? null,
   };
 }
 
@@ -264,6 +266,7 @@ export async function fetchCycleRewards(
   );
 
   results.forEach(result => {
+    if (result.stakedMicroStx === BigInt(0)) return;
     byCycle[result.cycleNumber] = result;
   });
   return byCycle;
@@ -313,7 +316,8 @@ async function fetchTxsByFunction(
   functionName: string,
   limit: number,
   offset = 0,
-  cache: 'default' | 'no-store' = 'default'
+  cache: 'default' | 'no-store' = 'default',
+  fetchRequest = stacksAPIFetch
 ): Promise<RawTx[]> {
   const transactions: RawTx[] = [];
   while (transactions.length < limit) {
@@ -324,7 +328,7 @@ async function fetchTxsByFunction(
       contract_id: poxContractId,
       function_name: functionName,
     });
-    const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx?${params}`, {
+    const response = await fetchRequest(`${apiUrl}/extended/v1/tx?${params}`, {
       cache,
       next:
         cache === 'no-store'
@@ -351,7 +355,13 @@ export function readTopic(repr: string): string | undefined {
   return /\(topic "([^"]+)"\)/.exec(repr)?.[1];
 }
 
-async function fetchTxEvents(apiUrl: string, txId: string, settled = false): Promise<string[]> {
+async function fetchTxEvents(
+  apiUrl: string,
+  txId: string,
+  poxContractId: string,
+  settled = false,
+  fetchRequest = stacksAPIFetch
+): Promise<string[]> {
   const eventLimit = 100;
   const reprs: string[] = [];
   let offset = 0;
@@ -360,7 +370,7 @@ async function fetchTxEvents(apiUrl: string, txId: string, settled = false): Pro
       event_limit: String(eventLimit),
       event_offset: String(offset),
     });
-    const response = await stacksAPIFetch(`${apiUrl}/extended/v1/tx/${txId}?${params}`, {
+    const response = await fetchRequest(`${apiUrl}/extended/v1/tx/${txId}?${params}`, {
       cache: 'default',
       next: {
         revalidate: settled ? SETTLED_REVALIDATE_SECONDS : REVALIDATE_SECONDS,
@@ -372,11 +382,12 @@ async function fetchTxEvents(apiUrl: string, txId: string, settled = false): Pro
     }
     const data: {
       event_count?: number;
-      events?: { contract_log?: { value?: { repr?: string } } }[];
+      events?: { contract_log?: { contract_id?: string; value?: { repr?: string } } }[];
     } = await response.json();
     const events = data.events ?? [];
     reprs.push(
       ...events
+        .filter(event => event.contract_log?.contract_id === poxContractId)
         .map(event => event.contract_log?.value?.repr)
         .filter((repr): repr is string => !!repr)
     );
@@ -422,7 +433,7 @@ function describeContractCall(
   fn: string,
   reprs: string[],
   bondsByIndex: Map<number, Bond>
-): { text?: string; bondIndex?: number; amount?: string } {
+): { text?: string; bondIndex?: number; amount?: string; amountUnavailable?: boolean } {
   const find = (topic: string) => reprs.find(repr => readTopic(repr) === topic);
 
   if (fn === 'setup-bond') {
@@ -431,17 +442,17 @@ function describeContractCall(
     const index = readUint(repr, 'bond-index');
     const cycle = readUint(repr, 'first-reward-cycle');
     const bondIndex = index !== undefined ? Number(index) : undefined;
+    const capacitySats = toBigInt(
+      bondIndex !== undefined ? bondsByIndex.get(bondIndex)?.parameters?.btc_capacity : undefined
+    );
     return {
       text: joinDetail(
         optionalBondLabel(bondIndex),
         cycle !== undefined ? `cycle ${cycle}` : undefined
       ),
       bondIndex,
-      amount:
-        bondIndex !== undefined &&
-        bondsByIndex.get(bondIndex)?.parameters?.btc_capacity !== undefined
-          ? formatBtc(toBigInt(bondsByIndex.get(bondIndex)?.parameters?.btc_capacity))
-          : undefined,
+      amount: capacitySats !== undefined ? formatBtc(capacitySats) : undefined,
+      amountUnavailable: bondIndex !== undefined && capacitySats === undefined,
     };
   }
 
@@ -528,11 +539,11 @@ export async function fetchStakingActivity(
   };
   const readActivityEvents = async (tx: RawTx): Promise<string[] | undefined> => {
     try {
-      return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');
+      return await fetchTxEvents(apiUrl, tx.tx_id, poxContractId, tx.tx_status === 'success');
     } catch {
       await new Promise(resolve => setTimeout(resolve, 300));
       try {
-        return await fetchTxEvents(apiUrl, tx.tx_id, tx.tx_status === 'success');
+        return await fetchTxEvents(apiUrl, tx.tx_id, poxContractId, tx.tx_status === 'success');
       } catch (error) {
         activityFailure(error as Error);
         return undefined;
@@ -542,7 +553,10 @@ export async function fetchStakingActivity(
 
   const bondsByIndex = new Map<number, Bond>();
   const bondRequests = new Map<number, Promise<Bond | undefined>>();
-  const page = await fetchBondsPage(chain, api).catch(() => undefined);
+  const page = await fetchBondsPage(chain, api).catch(error => {
+    activityFailure(error);
+    return undefined;
+  });
   if (page) {
     for (const bond of page.bonds) bondsByIndex.set(bond.index, bond);
   }
@@ -661,7 +675,9 @@ export async function fetchStakingActivity(
                 detail: detail.text,
                 bondIndex: detail.bondIndex,
                 amount: detail.amount,
-                amountUnavailable: settled && (reprs === undefined || bondLookupFailed),
+                amountUnavailable:
+                  settled &&
+                  (reprs === undefined || bondLookupFailed || detail.amountUnavailable === true),
               },
             ];
           })
@@ -696,12 +712,42 @@ export interface BondRewards {
   >;
 }
 
+// Temporary protection until the API provides aggregated bond reward history.
+const MAX_REWARD_HISTORY_REQUESTS = 250;
+const REWARD_HISTORY_TIMEOUT_MS = 15_000;
+
 export async function fetchBondRewards(
   poxContractId: string,
   chain: string,
   api?: string
 ): Promise<BondRewards | undefined> {
-  const apiUrl = getApiUrl(chain, api);
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(new Error('Reward history request timed out')),
+    REWARD_HISTORY_TIMEOUT_MS
+  );
+  let requests = 0;
+  const fetchRequest: typeof stacksAPIFetch = (url, options) => {
+    if (controller.signal.aborted) throw controller.signal.reason;
+    if (requests >= MAX_REWARD_HISTORY_REQUESTS) {
+      throw new Error('Reward history request limit exceeded');
+    }
+    requests++;
+    return stacksAPIFetch(url, { ...options, signal: controller.signal });
+  };
+  try {
+    return await fetchBondRewardsHistory(getApiUrl(chain, api), poxContractId, fetchRequest);
+  } finally {
+    clearTimeout(timeout);
+    controller.abort();
+  }
+}
+
+async function fetchBondRewardsHistory(
+  apiUrl: string,
+  poxContractId: string,
+  fetchRequest: typeof stacksAPIFetch
+): Promise<BondRewards | undefined> {
   const txs: RawTx[] = [];
   const seenTxIds = new Set<string>();
   for (let offset = 0; ; offset += DISTRIBUTION_TX_PAGE) {
@@ -710,7 +756,9 @@ export async function fetchBondRewards(
       poxContractId,
       'calculate-rewards',
       DISTRIBUTION_TX_PAGE,
-      offset
+      offset,
+      'default',
+      fetchRequest
     );
     if (batch.length && batch.every(tx => seenTxIds.has(tx.tx_id))) {
       throw new Error('Reward transaction history pagination did not advance');
@@ -730,7 +778,7 @@ export async function fetchBondRewards(
     perTx.push(
       ...(await Promise.all(
         settled.slice(start, start + 4).map(async tx => {
-          const reprs = await fetchTxEvents(apiUrl, tx.tx_id, true);
+          const reprs = await fetchTxEvents(apiUrl, tx.tx_id, poxContractId, true, fetchRequest);
           const summary = reprs.find(repr => readTopic(repr) === 'calculate-rewards');
           if (!summary) return undefined;
           const total = readUint(summary, 'total-bond-rewards');
