@@ -1,6 +1,6 @@
 'use client';
 
-import { CompressedPoxInfo } from '@/app/address/[principal]/page-data';
+import { CompressedPoxInfo, PrincipalNonces } from '@/app/address/[principal]/page-data';
 // TODO: Temporarily disabled - re-enable when API performance is fixed
 // import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 // import { CompressedTxAndMempoolTxTableData } from '@/common/utils/transaction-utils';
@@ -8,7 +8,6 @@ import { ReactNode, createContext, useContext, useMemo } from 'react';
 
 import {
   AddressBalanceResponse,
-  AddressNonces,
   // TODO: Temporarily disabled - re-enable when API performance is fixed
   // AddressTransactionsListResponse,
   BnsNamesOwnByAddressResponse,
@@ -19,7 +18,7 @@ interface AddressIdPageDataContextType {
   stxPrice: number;
   btcPrice: number;
   initialAddressBalancesData?: AddressBalanceResponse;
-  initialAddressLatestNonceData?: AddressNonces;
+  initialAddressLatestNonceData?: PrincipalNonces;
   initialAddressBNSNamesData?: BnsNamesOwnByAddressResponse;
   initialBurnChainRewardsData?: BurnchainRewardsTotal;
   // TODO: Temporarily disabled - re-enable when API performance is fixed

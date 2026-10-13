@@ -8,9 +8,13 @@ export const useAddressNonces = ({ address }: { address: string }) => {
   return useQuery({
     queryKey: ['addressNonces', address],
     queryFn: async () => {
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/address/{principal}/nonces', {
-        params: { path: { principal: address } },
-      });
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v3/principals/{principal}/nonces',
+        {
+          params: { path: { principal: address } },
+        }
+      );
     },
   });
 };
