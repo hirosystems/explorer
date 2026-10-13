@@ -10,7 +10,8 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 
 import type { BondTooltipData } from './BondTooltip';
-import { BondsTable } from './BondsTable';
+import { OverviewBondsTable } from './OverviewBondsTable';
+import type { RewardHistoryNetwork } from './OverviewBondsTable';
 import {
   ROW_LABEL_WIDTH,
   SEGMENT_ELAPSED_BG,
@@ -59,6 +60,7 @@ function Swatch({ bg, dashed }: { bg?: string; dashed?: boolean }) {
 
 export function PeriodsOverview({
   bonds,
+  rewardHistoryNetwork,
   featuredIndex,
   rewardsByBond,
   settlementsByBond,
@@ -71,6 +73,7 @@ export function PeriodsOverview({
   nowMs,
 }: {
   bonds: Bond[];
+  rewardHistoryNetwork?: RewardHistoryNetwork;
   featuredIndex?: number;
   rewardsByBond?: Record<number, bigint>;
   settlementsByBond?: BondRewards['settlementsByBond'];
@@ -251,7 +254,8 @@ export function PeriodsOverview({
         </TabsRoot>
       </Flex>
       {view === 'table' ? (
-        <BondsTable
+        <OverviewBondsTable
+          rewardHistoryNetwork={rewardHistoryNetwork}
           bonds={bonds}
           currentBurnHeight={currentBurnHeight}
           nowMs={nowMs}

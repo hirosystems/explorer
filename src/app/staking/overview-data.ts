@@ -73,6 +73,7 @@ async function loadOverviewBase(chain: string, api?: string) {
   const bonds = handleSettledResult(bondsResult, 'Staking page: fetch bonds');
   const poxInfo = handleSettledResult(poxResult, 'Staking page: fetch pox info');
   return {
+    rewardHistoryNetwork: { chain, api },
     bonds: bonds ?? [],
     bondsUnavailable: bonds === undefined,
     poxInfo,
@@ -97,44 +98,66 @@ async function loadBondsOverview(
   const data = await base;
   const { bonds, poxInfo, currentBurnHeight, rewardCycleLength, prepareCycleLength } = data;
   const featuredIndex = getFeaturedBondIndex(bonds);
-  const otherIndexes = bonds.filter(bond => bond.index !== featuredIndex).map(bond => bond.index);
-  const heights = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain.flatMap(
-    bond =>
-      Object.values(
-        getBondSchedule(
-          bond.schedule.activation.bitcoin_height,
-          bond.schedule.unlock.bitcoin_height,
-          rewardCycleLength,
-          prepareCycleLength
-        )
+  const activeIndexes = bonds
+    .filter(bond => bond.index !== featuredIndex && bond.status === 'active')
+    .map(bond => bond.index);
+  const timelineBonds = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain;
+  const historicalIndexes = timelineBonds
+    .filter(bond => bond.index !== featuredIndex && bond.status !== 'active')
+    .map(bond => bond.index);
+  const heights = timelineBonds.flatMap(bond =>
+    Object.values(
+      getBondSchedule(
+        bond.schedule.activation.bitcoin_height,
+        bond.schedule.unlock.bitcoin_height,
+        rewardCycleLength,
+        prepareCycleLength
       )
+    )
   );
-  const [rewardsResult, enrollmentsResult, detailResult, timesResult] = await Promise.allSettled([
-    otherIndexes.length
-      ? fetchBondRewards(otherIndexes, chain, api, poxInfo?.contract_id, data.rewardHistoryDeadline)
-      : undefined,
-    featuredIndex !== undefined ? fetchBondRegistrations(featuredIndex, chain, api) : undefined,
-    featuredIndex !== undefined ? fetchFeaturedBond(featuredIndex, chain, api) : undefined,
-    fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
-  ]);
+  const [rewardsResult, historicalResult, enrollmentsResult, detailResult, timesResult] =
+    await Promise.allSettled([
+      activeIndexes.length
+        ? fetchBondRewards(
+            activeIndexes,
+            chain,
+            api,
+            poxInfo?.contract_id,
+            data.rewardHistoryDeadline
+          )
+        : undefined,
+      historicalIndexes.length
+        ? fetchBondRewards(
+            historicalIndexes,
+            chain,
+            api,
+            poxInfo?.contract_id,
+            data.rewardHistoryDeadline
+          )
+        : undefined,
+      featuredIndex !== undefined ? fetchBondRegistrations(featuredIndex, chain, api) : undefined,
+      featuredIndex !== undefined ? fetchFeaturedBond(featuredIndex, chain, api) : undefined,
+      fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
+    ]);
   const featured = await featuredRewards;
-  const other = handleRewardHistoryResult(rewardsResult, 'Staking page: other bond rewards');
-  const rewarded: StakingPageData['rewarded'] =
-    featured || other
-      ? {
-          byBondIndex: { ...other?.byBondIndex, ...featured?.byBondIndex },
-          settlementsByBond: { ...other?.settlementsByBond, ...featured?.settlementsByBond },
-          lastCalculationHeightByCycle: {},
-        }
-      : undefined;
-  if (rewarded) {
-    for (const [cycle, height] of Object.entries({
-      ...other?.lastCalculationHeightByCycle,
-      ...featured?.lastCalculationHeightByCycle,
-    })) {
-      rewarded.lastCalculationHeightByCycle[Number(cycle)] = Math.max(
+  const active = handleRewardHistoryResult(rewardsResult, 'Staking page: active bond rewards');
+  const historical = handleRewardHistoryResult(
+    historicalResult,
+    'Staking page: timeline bond rewards'
+  );
+  const available = [historical, active, featured].filter(
+    (value): value is NonNullable<typeof value> => value !== undefined
+  );
+  const rewarded: StakingPageData['rewarded'] = available.length
+    ? { byBondIndex: {}, settlementsByBond: {}, lastCalculationHeightByCycle: {} }
+    : undefined;
+  for (const result of available) {
+    Object.assign(rewarded!.byBondIndex, result.byBondIndex);
+    Object.assign(rewarded!.settlementsByBond, result.settlementsByBond);
+    for (const [cycle, height] of Object.entries(result.lastCalculationHeightByCycle)) {
+      rewarded!.lastCalculationHeightByCycle[Number(cycle)] = Math.max(
         height,
-        other?.lastCalculationHeightByCycle[Number(cycle)] ?? 0
+        rewarded!.lastCalculationHeightByCycle[Number(cycle)] ?? 0
       );
     }
   }

@@ -2,6 +2,7 @@ import type { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { redirect } from 'next/navigation';
 
 import { ActivitySection } from '../ActivitySection';
+import { getActiveBondSummary } from '../active-bond-summary';
 import StakingActivityPage from '../activity/page';
 import StakingBondsPage from '../bonds/page';
 import * as data from '../data';
@@ -381,4 +382,57 @@ test('an exhausted featured-history deadline does not trigger another settlement
   } finally {
     clock.mockRestore();
   }
+});
+
+test('hundreds of historical bonds cannot exhaust or erase active reward loading', async () => {
+  const featured = { ...bond, index: 302 };
+  const active = { ...bond, index: 301 };
+  const historical = Array.from({ length: 300 }, (_, index) => ({
+    ...bond,
+    index: index + 1,
+    status: 'closed',
+  }));
+  jest.mocked(data.fetchBondsPage).mockResolvedValueOnce({
+    bonds: [featured, active, ...historical],
+    total: 302,
+    nextCursor: null,
+  });
+  jest.mocked(fetchFeaturedBond).mockResolvedValueOnce(featured);
+  jest.mocked(data.fetchBondRewards).mockImplementation(async indexes => {
+    if (indexes.some(index => index <= 300))
+      throw new Error('Reward history request limit exceeded');
+    return {
+      byBondIndex: Object.fromEntries(indexes.map(index => [index, BigInt(10000)])),
+      settlementsByBond: Object.fromEntries(
+        indexes.map(index => [
+          index,
+          [
+            {
+              calculationHeight: 10799,
+              timestampMs: 1791450000000,
+              rewardedSats: BigInt(10000),
+            },
+          ],
+        ])
+      ),
+      lastCalculationHeightByCycle: {},
+    };
+  });
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bonds).toHaveLength(302);
+  expect(data.fetchBondRewards).toHaveBeenCalledWith(
+    [301],
+    'testnet',
+    undefined,
+    poxInfo.contract_id,
+    expect.any(Number)
+  );
+  const requests = jest.mocked(data.fetchBondRewards).mock.calls.map(([indexes]) => indexes);
+  expect(requests.every(indexes => indexes.length <= 11)).toBe(true);
+  expect(requests.flat().length).toBeLessThan(20);
+  expect(
+    getActiveBondSummary(result.bonds, result.rewarded?.settlementsByBond).lastDistributionSats
+  ).toBe(BigInt(20000));
 });

@@ -4,8 +4,9 @@ import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
 
-import { BondsTable } from './BondsTable';
 import { CurrentBond } from './CurrentBond';
+import { OverviewBondsTable } from './OverviewBondsTable';
+import type { RewardHistoryNetwork } from './OverviewBondsTable';
 import { PeriodsOverview } from './PeriodsOverview';
 import { StackingOverview } from './StackingOverview';
 import { HowToParticipateButton, StakingStats } from './StakingStats';
@@ -16,6 +17,7 @@ import type { CurrentCycleEstimate } from './reward-estimate';
 
 export interface StakingPageData {
   bonds: Bond[];
+  rewardHistoryNetwork?: RewardHistoryNetwork;
   bondsUnavailable?: boolean;
   poxInfo?: PoxInfo;
   cycles: PoxCycle[];
@@ -36,6 +38,7 @@ export interface StakingPageData {
 
 export function StakingPageClient({
   bonds,
+  rewardHistoryNetwork,
   bondsUnavailable,
   poxInfo,
   cycles,
@@ -91,7 +94,8 @@ export function StakingPageClient({
           <Text as="h2" textStyle="heading-xs">
             Bonds
           </Text>
-          <BondsTable
+          <OverviewBondsTable
+            rewardHistoryNetwork={rewardHistoryNetwork}
             bonds={bonds}
             currentBurnHeight={undefined}
             nowMs={nowMs}
@@ -131,6 +135,7 @@ export function StakingPageClient({
             />
           </Stack>
           <PeriodsOverview
+            rewardHistoryNetwork={rewardHistoryNetwork}
             settlementsByBond={rewarded?.settlementsByBond}
             burnBlockTimes={burnBlockTimes}
             bonds={bonds}
