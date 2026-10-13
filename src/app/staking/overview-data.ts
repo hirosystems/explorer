@@ -52,17 +52,33 @@ export function loadStakingOverview(chain: string, api?: string) {
   };
 }
 
+async function fetchOverviewBonds(chain: string, api?: string) {
+  let page = await fetchBondsPage(chain, api);
+  const bonds = new Map(page.bonds.map(bond => [bond.index, bond]));
+  const seenCursors = new Set<string>();
+  while (page.nextCursor !== null) {
+    const cursor = page.nextCursor;
+    if (seenCursors.has(cursor)) throw new Error('Bond pagination did not advance');
+    seenCursors.add(cursor);
+    page = await fetchBondsPage(chain, api, undefined, cursor);
+    for (const bond of page.bonds) {
+      if (!bonds.has(bond.index)) bonds.set(bond.index, bond);
+    }
+  }
+  return Array.from(bonds.values()).sort((a, b) => b.index - a.index);
+}
+
 async function loadOverviewBase(chain: string, api?: string) {
   const nowMs = Date.now();
   const [bondsResult, poxResult] = await Promise.allSettled([
-    fetchBondsPage(chain, api),
+    fetchOverviewBonds(chain, api),
     fetchPoxInfo(chain, api),
   ]);
-  const bondsPage = handleSettledResult(bondsResult, 'Staking page: fetch bonds');
+  const bonds = handleSettledResult(bondsResult, 'Staking page: fetch bonds');
   const poxInfo = handleSettledResult(poxResult, 'Staking page: fetch pox info');
   return {
-    bonds: bondsPage?.bonds ?? [],
-    bondsUnavailable: bondsPage === undefined,
+    bonds: bonds ?? [],
+    bondsUnavailable: bonds === undefined,
     poxInfo,
     nowMs,
     currentBurnHeight: poxInfo?.current_burnchain_block_height ?? 0,
@@ -86,17 +102,17 @@ async function loadBondsOverview(
   const { bonds, poxInfo, currentBurnHeight, rewardCycleLength, prepareCycleLength } = data;
   const featuredIndex = getFeaturedBondIndex(bonds);
   const otherIndexes = bonds.filter(bond => bond.index !== featuredIndex).map(bond => bond.index);
-  const heights = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain.flatMap(
-    bond =>
-      Object.values(
-        getBondSchedule(
-          bond.schedule.activation.bitcoin_height,
-          bond.schedule.unlock.bitcoin_height,
-          rewardCycleLength,
-          prepareCycleLength,
-          bond.schedule
-        )
+  const timelineBonds = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain;
+  const heights = timelineBonds.flatMap(bond =>
+    Object.values(
+      getBondSchedule(
+        bond.schedule.activation.bitcoin_height,
+        bond.schedule.unlock.bitcoin_height,
+        rewardCycleLength,
+        prepareCycleLength,
+        bond.schedule
       )
+    )
   );
   const projections = getBondProjections(bonds, rewardCycleLength, currentBurnHeight);
   const projectionController = new AbortController();

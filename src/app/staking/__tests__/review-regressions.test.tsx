@@ -117,7 +117,7 @@ test('overview preserves bonds and known rewards when PoX is missing without inv
   expect(
     screen.getByRole('button', { name: 'Current Bitcoin block height is unavailable.' })
   ).toBeInTheDocument();
-  expect(screen.queryByRole('heading', { name: 'Current bond' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: 'Active bonds' })).not.toBeInTheDocument();
 });
 
 test('overview does not substitute a misleading empty table when both bonds and PoX fail', () => {
@@ -190,26 +190,21 @@ test('a server-paginated bond table displays the supplied page without slicing i
   await waitFor(() => expect(onPageChange).toHaveBeenCalledWith({ pageIndex: 2, pageSize: 2 }));
 });
 
-test('featured-bond cards preserve missing balances rather than showing zero or crashing', () => {
+test('active-bond stats preserve missing balances rather than showing zero or crashing', () => {
   renderWithChakraProviders(
     <StakingStats
-      featuredBond={{
-        ...bondFixture,
-        balances: { ...bondFixture.balances, locked: { btc: '', stx: 'invalid' } },
-      }}
-      rewardCycleLength={900}
-      prepareCycleLength={100}
-      currentBurnHeight={9508}
-      nowMs={Date.UTC(2026, 7, 25)}
+      bonds={[
+        {
+          ...bondFixture,
+          balances: { ...bondFixture.balances, locked: { btc: '', stx: 'invalid' } },
+        },
+      ]}
     />
   );
   expect(screen.getAllByText('N/A')).toHaveLength(3);
   expect(screen.getByText('Bond balance unavailable')).toBeInTheDocument();
   expect(screen.getByText(/Paired balance unavailable/)).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: '#19800' })).toHaveAttribute(
-    'href',
-    expect.stringContaining('/btcblock/19800?')
-  );
+  expect(screen.queryByText(/unlocks/)).not.toBeInTheDocument();
 });
 
 test('an invalid enrollment prevents a misleading partial total', () => {
