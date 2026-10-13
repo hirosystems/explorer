@@ -44,7 +44,12 @@ test('on-chain next bond takes precedence over projections from the featured bon
   };
   const result = getBondProjections([next, bond], 900);
   expect(result.featuredIndex).toBe(3);
-  expect(result.nextBond).toEqual({ index: 4, activationHeight: 12000, termEndHeight: 22800 });
+  expect(result.nextBond).toEqual({
+    index: 4,
+    activationHeight: 12000,
+    termEndHeight: 22800,
+    schedule: next.schedule,
+  });
   expect(result.scheduledBonds[0]).toEqual({
     index: 5,
     activationHeight: 13800,

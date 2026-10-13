@@ -1,6 +1,12 @@
 import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 
-import { fetchBondRegistrations, fetchBondsPage, fetchPoxInfo } from '../data';
+import {
+  fetchBond,
+  fetchBondRegistrations,
+  fetchBondSchedule,
+  fetchBondsPage,
+  fetchPoxInfo,
+} from '../data';
 
 jest.mock('@/api/stacksAPIFetch');
 const fetchMock = stacksAPIFetch as jest.MockedFunction<typeof stacksAPIFetch>;
@@ -10,6 +16,20 @@ function respond(body: unknown) {
 }
 
 beforeEach(() => fetchMock.mockReset());
+
+test('future schedules are available without exposing undeclared bonds as declared data', async () => {
+  const projected = {
+    index: 5,
+    status: 'projected',
+    schedule: {
+      activation: { bitcoin_height: 983150, pox_cycle: 151, time: null, projected_time: null },
+      unlock: { bitcoin_height: 1008350, pox_cycle: 163, time: null, projected_time: null },
+    },
+  };
+  fetchMock.mockResolvedValue(respond(projected));
+  await expect(fetchBondSchedule(5, 'mainnet')).resolves.toEqual(projected);
+  await expect(fetchBond(5, 'mainnet')).rejects.toThrow('has not been declared');
+});
 
 test('returns and forwards the opaque next bond cursor', async () => {
   fetchMock

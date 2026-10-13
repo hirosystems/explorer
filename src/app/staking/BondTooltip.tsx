@@ -5,15 +5,17 @@ import { Text } from '@/ui/Text';
 import { Badge, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 
+import { formatBondDate, resolveBondDate } from './bond-schedule';
 import { DISTRIBUTIONS_PER_BOND, STAKING_LINKS } from './consts';
+import type { Bond } from './data';
 import {
   BondLifecycleState,
   BondSchedule,
-  formatTermDuration,
-  formatTimeRemaining,
+  formatTermDurationMs,
+  formatTimeRemainingMs,
 } from './projections';
 import type { RealizedBondRate } from './reward-metrics';
-import { formatBtc, formatBurnDate, formatRatePercent, formatSbtc } from './utils';
+import { formatBtc, formatRatePercent, formatSbtc } from './utils';
 
 export const BOND_STATE_LABELS: Record<BondLifecycleState, string> = {
   scheduled: 'scheduled',
@@ -43,7 +45,7 @@ export const hasBondLinks = (state: BondLifecycleState) =>
 
 export function bondSummary(bond: BondTooltipData, currentBurnHeight: number, nowMs: number) {
   const date = (height: number) =>
-    formatBurnDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes);
+    formatBondDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes, bond.apiSchedule);
   return `${bond.label} · ${BOND_STATE_LABELS[bond.state]} · ${date(bond.schedule.activationHeight)} → ${date(bond.schedule.termEndHeight)}`;
 }
 
@@ -51,6 +53,7 @@ export interface BondTooltipData {
   label: string;
   state: BondLifecycleState;
   schedule: BondSchedule;
+  apiSchedule?: Bond['schedule'];
   capacitySats?: bigint;
   lockedSats?: bigint;
   rewardedSats?: bigint;
@@ -114,18 +117,19 @@ export function BondTooltip({
 }) {
   const { label, state, schedule, capacitySats, lockedSats, rewardedSats, targetRateBps } = bond;
   const date = (height: number) =>
-    formatBurnDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes);
+    formatBondDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes, bond.apiSchedule);
 
-  const termBlocks = schedule.termEndHeight - schedule.activationHeight;
-  const remainingBlocks =
-    state === 'scheduled'
-      ? schedule.activationHeight - currentBurnHeight
-      : schedule.termEndHeight - currentBurnHeight;
+  const at = (height: number) =>
+    resolveBondDate(height, currentBurnHeight, nowMs, bond.burnBlockTimes, bond.apiSchedule)
+      ?.timestampMs;
+  const activationMs = at(schedule.activationHeight);
+  const unlockMs = at(schedule.termEndHeight);
+  const remainingMs = state === 'scheduled' ? activationMs : unlockMs;
   const duration =
-    state === 'closed'
-      ? formatTermDuration(termBlocks)
-      : remainingBlocks > 0
-        ? `in ${formatTimeRemaining(remainingBlocks)}`
+    state === 'closed' && activationMs !== undefined && unlockMs !== undefined
+      ? formatTermDurationMs(unlockMs - activationMs)
+      : remainingMs !== undefined && remainingMs > nowMs
+        ? `in ${formatTimeRemainingMs(remainingMs - nowMs)}`
         : '';
 
   const rewarded = rewardedSats === undefined ? 'Unavailable' : formatSbtc(rewardedSats);
