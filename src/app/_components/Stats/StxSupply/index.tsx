@@ -5,22 +5,22 @@ import { Info } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
-import { abbreviateNumber } from '../../../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, abbreviateNumber } from '../../../../common/utils/utils';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
 function StxSupplyBase(props: StackProps) {
   const {
-    data: { total_stx, unlocked_stx, total_stx_year_2050 },
+    data: { total, projected_total_2050 },
   } = useSuspenseStxSupply();
-  const circulatingSupplyNumber = unlocked_stx ? Number(unlocked_stx) : 0;
-  const circulatingSupplyFormatted = abbreviateNumber(circulatingSupplyNumber);
-  const totalSupplyNumber = total_stx ? Number(total_stx) : 0;
+  // All STX is unlocked, so the circulating supply is the total supply.
+  const totalSupplyNumber = total ? Number(total) / MICROSTACKS_IN_STACKS : 0;
   const totalSupplyFormatted = abbreviateNumber(totalSupplyNumber);
-  const maxSupplyBy2050Number = total_stx_year_2050 ? Number(total_stx_year_2050) : 0;
+  const maxSupplyBy2050Number = projected_total_2050
+    ? Number(projected_total_2050) / MICROSTACKS_IN_STACKS
+    : 0;
   const maxSupplyBy2050Formatted = abbreviateNumber(maxSupplyBy2050Number);
-  const percentageUnlocked = ((circulatingSupplyNumber / totalSupplyNumber) * 100).toFixed(1);
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
 
   return (
@@ -42,7 +42,7 @@ function StxSupplyBase(props: StackProps) {
           )}
         </Flex>
       }
-      bodyMainText={circulatingSupplyFormatted}
+      bodyMainText={totalSupplyFormatted}
       bodySecondaryText={
         <Flex alignItems={'center'} gap={1}>
           <span>/</span>
@@ -51,7 +51,7 @@ function StxSupplyBase(props: StackProps) {
       }
       caption={
         <>
-          <b>{percentageUnlocked}%</b> of total supply is circulating
+          <b>100%</b> of total supply is circulating
         </>
       }
       {...props}

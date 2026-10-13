@@ -42,7 +42,7 @@ function serveChain(txs: TxStub[], { failingFunction }: { failingFunction?: stri
     const bondIndex = /\/extended\/v3\/staking\/bonds\/(\d+)$/.exec(url)?.[1];
     if (bondIndex) return respond({ ...bondFixture, index: Number(bondIndex) });
     if (url.includes('/extended/v3/staking/bonds')) {
-      return respond({ results: [], total: 0 });
+      return respond({ results: [], total: 0, cursor: { next: null } });
     }
 
     const requestedFunction = /function_name=([^&]+)/.exec(url)?.[1];

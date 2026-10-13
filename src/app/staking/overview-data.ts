@@ -1,6 +1,6 @@
 import { handleSettledResult } from '@/app/address/[principal]/page-data';
 
-import type { StakingPageData } from './PageClient';
+import type { StackingPageData, StakingPageData } from './PageClient';
 import { mergeBondDetail } from './bond-schedule';
 import { PREVIOUS_CYCLES_LIMIT, SCHEDULED_BONDS_AHEAD } from './consts';
 import {
@@ -11,6 +11,7 @@ import {
   fetchBondSchedule,
   fetchBondsPage,
   fetchBurnBlockTimes,
+  fetchCurrentCycleBonds,
   fetchCycleCalculationHeights,
   fetchCycleRewards,
   fetchPoxCycles,
@@ -27,11 +28,24 @@ import {
 } from './projections';
 import { fetchCurrentCycleEstimate } from './reward-estimate';
 
-// Share only the inputs both sections need. Each section awaits its own remaining work.
+// The summary starts independently of the bounded recent-bond page.
 export function loadStakingOverview(chain: string, api?: string) {
-  const base = loadOverviewBase(chain, api);
-  const featuredRewards = base.then(async data => {
-    const index = getFeaturedBondIndex(data.bonds);
+  const pox = Promise.allSettled([fetchPoxInfo(chain, api)]).then(([result]) =>
+    handleSettledResult(result, 'Staking page: fetch pox info')
+  );
+  const current = Promise.all([
+    pox,
+    Promise.allSettled([fetchCurrentCycleBonds(chain, api)]).then(([result]) =>
+      handleSettledResult(result, 'Staking page: current-cycle bonds')
+    ),
+  ]).then(([poxInfo, activeBonds]) => ({
+    poxInfo,
+    activeBonds,
+    rewardHistoryDeadline: createRewardHistoryDeadline(),
+  }));
+  const base = loadOverviewBase(chain, api, pox);
+  const featuredRewards = current.then(async data => {
+    const index = getFeaturedBondIndex(data.activeBonds ?? []);
     const [result] = await Promise.allSettled([
       index === undefined
         ? undefined
@@ -45,23 +59,58 @@ export function loadStakingOverview(chain: string, api?: string) {
     ]);
     return handleRewardHistoryResult(result, 'Staking page: featured bond rewards');
   });
+  const summary = current.then(async data => {
+    const featuredIndex = getFeaturedBondIndex(data.activeBonds ?? []);
+    const indexes =
+      data.activeBonds?.filter(bond => bond.index !== featuredIndex).map(bond => bond.index) ?? [];
+    const [result] = await Promise.allSettled([
+      indexes.length
+        ? fetchBondRewards(
+            indexes,
+            chain,
+            api,
+            data.poxInfo?.contract_id,
+            data.rewardHistoryDeadline
+          )
+        : undefined,
+    ]);
+    return {
+      activeBonds: data.activeBonds,
+      rewarded: mergeBondRewards([
+        handleRewardHistoryResult(result, 'Staking page: active bond rewards'),
+        await featuredRewards,
+      ]),
+    };
+  });
   return {
-    bonds: loadBondsOverview(base, featuredRewards, chain, api),
+    summary,
+    bonds: loadBondsOverview(
+      base,
+      current.then(data => data.activeBonds),
+      summary,
+      chain,
+      api
+    ),
     stacking: loadStackingOverview(base, featuredRewards, chain, api),
   };
 }
 
-async function loadOverviewBase(chain: string, api?: string) {
+async function loadOverviewBase(
+  chain: string,
+  api: string | undefined,
+  pox: Promise<Awaited<ReturnType<typeof fetchPoxInfo>> | undefined>
+) {
   const nowMs = Date.now();
-  const [bondsResult, poxResult] = await Promise.allSettled([
-    fetchBondsPage(chain, api),
-    fetchPoxInfo(chain, api),
+  const [pageResult, poxInfo] = await Promise.all([
+    Promise.allSettled([fetchBondsPage(chain, api)]).then(([result]) => result),
+    pox,
   ]);
-  const bondsPage = handleSettledResult(bondsResult, 'Staking page: fetch bonds');
-  const poxInfo = handleSettledResult(poxResult, 'Staking page: fetch pox info');
+  const page = handleSettledResult(pageResult, 'Staking page: fetch recent bonds');
   return {
-    bonds: bondsPage?.bonds ?? [],
-    bondsUnavailable: bondsPage === undefined,
+    rewardHistoryNetwork: { chain, api },
+    bonds: page?.bonds ?? [],
+    bondsUnavailable: page === undefined,
+    hasMoreBonds: page?.nextCursor != null,
     poxInfo,
     nowMs,
     currentBurnHeight: poxInfo?.current_burnchain_block_height ?? 0,
@@ -72,30 +121,57 @@ async function loadOverviewBase(chain: string, api?: string) {
   };
 }
 
+function mergeBondRewards(results: (Awaited<ReturnType<typeof fetchBondRewards>> | undefined)[]) {
+  const available = results.filter(
+    (value): value is NonNullable<typeof value> => value !== undefined
+  );
+  const rewarded: StakingPageData['rewarded'] = available.length
+    ? { byBondIndex: {}, settlementsByBond: {}, lastCalculationHeightByCycle: {} }
+    : undefined;
+  for (const result of available) {
+    Object.assign(rewarded!.byBondIndex, result.byBondIndex);
+    Object.assign(rewarded!.settlementsByBond, result.settlementsByBond);
+    for (const [cycle, height] of Object.entries(result.lastCalculationHeightByCycle)) {
+      rewarded!.lastCalculationHeightByCycle[Number(cycle)] = Math.max(
+        height,
+        rewarded!.lastCalculationHeightByCycle[Number(cycle)] ?? 0
+      );
+    }
+  }
+  return rewarded;
+}
+
 type OverviewBase = ReturnType<typeof loadOverviewBase>;
 type FeaturedRewards = Promise<Awaited<ReturnType<typeof fetchBondRewards>> | undefined>;
 
 async function loadBondsOverview(
   base: OverviewBase,
-  featuredRewards: FeaturedRewards,
+  currentBonds: Promise<Awaited<ReturnType<typeof fetchCurrentCycleBonds>> | undefined>,
+  summary: Promise<{
+    activeBonds: Awaited<ReturnType<typeof fetchCurrentCycleBonds>> | undefined;
+    rewarded: StakingPageData['rewarded'];
+  }>,
   chain: string,
   api?: string
 ): Promise<StakingPageData> {
-  const data = await base;
+  const [data, activeBonds] = await Promise.all([base, currentBonds]);
   const { bonds, poxInfo, currentBurnHeight, rewardCycleLength, prepareCycleLength } = data;
   const featuredIndex = getFeaturedBondIndex(bonds);
-  const otherIndexes = bonds.filter(bond => bond.index !== featuredIndex).map(bond => bond.index);
-  const heights = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain.flatMap(
-    bond =>
-      Object.values(
-        getBondSchedule(
-          bond.schedule.activation.bitcoin_height,
-          bond.schedule.unlock.bitcoin_height,
-          rewardCycleLength,
-          prepareCycleLength,
-          bond.schedule
-        )
+  const activeIndexes = activeBonds?.map(bond => bond.index) ?? [];
+  const timelineBonds = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain;
+  const historicalIndexes = timelineBonds
+    .filter(bond => !activeIndexes.includes(bond.index))
+    .map(bond => bond.index);
+  const heights = timelineBonds.flatMap(bond =>
+    Object.values(
+      getBondSchedule(
+        bond.schedule.activation.bitcoin_height,
+        bond.schedule.unlock.bitcoin_height,
+        rewardCycleLength,
+        prepareCycleLength,
+        bond.schedule
       )
+    )
   );
   // Ask for immediate successors before local estimates can rule them out.
   const latestIndex = Math.max(0, ...bonds.map(bond => bond.index));
@@ -116,35 +192,26 @@ async function loadBondsOverview(
           : []
       )
     );
-  const [rewardsResult, enrollmentsResult, detailResult, timesResult] = await Promise.allSettled([
-    otherIndexes.length
-      ? fetchBondRewards(otherIndexes, chain, api, poxInfo?.contract_id, data.rewardHistoryDeadline)
-      : undefined,
-    featuredIndex !== undefined ? fetchBondRegistrations(featuredIndex, chain, api) : undefined,
-    featuredIndex !== undefined ? fetchFeaturedBond(featuredIndex, chain, api) : undefined,
-    fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
+  const [historicalResult, enrollmentsResult, detailResult, timesResult] = await Promise.allSettled(
+    [
+      historicalIndexes.length
+        ? fetchBondRewards(
+            historicalIndexes,
+            chain,
+            api,
+            poxInfo?.contract_id,
+            data.rewardHistoryDeadline
+          )
+        : undefined,
+      featuredIndex !== undefined ? fetchBondRegistrations(featuredIndex, chain, api) : undefined,
+      featuredIndex !== undefined ? fetchFeaturedBond(featuredIndex, chain, api) : undefined,
+      fetchBurnBlockTimes(heights, currentBurnHeight, chain, api),
+    ]
+  );
+  const rewarded = mergeBondRewards([
+    handleRewardHistoryResult(historicalResult, 'Staking page: timeline bond rewards'),
+    (await summary).rewarded,
   ]);
-  const featured = await featuredRewards;
-  const other = handleRewardHistoryResult(rewardsResult, 'Staking page: other bond rewards');
-  const rewarded: StakingPageData['rewarded'] =
-    featured || other
-      ? {
-          byBondIndex: { ...other?.byBondIndex, ...featured?.byBondIndex },
-          settlementsByBond: { ...other?.settlementsByBond, ...featured?.settlementsByBond },
-          lastCalculationHeightByCycle: {},
-        }
-      : undefined;
-  if (rewarded) {
-    for (const [cycle, height] of Object.entries({
-      ...other?.lastCalculationHeightByCycle,
-      ...featured?.lastCalculationHeightByCycle,
-    })) {
-      rewarded.lastCalculationHeightByCycle[Number(cycle)] = Math.max(
-        height,
-        other?.lastCalculationHeightByCycle[Number(cycle)] ?? 0
-      );
-    }
-  }
   const detail = handleSettledResult(detailResult, 'Staking page: bond setup');
   const enrollments = handleSettledResult(enrollmentsResult, 'Staking page: enrollments');
   return {
@@ -156,8 +223,6 @@ async function loadBondsOverview(
     rewarded,
     enrollments: enrollments?.map(enrollment => ({ btc: enrollment.balances.btc })),
     burnBlockTimes: handleSettledResult(timesResult, 'Staking page: bond dates') ?? {},
-    cycles: [],
-    cycleRewards: {},
   };
 }
 
@@ -166,7 +231,7 @@ async function loadStackingOverview(
   featuredRewards: FeaturedRewards,
   chain: string,
   api?: string
-): Promise<StakingPageData> {
+): Promise<StackingPageData> {
   const [data, cyclesResult] = await Promise.all([
     base,
     Promise.allSettled([fetchPoxCycles(chain, api)]).then(([result]) => result),
@@ -239,7 +304,10 @@ async function loadStackingOverview(
       settlement(),
     ]);
   return {
-    ...data,
+    poxInfo,
+    currentBurnHeight,
+    firstBurnchainBlockHeight,
+    nowMs,
     cycles,
     pox5FirstCycleId,
     cycleRewards: handleSettledResult(rewardsResult, 'Staking page: cycle rewards') ?? {},

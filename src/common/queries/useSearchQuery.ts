@@ -383,7 +383,6 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
             query: {
               limit: 5,
               offset: 0,
-              unanchored: true,
               order: 'desc',
               sort_by: 'burn_block_time',
               ...(fromAddress && { from_address: fromAddress }),

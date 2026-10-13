@@ -62,7 +62,7 @@ export const AddressOverviewTable = () => {
         />
         <SummaryItem
           label="Last executed nonce"
-          value={initialAddressLatestNonceData?.last_executed_tx_nonce?.toString() || ''}
+          value={initialAddressLatestNonceData?.last_confirmed_nonce?.toString() || ''}
           showCopyButton
           infoText="A nonce is a unique number used to track and order transactions from an address."
         />

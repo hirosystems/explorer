@@ -44,6 +44,28 @@ test('returns and forwards the opaque next bond cursor', async () => {
   expect(last.nextCursor).toBeNull();
 });
 
+test.each([
+  { results: [], cursor: { next: null } },
+  { results: [], total: -1, cursor: { next: null } },
+  { results: [], total: 1.5, cursor: { next: null } },
+  { total: 0, cursor: { next: null } },
+  { results: [], total: 0 },
+  { results: [], total: 0, cursor: { next: '' } },
+  { results: [{}], total: 1, cursor: { next: null } },
+])('rejects malformed bond pages instead of inventing pagination metadata: %j', async page => {
+  fetchMock.mockResolvedValue(respond(page));
+  await expect(fetchBondsPage('mainnet')).rejects.toThrow('Invalid bonds page');
+});
+
+test('accepts a complete empty bond list', async () => {
+  fetchMock.mockResolvedValue(respond({ results: [], total: 0, cursor: { next: null } }));
+  await expect(fetchBondsPage('mainnet')).resolves.toEqual({
+    bonds: [],
+    total: 0,
+    nextCursor: null,
+  });
+});
+
 test('rejects PoX data without a current cycle so the page can use its unavailable state', async () => {
   fetchMock.mockResolvedValue(respond({ contract_id: 'SP000000000000000000002Q6VF78.pox-5' }));
   await expect(fetchPoxInfo('mainnet')).rejects.toThrow('missing the current cycle');
