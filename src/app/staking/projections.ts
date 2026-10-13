@@ -137,8 +137,10 @@ export type TimelineGranularity = 'day' | 'month';
 
 const MAX_DAYS_FOR_DAY_AXIS = 21;
 
-function getTimelineGranularity(spanMs: number): TimelineGranularity {
-  const days = spanMs / (24 * 60 * 60 * 1000);
+function getTimelineGranularity(start: Date, end: Date): TimelineGranularity {
+  const startDay = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+  const endDay = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+  const days = (endDay - startDay) / (24 * 60 * 60 * 1000);
   return days <= MAX_DAYS_FOR_DAY_AXIS ? 'day' : 'month';
 }
 
@@ -150,9 +152,9 @@ export function getTimelineBounds(
   const earliest = Math.min(nowMs, ...(times.length ? times : [nowMs]));
   const latest = Math.max(nowMs, ...(times.length ? times : [nowMs]));
 
-  const granularity = getTimelineGranularity(latest - earliest);
   const start = new Date(earliest);
   const end = new Date(latest);
+  const granularity = getTimelineGranularity(start, end);
 
   if (granularity === 'day') {
     return {
@@ -454,17 +456,9 @@ export function getBondProjections(
         termEndHeight: onChainNext.schedule.unlock.bitcoin_height,
         schedule: onChainNext.schedule,
       }
-    : featuredBond && rewardCycleLength > 0
-      ? projectScheduledBonds(
-          featuredBond.index,
-          featuredBond.schedule.activation.bitcoin_height,
-          rewardCycleLength,
-          1,
-          currentBurnHeight
-        )[0]
-      : undefined;
+    : undefined;
   const latest = [...bonds].sort((a, b) => b.index - a.index)[0];
-  const scheduledBonds =
+  const localProjections =
     latest && rewardCycleLength > 0
       ? projectScheduledBonds(
           latest.index,
@@ -474,21 +468,24 @@ export function getBondProjections(
           currentBurnHeight
         )
       : [];
-  const withApiSchedule = (bond: ScheduledBond): ScheduledBond => {
-    const projected = projectedBonds.find(candidate => candidate.index === bond.index);
-    return projected
-      ? {
-          index: projected.index,
-          activationHeight: projected.schedule.activation.bitcoin_height,
-          termEndHeight: projected.schedule.unlock.bitcoin_height,
-          schedule: projected.schedule,
-        }
-      : bond;
-  };
+  const byIndex = new Map(localProjections.map(bond => [bond.index, bond]));
+  for (const projected of projectedBonds) {
+    if (!latest || projected.index <= latest.index) continue;
+    byIndex.set(projected.index, {
+      index: projected.index,
+      activationHeight: projected.schedule.activation.bitcoin_height,
+      termEndHeight: projected.schedule.unlock.bitcoin_height,
+      schedule: projected.schedule,
+    });
+  }
+  const scheduledBonds = Array.from(byIndex.values())
+    .filter(bond => bond.activationHeight > currentBurnHeight)
+    .sort((a, b) => a.activationHeight - b.activationHeight || a.index - b.index)
+    .slice(0, SCHEDULED_BONDS_AHEAD);
   return {
     featuredIndex,
     featuredBond,
-    nextBond: nextBond ? withApiSchedule(nextBond) : undefined,
-    scheduledBonds: scheduledBonds.map(withApiSchedule),
+    nextBond: nextBond ?? (featuredBond ? scheduledBonds[0] : undefined),
+    scheduledBonds,
   };
 }

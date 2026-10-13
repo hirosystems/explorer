@@ -114,10 +114,19 @@ test('future API schedules override local projections without becoming declared 
       unlock: { bitcoin_height: 1000000, pox_cycle: 159, projected_time: 1809106934 },
     },
   };
-  const result = getBondProjections([bond], 2100, 971267, [projected]);
+  // Local estimation puts this successor at 974750, before the current height.
+  const result = getBondProjections([bond], 2100, 974775, [projected]);
   expect(result.nextBond?.schedule).toEqual(projected.schedule);
   expect(result.scheduledBonds[0].activationHeight).toBe(974800);
   expect(result.featuredBond).toBe(bond);
   expect(result.scheduledBonds[0]).not.toHaveProperty('parameters');
-  expect(getBondProjections([bond], 2100, 971267).scheduledBonds[0].activationHeight).toBe(974750);
+  expect(getBondProjections([bond], 2100, 974775).scheduledBonds[0].activationHeight).toBe(978950);
+  const past = {
+    ...projected,
+    index: bond.index + 2,
+    schedule: { ...projected.schedule, activation: { bitcoin_height: 974770, pox_cycle: 147 } },
+  };
+  const upcoming = getBondProjections([bond], 2100, 974775, [past, projected]);
+  expect(upcoming.scheduledBonds.map(next => next.index)).not.toContain(past.index);
+  expect(upcoming.nextBond?.index).toBe(projected.index);
 });

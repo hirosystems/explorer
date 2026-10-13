@@ -2,7 +2,7 @@ import { handleSettledResult } from '@/app/address/[principal]/page-data';
 
 import type { StakingPageData } from './PageClient';
 import { mergeBondDetail } from './bond-schedule';
-import { PREVIOUS_CYCLES_LIMIT } from './consts';
+import { PREVIOUS_CYCLES_LIMIT, SCHEDULED_BONDS_AHEAD } from './consts';
 import {
   type ProjectedBond,
   createRewardHistoryDeadline,
@@ -21,7 +21,6 @@ import { fetchFeaturedBond } from './page-data';
 import { fetchDailyPrices } from './prices';
 import {
   burnHeightToApproximateTimestamp,
-  getBondProjections,
   getBondSchedule,
   getFeaturedBondIndex,
   getTimelineBondWindow,
@@ -98,13 +97,15 @@ async function loadBondsOverview(
         )
       )
   );
-  const projections = getBondProjections(bonds, rewardCycleLength, currentBurnHeight);
+  // Ask for immediate successors before local estimates can rule them out.
+  const latestIndex = Math.max(0, ...bonds.map(bond => bond.index));
+  const projectedIndices = latestIndex
+    ? Array.from({ length: SCHEDULED_BONDS_AHEAD }, (_, offset) => latestIndex + offset + 1)
+    : [];
   const projectionController = new AbortController();
   const projectionTimeout = setTimeout(() => projectionController.abort(), 5000);
   const projected = Promise.allSettled(
-    projections.scheduledBonds.map(bond =>
-      fetchBondSchedule(bond.index, chain, api, projectionController.signal)
-    )
+    projectedIndices.map(index => fetchBondSchedule(index, chain, api, projectionController.signal))
   )
     .finally(() => clearTimeout(projectionTimeout))
     .then(results =>

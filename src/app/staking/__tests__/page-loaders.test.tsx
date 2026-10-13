@@ -172,9 +172,9 @@ test('overview uses verified featured-bond details from the existing setup loade
   expect(result.bondsUnavailable).toBe(false);
 });
 
-test('future schedules load separately from declared bonds and retain partial successes', async () => {
+test('loads immediate successors even when local estimates put them in the past', async () => {
   const projected: data.ProjectedBond = {
-    index: bond.index + 2,
+    index: bond.index + 1,
     status: 'projected',
     schedule: {
       activation: { bitcoin_height: 12600, pox_cycle: 14, projected_time: 1792000000 },

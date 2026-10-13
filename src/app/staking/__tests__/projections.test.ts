@@ -60,6 +60,21 @@ describe('getBarPosition', () => {
 });
 
 describe('getTimelineBounds', () => {
+  test('uses the same calendar-day threshold across the fall DST transition', () => {
+    const start = new Date(2026, 9, 20);
+    const end = new Date(2026, 10, 10);
+    expect(end.getTime() - start.getTime()).toBe(505 * 60 * 60 * 1000);
+    for (const [from, to] of [
+      [start, end],
+      [new Date(2026, 8, 20), new Date(2026, 9, 11)],
+    ]) {
+      expect(getTimelineBounds([{ startMs: +from, endMs: +to }], +from).granularity).toBe('day');
+    }
+    expect(
+      getTimelineBounds([{ startMs: +start, endMs: +new Date(2026, 10, 11) }], +start).granularity
+    ).toBe('month');
+  });
+
   test('rounds out to whole days for a short run', () => {
     const bars = [
       { startMs: new Date(2026, 7, 23, 9).getTime(), endMs: new Date(2026, 7, 28, 15).getTime() },
