@@ -1,12 +1,12 @@
 import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { AnnotatedValue } from '../AnnotatedValue';
 import { BondsTable } from '../BondsTable';
 import { CurrentBond } from '../CurrentBond';
-import { StakingPageClient, StakingPageData } from '../PageClient';
-import { StakingStats } from '../StakingStats';
+import { StackingPageClient, StakingPageClient, StakingPageData } from '../PageClient';
+import { ActiveBondsSummary, StakingStats } from '../StakingStats';
 import bondFixture from './fixtures/bond.json';
 
 const originalResizeObserver = globalThis.ResizeObserver;
@@ -26,8 +26,6 @@ afterAll(() => {
 const overviewWithoutPox: StakingPageData = {
   bonds: [bondFixture],
   bondsUnavailable: false,
-  cycles: [],
-  cycleRewards: {},
   currentBurnHeight: 0,
   nowMs: Date.UTC(2026, 8, 1),
   rewardCycleLength: 0,
@@ -42,7 +40,7 @@ const overviewWithoutPox: StakingPageData = {
 };
 
 test('overview preserves bonds and known rewards when PoX is missing without inventing dates or rates', () => {
-  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} section="bonds" />);
+  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} />);
   expect(screen.getByText(/Some staking data could not be loaded/)).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Bonds' })).toBeInTheDocument();
   expect(screen.getByText('Bond 3')).toBeInTheDocument();
@@ -51,12 +49,12 @@ test('overview preserves bonds and known rewards when PoX is missing without inv
   expect(
     screen.getByRole('button', { name: 'Current Bitcoin block height is unavailable.' })
   ).toBeInTheDocument();
-  expect(screen.queryByRole('heading', { name: 'Current bond' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: 'Active bonds' })).not.toBeInTheDocument();
 });
 
 test('overview does not substitute a misleading empty table when both bonds and PoX fail', () => {
   renderWithChakraProviders(
-    <StakingPageClient {...overviewWithoutPox} bonds={[]} bondsUnavailable section="bonds" />
+    <StakingPageClient {...overviewWithoutPox} bonds={[]} bondsUnavailable />
   );
   expect(screen.getByText(/Some staking data could not be loaded/)).toBeInTheDocument();
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
@@ -64,8 +62,23 @@ test('overview does not substitute a misleading empty table when both bonds and 
 });
 
 test('missing PoX does not duplicate the bond fallback in the stacking section', () => {
-  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} section="stacking" />);
+  renderWithChakraProviders(
+    <StackingPageClient {...overviewWithoutPox} cycles={[]} cycleRewards={{}} />
+  );
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
+});
+
+test.each([
+  { activeBonds: [bondFixture], expected: 'Simple average · across 1 active bond' },
+  { activeBonds: undefined, expected: 'Active bond data unavailable' },
+  { activeBonds: [], expected: 'No active bonds' },
+])('the independent summary renders current-cycle availability: %j', props => {
+  renderWithChakraProviders(<ActiveBondsSummary activeBonds={props.activeBonds} />);
+  expect(screen.getAllByText(props.expected).length).toBeGreaterThan(0);
+  if (props.activeBonds === undefined) {
+    const summary = screen.getByLabelText('BTC bonded').parentElement!;
+    expect(within(summary).getAllByText('N/A')).toHaveLength(4);
+  }
 });
 
 test('value annotations have a named, keyboard-accessible help trigger', async () => {
@@ -124,26 +137,20 @@ test('a server-paginated bond table displays the supplied page without slicing i
   await waitFor(() => expect(onPageChange).toHaveBeenCalledWith({ pageIndex: 2, pageSize: 2 }));
 });
 
-test('featured-bond cards preserve missing balances rather than showing zero or crashing', () => {
+test('active-bond stats preserve missing balances rather than showing zero or crashing', () => {
   renderWithChakraProviders(
     <StakingStats
-      featuredBond={{
-        ...bondFixture,
-        balances: { ...bondFixture.balances, locked: { btc: '', stx: 'invalid' } },
-      }}
-      rewardCycleLength={900}
-      prepareCycleLength={100}
-      currentBurnHeight={9508}
-      nowMs={Date.UTC(2026, 7, 25)}
+      activeBonds={[
+        {
+          ...bondFixture,
+          balances: { ...bondFixture.balances, locked: { btc: '', stx: 'invalid' } },
+        },
+      ]}
     />
   );
   expect(screen.getAllByText('N/A')).toHaveLength(3);
   expect(screen.getByText('Bond balance unavailable')).toBeInTheDocument();
   expect(screen.getByText(/Paired balance unavailable/)).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: '#19800' })).toHaveAttribute(
-    'href',
-    expect.stringContaining('/btcblock/19800?')
-  );
 });
 
 test('an invalid enrollment prevents a misleading partial total', () => {

@@ -4,21 +4,35 @@ import { Stack } from '@chakra-ui/react';
 import { Suspense } from 'react';
 
 import { ActivitySection } from './ActivitySection';
-import { StakingPageClient } from './PageClient';
+import { StackingPageClient, StakingPageClient } from './PageClient';
 import { StakingLoading } from './StakingLoading';
+import { ActiveBondsSummary } from './StakingStats';
 import { UnsupportedStakingNetwork } from './UnsupportedStakingNetwork';
 import { parseActivityGroup } from './activity-filter';
 import { loadStakingOverview } from './overview-data';
 import { getStakingPageApiUrl } from './page-network';
 
-async function OverviewSection({
+async function SummarySection({
   data,
-  section,
 }: {
-  data: ReturnType<typeof loadStakingOverview>['bonds'];
-  section: 'bonds' | 'stacking';
+  data: ReturnType<typeof loadStakingOverview>['summary'];
 }) {
-  return <StakingPageClient {...await data} section={section} />;
+  const { activeBonds, rewarded } = await data;
+  return (
+    <ActiveBondsSummary activeBonds={activeBonds} settlementsByBond={rewarded?.settlementsByBond} />
+  );
+}
+
+async function BondsSection({ data }: { data: ReturnType<typeof loadStakingOverview>['bonds'] }) {
+  return <StakingPageClient {...await data} />;
+}
+
+async function StackingSection({
+  data,
+}: {
+  data: ReturnType<typeof loadStakingOverview>['stacking'];
+}) {
+  return <StackingPageClient {...await data} />;
 }
 
 export default async function StakingPage({
@@ -39,9 +53,14 @@ export default async function StakingPage({
         <Text as="h1" textStyle="heading-md" color="textPrimary">
           Bitcoin Staking
         </Text>
-        <Suspense fallback={<StakingLoading label="Loading bonds…" />}>
-          <OverviewSection data={data.bonds} section="bonds" />
-        </Suspense>
+        <Stack gap={4}>
+          <Suspense fallback={<StakingLoading label="Loading active bonds…" />}>
+            <SummarySection data={data.summary} />
+          </Suspense>
+          <Suspense fallback={<StakingLoading label="Loading bonds…" />}>
+            <BondsSection data={data.bonds} />
+          </Suspense>
+        </Stack>
         <Suspense
           key={`${chain}:${api ?? ''}:${group ?? 'all'}`}
           fallback={<StakingLoading label="Loading activity…" />}
@@ -50,7 +69,7 @@ export default async function StakingPage({
         </Suspense>
       </Stack>
       <Suspense fallback={<StakingLoading label="Loading STX staking…" />}>
-        <OverviewSection data={data.stacking} section="stacking" />
+        <StackingSection data={data.stacking} />
       </Suspense>
     </Stack>
   );

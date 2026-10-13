@@ -255,6 +255,9 @@ export function CurrentBond({
       >
         <Stack gap={5} flex={1} p={[3, 4]}>
           <Stack gap={2}>
+            <Text textStyle="text-regular-xs" color="textSecondary">
+              Latest bond
+            </Text>
             <Flex gap={3} align="center" flexWrap="wrap">
               <Text textStyle="heading-lg">{name}</Text>
               <BondStateBadge tone={STATE_TONES[state]} label={STATE_LABELS[state]} />

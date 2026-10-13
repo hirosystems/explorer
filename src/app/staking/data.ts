@@ -96,11 +96,21 @@ export async function fetchBondsPage(
     throw new Error(`Failed to fetch bonds: ${response.status}`);
   }
   const data: CursorPaginated<Bond> = await response.json();
-  const bonds = [...(data.results ?? [])].sort((a, b) => b.index - a.index);
+  if (
+    !Array.isArray(data?.results) ||
+    !Number.isSafeInteger(data.total) ||
+    data.total < 0 ||
+    (data.cursor?.next !== null &&
+      (typeof data.cursor?.next !== 'string' || !data.cursor.next.length)) ||
+    data.results.some(bond => !Number.isSafeInteger(bond?.index) || bond.index < 1)
+  ) {
+    throw new Error('Invalid bonds page');
+  }
+  const bonds = [...data.results].sort((a, b) => b.index - a.index);
   return {
     bonds,
-    total: data.total ?? bonds.length,
-    nextCursor: data.cursor?.next ?? null,
+    total: data.total,
+    nextCursor: data.cursor.next,
   };
 }
 
@@ -122,6 +132,37 @@ export async function fetchBond(
   );
   if (!response.ok) throw new Error(`Failed to fetch bond ${index}: ${response.status}`);
   return response.json();
+}
+
+export async function fetchCurrentCycleBonds(chain: string, api?: string): Promise<Bond[]> {
+  const response = await stacksAPIFetch(
+    `${getApiUrl(chain, api)}/extended/v3/staking/cycles/current`,
+    {
+      redirect: 'error',
+      cache: 'default',
+      next: { revalidate: REVALIDATE_SECONDS, tags: ['staking-current-cycle'] },
+    }
+  );
+  if (!response.ok) throw new Error(`Failed to fetch current staking cycle: ${response.status}`);
+  const cycle = await response.json();
+  const indexes: number[] = cycle?.bonds?.indexes;
+  if (
+    !Array.isArray(indexes) ||
+    !Number.isSafeInteger(cycle.bonds.total) ||
+    cycle.bonds.total !== indexes.length ||
+    indexes.some(index => !Number.isSafeInteger(index) || index < 1) ||
+    new Set(indexes).size !== indexes.length
+  ) {
+    throw new Error('Invalid current-cycle bond indexes');
+  }
+  // The cycle selects membership. Never return a partial set if a detail request fails.
+  return Promise.all(
+    indexes.map(async index => {
+      const bond = await fetchBond(index, chain, api);
+      if (bond?.index !== index) throw new Error(`Invalid details for bond ${index}`);
+      return bond;
+    })
+  );
 }
 
 export async function fetchHighestBondIndex(
@@ -828,11 +869,15 @@ export function handleRewardHistoryResult<T>(
 
 async function withRewardHistoryBudget<T>(
   deadline: number,
+  signal: AbortSignal | undefined,
   load: (fetchRequest: typeof stacksAPIFetch) => Promise<T>
 ): Promise<T> {
+  if (signal?.aborted) throw signal.reason;
   const remainingMs = deadline - Date.now();
   if (remainingMs <= 0) throw new RewardHistoryTimeout();
   const controller = new AbortController();
+  const abort = () => controller.abort(signal?.reason);
+  signal?.addEventListener('abort', abort, { once: true });
   const timeout = setTimeout(() => controller.abort(new RewardHistoryTimeout()), remainingMs);
   let requests = 0;
   const fetchRequest: typeof stacksAPIFetch = (url, options) => {
@@ -851,6 +896,7 @@ async function withRewardHistoryBudget<T>(
     throw error;
   } finally {
     clearTimeout(timeout);
+    signal?.removeEventListener('abort', abort);
     controller.abort();
   }
 }
@@ -874,9 +920,10 @@ export async function fetchBondRewards(
   chain: string,
   api?: string,
   poxContractId?: string,
-  deadline = createRewardHistoryDeadline()
+  deadline = createRewardHistoryDeadline(),
+  signal?: AbortSignal
 ): Promise<BondRewards> {
-  return withRewardHistoryBudget(deadline, async fetchRequest => {
+  return withRewardHistoryBudget(deadline, signal, async fetchRequest => {
     const result: BondRewards = {
       byBondIndex: {},
       lastCalculationHeightByCycle: {},
@@ -981,8 +1028,9 @@ export async function fetchBondRewards(
     }
     return result;
   }).catch(error => {
+    if (signal?.aborted) throw signal.reason;
     if (error instanceof StakingEndpointUnavailable && poxContractId) {
-      return fetchLegacyBondRewards(poxContractId, chain, api, deadline).then(result => ({
+      return fetchLegacyBondRewards(poxContractId, chain, api, deadline, signal).then(result => ({
         ...result,
         byBondIndex: Object.fromEntries(
           bondIndexes.map(index => [index, result.byBondIndex[index] ?? BigInt(0)])
@@ -1034,9 +1082,10 @@ async function forEachRewardCalculation(
   api: string | undefined,
   visit: (tx: RawTx, reprs: string[], cycle: number, height: number) => void,
   complete: () => boolean,
-  deadline: number
+  deadline: number,
+  signal?: AbortSignal
 ): Promise<void> {
-  await withRewardHistoryBudget(deadline, async fetchRequest => {
+  await withRewardHistoryBudget(deadline, signal, async fetchRequest => {
     const apiUrl = getApiUrl(chain, api);
     const seenTxIds = new Set<string>();
     for (let offset = 0; ; offset += MAX_PAGE_LIMIT) {
@@ -1087,7 +1136,8 @@ async function fetchLegacyBondRewards(
   poxContractId: string,
   chain: string,
   api: string | undefined,
-  deadline: number
+  deadline: number,
+  signal?: AbortSignal
 ): Promise<BondRewards> {
   const result: BondRewards = {
     byBondIndex: {},
@@ -1127,7 +1177,8 @@ async function fetchLegacyBondRewards(
       }
     },
     () => false,
-    deadline
+    deadline,
+    signal
   );
   return result;
 }

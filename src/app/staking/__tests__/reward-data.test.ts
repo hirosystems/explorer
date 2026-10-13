@@ -458,3 +458,30 @@ test('settlement fallback reads later event pages and rejects truncated logs', a
     'Incomplete events'
   );
 });
+
+test.each(['v3', 'legacy'])('canceling the viewer request stops %s reward loading', async mode => {
+  jest.useFakeTimers();
+  try {
+    if (mode === 'legacy') fetchMock.mockResolvedValueOnce({ ok: false, status: 404 } as Response);
+    fetchMock.mockImplementation(stalledRequest);
+    const controller = new AbortController();
+    const rejected = expect(
+      fetchBondRewards(
+        [1],
+        'mainnet',
+        undefined,
+        contract,
+        createRewardHistoryDeadline(),
+        controller.signal
+      )
+    ).rejects.toThrow('page changed');
+    await jest.advanceTimersByTimeAsync(0);
+    expect(fetchMock).toHaveBeenCalledTimes(mode === 'legacy' ? 2 : 1);
+    controller.abort(new Error('page changed'));
+    await rejected;
+    expect(fetchMock.mock.calls[fetchMock.mock.calls.length - 1][1]?.signal?.aborted).toBe(true);
+    expect(jest.getTimerCount()).toBe(0);
+  } finally {
+    jest.useRealTimers();
+  }
+});

@@ -3,22 +3,16 @@
 import { OverviewCard } from '@/common/components/OverviewCard';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { formatDateShort } from '@/common/utils/date-utils';
-import { BlockHeightBadge } from '@/ui/Badge';
 import { Button } from '@/ui/Button';
 import type { ButtonProps } from '@/ui/Button';
 import { Text } from '@/ui/Text';
-import { Flex, Grid, Icon } from '@chakra-ui/react';
+import { ClientOnly, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { GlossaryTerm } from './GlossaryTerm';
+import { getActiveBondSummary } from './active-bond-summary';
 import { STAKING_LINKS } from './consts';
-import type { Bond } from './data';
-import {
-  burnHeightToApproximateTimestamp,
-  getBondProgress,
-  getBondSchedule,
-  getDistributionCadence,
-} from './projections';
+import type { Bond, BondRewards } from './data';
 import {
   formatBtc,
   formatRatePercent,
@@ -26,7 +20,6 @@ import {
   formatUsd,
   microStxToStx,
   satsToBtc,
-  toBigInt,
 } from './utils';
 
 function Figure({ value, unit }: { value: string; unit?: string }) {
@@ -66,50 +59,44 @@ export function HowToParticipateButton(props: ButtonProps) {
   );
 }
 
+export function ActiveBondsSummary(props: Parameters<typeof StakingStats>[0]) {
+  return (
+    <Stack gap={4}>
+      <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
+        <Text as="h2" textStyle="heading-xs">
+          Active bonds
+        </Text>
+        <HowToParticipateButton />
+      </Flex>
+      <StakingStats {...props} />
+    </Stack>
+  );
+}
+
 export function StakingStats({
-  featuredBond,
-  rewardCycleLength,
-  prepareCycleLength,
-  currentBurnHeight,
-  nowMs,
-  rewardsByBond,
+  activeBonds,
+  settlementsByBond,
 }: {
-  featuredBond?: Bond;
-  rewardCycleLength: number;
-  prepareCycleLength: number;
-  currentBurnHeight: number;
-  nowMs: number;
-  rewardsByBond?: Record<number, bigint>;
+  activeBonds?: Bond[];
+  settlementsByBond?: BondRewards['settlementsByBond'];
 }) {
   const { stxPrice, btcPrice } = useGlobalContext().tokenPrice;
-
-  if (!featuredBond) return null;
-
-  const bondedSats = toBigInt(featuredBond.balances?.locked?.btc);
-  const pairedMicroStx = toBigInt(featuredBond.balances?.locked?.stx);
-  const rewardedSats = rewardsByBond?.[featuredBond.index];
+  const summary =
+    activeBonds === undefined ? undefined : getActiveBondSummary(activeBonds, settlementsByBond);
+  const {
+    averageTargetRateBps,
+    bondedSats,
+    pairedMicroStx,
+    lastDistributionSats,
+    lastDistributionTimestampMs,
+  } = summary ?? {};
   const bondedBtc = bondedSats === undefined ? undefined : satsToBtc(bondedSats);
   const pairedStx = pairedMicroStx === undefined ? undefined : microStxToStx(pairedMicroStx);
-
-  const schedule = getBondSchedule(
-    featuredBond.schedule.activation.bitcoin_height,
-    featuredBond.schedule.unlock.bitcoin_height,
-    rewardCycleLength,
-    prepareCycleLength
-  );
-  const progress = getBondProgress(schedule, currentBurnHeight, rewardCycleLength);
-
-  const cadence = getDistributionCadence(rewardCycleLength);
-  const nextRewardsHeight =
-    progress.elapsedDistributions < progress.total
-      ? schedule.activationHeight + (progress.elapsedDistributions + 1) * cadence
-      : undefined;
-  const nextRewards =
-    nextRewardsHeight !== undefined
-      ? `Next scheduled ~${formatDateShort(
-          burnHeightToApproximateTimestamp(nextRewardsHeight, currentBurnHeight, nowMs)
-        )}`
-      : undefined;
+  const scope = summary
+    ? summary.count === 0
+      ? 'No active bonds'
+      : `Across ${summary.count} active bond${summary.count === 1 ? '' : 's'}`
+    : 'Active bond data unavailable';
 
   const usd = (amount: number | undefined, price?: number) =>
     amount !== undefined && price ? formatUsd(amount * price) : undefined;
@@ -125,13 +112,16 @@ export function StakingStats({
       gap={3}
     >
       <OverviewCard
-        title={<GlossaryTerm entry="targetRewardRate" />}
-        stat={<Figure value={formatRatePercent(featuredBond.parameters?.target_rate_bps ?? 0)} />}
+        title={<GlossaryTerm entry="targetRewardRate">Average protocol yield target</GlossaryTerm>}
+        stat={
+          <Figure
+            value={
+              averageTargetRateBps === undefined ? 'N/A' : formatRatePercent(averageTargetRateBps)
+            }
+          />
+        }
         caption={
-          <>
-            <GlossaryTerm entry="stxPairing">STX pairing</GlossaryTerm> ≥
-            {formatRatePercent(featuredBond.parameters?.minimum_stx_ratio ?? 0)}
-          </>
+          averageTargetRateBps === undefined ? scope : `Simple average · ${scope.toLowerCase()}`
         }
       />
       <OverviewCard
@@ -145,28 +135,37 @@ export function StakingStats({
         caption={
           bondedSats === undefined
             ? 'Bond balance unavailable'
-            : join(usd(bondedBtc, btcPrice), 'total of confirmed enrollments')
+            : join(usd(bondedBtc, btcPrice), scope)
         }
       />
       <OverviewCard
-        title="Rewards credited"
+        title="Latest reward distribution"
         stat={
           <Figure
             value={
-              rewardedSats === undefined ? 'N/A' : formatBtc(rewardedSats, 4).replace(' BTC', '')
+              lastDistributionSats === undefined
+                ? 'N/A'
+                : formatBtc(lastDistributionSats, 4).replace(' BTC', '')
             }
-            unit={rewardedSats === undefined ? undefined : 'sBTC'}
+            unit={lastDistributionSats === undefined ? undefined : 'sBTC'}
           />
         }
         caption={
-          <span suppressHydrationWarning>
-            {join(
-              rewardedSats === undefined
-                ? 'Reward history unavailable'
-                : usd(satsToBtc(rewardedSats), btcPrice),
-              nextRewards
-            )}
-          </span>
+          lastDistributionSats === undefined ? (
+            'Reward history unavailable'
+          ) : (
+            <ClientOnly>
+              {join(
+                usd(satsToBtc(lastDistributionSats), btcPrice),
+                lastDistributionTimestampMs === null
+                  ? 'No distributions yet'
+                  : lastDistributionTimestampMs === undefined
+                    ? 'Date unavailable'
+                    : formatDateShort(lastDistributionTimestampMs),
+                scope
+              )}
+            </ClientOnly>
+          )
         }
       />
       <OverviewCard
@@ -180,11 +179,9 @@ export function StakingStats({
           />
         }
         caption={
-          <Flex align="center" gap={1.5} flexWrap="wrap">
-            {pairedMicroStx === undefined ? 'Paired balance unavailable' : usd(pairedStx, stxPrice)}
-            <span>unlocks</span>
-            <BlockHeightBadge blockType="btc" blockHeight={schedule.termEndHeight} />
-          </Flex>
+          pairedMicroStx === undefined
+            ? 'Paired balance unavailable'
+            : join(usd(pairedStx, stxPrice), scope)
         }
       />
     </Grid>

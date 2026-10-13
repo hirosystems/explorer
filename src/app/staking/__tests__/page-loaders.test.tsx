@@ -2,6 +2,7 @@ import type { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { redirect } from 'next/navigation';
 
 import { ActivitySection } from '../ActivitySection';
+import { getActiveBondSummary } from '../active-bond-summary';
 import StakingActivityPage from '../activity/page';
 import StakingBondsPage from '../bonds/page';
 import * as data from '../data';
@@ -17,7 +18,7 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-jest.mock('../PageClient', () => ({ StakingPageClient: jest.fn() }));
+jest.mock('../PageClient', () => ({ StakingPageClient: jest.fn(), StackingPageClient: jest.fn() }));
 jest.mock('../page-data', () => ({ fetchFeaturedBond: jest.fn() }));
 jest.mock('../activity/PageClient', () => ({ ActivityPageClient: jest.fn() }));
 jest.mock('../bonds/PageClient', () => ({ BondsPageClient: jest.fn() }));
@@ -33,6 +34,7 @@ jest.mock('../data', () => ({
   fetchBondRegistrations: jest.fn(),
   fetchBondRewards: jest.fn(),
   fetchBurnBlockTimes: jest.fn(),
+  fetchCurrentCycleBonds: jest.fn(),
   fetchCycleRewards: jest.fn(),
   fetchCycleCalculationHeights: jest.fn(),
   fetchPoxCycles: jest.fn(),
@@ -55,6 +57,7 @@ const poxInfo = {
 beforeEach(() => {
   jest.clearAllMocks();
   jest.mocked(data.fetchPoxInfo).mockResolvedValue(poxInfo);
+  jest.mocked(data.fetchCurrentCycleBonds).mockResolvedValue([bond]);
   jest.mocked(data.fetchBondsPage).mockResolvedValue({ bonds: [bond], total: 1, nextCursor: null });
   jest.mocked(fetchFeaturedBond).mockResolvedValue(bond);
   jest.mocked(data.fetchBondRegistrations).mockResolvedValue([]);
@@ -140,7 +143,7 @@ test('cycle settlement remains independent of unavailable bond histories', async
   const sections = loadStakingOverview('mainnet');
   const overview = await sections.stacking;
   await sections.bonds;
-  expect(overview.rewarded).toBeUndefined();
+  expect(overview).not.toHaveProperty('rewarded');
   expect(overview.lastCalculationHeightByCycle).toEqual({ 11: 10799 });
 });
 
@@ -168,6 +171,76 @@ test('overview uses verified featured-bond details from the existing setup loade
   expect(fetchFeaturedBond).toHaveBeenCalledWith(bond.index, 'testnet', undefined);
   expect(result.bonds[0]).toBe(verified);
   expect(result.bondsUnavailable).toBe(false);
+});
+
+test('overview requests only the recent page while the summary includes older active bonds', async () => {
+  const olderActive = { ...bond, index: 1 };
+  jest.mocked(data.fetchCurrentCycleBonds).mockResolvedValueOnce([bond, olderActive]);
+  jest
+    .mocked(data.fetchBondsPage)
+    .mockResolvedValueOnce({ bonds: [bond], total: 300, nextCursor: 'older' });
+  const sections = loadStakingOverview('testnet');
+  const [result, summary, stacking] = await Promise.all([
+    sections.bonds,
+    sections.summary,
+    sections.stacking,
+  ]);
+  expect(data.fetchBondsPage).toHaveBeenCalledTimes(1);
+  expect(result.bonds).toEqual([bond]);
+  expect(result.hasMoreBonds).toBe(true);
+  expect(summary.activeBonds).toEqual([bond, olderActive]);
+  expect(data.fetchBondRewards).toHaveBeenCalledWith(
+    [1],
+    'testnet',
+    undefined,
+    poxInfo.contract_id,
+    expect.any(Number)
+  );
+  expect(stacking).not.toHaveProperty('bonds');
+  expect(stacking).not.toHaveProperty('activeBonds');
+  expect(stacking).not.toHaveProperty('rewarded');
+});
+
+test('a failed recent page preserves current-cycle totals and distribution history', async () => {
+  jest.mocked(data.fetchBondRewards).mockResolvedValue({
+    byBondIndex: { [bond.index]: BigInt(42) },
+    settlementsByBond: {
+      [bond.index]: [
+        { calculationHeight: 10799, timestampMs: 1791450000000, rewardedSats: BigInt(42) },
+      ],
+    },
+    lastCalculationHeightByCycle: {},
+  });
+  jest.mocked(data.fetchBondsPage).mockRejectedValueOnce(new Error('Recent page unavailable'));
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bondsUnavailable).toBe(true);
+  expect(result.bonds).toEqual([]);
+  const summary = await sections.summary;
+  expect(summary.activeBonds).toEqual([bond]);
+  expect(
+    getActiveBondSummary(summary.activeBonds!, summary.rewarded?.settlementsByBond)
+  ).toMatchObject({
+    count: 1,
+    lastDistributionSats: BigInt(42),
+    lastDistributionTimestampMs: 1791450000000,
+  });
+});
+
+test('the active summary resolves while recent bond records are still loading', async () => {
+  let finish!: (value: data.BondsPage) => void;
+  jest.mocked(data.fetchBondsPage).mockReturnValueOnce(
+    new Promise(resolve => {
+      finish = resolve;
+    })
+  );
+  const sections = loadStakingOverview('testnet');
+  const summary = await sections.summary;
+  expect(summary.activeBonds).toEqual([bond]);
+  expect(data.fetchBondRewards).toHaveBeenCalled();
+  finish({ bonds: [bond], total: 1, nextCursor: null });
+  await Promise.all([sections.bonds, sections.stacking]);
 });
 
 test('bonds route follows opaque cursors and normalizes an out-of-range URL', async () => {
@@ -290,7 +363,11 @@ test('overview exact date lookups are bounded by the timeline window', async () 
   }));
   jest.mocked(data.fetchBondsPage).mockResolvedValueOnce({ bonds, total: 50, nextCursor: null });
   await Promise.all(Object.values(loadStakingOverview('testnet')));
-  const heights = jest.mocked(data.fetchBurnBlockTimes).mock.calls[0][0];
+  const heights = jest
+    .mocked(data.fetchBurnBlockTimes)
+    .mock.calls.find(([heights]) =>
+      heights.includes(bonds[39].schedule.activation.bitcoin_height)
+    )![0];
   expect(heights).toHaveLength(11 * 5);
   expect(heights).not.toContain(bonds[0].schedule.activation.bitcoin_height);
 });
@@ -349,4 +426,94 @@ test('an exhausted featured-history deadline does not trigger another settlement
   } finally {
     clock.mockRestore();
   }
+});
+
+test('historical reward failure in the recent page cannot erase active rewards', async () => {
+  const featured = { ...bond, index: 302 };
+  const active = { ...bond, index: 301 };
+  const historical = Array.from({ length: 48 }, (_, index) => ({
+    ...bond,
+    index: index + 253,
+    status: 'closed',
+  }));
+  jest.mocked(data.fetchBondsPage).mockResolvedValueOnce({
+    bonds: [featured, active, ...historical],
+    total: 302,
+    nextCursor: 'older',
+  });
+  jest.mocked(fetchFeaturedBond).mockResolvedValueOnce(featured);
+  jest.mocked(data.fetchCurrentCycleBonds).mockResolvedValueOnce([featured, active]);
+  jest.mocked(data.fetchBondRewards).mockImplementation(async indexes => {
+    if (indexes.some(index => index <= 300))
+      throw new Error('Reward history request limit exceeded');
+    return {
+      byBondIndex: Object.fromEntries(indexes.map(index => [index, BigInt(10000)])),
+      settlementsByBond: Object.fromEntries(
+        indexes.map(index => [
+          index,
+          [
+            {
+              calculationHeight: 10799,
+              timestampMs: 1791450000000,
+              rewardedSats: BigInt(10000),
+            },
+          ],
+        ])
+      ),
+      lastCalculationHeightByCycle: {},
+    };
+  });
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bonds).toHaveLength(50);
+  expect(data.fetchBondRewards).toHaveBeenCalledWith(
+    [301],
+    'testnet',
+    undefined,
+    poxInfo.contract_id,
+    expect.any(Number)
+  );
+  const requests = jest.mocked(data.fetchBondRewards).mock.calls.map(([indexes]) => indexes);
+  expect(requests.every(indexes => indexes.length <= 11)).toBe(true);
+  expect(requests.flat().length).toBeLessThan(20);
+  expect(
+    getActiveBondSummary((await sections.summary).activeBonds!, result.rewarded?.settlementsByBond)
+      .lastDistributionSats
+  ).toBe(BigInt(20000));
+});
+
+test('current-cycle membership drives the summary independently of historical bond statuses', async () => {
+  const selected = { ...bond, index: 1, status: 'upcoming' };
+  jest.mocked(data.fetchCurrentCycleBonds).mockResolvedValueOnce([selected]);
+  const sections = loadStakingOverview('testnet', 'https://api.testnet.hiro.so');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(data.fetchCurrentCycleBonds).toHaveBeenCalledWith(
+    'testnet',
+    'https://api.testnet.hiro.so'
+  );
+  expect(result.bonds).toEqual([bond]);
+  const summary = await sections.summary;
+  expect(summary.activeBonds).toEqual([selected]);
+  expect(data.fetchBondRewards).toHaveBeenCalledWith(
+    [1],
+    'testnet',
+    'https://api.testnet.hiro.so',
+    poxInfo.contract_id,
+    expect.any(Number)
+  );
+  expect(getActiveBondSummary(summary.activeBonds!)).toMatchObject({ count: 1 });
+});
+
+test('unavailable current-cycle bonds preserve the historical list without inventing membership', async () => {
+  jest
+    .mocked(data.fetchCurrentCycleBonds)
+    .mockRejectedValueOnce(new Error('Current cycle unavailable'));
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bonds).toEqual([bond]);
+  expect(result.bondsUnavailable).toBe(false);
+  expect((await sections.summary).activeBonds).toBeUndefined();
 });
