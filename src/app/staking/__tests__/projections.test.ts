@@ -1,3 +1,4 @@
+/** @jest-environment ./jest.dst-environment.js */
 import {
   formatTermDuration,
   formatTimeRemaining,
@@ -95,15 +96,39 @@ describe('getTimelineBounds', () => {
 });
 
 describe('getTimelineTicks', () => {
-  test('keeps daily labels on local midnight across a daylight-saving transition', () => {
-    const start = new Date(2026, 9, 31).getTime();
-    const end = new Date(2026, 10, 3).getTime();
-    const ticks = getTimelineTicks(start, end, 'day');
-    expect(ticks.map(tick => tick.label)).toEqual(['Oct 31', 'Nov 1', 'Nov 2']);
-    expect(ticks[2].leftPercent).toBeCloseTo(
-      ((new Date(2026, 10, 2).getTime() - start) / (end - start)) * 100
-    );
-  });
+  test.each([
+    {
+      transition: 'spring forward',
+      start: new Date(2026, 2, 7),
+      end: new Date(2026, 2, 10),
+      offsets: [300, 240],
+      labels: ['Mar 7', 'Mar 8', 'Mar 9'],
+      elapsedHours: [0, 24, 47],
+      totalHours: 71,
+    },
+    {
+      transition: 'fall back',
+      start: new Date(2026, 9, 31),
+      end: new Date(2026, 10, 3),
+      offsets: [240, 300],
+      labels: ['Oct 31', 'Nov 1', 'Nov 2'],
+      elapsedHours: [0, 24, 49],
+      totalHours: 73,
+    },
+  ])(
+    'keeps daily labels on local midnight across $transition',
+    ({ start, end, offsets, labels, elapsedHours, totalHours }) => {
+      // Guard against silently running this regression test in UTC.
+      expect([start.getTimezoneOffset(), end.getTimezoneOffset()]).toEqual(offsets);
+      expect(end.getTime() - start.getTime()).toBe(totalHours * 60 * 60 * 1000);
+
+      const ticks = getTimelineTicks(start.getTime(), end.getTime(), 'day');
+      expect(ticks.map(tick => tick.label)).toEqual(labels);
+      ticks.forEach((tick, index) => {
+        expect(tick.leftPercent).toBeCloseTo((elapsedHours[index] / totalHours) * 100);
+      });
+    }
+  );
 
   test('gives one tick a day on a short axis, named for the day', () => {
     const ticks = getTimelineTicks(
