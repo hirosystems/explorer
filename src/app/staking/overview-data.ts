@@ -109,9 +109,10 @@ async function loadBondsOverview(
   )
     .finally(() => clearTimeout(projectionTimeout))
     .then(results =>
-      results.flatMap(result =>
-        result.status === 'fulfilled' && result.value.status === 'projected'
-          ? [result.value as ProjectedBond]
+      // The per-index cache can report a declared successor before the list does.
+      results.flatMap<ProjectedBond>(result =>
+        result.status === 'fulfilled'
+          ? [{ index: result.value.index, status: 'projected', schedule: result.value.schedule }]
           : []
       )
     );
