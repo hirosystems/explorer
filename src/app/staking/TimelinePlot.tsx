@@ -481,7 +481,6 @@ export function TimelinePlot({
   const todayLabel = new Date(nowMs).toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
-    timeZone: 'UTC',
   });
 
   const pointer = hover?.pointer;

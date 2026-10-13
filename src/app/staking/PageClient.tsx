@@ -9,13 +9,21 @@ import { CurrentBond } from './CurrentBond';
 import { PeriodsOverview } from './PeriodsOverview';
 import { StackingOverview } from './StackingOverview';
 import { HowToParticipateButton, StakingStats } from './StakingStats';
-import type { Bond, BondRewards, CycleRewards, EnrollmentShare, PoxCycle } from './data';
+import type {
+  Bond,
+  BondRewards,
+  CycleRewards,
+  EnrollmentShare,
+  PoxCycle,
+  ProjectedBond,
+} from './data';
 import type { DailyPrices } from './prices';
 import { getBondProjections } from './projections';
 import type { CurrentCycleEstimate } from './reward-estimate';
 
 export interface StakingPageData {
   bonds: Bond[];
+  projectedBonds?: ProjectedBond[];
   bondsUnavailable?: boolean;
   poxInfo?: PoxInfo;
   cycles: PoxCycle[];
@@ -37,6 +45,7 @@ export interface StakingPageData {
 export function StakingPageClient({
   bonds,
   bondsUnavailable,
+  projectedBonds,
   poxInfo,
   cycles,
   cycleRewards,
@@ -57,7 +66,8 @@ export function StakingPageClient({
   const { featuredIndex, featuredBond, nextBond, scheduledBonds } = getBondProjections(
     bonds,
     rewardCycleLength,
-    currentBurnHeight
+    currentBurnHeight,
+    projectedBonds
   );
   if (section === 'stacking')
     return poxInfo ? (
@@ -111,6 +121,7 @@ export function StakingPageClient({
               <HowToParticipateButton />
             </Flex>
             <StakingStats
+              burnBlockTimes={burnBlockTimes}
               featuredBond={featuredBond}
               rewardCycleLength={rewardCycleLength}
               prepareCycleLength={prepareCycleLength}

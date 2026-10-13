@@ -21,6 +21,10 @@ export interface BondParameters {
 export interface BondSchedulePoint {
   bitcoin_height: number;
   pox_cycle: number;
+  time?: number | null;
+  time_iso?: string | null;
+  projected_time?: number | null;
+  projected_time_iso?: string | null;
 }
 
 export interface Bond {
@@ -33,6 +37,7 @@ export interface Bond {
     registered_count: number;
   };
   schedule: {
+    enrollment_cutoff?: BondSchedulePoint;
     activation: BondSchedulePoint;
     unlock: BondSchedulePoint;
   };
@@ -45,6 +50,13 @@ export interface Bond {
     block: { height: number; hash: string; time: number };
     bitcoin_block: { height: number; time: number };
   };
+}
+
+// Undeclared bonds have a schedule, but no parameters, registrations, or balances.
+export interface ProjectedBond {
+  index: number;
+  status: 'projected';
+  schedule: Bond['schedule'];
 }
 
 export interface EnrollmentShare {
@@ -110,6 +122,17 @@ export async function fetchBond(
   api?: string,
   signal?: AbortSignal
 ): Promise<Bond> {
+  const bond = await fetchBondSchedule(index, chain, api, signal);
+  if (!('parameters' in bond)) throw new Error(`Bond ${index} has not been declared`);
+  return bond;
+}
+
+export async function fetchBondSchedule(
+  index: number,
+  chain: string,
+  api?: string,
+  signal?: AbortSignal
+): Promise<Bond | ProjectedBond> {
   if (signal?.aborted) throw signal.reason;
   const response = await stacksAPIFetch(
     `${getApiUrl(chain, api)}/extended/v3/staking/bonds/${index}`,

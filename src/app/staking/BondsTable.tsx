@@ -4,7 +4,7 @@ import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
 import { Text } from '@/ui/Text';
-import { Stack } from '@chakra-ui/react';
+import { ClientOnly, Stack } from '@chakra-ui/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -65,13 +65,10 @@ const bondColumns: ColumnDef<BondRow>[] = [
             #{row.activationHeight.toLocaleString('en-US')} &rarr; #
             {row.unlockHeight.toLocaleString('en-US')}
           </Text>
-          <Text
-            textStyle="text-regular-xs"
-            color="textSecondary"
-            whiteSpace="nowrap"
-            suppressHydrationWarning
-          >
-            {row.activationDate} &rarr; {row.unlockDate}
+          <Text textStyle="text-regular-xs" color="textSecondary" whiteSpace="nowrap">
+            <ClientOnly>
+              {row.activationDate} &rarr; {row.unlockDate}
+            </ClientOnly>
           </Text>
         </Stack>
       );

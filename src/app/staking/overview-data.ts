@@ -1,11 +1,14 @@
 import { handleSettledResult } from '@/app/address/[principal]/page-data';
 
 import type { StakingPageData } from './PageClient';
+import { mergeBondDetail } from './bond-schedule';
 import { PREVIOUS_CYCLES_LIMIT } from './consts';
 import {
+  type ProjectedBond,
   createRewardHistoryDeadline,
   fetchBondRegistrations,
   fetchBondRewards,
+  fetchBondSchedule,
   fetchBondsPage,
   fetchBurnBlockTimes,
   fetchCycleCalculationHeights,
@@ -18,6 +21,7 @@ import { fetchFeaturedBond } from './page-data';
 import { fetchDailyPrices } from './prices';
 import {
   burnHeightToApproximateTimestamp,
+  getBondProjections,
   getBondSchedule,
   getFeaturedBondIndex,
   getTimelineBondWindow,
@@ -89,10 +93,27 @@ async function loadBondsOverview(
           bond.schedule.activation.bitcoin_height,
           bond.schedule.unlock.bitcoin_height,
           rewardCycleLength,
-          prepareCycleLength
+          prepareCycleLength,
+          bond.schedule
         )
       )
   );
+  const projections = getBondProjections(bonds, rewardCycleLength, currentBurnHeight);
+  const projectionController = new AbortController();
+  const projectionTimeout = setTimeout(() => projectionController.abort(), 5000);
+  const projected = Promise.allSettled(
+    projections.scheduledBonds.map(bond =>
+      fetchBondSchedule(bond.index, chain, api, projectionController.signal)
+    )
+  )
+    .finally(() => clearTimeout(projectionTimeout))
+    .then(results =>
+      results.flatMap(result =>
+        result.status === 'fulfilled' && result.value.status === 'projected'
+          ? [result.value as ProjectedBond]
+          : []
+      )
+    );
   const [rewardsResult, enrollmentsResult, detailResult, timesResult] = await Promise.allSettled([
     otherIndexes.length
       ? fetchBondRewards(otherIndexes, chain, api, poxInfo?.contract_id, data.rewardHistoryDeadline)
@@ -126,7 +147,10 @@ async function loadBondsOverview(
   const enrollments = handleSettledResult(enrollmentsResult, 'Staking page: enrollments');
   return {
     ...data,
-    bonds: bonds.map(bond => (bond.index === detail?.index ? detail : bond)),
+    bonds: bonds.map(bond =>
+      detail && bond.index === detail.index ? mergeBondDetail(bond, detail) : bond
+    ),
+    projectedBonds: await projected,
     rewarded,
     enrollments: enrollments?.map(enrollment => ({ btc: enrollment.balances.btc })),
     burnBlockTimes: handleSettledResult(timesResult, 'Staking page: bond dates') ?? {},

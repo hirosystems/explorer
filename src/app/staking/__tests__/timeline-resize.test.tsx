@@ -214,7 +214,11 @@ test.each(['window', 'plot'])(
       act(() => resizeCallbacks.get(plot)!());
     }
     expect(screen.queryByRole('link', { name: 'Estimate your yield' })).not.toBeInTheDocument();
-    expect(screen.getByText('today · Aug 25')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `today · ${new Date(Date.UTC(2026, 7, 25)).toLocaleString('en-US', { month: 'short', day: 'numeric' })}`
+      )
+    ).toBeInTheDocument();
     act(() => jest.advanceTimersByTime(1000));
     expect(screen.queryByRole('link', { name: 'Estimate your yield' })).not.toBeInTheDocument();
 

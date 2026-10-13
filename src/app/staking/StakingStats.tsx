@@ -2,23 +2,18 @@
 
 import { OverviewCard } from '@/common/components/OverviewCard';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
-import { formatDateShort } from '@/common/utils/date-utils';
 import { BlockHeightBadge } from '@/ui/Badge';
 import { Button } from '@/ui/Button';
 import type { ButtonProps } from '@/ui/Button';
 import { Text } from '@/ui/Text';
-import { Flex, Grid, Icon } from '@chakra-ui/react';
+import { ClientOnly, Flex, Grid, Icon } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { GlossaryTerm } from './GlossaryTerm';
+import { formatBondDate } from './bond-schedule';
 import { STAKING_LINKS } from './consts';
 import type { Bond } from './data';
-import {
-  burnHeightToApproximateTimestamp,
-  getBondProgress,
-  getBondSchedule,
-  getDistributionCadence,
-} from './projections';
+import { getBondProgress, getBondSchedule, getDistributionCadence } from './projections';
 import {
   formatBtc,
   formatRatePercent,
@@ -73,6 +68,7 @@ export function StakingStats({
   currentBurnHeight,
   nowMs,
   rewardsByBond,
+  burnBlockTimes = {},
 }: {
   featuredBond?: Bond;
   rewardCycleLength: number;
@@ -80,6 +76,7 @@ export function StakingStats({
   currentBurnHeight: number;
   nowMs: number;
   rewardsByBond?: Record<number, bigint>;
+  burnBlockTimes?: Record<number, number>;
 }) {
   const { stxPrice, btcPrice } = useGlobalContext().tokenPrice;
 
@@ -95,7 +92,8 @@ export function StakingStats({
     featuredBond.schedule.activation.bitcoin_height,
     featuredBond.schedule.unlock.bitcoin_height,
     rewardCycleLength,
-    prepareCycleLength
+    prepareCycleLength,
+    featuredBond.schedule
   );
   const progress = getBondProgress(schedule, currentBurnHeight, rewardCycleLength);
 
@@ -106,8 +104,12 @@ export function StakingStats({
       : undefined;
   const nextRewards =
     nextRewardsHeight !== undefined
-      ? `Next scheduled ~${formatDateShort(
-          burnHeightToApproximateTimestamp(nextRewardsHeight, currentBurnHeight, nowMs)
+      ? `Next scheduled ${formatBondDate(
+          nextRewardsHeight,
+          currentBurnHeight,
+          nowMs,
+          burnBlockTimes,
+          featuredBond.schedule
         )}`
       : undefined;
 
@@ -159,14 +161,14 @@ export function StakingStats({
           />
         }
         caption={
-          <span suppressHydrationWarning>
+          <ClientOnly>
             {join(
               rewardedSats === undefined
                 ? 'Reward history unavailable'
                 : usd(satsToBtc(rewardedSats), btcPrice),
               nextRewards
             )}
-          </span>
+          </ClientOnly>
         }
       />
       <OverviewCard
