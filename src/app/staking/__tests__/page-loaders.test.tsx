@@ -181,11 +181,26 @@ test('loads immediate successors even when local estimates put them in the past'
       unlock: { bitcoin_height: 23400, pox_cycle: 26, projected_time: 1799000000 },
     },
   };
-  jest.mocked(data.fetchBondSchedule).mockResolvedValueOnce(projected);
+  const declared: data.Bond = {
+    ...bond,
+    index: bond.index + 2,
+    status: 'upcoming',
+    schedule: {
+      activation: { bitcoin_height: 14400, pox_cycle: 16, projected_time: 1793000000 },
+      unlock: { bitcoin_height: 25200, pox_cycle: 28, projected_time: 1800000000 },
+    },
+  };
+  jest
+    .mocked(data.fetchBondSchedule)
+    .mockResolvedValueOnce(projected)
+    .mockResolvedValueOnce(declared);
   const sections = loadStakingOverview('testnet', 'https://api.example.test');
   const result = await sections.bonds;
   await sections.stacking;
-  expect(result.projectedBonds).toEqual([projected]);
+  expect(result.projectedBonds).toEqual([
+    projected,
+    { index: declared.index, status: 'projected', schedule: declared.schedule },
+  ]);
   expect(result.bonds).toHaveLength(1);
   expect(result.bonds[0].index).toBe(bond.index);
   expect(data.fetchBondSchedule).toHaveBeenCalledWith(
