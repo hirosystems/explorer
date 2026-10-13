@@ -96,14 +96,18 @@ export function HoldersTable({
     pageIndex: 0,
     pageSize,
   });
+  // Holders are cursor-paginated: pageCursors[i] is the cursor that fetches page i. The first page
+  // needs no cursor; each later one is learned from the previous page's `cursor.next`.
+  const [pageCursors, setPageCursors] = useState<(string | undefined)[]>([undefined]);
 
-  const handlePageChange = useCallback((page: PaginationState) => {
-    setPagination(prev => ({
-      ...prev,
-      pageIndex: page.pageIndex,
-    }));
-    window?.scrollTo(0, 0); // Smooth scroll to top
-  }, []);
+  // Cursors only apply to the asset they came from, so start over from the first page when the
+  // table is reused for another asset (e.g. client-side navigation between token pages).
+  const [cursorsAssetId, setCursorsAssetId] = useState(assetId);
+  if (cursorsAssetId !== assetId) {
+    setCursorsAssetId(assetId);
+    setPageCursors([undefined]);
+    setPagination(prev => ({ ...prev, pageIndex: 0 }));
+  }
 
   const queryClient = useQueryClient();
 
@@ -115,11 +119,7 @@ export function HoldersTable({
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = getHoldersQueryKey(
-      assetId,
-      pagination.pageSize,
-      pagination.pageIndex * pagination.pageSize
-    );
+    const queryKey = getHoldersQueryKey(assetId, pagination.pageSize, undefined);
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
@@ -128,7 +128,7 @@ export function HoldersTable({
   const { data, isFetching, isLoading } = useHolders(
     assetId,
     pagination.pageSize,
-    pagination.pageIndex * pagination.pageSize,
+    cursorsAssetId === assetId ? pageCursors[pagination.pageIndex] : undefined,
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
@@ -136,6 +136,26 @@ export function HoldersTable({
   );
 
   const { total, results: holders = [] } = data || {};
+  const nextCursor = data?.cursor?.next ?? undefined;
+
+  const handlePageChange = useCallback(
+    (page: PaginationState) => {
+      const isNextPage = page.pageIndex === pagination.pageIndex + 1;
+      const isVisitedPage = page.pageIndex < pageCursors.length;
+      if (isNextPage && !isVisitedPage) {
+        if (!nextCursor) return;
+        setPageCursors(prev => [...prev, nextCursor]);
+      } else if (!isVisitedPage) {
+        return;
+      }
+      setPagination(prev => ({
+        ...prev,
+        pageIndex: page.pageIndex,
+      }));
+      window?.scrollTo(0, 0); // Smooth scroll to top
+    },
+    [pagination.pageIndex, pageCursors.length, nextCursor]
+  );
 
   const rowData: HoldersTableData[] = useMemo(() => {
     return holders.map((holder, index) => {
@@ -151,8 +171,8 @@ export function HoldersTable({
       return {
         [HoldersTableColumns.Index]: holdersIndex,
         [HoldersTableColumns.Address]: {
-          address: holder.address,
-          isContract: validateStacksContractId(holder.address),
+          address: holder.principal,
+          isContract: validateStacksContractId(holder.principal),
         },
         [HoldersTableColumns.Balance]: formattedBalance,
         [HoldersTableColumns.Holding]: formattedHoldingPercentage || 'N/A',
@@ -175,6 +195,7 @@ export function HoldersTable({
               pageSize: pagination.pageSize,
               totalRows: total || 0,
               onPageChange: handlePageChange,
+              previousNextOnly: true,
             }
       }
       isLoading={isLoading}

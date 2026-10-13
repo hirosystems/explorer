@@ -1,5 +1,6 @@
 import {
   fetchContractInfo,
+  fetchFtSupply,
   fetchHolders,
   fetchRecentTransactions,
   fetchTx,
@@ -9,6 +10,7 @@ import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { NetworkModes } from '@/common/types/network';
+import { FtHolderListResponse } from '@/common/types/tokens-v3';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
 import {
@@ -20,7 +22,6 @@ import { isAddressForNetworkMode, validateStacksContractId } from '@/common/util
 
 import {
   ContractInterfaceResponse,
-  FungibleTokenHolderList,
   MempoolTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
@@ -73,7 +74,8 @@ export default async function (props: {
   let txId: string | undefined;
   let txBlockTime: number | undefined;
   let assetId: string | undefined;
-  let holders: FungibleTokenHolderList | undefined;
+  let holders: FtHolderListResponse | undefined;
+  let supply: string | undefined;
   let numFunctions: number | undefined;
 
   const isSSRDisabled = searchParams?.ssr === 'false';
@@ -124,19 +126,21 @@ export default async function (props: {
       assetId = ftName ? `${tokenId}::${ftName}` : undefined;
       numFunctions = abi?.functions?.length;
 
-      const [txResult, holdersResult] = await Promise.allSettled([
+      const [txResult, holdersResult, supplyResult] = await Promise.allSettled([
         // dependent queries
         fetchTx(apiUrl, txId || ''),
-        fetchHolders(apiUrl, assetId || '', 10, 0),
+        fetchHolders(apiUrl, assetId || '', 10),
+        fetchFtSupply(apiUrl, assetId || ''),
       ]);
 
       const tx = handleSettledResult(txResult, 'Failed to fetch transaction');
       holders = handleSettledResult(holdersResult, 'Failed to fetch holders');
+      supply = handleSettledResult(supplyResult, 'Failed to fetch token supply')?.total;
 
       tokenData = mergeTokenData(
         tokenDataFromStacksApi,
         tokenDataFromLunarCrush,
-        holders,
+        supply,
         tokenId,
         networkMode
       );
@@ -177,6 +181,7 @@ export default async function (props: {
       txId={txId}
       assetId={assetId}
       holders={holders}
+      supply={supply}
       numFunctions={numFunctions}
     >
       <TokenIdPageRedesign />

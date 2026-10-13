@@ -5,10 +5,9 @@ import { TokenIdPageDataProvider } from '@/app/token/[tokenId]/redesign/context/
 import { MergedTokenData } from '@/app/token/[tokenId]/types';
 import { CommonSearchParams } from '@/app/transactions/page';
 import { NetworkModes } from '@/common/types/network';
+import { FtHolderListResponse } from '@/common/types/tokens-v3';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
-
-import { FungibleTokenHolderList } from '@stacks/stacks-blockchain-api-types';
 
 import StxTokenPageRedesign from './StxTokenPageRedesign';
 import {
@@ -36,7 +35,8 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
     imageUri: STX_LOGO_URL,
     decimals: STX_DECIMALS,
   };
-  let holders: FungibleTokenHolderList | undefined;
+  let holders: FtHolderListResponse | undefined;
+  let supply: string | undefined;
 
   const isSSRDisabled = searchParams?.ssr === 'false';
 
@@ -47,7 +47,7 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
           getTokenPrice(),
           getTokenDataFromLunarCrush(STX_LUNARCRUSH_ID),
           fetchStxSupply(apiUrl),
-          fetchStxHolders(apiUrl, 10, 0),
+          fetchStxHolders(apiUrl, 10),
         ]
       );
 
@@ -56,7 +56,7 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
         btcPrice: 0,
       };
       const lunarCrush = handleSettledResult(lunarCrushResult, 'Failed to fetch STX market data');
-      const supply = handleSettledResult(supplyResult, 'Failed to fetch STX supply');
+      supply = handleSettledResult(supplyResult, 'Failed to fetch STX supply')?.total;
       holders = handleSettledResult(holdersResult, 'Failed to fetch STX holders');
 
       tokenData = {
@@ -66,7 +66,7 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
         symbol: STX_SYMBOL,
         imageUri: STX_LOGO_URL,
         decimals: STX_DECIMALS,
-        totalSupply: supply ? Number(supply.total) : undefined,
+        totalSupply: supply ? Number(supply) : undefined,
       };
     } catch (error) {
       logError(error as Error, 'STX token page server-side fetch', { chain, api }, 'error');
@@ -84,6 +84,7 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
       txId={undefined}
       assetId={STX_ASSET_ID}
       holders={holders}
+      supply={supply}
       numFunctions={undefined}
     >
       <StxTokenPageRedesign />
