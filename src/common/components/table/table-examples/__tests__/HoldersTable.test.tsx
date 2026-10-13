@@ -52,14 +52,20 @@ beforeEach(() => {
   });
 });
 
-function renderTable() {
-  return render(
-    <QueryClientProvider client={new QueryClient()}>
+const queryClient = new QueryClient();
+
+function tableFor(assetId: string) {
+  return (
+    <QueryClientProvider client={queryClient}>
       <ChakraProvider value={system}>
-        <HoldersTable assetId="stx" totalSupply={3000000} decimals={6} pageSize={1} />
+        <HoldersTable assetId={assetId} totalSupply={3000000} decimals={6} pageSize={1} />
       </ChakraProvider>
     </QueryClientProvider>
   );
+}
+
+function renderTable() {
+  return render(tableFor('stx'));
 }
 
 test('pages through holders with v3 cursors and shows previous/next only', async () => {
@@ -85,4 +91,18 @@ test('pages through holders with v3 cursors and shows previous/next only', async
   fireEvent.click(screen.getByLabelText('Go to previous page'));
   expect(await screen.findByText('SP1HOLDER')).toBeInTheDocument();
   expect(mockUseHolders).toHaveBeenLastCalledWith('stx', 1, undefined, expect.anything());
+});
+
+test('starts over from the first page when the asset changes', async () => {
+  const { rerender } = renderTable();
+
+  fireEvent.click(screen.getByLabelText('Go to next page'));
+  expect(await screen.findByText('Page 2 of 3')).toBeInTheDocument();
+
+  const otherAsset = 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token';
+  rerender(tableFor(otherAsset));
+
+  expect(await screen.findByText('Page 1 of 3')).toBeInTheDocument();
+  expect(mockUseHolders).not.toHaveBeenCalledWith(otherAsset, 1, 'cursor-2', expect.anything());
+  expect(mockUseHolders).toHaveBeenLastCalledWith(otherAsset, 1, undefined, expect.anything());
 });

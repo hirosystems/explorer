@@ -100,6 +100,15 @@ export function HoldersTable({
   // needs no cursor; each later one is learned from the previous page's `cursor.next`.
   const [pageCursors, setPageCursors] = useState<(string | undefined)[]>([undefined]);
 
+  // Cursors only apply to the asset they came from, so start over from the first page when the
+  // table is reused for another asset (e.g. client-side navigation between token pages).
+  const [cursorsAssetId, setCursorsAssetId] = useState(assetId);
+  if (cursorsAssetId !== assetId) {
+    setCursorsAssetId(assetId);
+    setPageCursors([undefined]);
+    setPagination(prev => ({ ...prev, pageIndex: 0 }));
+  }
+
   const queryClient = useQueryClient();
 
   const isCacheSetWithInitialData = useRef(false);
@@ -119,7 +128,7 @@ export function HoldersTable({
   const { data, isFetching, isLoading } = useHolders(
     assetId,
     pagination.pageSize,
-    pageCursors[pagination.pageIndex],
+    cursorsAssetId === assetId ? pageCursors[pagination.pageIndex] : undefined,
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
