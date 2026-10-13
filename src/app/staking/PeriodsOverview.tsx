@@ -61,6 +61,7 @@ function Swatch({ bg, dashed }: { bg?: string; dashed?: boolean }) {
 export function PeriodsOverview({
   bonds,
   rewardHistoryNetwork,
+  hasMoreBonds,
   featuredIndex,
   rewardsByBond,
   settlementsByBond,
@@ -74,6 +75,7 @@ export function PeriodsOverview({
 }: {
   bonds: Bond[];
   rewardHistoryNetwork?: RewardHistoryNetwork;
+  hasMoreBonds?: boolean;
   featuredIndex?: number;
   rewardsByBond?: Record<number, bigint>;
   settlementsByBond?: BondRewards['settlementsByBond'];
@@ -253,6 +255,11 @@ export function PeriodsOverview({
           </Flex>
         </TabsRoot>
       </Flex>
+      {hasMoreBonds && (
+        <Text textStyle="text-regular-xs" color="textSecondary">
+          Showing {bonds.length} recent bonds. View all bonds for older history.
+        </Text>
+      )}
       {view === 'table' ? (
         <OverviewBondsTable
           rewardHistoryNetwork={rewardHistoryNetwork}

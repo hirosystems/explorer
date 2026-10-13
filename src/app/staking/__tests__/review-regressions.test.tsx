@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 import { AnnotatedValue } from '../AnnotatedValue';
 import { BondsTable } from '../BondsTable';
 import { CurrentBond } from '../CurrentBond';
-import { StakingPageClient, StakingPageData } from '../PageClient';
-import { StakingStats } from '../StakingStats';
+import { StackingPageClient, StakingPageClient, StakingPageData } from '../PageClient';
+import { ActiveBondsSummary, StakingStats } from '../StakingStats';
 import bondFixture from './fixtures/bond.json';
 
 const originalResizeObserver = globalThis.ResizeObserver;
@@ -26,8 +26,6 @@ afterAll(() => {
 const overviewWithoutPox: StakingPageData = {
   bonds: [bondFixture],
   bondsUnavailable: false,
-  cycles: [],
-  cycleRewards: {},
   currentBurnHeight: 0,
   nowMs: Date.UTC(2026, 8, 1),
   rewardCycleLength: 0,
@@ -42,7 +40,7 @@ const overviewWithoutPox: StakingPageData = {
 };
 
 test('overview preserves bonds and known rewards when PoX is missing without inventing dates or rates', () => {
-  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} section="bonds" />);
+  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} />);
   expect(screen.getByText(/Some staking data could not be loaded/)).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Bonds' })).toBeInTheDocument();
   expect(screen.getByText('Bond 3')).toBeInTheDocument();
@@ -56,7 +54,7 @@ test('overview preserves bonds and known rewards when PoX is missing without inv
 
 test('overview does not substitute a misleading empty table when both bonds and PoX fail', () => {
   renderWithChakraProviders(
-    <StakingPageClient {...overviewWithoutPox} bonds={[]} bondsUnavailable section="bonds" />
+    <StakingPageClient {...overviewWithoutPox} bonds={[]} bondsUnavailable />
   );
   expect(screen.getByText(/Some staking data could not be loaded/)).toBeInTheDocument();
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
@@ -64,35 +62,18 @@ test('overview does not substitute a misleading empty table when both bonds and 
 });
 
 test('missing PoX does not duplicate the bond fallback in the stacking section', () => {
-  renderWithChakraProviders(<StakingPageClient {...overviewWithoutPox} section="stacking" />);
+  renderWithChakraProviders(
+    <StackingPageClient {...overviewWithoutPox} cycles={[]} cycleRewards={{}} />
+  );
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
 });
 
 test.each([
-  {
-    activeBonds: [bondFixture],
-    bondsUnavailable: true,
-    expected: 'Simple average · across 1 active bond',
-  },
-  {
-    activeBonds: undefined,
-    bondsUnavailable: false,
-    expected: 'Active bond data unavailable',
-  },
-  { activeBonds: [], bondsUnavailable: false, expected: 'No active bonds' },
-])('headline uses cycle membership independently of historical availability: %j', props => {
-  renderWithChakraProviders(
-    <StakingPageClient
-      {...overviewWithoutPox}
-      {...props}
-      bonds={props.bondsUnavailable ? [] : [bondFixture]}
-      poxInfo={{ current_cycle: { id: 10 } } as NonNullable<StakingPageData['poxInfo']>}
-      rewardCycleLength={900}
-      prepareCycleLength={100}
-      currentBurnHeight={9500}
-      section="bonds"
-    />
-  );
+  { activeBonds: [bondFixture], expected: 'Simple average · across 1 active bond' },
+  { activeBonds: undefined, expected: 'Active bond data unavailable' },
+  { activeBonds: [], expected: 'No active bonds' },
+])('the independent summary renders current-cycle availability: %j', props => {
+  renderWithChakraProviders(<ActiveBondsSummary activeBonds={props.activeBonds} />);
   expect(screen.getAllByText(props.expected).length).toBeGreaterThan(0);
   if (props.activeBonds === undefined) {
     const summary = screen.getByLabelText('BTC bonded').parentElement!;

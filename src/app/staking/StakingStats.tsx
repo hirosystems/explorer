@@ -6,7 +6,7 @@ import { formatDateShort } from '@/common/utils/date-utils';
 import { Button } from '@/ui/Button';
 import type { ButtonProps } from '@/ui/Button';
 import { Text } from '@/ui/Text';
-import { ClientOnly, Flex, Grid, Icon } from '@chakra-ui/react';
+import { ClientOnly, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { GlossaryTerm } from './GlossaryTerm';
@@ -56,6 +56,20 @@ export function HowToParticipateButton(props: ButtonProps) {
         </Icon>
       </a>
     </Button>
+  );
+}
+
+export function ActiveBondsSummary(props: Parameters<typeof StakingStats>[0]) {
+  return (
+    <Stack gap={4}>
+      <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
+        <Text as="h2" textStyle="heading-xs">
+          Active bonds
+        </Text>
+        <HowToParticipateButton />
+      </Flex>
+      <StakingStats {...props} />
+    </Stack>
   );
 }
 

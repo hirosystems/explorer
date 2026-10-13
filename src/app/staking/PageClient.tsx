@@ -2,28 +2,23 @@
 
 import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { Text } from '@/ui/Text';
-import { Flex, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
+import type { ComponentProps } from 'react';
 
 import { CurrentBond } from './CurrentBond';
 import { OverviewBondsTable } from './OverviewBondsTable';
 import type { RewardHistoryNetwork } from './OverviewBondsTable';
 import { PeriodsOverview } from './PeriodsOverview';
 import { StackingOverview } from './StackingOverview';
-import { HowToParticipateButton, StakingStats } from './StakingStats';
-import type { Bond, BondRewards, CycleRewards, EnrollmentShare, PoxCycle } from './data';
-import type { DailyPrices } from './prices';
+import type { Bond, BondRewards, EnrollmentShare } from './data';
 import { getBondProjections } from './projections';
-import type { CurrentCycleEstimate } from './reward-estimate';
 
 export interface StakingPageData {
   bonds: Bond[];
-  activeBonds?: Bond[];
+  hasMoreBonds?: boolean;
   rewardHistoryNetwork?: RewardHistoryNetwork;
   bondsUnavailable?: boolean;
   poxInfo?: PoxInfo;
-  cycles: PoxCycle[];
-  cycleRewards: Record<number, CycleRewards>;
-  pox5FirstCycleId?: number;
   currentBurnHeight: number;
   nowMs: number;
   rewardCycleLength: number;
@@ -31,21 +26,23 @@ export interface StakingPageData {
   firstBurnchainBlockHeight: number;
   enrollments?: EnrollmentShare[];
   rewarded?: BondRewards;
-  lastCalculationHeightByCycle?: Record<number, number>;
   burnBlockTimes: Record<number, number>;
-  prices?: DailyPrices;
-  currentCycleEstimate?: CurrentCycleEstimate;
+}
+
+export type StackingPageData = Omit<ComponentProps<typeof StackingOverview>, 'poxInfo'> & {
+  poxInfo?: PoxInfo;
+};
+
+export function StackingPageClient({ poxInfo, ...props }: StackingPageData) {
+  return poxInfo ? <StackingOverview {...props} poxInfo={poxInfo} /> : null;
 }
 
 export function StakingPageClient({
   bonds,
-  activeBonds,
+  hasMoreBonds,
   rewardHistoryNetwork,
   bondsUnavailable,
   poxInfo,
-  cycles,
-  cycleRewards,
-  pox5FirstCycleId,
   currentBurnHeight,
   nowMs,
   rewardCycleLength,
@@ -53,36 +50,16 @@ export function StakingPageClient({
   firstBurnchainBlockHeight,
   enrollments,
   rewarded,
-  lastCalculationHeightByCycle,
   burnBlockTimes,
-  prices,
-  currentCycleEstimate,
-  section,
-}: StakingPageData & { section: 'bonds' | 'stacking' }) {
+}: StakingPageData) {
   const { featuredIndex, featuredBond, nextBond, scheduledBonds } = getBondProjections(
     bonds,
     rewardCycleLength,
     currentBurnHeight
   );
-  if (section === 'stacking')
-    return poxInfo ? (
-      <StackingOverview
-        currentCycleEstimate={currentCycleEstimate}
-        prices={prices}
-        poxInfo={poxInfo}
-        cycles={cycles}
-        cycleRewards={cycleRewards}
-        pox5FirstCycleId={pox5FirstCycleId}
-        firstBurnchainBlockHeight={firstBurnchainBlockHeight}
-        currentBurnHeight={currentBurnHeight}
-        nowMs={nowMs}
-        burnBlockTimes={burnBlockTimes}
-        lastCalculationHeightByCycle={lastCalculationHeightByCycle}
-      />
-    ) : null;
   return (
     <Stack gap={{ base: 10, lg: 12 }}>
-      {bondsUnavailable || activeBonds === undefined || !poxInfo ? (
+      {bondsUnavailable || !poxInfo ? (
         <Text role="status" textStyle="text-regular-sm" color="textSecondary">
           Some staking data could not be loaded. Refresh the page to try again.
         </Text>
@@ -110,16 +87,6 @@ export function StakingPageClient({
       {poxInfo && (
         <>
           <Stack gap={4}>
-            <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
-              <Text as="h2" textStyle="heading-xs">
-                Active bonds
-              </Text>
-              <HowToParticipateButton />
-            </Flex>
-            <StakingStats
-              activeBonds={activeBonds}
-              settlementsByBond={rewarded?.settlementsByBond}
-            />
             <CurrentBond
               featuredBond={featuredBond}
               nextBond={nextBond}
@@ -137,6 +104,7 @@ export function StakingPageClient({
             />
           </Stack>
           <PeriodsOverview
+            hasMoreBonds={hasMoreBonds}
             rewardHistoryNetwork={rewardHistoryNetwork}
             settlementsByBond={rewarded?.settlementsByBond}
             burnBlockTimes={burnBlockTimes}
