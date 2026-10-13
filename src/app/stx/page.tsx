@@ -20,7 +20,6 @@ import {
   STX_SYMBOL,
 } from './consts';
 import { fetchStxHolders, fetchStxSupply } from './data';
-import { stxToMicro } from './utils';
 
 export default async function (props: { searchParams: Promise<CommonSearchParams> }) {
   const searchParams = await props.searchParams;
@@ -67,7 +66,7 @@ export default async function (props: { searchParams: Promise<CommonSearchParams
         symbol: STX_SYMBOL,
         imageUri: STX_LOGO_URL,
         decimals: STX_DECIMALS,
-        totalSupply: stxToMicro(supply?.total_stx),
+        totalSupply: supply ? Number(supply.total) : undefined,
       };
     } catch (error) {
       logError(error as Error, 'STX token page server-side fetch', { chain, api }, 'error');
