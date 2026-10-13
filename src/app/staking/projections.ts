@@ -137,10 +137,12 @@ export type TimelineGranularity = 'day' | 'month';
 
 const MAX_DAYS_FOR_DAY_AXIS = 21;
 
+function localCalendarDay(date: Date): number {
+  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
+}
+
 function getTimelineGranularity(start: Date, end: Date): TimelineGranularity {
-  const startDay = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
-  const endDay = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
-  const days = (endDay - startDay) / (24 * 60 * 60 * 1000);
+  const days = localCalendarDay(end) - localCalendarDay(start);
   return days <= MAX_DAYS_FOR_DAY_AXIS ? 'day' : 'month';
 }
 
@@ -323,10 +325,17 @@ export function getBondProgress(
       cadence > 0 ? Math.min(Math.floor(blocksElapsed / cadence), DISTRIBUTIONS_PER_BOND) : 0,
     total: DISTRIBUTIONS_PER_BOND,
     dayOfTerm: dates
-      ? Math.max(0, Math.floor((dates.nowMs - dates.activationMs) / 86400000))
+      ? Math.max(
+          0,
+          localCalendarDay(new Date(dates.nowMs)) - localCalendarDay(new Date(dates.activationMs))
+        )
       : Math.floor((blocksElapsed * MINUTES_PER_BLOCK) / minutesPerDay),
     termDays: dates
-      ? Math.max(1, Math.round((dates.unlockMs - dates.activationMs) / 86400000))
+      ? Math.max(
+          1,
+          localCalendarDay(new Date(dates.unlockMs)) -
+            localCalendarDay(new Date(dates.activationMs))
+        )
       : Math.round((termBlocks * MINUTES_PER_BLOCK) / minutesPerDay),
     elapsedRatio: Math.min(blocksElapsed / termBlocks, 1),
   };

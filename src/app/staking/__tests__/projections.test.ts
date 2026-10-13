@@ -253,6 +253,22 @@ describe('getBondLifecycleState', () => {
 });
 
 describe('getBondProgress', () => {
+  test('counts local calendar days across DST without changing block progress', () => {
+    const fallback = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
+    for (const [start, end, hours] of [
+      [new Date(2026, 2, 7), new Date(2026, 2, 9), 47],
+      [new Date(2026, 9, 31), new Date(2026, 10, 2), 49],
+    ] as const) {
+      expect(+end - +start).toBe(hours * 60 * 60 * 1000);
+      const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength, {
+        activationMs: +start,
+        nowMs: +end,
+        unlockMs: +end,
+      });
+      expect(progress).toEqual({ ...fallback, dayOfTerm: 2, termDays: 2 });
+    }
+  });
+
   test('counts scheduled intervals and days from the design example', () => {
     const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
     expect(progress.elapsedDistributions).toBe(3);

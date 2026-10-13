@@ -98,9 +98,13 @@ test('uses the API cutoff as the first rejected enrollment height', () => {
 test('calendar day progress uses timestamps while lifecycle progress stays block based', () => {
   const schedule = getBondSchedule(970550, 995750, 2100, 100, bond.schedule);
   const fallback = getBondProgress(schedule, 971267, 2100);
-  const progress = getBondProgress(schedule, 971267, 2100, { activationMs, unlockMs, nowMs });
+  const progress = getBondProgress(schedule, 971267, 2100, {
+    activationMs: +new Date(2026, 9, 9, 0, 17, 52),
+    unlockMs: +new Date(2027, 3, 1, 13, 42, 14),
+    nowMs: +new Date(2026, 9, 13, 12),
+  });
   expect(progress.dayOfTerm).toBe(4);
-  expect(progress.termDays).toBe(Math.round((unlockMs - activationMs) / 86400000));
+  expect(progress.termDays).toBe(174);
   expect(progress.elapsedRatio).toBe(fallback.elapsedRatio);
   expect(progress.elapsedDistributions).toBe(fallback.elapsedDistributions);
 });
