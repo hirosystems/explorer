@@ -12,7 +12,7 @@ import { BlockHeightBadge } from '@/ui/Badge';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
-import { Box, Flex, Grid, Icon, Stack, chakra } from '@chakra-ui/react';
+import { Box, ClientOnly, Flex, Grid, Icon, Stack, chakra } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
 
@@ -262,9 +262,10 @@ export function StackingOverview({
                   bg="surfaceFifth"
                   px={2}
                   py={1}
-                  suppressHydrationWarning
                 >
-                  {formatBurnDate(currentStart, currentBurnHeight, nowMs, burnBlockTimes)}
+                  <ClientOnly>
+                    {formatBurnDate(currentStart, currentBurnHeight, nowMs, burnBlockTimes)}
+                  </ClientOnly>
                 </Text>
                 <Text
                   textStyle="text-medium-xs"
@@ -273,9 +274,10 @@ export function StackingOverview({
                   bg="surfaceFifth"
                   px={2}
                   py={1}
-                  suppressHydrationWarning
                 >
-                  {formatBurnDate(currentEnd, currentBurnHeight, nowMs, burnBlockTimes)}
+                  <ClientOnly>
+                    {formatBurnDate(currentEnd, currentBurnHeight, nowMs, burnBlockTimes)}
+                  </ClientOnly>
                 </Text>
               </Flex>
               <Flex justify="space-between" gap={3} align="flex-start">
@@ -309,12 +311,8 @@ export function StackingOverview({
                   starts #{currentEnd.toLocaleString('en-US')}
                 </Text>
               </Flex>
-              <Text
-                textStyle="text-regular-sm"
-                color="textInteractiveHover"
-                suppressHydrationWarning
-              >
-                ~{formatDateWithYear(at(currentEnd))} · projected
+              <Text textStyle="text-regular-sm" color="textInteractiveHover">
+                <ClientOnly>~{formatDateWithYear(at(currentEnd))} · projected</ClientOnly>
               </Text>
             </Stack>
 

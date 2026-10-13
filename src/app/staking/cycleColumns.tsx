@@ -2,6 +2,7 @@
 
 import { abbreviateNumber } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
+import { ClientOnly } from '@chakra-ui/react';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { AnnotatedValue, NO_VALUE } from './AnnotatedValue';
@@ -47,8 +48,8 @@ export const cycleColumns: ColumnDef<CycleRow>[] = [
     cell: info => {
       const row = info.row.original;
       return (
-        <Text textStyle="text-regular-sm" whiteSpace="nowrap" suppressHydrationWarning>
-          #{row.startedHeight.toLocaleString('en-US')} · {row.startedDate}
+        <Text textStyle="text-regular-sm" whiteSpace="nowrap">
+          #{row.startedHeight.toLocaleString('en-US')} · <ClientOnly>{row.startedDate}</ClientOnly>
         </Text>
       );
     },
@@ -62,8 +63,8 @@ export const cycleColumns: ColumnDef<CycleRow>[] = [
     cell: info => {
       const row = info.row.original;
       return (
-        <Text textStyle="text-regular-sm" whiteSpace="nowrap" suppressHydrationWarning>
-          #{row.endedHeight.toLocaleString('en-US')} · {row.endedDate}
+        <Text textStyle="text-regular-sm" whiteSpace="nowrap">
+          #{row.endedHeight.toLocaleString('en-US')} · <ClientOnly>{row.endedDate}</ClientOnly>
         </Text>
       );
     },

@@ -6,24 +6,25 @@ import { formatDateShort } from '@/common/utils/date-utils';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
-import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
+import { Box, ClientOnly, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 
 import { BondStateBadge } from './BondStateBadge';
 import type { BondStateTone } from './BondStateBadge';
 import { GlossaryTerm } from './GlossaryTerm';
+import { formatBondDate, resolveBondDate } from './bond-schedule';
 import { GENESIS_BOND_INDEX } from './consts';
 import type { Bond, BondRewards, EnrollmentShare } from './data';
 import { bondActivityHref } from './links';
 import {
   BondLifecycleState,
-  burnHeightToApproximateTimestamp,
+  type ScheduledBond,
   getBondLifecycleState,
   getBondProgress,
   getBondSchedule,
   getDistributionCadence,
 } from './projections';
-import { bondLabel, formatBtc, formatBurnDate, formatDateWithYear, toBigInt } from './utils';
+import { bondLabel, formatBtc, formatDateWithYear, toBigInt } from './utils';
 
 const BAR_HEIGHT = 2;
 
@@ -133,9 +134,8 @@ function LifecycleRow({ milestone, live }: { milestone: Milestone; live: boolean
           color={reached ? 'textPrimary' : 'textSecondary'}
           minW="7rem"
           textAlign="right"
-          suppressHydrationWarning
         >
-          {date}
+          <ClientOnly>{date}</ClientOnly>
         </Text>
       </Flex>
     </Flex>
@@ -154,7 +154,7 @@ export function CurrentBond({
   nowMs,
 }: {
   featuredBond?: Bond;
-  nextBond?: { index: number; activationHeight: number; termEndHeight: number };
+  nextBond?: ScheduledBond;
   enrollments?: EnrollmentShare[];
   burnBlockTimes: Record<number, number>;
   settlements?: BondRewards['settlementsByBond'][number];
@@ -172,11 +172,34 @@ export function CurrentBond({
     activationHeight,
     termEndHeight,
     rewardCycleLength,
-    prepareCycleLength
+    prepareCycleLength,
+    featuredBond.schedule
   );
   const state = getBondLifecycleState(schedule, currentBurnHeight, true);
   const hasStarted = currentBurnHeight >= schedule.activationHeight;
-  const progress = getBondProgress(schedule, currentBurnHeight, rewardCycleLength);
+  const activationDate = resolveBondDate(
+    activationHeight,
+    currentBurnHeight,
+    nowMs,
+    burnBlockTimes,
+    featuredBond.schedule
+  );
+  const unlockDate = resolveBondDate(
+    termEndHeight,
+    currentBurnHeight,
+    nowMs,
+    burnBlockTimes,
+    featuredBond.schedule
+  );
+  const progress = getBondProgress(
+    schedule,
+    currentBurnHeight,
+    rewardCycleLength,
+    activationDate && unlockDate
+      ? { activationMs: activationDate.timestampMs, unlockMs: unlockDate.timestampMs, nowMs }
+      : undefined
+  );
+
   const elapsedPercentage = progress.elapsedRatio * 100;
   const hasValidDay = Number.isFinite(progress.dayOfTerm) && Number.isFinite(progress.termDays);
   const cadence = getDistributionCadence(rewardCycleLength);
@@ -190,7 +213,6 @@ export function CurrentBond({
     : undefined;
   const enrolledSats = confirmedAmounts?.reduce((total, amount) => total + amount, BigInt(0));
 
-  const at = (height: number) => burnHeightToApproximateTimestamp(height, currentBurnHeight, nowMs);
   const past = (height: number) => currentBurnHeight >= height;
 
   const milestones: Milestone[] = [
@@ -222,12 +244,18 @@ export function CurrentBond({
       date:
         m.id === 'enrollment-opened' && featuredBond.transaction
           ? formatDateShort(featuredBond.transaction.bitcoin_block.time * 1000)
-          : formatBurnDate(m.height, currentBurnHeight, nowMs, burnBlockTimes),
+          : formatBondDate(
+              m.height,
+              currentBurnHeight,
+              nowMs,
+              burnBlockTimes,
+              featuredBond.schedule
+            ),
       isPast: past(m.height),
       isCurrent:
         (state === 'enrolling' && m.id === 'enrollment-opened') ||
         (state === 'awaitingActivation' && m.id === 'enrollment-closed') ||
-        (state === 'active' && m.id === 'bond-started') ||
+        (state === 'active' && m.id === 'next-distribution') ||
         (state === 'maturity' && m.id === 'l1-unlock'),
     }))
     .sort((a, b) => a.height - b.height);
@@ -272,11 +300,13 @@ export function CurrentBond({
           <Stack gap={2}>
             <Flex justify="space-between" gap={3}>
               <Text textStyle="text-medium-sm">
-                {!hasValidDay
-                  ? 'Day unavailable'
-                  : hasStarted
-                    ? `Day ${Math.min(progress.dayOfTerm, progress.termDays)} of ${progress.termDays}`
-                    : 'Not yet started'}
+                <ClientOnly>
+                  {!hasValidDay
+                    ? 'Day unavailable'
+                    : hasStarted
+                      ? `Day ${Math.min(progress.dayOfTerm, progress.termDays)} of ${progress.termDays}`
+                      : 'Not yet started'}
+                </ClientOnly>
               </Text>
               <Text textStyle="text-regular-sm" color="textSecondary">
                 {Number.isFinite(elapsedPercentage)
@@ -316,8 +346,18 @@ export function CurrentBond({
             <Stack gap={1} pt={2} borderTop="1px solid" borderColor="redesignBorderSecondary">
               <Flex gap={2} align="center">
                 <Box w={2} h={2} borderRadius="full" bg="accent.stacks-500" />
-                <Text textStyle="text-medium-sm" suppressHydrationWarning>
-                  Next bond starts ~{formatDateWithYear(at(nextBond.activationHeight))}
+                <Text textStyle="text-medium-sm">
+                  Next bond starts{' '}
+                  <ClientOnly>
+                    {formatBondDate(
+                      nextBond.activationHeight,
+                      currentBurnHeight,
+                      nowMs,
+                      burnBlockTimes,
+                      nextBond.schedule,
+                      formatDateWithYear
+                    )}
+                  </ClientOnly>
                 </Text>
               </Flex>
               <Flex gap={1.5} align="center" flexWrap="wrap">
@@ -342,12 +382,14 @@ export function CurrentBond({
               View bond activity
             </ButtonLink>
           </Flex>
-          <Text textStyle="text-regular-xs" color="textSecondary" suppressHydrationWarning>
-            {latestCredit
-              ? `Latest credit recorded ${formatDateShort(latestCredit.timestampMs)}.`
-              : settlements === undefined
-                ? 'Credit history unavailable.'
-                : 'No reward credits recorded yet.'}{' '}
+          <Text textStyle="text-regular-xs" color="textSecondary">
+            <ClientOnly>
+              {latestCredit
+                ? `Latest credit recorded ${formatDateShort(latestCredit.timestampMs)}.`
+                : settlements === undefined
+                  ? 'Credit history unavailable.'
+                  : 'No reward credits recorded yet.'}
+            </ClientOnly>{' '}
             Distribution dates below are scheduled. Credits require a successful reward calculation.
           </Text>
           <Stack gap={0}>

@@ -1,8 +1,9 @@
 import type { BondStateTone } from './BondStateBadge';
+import { formatBondDate } from './bond-schedule';
 import type { Bond, BondRewards, BondStatus } from './data';
 import { bpsToPercent } from './projections';
 import { RealizedBondRate, getRealizedBondRate } from './reward-metrics';
-import { bondLabel, formatBurnDate, getBondStatusLabel, isBondPending, toBigInt } from './utils';
+import { bondLabel, getBondStatusLabel, isBondPending, toBigInt } from './utils';
 
 export function getBondStateTone(status: BondStatus): BondStateTone {
   switch (status) {
@@ -60,14 +61,20 @@ export function toBondRow(
   const unlockHeight = bond.schedule?.unlock?.bitcoin_height ?? 0;
   const rewardedSats = rewardsByBond?.[bond.index];
   return {
-    activationDate:
-      currentBurnHeight === undefined
-        ? 'Unavailable'
-        : formatBurnDate(activationHeight, currentBurnHeight, nowMs, burnBlockTimes),
-    unlockDate:
-      currentBurnHeight === undefined
-        ? 'Unavailable'
-        : formatBurnDate(unlockHeight, currentBurnHeight, nowMs, burnBlockTimes),
+    activationDate: formatBondDate(
+      activationHeight,
+      currentBurnHeight,
+      nowMs,
+      burnBlockTimes,
+      bond.schedule
+    ),
+    unlockDate: formatBondDate(
+      unlockHeight,
+      currentBurnHeight,
+      nowMs,
+      burnBlockTimes,
+      bond.schedule
+    ),
     index: bond.index,
     name: bondLabel(bond.index),
     status: getBondStatusLabel(bond.status),

@@ -6,7 +6,7 @@ import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { TabsLabel, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Box, ClientOnly, Flex, Stack } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 
 import type { BondTooltipData } from './BondTooltip';
@@ -18,10 +18,11 @@ import {
   SEGMENT_REMAINING_BG,
   TimelinePlot,
 } from './TimelinePlot';
+import { resolveBondDate } from './bond-schedule';
 import { DISTRIBUTIONS_PER_BOND, TIMELINE_BONDS_AFTER } from './consts';
 import type { Bond, BondRewards } from './data';
 import {
-  burnHeightToApproximateTimestamp,
+  type ScheduledBond,
   getBarPosition,
   getBondLifecycleState,
   getBondSchedule,
@@ -80,7 +81,7 @@ export function PeriodsOverview({
   rewardsByBond?: Record<number, bigint>;
   settlementsByBond?: BondRewards['settlementsByBond'];
   burnBlockTimes: Record<number, number>;
-  scheduledBonds?: { index: number; activationHeight: number; termEndHeight: number }[];
+  scheduledBonds?: ScheduledBond[];
   rewardCycleLength: number;
   prepareCycleLength: number;
   firstBurnchainBlockHeight: number;
@@ -115,14 +116,24 @@ export function PeriodsOverview({
           activationHeight,
           unlockHeight,
           rewardCycleLength,
-          prepareCycleLength
+          prepareCycleLength,
+          bond.schedule
         );
         const state = getBondLifecycleState(schedule, currentBurnHeight, true);
         return {
           index: bond.index,
           label: bondLabel(bond.index),
-          startMs: burnHeightToApproximateTimestamp(activationHeight, currentBurnHeight, nowMs),
-          endMs: burnHeightToApproximateTimestamp(unlockHeight, currentBurnHeight, nowMs),
+          startMs:
+            resolveBondDate(
+              activationHeight,
+              currentBurnHeight,
+              nowMs,
+              burnBlockTimes,
+              bond.schedule
+            )?.timestampMs ?? nowMs,
+          endMs:
+            resolveBondDate(unlockHeight, currentBurnHeight, nowMs, burnBlockTimes, bond.schedule)
+              ?.timestampMs ?? nowMs,
           state:
             state === 'closed'
               ? ('complete' as const)
@@ -135,6 +146,7 @@ export function PeriodsOverview({
             label: bondLabel(bond.index),
             state,
             schedule,
+            apiSchedule: bond.schedule,
             capacitySats: toBigInt(bond.parameters?.btc_capacity),
             lockedSats: toBigInt(bond.balances?.locked?.btc),
             rewardedSats: rewardsByBond?.[bond.index],
@@ -152,16 +164,22 @@ export function PeriodsOverview({
         .map(scheduled => ({
           index: scheduled.index,
           label: bondLabel(scheduled.index),
-          startMs: burnHeightToApproximateTimestamp(
-            scheduled.activationHeight,
-            currentBurnHeight,
-            nowMs
-          ),
-          endMs: burnHeightToApproximateTimestamp(
-            scheduled.termEndHeight,
-            currentBurnHeight,
-            nowMs
-          ),
+          startMs:
+            resolveBondDate(
+              scheduled.activationHeight,
+              currentBurnHeight,
+              nowMs,
+              burnBlockTimes,
+              scheduled.schedule
+            )?.timestampMs ?? nowMs,
+          endMs:
+            resolveBondDate(
+              scheduled.termEndHeight,
+              currentBurnHeight,
+              nowMs,
+              burnBlockTimes,
+              scheduled.schedule
+            )?.timestampMs ?? nowMs,
           state: 'upcoming' as const,
           elapsedDistributions: 0,
           tooltip: {
@@ -171,10 +189,10 @@ export function PeriodsOverview({
               scheduled.activationHeight,
               scheduled.termEndHeight,
               rewardCycleLength,
-              prepareCycleLength
+              prepareCycleLength,
+              scheduled.schedule
             ),
-            lockedSats: BigInt(0),
-            rewardedSats: BigInt(0),
+            apiSchedule: scheduled.schedule,
           } satisfies BondTooltipData,
         })),
     ];
@@ -273,68 +291,70 @@ export function PeriodsOverview({
       ) : (
         <Stack gap={4} bg="surfaceSecondary" borderRadius="redesign.xl" px={[4, 6]} py={[4, 5]}>
           <Text textStyle="text-regular-xs" color="textSecondary">
-            Projected calendar at ten minutes per block. Shading shows elapsed scheduled intervals,
-            not confirmed credits.
+            Future dates are estimates. Shading shows elapsed scheduled intervals, not confirmed
+            credits.
           </Text>
-          <ScrollIndicator>
-            <Box minW="32rem">
-              <Flex>
-                <Box w={ROW_LABEL_WIDTH} flexShrink={0} />
-                <Box position="relative" flex={1} h={8}>
-                  {ticks.map(tick => (
-                    <Flex
-                      key={`${tick.year}-${tick.label}`}
-                      position="absolute"
-                      left={`${tick.leftPercent}%`}
-                      top={0}
-                      gap={1}
-                      align="baseline"
-                      pl={1.5}
-                    >
-                      <Text textStyle="text-mono-xs" color="textSecondary" whiteSpace="nowrap">
-                        {tick.label}
-                      </Text>
-                      {tick.isYearStart && (
-                        <Text textStyle="text-mono-xs" color="textTertiary">
-                          &apos;{`${tick.year}`.slice(2)}
+          <ClientOnly>
+            <ScrollIndicator>
+              <Box minW="32rem">
+                <Flex>
+                  <Box w={ROW_LABEL_WIDTH} flexShrink={0} />
+                  <Box position="relative" flex={1} h={8}>
+                    {ticks.map(tick => (
+                      <Flex
+                        key={`${tick.year}-${tick.label}`}
+                        position="absolute"
+                        left={`${tick.leftPercent}%`}
+                        top={0}
+                        gap={1}
+                        align="baseline"
+                        pl={1.5}
+                      >
+                        <Text textStyle="text-mono-xs" color="textSecondary" whiteSpace="nowrap">
+                          {tick.label}
                         </Text>
-                      )}
-                    </Flex>
-                  ))}
-                  <Box
-                    position="absolute"
-                    left={0}
-                    right={0}
-                    bottom={0}
-                    borderBottom="1px solid"
-                    borderColor="redesignBorderSecondary"
-                  />
-                  {ticks.map(tick => (
+                        {tick.isYearStart && (
+                          <Text textStyle="text-mono-xs" color="textTertiary">
+                            &apos;{`${tick.year}`.slice(2)}
+                          </Text>
+                        )}
+                      </Flex>
+                    ))}
                     <Box
-                      key={`tick-${tick.year}-${tick.label}`}
                       position="absolute"
-                      left={`${tick.leftPercent}%`}
+                      left={0}
+                      right={0}
                       bottom={0}
-                      h={2}
-                      borderLeft="1px solid"
+                      borderBottom="1px solid"
                       borderColor="redesignBorderSecondary"
                     />
-                  ))}
-                </Box>
-              </Flex>
+                    {ticks.map(tick => (
+                      <Box
+                        key={`tick-${tick.year}-${tick.label}`}
+                        position="absolute"
+                        left={`${tick.leftPercent}%`}
+                        bottom={0}
+                        h={2}
+                        borderLeft="1px solid"
+                        borderColor="redesignBorderSecondary"
+                      />
+                    ))}
+                  </Box>
+                </Flex>
 
-              <TimelinePlot
-                rows={rows}
-                cells={cells}
-                bounds={bounds}
-                todayPercent={todayPercent}
-                currentBurnHeight={currentBurnHeight}
-                nowMs={nowMs}
-                rewardCycleLength={rewardCycleLength}
-                firstBurnchainBlockHeight={firstBurnchainBlockHeight}
-              />
-            </Box>
-          </ScrollIndicator>
+                <TimelinePlot
+                  rows={rows}
+                  cells={cells}
+                  bounds={bounds}
+                  todayPercent={todayPercent}
+                  currentBurnHeight={currentBurnHeight}
+                  nowMs={nowMs}
+                  rewardCycleLength={rewardCycleLength}
+                  firstBurnchainBlockHeight={firstBurnchainBlockHeight}
+                />
+              </Box>
+            </ScrollIndicator>
+          </ClientOnly>
 
           <Flex gap={5} flexWrap="wrap" pl={{ base: 0, md: ROW_LABEL_WIDTH }}>
             <LegendKey

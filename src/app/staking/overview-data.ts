@@ -1,11 +1,14 @@
 import { handleSettledResult } from '@/app/address/[principal]/page-data';
 
 import type { StackingPageData, StakingPageData } from './PageClient';
-import { PREVIOUS_CYCLES_LIMIT } from './consts';
+import { mergeBondDetail } from './bond-schedule';
+import { PREVIOUS_CYCLES_LIMIT, SCHEDULED_BONDS_AHEAD } from './consts';
 import {
+  type ProjectedBond,
   createRewardHistoryDeadline,
   fetchBondRegistrations,
   fetchBondRewards,
+  fetchBondSchedule,
   fetchBondsPage,
   fetchBurnBlockTimes,
   fetchCurrentCycleBonds,
@@ -165,10 +168,30 @@ async function loadBondsOverview(
         bond.schedule.activation.bitcoin_height,
         bond.schedule.unlock.bitcoin_height,
         rewardCycleLength,
-        prepareCycleLength
+        prepareCycleLength,
+        bond.schedule
       )
     )
   );
+  // Ask for immediate successors before local estimates can rule them out.
+  const latestIndex = Math.max(0, ...bonds.map(bond => bond.index));
+  const projectedIndices = latestIndex
+    ? Array.from({ length: SCHEDULED_BONDS_AHEAD }, (_, offset) => latestIndex + offset + 1)
+    : [];
+  const projectionController = new AbortController();
+  const projectionTimeout = setTimeout(() => projectionController.abort(), 5000);
+  const projected = Promise.allSettled(
+    projectedIndices.map(index => fetchBondSchedule(index, chain, api, projectionController.signal))
+  )
+    .finally(() => clearTimeout(projectionTimeout))
+    .then(results =>
+      // The per-index cache can report a declared successor before the list does.
+      results.flatMap<ProjectedBond>(result =>
+        result.status === 'fulfilled'
+          ? [{ index: result.value.index, status: 'projected', schedule: result.value.schedule }]
+          : []
+      )
+    );
   const [historicalResult, enrollmentsResult, detailResult, timesResult] = await Promise.allSettled(
     [
       historicalIndexes.length
@@ -193,7 +216,10 @@ async function loadBondsOverview(
   const enrollments = handleSettledResult(enrollmentsResult, 'Staking page: enrollments');
   return {
     ...data,
-    bonds: bonds.map(bond => (bond.index === detail?.index ? detail : bond)),
+    bonds: bonds.map(bond =>
+      detail && bond.index === detail.index ? mergeBondDetail(bond, detail) : bond
+    ),
+    projectedBonds: await projected,
     rewarded,
     enrollments: enrollments?.map(enrollment => ({ btc: enrollment.balances.btc })),
     burnBlockTimes: handleSettledResult(timesResult, 'Staking page: bond dates') ?? {},

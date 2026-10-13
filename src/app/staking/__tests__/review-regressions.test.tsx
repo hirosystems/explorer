@@ -1,12 +1,16 @@
+import { formatDateShort } from '@/common/utils/date-utils';
 import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { AnnotatedValue } from '../AnnotatedValue';
+import { BondTooltip } from '../BondTooltip';
 import { BondsTable } from '../BondsTable';
 import { CurrentBond } from '../CurrentBond';
 import { StackingPageClient, StakingPageClient, StakingPageData } from '../PageClient';
+import { PeriodsOverview } from '../PeriodsOverview';
 import { ActiveBondsSummary, StakingStats } from '../StakingStats';
+import { getBarPosition, getBondSchedule, getTimelineBounds } from '../projections';
 import bondFixture from './fixtures/bond.json';
 
 const originalResizeObserver = globalThis.ResizeObserver;
@@ -21,6 +25,68 @@ beforeAll(() => {
 
 afterAll(() => {
   globalThis.ResizeObserver = originalResizeObserver;
+});
+
+test('API dates agree across the lifecycle, table, tooltip, and timeline positions', async () => {
+  const activationMs = Date.parse('2026-10-09T00:17:52Z');
+  const unlockMs = Date.parse('2027-04-01T13:42:14Z');
+  const nowMs = Date.parse('2026-10-13T12:00:00Z');
+  const bond = {
+    ...bondFixture,
+    schedule: {
+      enrollment_cutoff: { bitcoin_height: 970440, pox_cycle: 144, time: 1791439352 },
+      activation: { bitcoin_height: 970550, pox_cycle: 145, time: activationMs / 1000 },
+      unlock: { bitcoin_height: 995750, pox_cycle: 157, projected_time: unlockMs / 1000 },
+    },
+  };
+  const shared = {
+    currentBurnHeight: 971267,
+    nowMs,
+    rewardCycleLength: 2100,
+    prepareCycleLength: 100,
+    burnBlockTimes: {},
+  };
+  const { rerender } = renderWithChakraProviders(<CurrentBond featuredBond={bond} {...shared} />);
+  expect(screen.getAllByText(formatDateShort(activationMs)).length).toBeGreaterThan(0);
+  expect(screen.getByText(`~${formatDateShort(unlockMs)}`)).toBeInTheDocument();
+  expect(screen.getByText('#970,440')).toBeInTheDocument();
+
+  rerender(<BondsTable bonds={[bond]} {...shared} />);
+  expect(
+    screen.getByText(`${formatDateShort(activationMs)} → ~${formatDateShort(unlockMs)}`)
+  ).toBeInTheDocument();
+
+  rerender(
+    <BondTooltip
+      bond={{
+        label: 'Bond 3',
+        state: 'active',
+        schedule: getBondSchedule(970550, 995750, 2100, 100, bond.schedule),
+        apiSchedule: bond.schedule,
+      }}
+      elapsedDistributions={0}
+      {...shared}
+    />
+  );
+  expect(
+    screen.getByText(
+      `${formatDateShort(activationMs)} → ~${formatDateShort(unlockMs)} (in 170 days)`
+    )
+  ).toBeInTheDocument();
+
+  rerender(
+    <PeriodsOverview
+      bonds={[bond]}
+      featuredIndex={bond.index}
+      firstBurnchainBlockHeight={666050}
+      {...shared}
+    />
+  );
+  const bounds = getTimelineBounds([{ startMs: activationMs, endMs: unlockMs }], nowMs);
+  const position = getBarPosition(activationMs, unlockMs, bounds.startMs, bounds.endMs);
+  const bar = screen.getByRole('img', { name: /Bond 3, active/ });
+  expect(bar).toHaveStyle({ left: `${position.leftPercent}%`, width: `${position.widthPercent}%` });
+  await act(async () => {});
 });
 
 const overviewWithoutPox: StakingPageData = {

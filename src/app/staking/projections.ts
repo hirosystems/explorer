@@ -11,7 +11,7 @@ import {
   TIMELINE_BONDS_AFTER,
   TIMELINE_BONDS_BEFORE,
 } from './consts';
-import type { Bond } from './data';
+import type { Bond, ProjectedBond } from './data';
 
 export function burnHeightToApproximateTimestamp(
   targetBurnHeight: number,
@@ -137,8 +137,12 @@ export type TimelineGranularity = 'day' | 'month';
 
 const MAX_DAYS_FOR_DAY_AXIS = 21;
 
-function getTimelineGranularity(spanMs: number): TimelineGranularity {
-  const days = spanMs / (24 * 60 * 60 * 1000);
+function localCalendarDay(date: Date): number {
+  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
+}
+
+function getTimelineGranularity(start: Date, end: Date): TimelineGranularity {
+  const days = localCalendarDay(end) - localCalendarDay(start);
   return days <= MAX_DAYS_FOR_DAY_AXIS ? 'day' : 'month';
 }
 
@@ -150,21 +154,21 @@ export function getTimelineBounds(
   const earliest = Math.min(nowMs, ...(times.length ? times : [nowMs]));
   const latest = Math.max(nowMs, ...(times.length ? times : [nowMs]));
 
-  const granularity = getTimelineGranularity(latest - earliest);
   const start = new Date(earliest);
   const end = new Date(latest);
+  const granularity = getTimelineGranularity(start, end);
 
   if (granularity === 'day') {
     return {
-      startMs: Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()),
-      endMs: Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1),
+      startMs: new Date(start.getFullYear(), start.getMonth(), start.getDate()).getTime(),
+      endMs: new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1).getTime(),
       granularity,
     };
   }
 
   return {
-    startMs: Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1),
-    endMs: Date.UTC(end.getUTCFullYear(), end.getUTCMonth() + 1, 1),
+    startMs: new Date(start.getFullYear(), start.getMonth(), 1).getTime(),
+    endMs: new Date(end.getFullYear(), end.getMonth() + 1, 1).getTime(),
     granularity,
   };
 }
@@ -190,10 +194,10 @@ export function getTimelineTicks(
   for (let i = 0; i < 400; i++) {
     const tickMs =
       granularity === 'day'
-        ? Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate() + i)
-        : Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + i, 1);
+        ? new Date(start.getFullYear(), start.getMonth(), start.getDate() + i).getTime()
+        : new Date(start.getFullYear(), start.getMonth() + i, 1).getTime();
     if (tickMs >= endMs) break;
-    divisions.push(tickMs);
+    if (tickMs >= startMs) divisions.push(tickMs);
   }
 
   const step = Math.max(1, Math.ceil(divisions.length / MAX_TICKS));
@@ -204,10 +208,10 @@ export function getTimelineTicks(
       return {
         label:
           granularity === 'day'
-            ? date.toLocaleString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
-            : date.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' }),
-        isYearStart: date.getUTCMonth() === 0 && date.getUTCDate() === 1,
-        year: date.getUTCFullYear(),
+            ? date.toLocaleString('en-US', { month: 'short', day: 'numeric' })
+            : date.toLocaleString('en-US', { month: 'short' }),
+        isYearStart: date.getMonth() === 0 && date.getDate() === 1,
+        year: date.getFullYear(),
         leftPercent: ((tickMs - startMs) / span) * 100,
       };
     });
@@ -223,8 +227,12 @@ export function getFeaturedBondIndex(
 }
 
 export function formatTermDuration(blocks: number): string {
-  if (blocks <= 0) return '';
-  const minutes = blocks * MINUTES_PER_BLOCK;
+  return formatTermDurationMs(blocks * MINUTES_PER_BLOCK * 60000);
+}
+
+export function formatTermDurationMs(durationMs: number): string {
+  if (durationMs <= 0) return '';
+  const minutes = durationMs / 60000;
   const hours = minutes / 60;
   const days = hours / 24;
   const plural = (value: number, unit: string) => `${value} ${unit}${value === 1 ? '' : 's'}`;
@@ -234,8 +242,12 @@ export function formatTermDuration(blocks: number): string {
 }
 
 export function formatTimeRemaining(blocks: number): string {
-  if (blocks <= 0) return '';
-  const minutes = blocks * MINUTES_PER_BLOCK;
+  return formatTimeRemainingMs(blocks * MINUTES_PER_BLOCK * 60000);
+}
+
+export function formatTimeRemainingMs(durationMs: number): string {
+  if (durationMs <= 0) return '';
+  const minutes = durationMs / 60000;
   const plural = (value: number, unit: string) => `${value} ${unit}${value === 1 ? '' : 's'}`;
   if (minutes < 90) return `${Math.max(Math.round(minutes), 1)} min`;
   const hours = minutes / 60;
@@ -263,11 +275,13 @@ export function getBondSchedule(
   activationHeight: number,
   termEndHeight: number,
   rewardCycleLength: number,
-  prepareCycleLength: number
+  prepareCycleLength: number,
+  apiSchedule?: Bond['schedule']
 ): BondSchedule {
   return {
     enrollmentOpensHeight: activationHeight - BOND_GAP_CYCLES * rewardCycleLength,
-    enrollmentClosesHeight: activationHeight - prepareCycleLength,
+    enrollmentClosesHeight:
+      apiSchedule?.enrollment_cutoff?.bitcoin_height ?? activationHeight - prepareCycleLength,
     activationHeight,
     l1UnlockHeight: termEndHeight - getDistributionCadence(rewardCycleLength),
     termEndHeight,
@@ -299,7 +313,8 @@ export interface BondProgress {
 export function getBondProgress(
   schedule: BondSchedule,
   currentBurnHeight: number,
-  rewardCycleLength: number
+  rewardCycleLength: number,
+  dates?: { activationMs: number; unlockMs: number; nowMs: number }
 ): BondProgress {
   const cadence = getDistributionCadence(rewardCycleLength);
   const blocksElapsed = Math.max(currentBurnHeight - schedule.activationHeight, 0);
@@ -309,10 +324,28 @@ export function getBondProgress(
     elapsedDistributions:
       cadence > 0 ? Math.min(Math.floor(blocksElapsed / cadence), DISTRIBUTIONS_PER_BOND) : 0,
     total: DISTRIBUTIONS_PER_BOND,
-    dayOfTerm: Math.floor((blocksElapsed * MINUTES_PER_BLOCK) / minutesPerDay),
-    termDays: Math.round((termBlocks * MINUTES_PER_BLOCK) / minutesPerDay),
+    dayOfTerm: dates
+      ? Math.max(
+          0,
+          localCalendarDay(new Date(dates.nowMs)) - localCalendarDay(new Date(dates.activationMs))
+        )
+      : Math.floor((blocksElapsed * MINUTES_PER_BLOCK) / minutesPerDay),
+    termDays: dates
+      ? Math.max(
+          1,
+          localCalendarDay(new Date(dates.unlockMs)) -
+            localCalendarDay(new Date(dates.activationMs))
+        )
+      : Math.round((termBlocks * MINUTES_PER_BLOCK) / minutesPerDay),
     elapsedRatio: Math.min(blocksElapsed / termBlocks, 1),
   };
+}
+
+export interface ScheduledBond {
+  index: number;
+  activationHeight: number;
+  termEndHeight: number;
+  schedule?: Bond['schedule'];
 }
 
 export function projectScheduledBonds(
@@ -321,7 +354,7 @@ export function projectScheduledBonds(
   rewardCycleLength: number,
   count: number,
   currentBurnHeight = 0
-): { index: number; activationHeight: number; termEndHeight: number }[] {
+): ScheduledBond[] {
   const gapBlocks = BOND_GAP_CYCLES * rewardCycleLength;
   const termBlocks = BOND_TERM_CYCLES * rewardCycleLength;
   if (!Number.isFinite(gapBlocks) || gapBlocks <= 0 || !Number.isFinite(currentBurnHeight))
@@ -413,7 +446,8 @@ export function getTimelineBondWindow(
 export function getBondProjections(
   bonds: Bond[],
   rewardCycleLength: number,
-  currentBurnHeight = 0
+  currentBurnHeight = 0,
+  projectedBonds: ProjectedBond[] = []
 ) {
   const featuredIndex = getFeaturedBondIndex(bonds);
   const featuredBond = bonds.find(bond => bond.index === featuredIndex);
@@ -429,18 +463,11 @@ export function getBondProjections(
         index: onChainNext.index,
         activationHeight: onChainNext.schedule.activation.bitcoin_height,
         termEndHeight: onChainNext.schedule.unlock.bitcoin_height,
+        schedule: onChainNext.schedule,
       }
-    : featuredBond && rewardCycleLength > 0
-      ? projectScheduledBonds(
-          featuredBond.index,
-          featuredBond.schedule.activation.bitcoin_height,
-          rewardCycleLength,
-          1,
-          currentBurnHeight
-        )[0]
-      : undefined;
+    : undefined;
   const latest = [...bonds].sort((a, b) => b.index - a.index)[0];
-  const scheduledBonds =
+  const localProjections =
     latest && rewardCycleLength > 0
       ? projectScheduledBonds(
           latest.index,
@@ -450,5 +477,24 @@ export function getBondProjections(
           currentBurnHeight
         )
       : [];
-  return { featuredIndex, featuredBond, nextBond, scheduledBonds };
+  const byIndex = new Map(localProjections.map(bond => [bond.index, bond]));
+  for (const projected of projectedBonds) {
+    if (!latest || projected.index <= latest.index) continue;
+    byIndex.set(projected.index, {
+      index: projected.index,
+      activationHeight: projected.schedule.activation.bitcoin_height,
+      termEndHeight: projected.schedule.unlock.bitcoin_height,
+      schedule: projected.schedule,
+    });
+  }
+  const scheduledBonds = Array.from(byIndex.values())
+    .filter(bond => bond.activationHeight > currentBurnHeight)
+    .sort((a, b) => a.activationHeight - b.activationHeight || a.index - b.index)
+    .slice(0, SCHEDULED_BONDS_AHEAD);
+  return {
+    featuredIndex,
+    featuredBond,
+    nextBond: nextBond ?? (featuredBond ? scheduledBonds[0] : undefined),
+    scheduledBonds,
+  };
 }

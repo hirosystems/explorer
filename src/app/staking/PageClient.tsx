@@ -10,11 +10,12 @@ import { OverviewBondsTable } from './OverviewBondsTable';
 import type { RewardHistoryNetwork } from './OverviewBondsTable';
 import { PeriodsOverview } from './PeriodsOverview';
 import { StackingOverview } from './StackingOverview';
-import type { Bond, BondRewards, EnrollmentShare } from './data';
+import type { Bond, BondRewards, EnrollmentShare, ProjectedBond } from './data';
 import { getBondProjections } from './projections';
 
 export interface StakingPageData {
   bonds: Bond[];
+  projectedBonds?: ProjectedBond[];
   hasMoreBonds?: boolean;
   rewardHistoryNetwork?: RewardHistoryNetwork;
   bondsUnavailable?: boolean;
@@ -42,6 +43,7 @@ export function StakingPageClient({
   hasMoreBonds,
   rewardHistoryNetwork,
   bondsUnavailable,
+  projectedBonds,
   poxInfo,
   currentBurnHeight,
   nowMs,
@@ -55,7 +57,8 @@ export function StakingPageClient({
   const { featuredIndex, featuredBond, nextBond, scheduledBonds } = getBondProjections(
     bonds,
     rewardCycleLength,
-    currentBurnHeight
+    currentBurnHeight,
+    projectedBonds
   );
   return (
     <Stack gap={{ base: 10, lg: 12 }}>

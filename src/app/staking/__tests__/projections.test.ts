@@ -1,3 +1,4 @@
+/** @jest-environment ./jest.dst-environment.js */
 import {
   formatTermDuration,
   formatTimeRemaining,
@@ -59,62 +60,135 @@ describe('getBarPosition', () => {
 });
 
 describe('getTimelineBounds', () => {
+  test('uses the same calendar-day threshold across the fall DST transition', () => {
+    const start = new Date(2026, 9, 20);
+    const end = new Date(2026, 10, 10);
+    expect(end.getTime() - start.getTime()).toBe(505 * 60 * 60 * 1000);
+    for (const [from, to] of [
+      [start, end],
+      [new Date(2026, 8, 20), new Date(2026, 9, 11)],
+    ]) {
+      expect(getTimelineBounds([{ startMs: +from, endMs: +to }], +from).granularity).toBe('day');
+    }
+    expect(
+      getTimelineBounds([{ startMs: +start, endMs: +new Date(2026, 10, 11) }], +start).granularity
+    ).toBe('month');
+  });
+
   test('rounds out to whole days for a short run', () => {
-    const bars = [{ startMs: Date.UTC(2026, 7, 23, 9), endMs: Date.UTC(2026, 7, 28, 15) }];
-    const bounds = getTimelineBounds(bars, Date.UTC(2026, 7, 26));
+    const bars = [
+      { startMs: new Date(2026, 7, 23, 9).getTime(), endMs: new Date(2026, 7, 28, 15).getTime() },
+    ];
+    const bounds = getTimelineBounds(bars, new Date(2026, 7, 26).getTime());
     expect(bounds.granularity).toBe('day');
-    expect(bounds.startMs).toBe(Date.UTC(2026, 7, 23));
-    expect(bounds.endMs).toBe(Date.UTC(2026, 7, 29));
+    expect(bounds.startMs).toBe(new Date(2026, 7, 23).getTime());
+    expect(bounds.endMs).toBe(new Date(2026, 7, 29).getTime());
   });
 
   test('rounds out to whole months for a long run', () => {
-    const bars = [{ startMs: Date.UTC(2026, 2, 17), endMs: Date.UTC(2026, 8, 9) }];
-    const bounds = getTimelineBounds(bars, Date.UTC(2026, 4, 15));
+    const bars = [
+      { startMs: new Date(2026, 2, 17).getTime(), endMs: new Date(2026, 8, 9).getTime() },
+    ];
+    const bounds = getTimelineBounds(bars, new Date(2026, 4, 15).getTime());
     expect(bounds.granularity).toBe('month');
-    expect(bounds.startMs).toBe(Date.UTC(2026, 2, 1));
-    expect(bounds.endMs).toBe(Date.UTC(2026, 9, 1));
+    expect(bounds.startMs).toBe(new Date(2026, 2, 1).getTime());
+    expect(bounds.endMs).toBe(new Date(2026, 9, 1).getTime());
   });
 
   test('always includes today, even when every bond is in the future', () => {
-    const bars = [{ startMs: Date.UTC(2027, 0, 5), endMs: Date.UTC(2027, 5, 5) }];
-    const bounds = getTimelineBounds(bars, Date.UTC(2026, 4, 15));
-    expect(bounds.startMs).toBe(Date.UTC(2026, 4, 1));
+    const bars = [
+      { startMs: new Date(2027, 0, 5).getTime(), endMs: new Date(2027, 5, 5).getTime() },
+    ];
+    const bounds = getTimelineBounds(bars, new Date(2026, 4, 15).getTime());
+    expect(bounds.startMs).toBe(new Date(2026, 4, 1).getTime());
   });
 
   test('copes with no bonds at all', () => {
-    const bounds = getTimelineBounds([], Date.UTC(2026, 4, 15));
-    expect(bounds.startMs).toBe(Date.UTC(2026, 4, 15));
-    expect(bounds.endMs).toBe(Date.UTC(2026, 4, 16));
+    const bounds = getTimelineBounds([], new Date(2026, 4, 15).getTime());
+    expect(bounds.startMs).toBe(new Date(2026, 4, 15).getTime());
+    expect(bounds.endMs).toBe(new Date(2026, 4, 16).getTime());
   });
 });
 
 describe('getTimelineTicks', () => {
+  test.each([
+    {
+      transition: 'spring forward',
+      start: new Date(2026, 2, 7),
+      end: new Date(2026, 2, 10),
+      offsets: [300, 240],
+      labels: ['Mar 7', 'Mar 8', 'Mar 9'],
+      elapsedHours: [0, 24, 47],
+      totalHours: 71,
+    },
+    {
+      transition: 'fall back',
+      start: new Date(2026, 9, 31),
+      end: new Date(2026, 10, 3),
+      offsets: [240, 300],
+      labels: ['Oct 31', 'Nov 1', 'Nov 2'],
+      elapsedHours: [0, 24, 49],
+      totalHours: 73,
+    },
+  ])(
+    'keeps daily labels on local midnight across $transition',
+    ({ start, end, offsets, labels, elapsedHours, totalHours }) => {
+      // Guard against silently running this regression test in UTC.
+      expect([start.getTimezoneOffset(), end.getTimezoneOffset()]).toEqual(offsets);
+      expect(end.getTime() - start.getTime()).toBe(totalHours * 60 * 60 * 1000);
+
+      const ticks = getTimelineTicks(start.getTime(), end.getTime(), 'day');
+      expect(ticks.map(tick => tick.label)).toEqual(labels);
+      ticks.forEach((tick, index) => {
+        expect(tick.leftPercent).toBeCloseTo((elapsedHours[index] / totalHours) * 100);
+      });
+    }
+  );
+
   test('gives one tick a day on a short axis, named for the day', () => {
-    const ticks = getTimelineTicks(Date.UTC(2026, 7, 23), Date.UTC(2026, 7, 28), 'day');
+    const ticks = getTimelineTicks(
+      new Date(2026, 7, 23).getTime(),
+      new Date(2026, 7, 28).getTime(),
+      'day'
+    );
     expect(ticks).toHaveLength(5);
     expect(ticks[0].leftPercent).toBe(0);
     ticks.forEach(tick => expect(tick.label).toMatch(/^\w{3} \d{1,2}$/));
   });
 
   test('gives one tick a month on a long axis, named for the month', () => {
-    const ticks = getTimelineTicks(Date.UTC(2026, 2, 1), Date.UTC(2026, 6, 1), 'month');
+    const ticks = getTimelineTicks(
+      new Date(2026, 2, 1).getTime(),
+      new Date(2026, 6, 1).getTime(),
+      'month'
+    );
     expect(ticks).toHaveLength(4);
     ticks.forEach(tick => expect(tick.label).toMatch(/^\w{3}$/));
   });
 
   test('thins out labels rather than crowding them', () => {
-    const ticks = getTimelineTicks(Date.UTC(2026, 7, 1), Date.UTC(2026, 7, 22), 'day');
+    const ticks = getTimelineTicks(
+      new Date(2026, 7, 1).getTime(),
+      new Date(2026, 7, 22).getTime(),
+      'day'
+    );
     expect(ticks.length).toBeLessThanOrEqual(8);
   });
 
   test('marks January so the UI can show the year turning over', () => {
-    const ticks = getTimelineTicks(Date.UTC(2026, 10, 1), Date.UTC(2027, 1, 1), 'month');
+    const ticks = getTimelineTicks(
+      new Date(2026, 10, 1).getTime(),
+      new Date(2027, 1, 1).getTime(),
+      'month'
+    );
     expect(ticks.map(t => t.isYearStart)).toEqual([false, false, true]);
     expect(ticks[2].year).toBe(2027);
   });
 
   test('returns nothing for an empty range', () => {
-    expect(getTimelineTicks(Date.UTC(2026, 2, 1), Date.UTC(2026, 2, 1), 'day')).toEqual([]);
+    expect(
+      getTimelineTicks(new Date(2026, 2, 1).getTime(), new Date(2026, 2, 1).getTime(), 'day')
+    ).toEqual([]);
   });
 });
 
@@ -179,6 +253,22 @@ describe('getBondLifecycleState', () => {
 });
 
 describe('getBondProgress', () => {
+  test('counts local calendar days across DST without changing block progress', () => {
+    const fallback = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
+    for (const [start, end, hours] of [
+      [new Date(2026, 2, 7), new Date(2026, 2, 9), 47],
+      [new Date(2026, 9, 31), new Date(2026, 10, 2), 49],
+    ] as const) {
+      expect(+end - +start).toBe(hours * 60 * 60 * 1000);
+      const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength, {
+        activationMs: +start,
+        nowMs: +end,
+        unlockMs: +end,
+      });
+      expect(progress).toEqual({ ...fallback, dayOfTerm: 2, termDays: 2 });
+    }
+  });
+
   test('counts scheduled intervals and days from the design example', () => {
     const progress = getBondProgress(schedule, 969_500, GENESIS.rewardCycleLength);
     expect(progress.elapsedDistributions).toBe(3);

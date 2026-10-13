@@ -31,6 +31,7 @@ jest.mock('../reward-estimate');
 jest.mock('../data', () => ({
   ...jest.requireActual('../data'),
   fetchBondsPage: jest.fn(),
+  fetchBondSchedule: jest.fn(),
   fetchBondRegistrations: jest.fn(),
   fetchBondRewards: jest.fn(),
   fetchBurnBlockTimes: jest.fn(),
@@ -56,6 +57,7 @@ const poxInfo = {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  jest.mocked(data.fetchBondSchedule).mockRejectedValue(new Error('No projection'));
   jest.mocked(data.fetchPoxInfo).mockResolvedValue(poxInfo);
   jest.mocked(data.fetchCurrentCycleBonds).mockResolvedValue([bond]);
   jest.mocked(data.fetchBondsPage).mockResolvedValue({ bonds: [bond], total: 1, nextCursor: null });
@@ -169,8 +171,68 @@ test('overview uses verified featured-bond details from the existing setup loade
   const result = await sections.bonds;
   await sections.stacking;
   expect(fetchFeaturedBond).toHaveBeenCalledWith(bond.index, 'testnet', undefined);
-  expect(result.bonds[0]).toBe(verified);
+  expect(result.bonds[0]).toEqual(verified);
   expect(result.bondsUnavailable).toBe(false);
+});
+
+test('loads immediate successors even when local estimates put them in the past', async () => {
+  const projected: data.ProjectedBond = {
+    index: bond.index + 1,
+    status: 'projected',
+    schedule: {
+      activation: { bitcoin_height: 12600, pox_cycle: 14, projected_time: 1792000000 },
+      unlock: { bitcoin_height: 23400, pox_cycle: 26, projected_time: 1799000000 },
+    },
+  };
+  const declared: data.Bond = {
+    ...bond,
+    index: bond.index + 2,
+    status: 'upcoming',
+    schedule: {
+      activation: { bitcoin_height: 14400, pox_cycle: 16, projected_time: 1793000000 },
+      unlock: { bitcoin_height: 25200, pox_cycle: 28, projected_time: 1800000000 },
+    },
+  };
+  jest
+    .mocked(data.fetchBondSchedule)
+    .mockResolvedValueOnce(projected)
+    .mockResolvedValueOnce(declared);
+  const sections = loadStakingOverview('testnet', 'https://api.example.test');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.projectedBonds).toEqual([
+    projected,
+    { index: declared.index, status: 'projected', schedule: declared.schedule },
+  ]);
+  expect(result.bonds).toHaveLength(1);
+  expect(result.bonds[0].index).toBe(bond.index);
+  expect(data.fetchBondSchedule).toHaveBeenCalledWith(
+    projected.index,
+    'testnet',
+    'https://api.example.test',
+    expect.any(AbortSignal)
+  );
+  expect(data.fetchBondSchedule).toHaveBeenCalledTimes(6);
+});
+
+test('detail loading preserves actual schedule dates supplied by the list', async () => {
+  jest.mocked(data.fetchBondsPage).mockResolvedValueOnce({
+    bonds: [
+      {
+        ...bond,
+        schedule: {
+          ...bond.schedule,
+          activation: { ...bond.schedule.activation, time: 1791505072 },
+        },
+      },
+    ],
+    total: 1,
+    nextCursor: null,
+  });
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bonds[0].schedule.activation.time).toBe(1791505072);
 });
 
 test('overview requests only the recent page while the summary includes older active bonds', async () => {
