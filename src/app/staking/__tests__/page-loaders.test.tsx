@@ -170,6 +170,38 @@ test('overview uses verified featured-bond details from the existing setup loade
   expect(result.bondsUnavailable).toBe(false);
 });
 
+test('overview includes active bonds from later API pages and requests their reward history', async () => {
+  const older = { ...bond, index: 2 };
+  jest
+    .mocked(data.fetchBondsPage)
+    .mockResolvedValueOnce({ bonds: [bond], total: 2, nextCursor: 'more' })
+    .mockResolvedValueOnce({ bonds: [older], total: 2, nextCursor: null });
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bonds.map(bond => bond.index)).toEqual([3, 2]);
+  expect(data.fetchBondsPage).toHaveBeenCalledWith('testnet', undefined, undefined, 'more');
+  expect(data.fetchBondRewards).toHaveBeenCalledWith(
+    [2],
+    'testnet',
+    undefined,
+    poxInfo.contract_id,
+    expect.any(Number)
+  );
+});
+
+test('a failed later bond page cannot become a misleading partial aggregate', async () => {
+  jest
+    .mocked(data.fetchBondsPage)
+    .mockResolvedValueOnce({ bonds: [bond], total: 2, nextCursor: 'more' })
+    .mockRejectedValueOnce(new Error('Later page unavailable'));
+  const sections = loadStakingOverview('testnet');
+  const result = await sections.bonds;
+  await sections.stacking;
+  expect(result.bondsUnavailable).toBe(true);
+  expect(result.bonds).toEqual([]);
+});
+
 test('bonds route follows opaque cursors and normalizes an out-of-range URL', async () => {
   jest
     .mocked(data.fetchBondsPage)

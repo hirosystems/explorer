@@ -106,17 +106,13 @@ export function StakingPageClient({
           <Stack gap={4}>
             <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
               <Text as="h2" textStyle="heading-xs">
-                Current bond
+                Active bonds
               </Text>
               <HowToParticipateButton />
             </Flex>
             <StakingStats
-              featuredBond={featuredBond}
-              rewardCycleLength={rewardCycleLength}
-              prepareCycleLength={prepareCycleLength}
-              currentBurnHeight={currentBurnHeight}
-              nowMs={nowMs}
-              rewardsByBond={rewarded?.byBondIndex}
+              bonds={bondsUnavailable ? undefined : bonds}
+              settlementsByBond={rewarded?.settlementsByBond}
             />
             <CurrentBond
               featuredBond={featuredBond}
