@@ -9,7 +9,6 @@ import { validateAssettId } from '@/common/utils/utils';
 import { OperationResponse } from '@stacks/blockchain-api-client';
 import {
   AddressBalanceResponse,
-  AddressNonces,
   AddressTransactionsListResponse,
   BnsNamesOwnByAddressResponse,
   BurnchainRewardsTotal,
@@ -20,6 +19,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import type { operations } from '@stacks/token-metadata-api-client/lib/generated/schema';
 
+type PrincipalNonces = OperationResponse['/extended/v3/principals/{principal}/nonces'];
 type StxBalanceResponse = OperationResponse['/extended/v2/addresses/{principal}/balances/stx'];
 type FtBalancesResponse = OperationResponse['/extended/v2/addresses/{principal}/balances/ft'];
 type AddressTransactionsResponse =
@@ -111,16 +111,19 @@ export async function fetchAddressBalances(
 export async function fetchAddressLatestNonce(
   apiUrl: string,
   principal: string
-): Promise<AddressNonces> {
-  const response = await stacksAPIFetch(`${apiUrl}/extended/v1/address/${principal}/nonces`, {
-    cache: 'default',
-    next: {
-      revalidate: ADDRESS_LATEST_NONCE_REVALIDATION_TIMEOUT_IN_SECONDS,
-      tags: [getAddressLatestNonceTag(principal)],
-    },
-  });
+): Promise<PrincipalNonces> {
+  const response = await stacksAPIFetch(
+    `${apiUrl}/extended/v3/principals/${encodeURIComponent(principal)}/nonces`,
+    {
+      cache: 'default',
+      next: {
+        revalidate: ADDRESS_LATEST_NONCE_REVALIDATION_TIMEOUT_IN_SECONDS,
+        tags: [getAddressLatestNonceTag(principal)],
+      },
+    }
+  );
 
-  const nonceResponse: AddressNonces = await response.json();
+  const nonceResponse: PrincipalNonces = await response.json();
   return nonceResponse;
 }
 

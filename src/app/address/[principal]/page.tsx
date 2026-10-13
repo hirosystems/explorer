@@ -15,7 +15,6 @@ import { getApiUrl } from '@/common/utils/network-utils';
 
 import {
   AddressBalanceResponse,
-  AddressNonces,
   BnsNamesOwnByAddressResponse,
   BurnchainRewardsTotal,
   // TODO: Temporarily disabled - re-enable when API performance is fixed
@@ -27,6 +26,7 @@ import { AddressIdPageDataProvider } from './AddressIdPageContext';
 import AddressPage from './PageClient';
 import {
   CompressedPoxInfo,
+  PrincipalNonces,
   compressPoxInfo,
   fetchAddressBNSNames,
   fetchAddressBalances,
@@ -59,7 +59,7 @@ export default async function Page(props: {
     btcPrice: 0,
   };
   let initialAddressBalancesData: AddressBalanceResponse | undefined;
-  let initialAddressLatestNonceData: AddressNonces | undefined;
+  let initialAddressLatestNonceData: PrincipalNonces | undefined;
   let initialAddressBNSNamesData: BnsNamesOwnByAddressResponse | undefined;
   let initialBurnChainRewardsData: BurnchainRewardsTotal | undefined;
   let initialPoxInfoData: CompressedPoxInfo | undefined;
