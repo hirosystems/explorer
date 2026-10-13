@@ -8,6 +8,7 @@ import {
   fetchBondRewards,
   fetchBondsPage,
   fetchBurnBlockTimes,
+  fetchCurrentCycleBonds,
   fetchCycleCalculationHeights,
   fetchCycleRewards,
   fetchPoxCycles,
@@ -50,25 +51,33 @@ export function loadStakingOverview(chain: string, api?: string) {
 
 async function fetchOverviewBonds(chain: string, api?: string) {
   let page = await fetchBondsPage(chain, api);
+  const expectedTotal = page.total;
   const bonds = new Map(page.bonds.map(bond => [bond.index, bond]));
   const seenCursors = new Set<string>();
   while (page.nextCursor !== null) {
     const cursor = page.nextCursor;
-    if (seenCursors.has(cursor)) throw new Error('Bond pagination did not advance');
+    if (bonds.size === 0 || bonds.size >= expectedTotal || seenCursors.has(cursor)) {
+      throw new Error('Bond pagination did not advance');
+    }
     seenCursors.add(cursor);
     page = await fetchBondsPage(chain, api, undefined, cursor);
+    if (page.total !== expectedTotal) throw new Error('Bond total changed during pagination');
+    const previousCount = bonds.size;
     for (const bond of page.bonds) {
       if (!bonds.has(bond.index)) bonds.set(bond.index, bond);
     }
+    if (bonds.size === previousCount) throw new Error('Bond pagination did not advance');
   }
+  if (bonds.size !== expectedTotal) throw new Error('Incomplete bond list');
   return Array.from(bonds.values()).sort((a, b) => b.index - a.index);
 }
 
 async function loadOverviewBase(chain: string, api?: string) {
   const nowMs = Date.now();
-  const [bondsResult, poxResult] = await Promise.allSettled([
+  const [bondsResult, poxResult, activeResult] = await Promise.allSettled([
     fetchOverviewBonds(chain, api),
     fetchPoxInfo(chain, api),
+    fetchCurrentCycleBonds(chain, api),
   ]);
   const bonds = handleSettledResult(bondsResult, 'Staking page: fetch bonds');
   const poxInfo = handleSettledResult(poxResult, 'Staking page: fetch pox info');
@@ -76,6 +85,7 @@ async function loadOverviewBase(chain: string, api?: string) {
     rewardHistoryNetwork: { chain, api },
     bonds: bonds ?? [],
     bondsUnavailable: bonds === undefined,
+    activeBonds: handleSettledResult(activeResult, 'Staking page: current-cycle bonds'),
     poxInfo,
     nowMs,
     currentBurnHeight: poxInfo?.current_burnchain_block_height ?? 0,
@@ -98,12 +108,10 @@ async function loadBondsOverview(
   const data = await base;
   const { bonds, poxInfo, currentBurnHeight, rewardCycleLength, prepareCycleLength } = data;
   const featuredIndex = getFeaturedBondIndex(bonds);
-  const activeIndexes = bonds
-    .filter(bond => bond.index !== featuredIndex && bond.status === 'active')
-    .map(bond => bond.index);
+  const activeIndexes = data.activeBonds?.map(bond => bond.index) ?? [];
   const timelineBonds = getTimelineBondWindow(bonds, featuredIndex, currentBurnHeight).onChain;
   const historicalIndexes = timelineBonds
-    .filter(bond => bond.index !== featuredIndex && bond.status !== 'active')
+    .filter(bond => bond.index !== featuredIndex && !activeIndexes.includes(bond.index))
     .map(bond => bond.index);
   const heights = timelineBonds.flatMap(bond =>
     Object.values(
@@ -117,9 +125,9 @@ async function loadBondsOverview(
   );
   const [rewardsResult, historicalResult, enrollmentsResult, detailResult, timesResult] =
     await Promise.allSettled([
-      activeIndexes.length
+      activeIndexes.some(index => index !== featuredIndex)
         ? fetchBondRewards(
-            activeIndexes,
+            activeIndexes.filter(index => index !== featuredIndex),
             chain,
             api,
             poxInfo?.contract_id,

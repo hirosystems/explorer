@@ -1,5 +1,5 @@
 import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { AnnotatedValue } from '../AnnotatedValue';
@@ -68,6 +68,38 @@ test('missing PoX does not duplicate the bond fallback in the stacking section',
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
 });
 
+test.each([
+  {
+    activeBonds: [bondFixture],
+    bondsUnavailable: true,
+    expected: 'Simple average · across 1 active bond',
+  },
+  {
+    activeBonds: undefined,
+    bondsUnavailable: false,
+    expected: 'Active bond data unavailable',
+  },
+  { activeBonds: [], bondsUnavailable: false, expected: 'No active bonds' },
+])('headline uses cycle membership independently of historical availability: %j', props => {
+  renderWithChakraProviders(
+    <StakingPageClient
+      {...overviewWithoutPox}
+      {...props}
+      bonds={props.bondsUnavailable ? [] : [bondFixture]}
+      poxInfo={{ current_cycle: { id: 10 } } as NonNullable<StakingPageData['poxInfo']>}
+      rewardCycleLength={900}
+      prepareCycleLength={100}
+      currentBurnHeight={9500}
+      section="bonds"
+    />
+  );
+  expect(screen.getAllByText(props.expected).length).toBeGreaterThan(0);
+  if (props.activeBonds === undefined) {
+    const summary = screen.getByLabelText('BTC bonded').parentElement!;
+    expect(within(summary).getAllByText('N/A')).toHaveLength(4);
+  }
+});
+
 test('value annotations have a named, keyboard-accessible help trigger', async () => {
   const user = userEvent.setup();
   const note = 'Complete reward allocation history is unavailable.';
@@ -127,7 +159,7 @@ test('a server-paginated bond table displays the supplied page without slicing i
 test('active-bond stats preserve missing balances rather than showing zero or crashing', () => {
   renderWithChakraProviders(
     <StakingStats
-      bonds={[
+      activeBonds={[
         {
           ...bondFixture,
           balances: { ...bondFixture.balances, locked: { btc: '', stx: 'invalid' } },
@@ -138,7 +170,6 @@ test('active-bond stats preserve missing balances rather than showing zero or cr
   expect(screen.getAllByText('N/A')).toHaveLength(3);
   expect(screen.getByText('Bond balance unavailable')).toBeInTheDocument();
   expect(screen.getByText(/Paired balance unavailable/)).toBeInTheDocument();
-  expect(screen.queryByText(/unlocks/)).not.toBeInTheDocument();
 });
 
 test('an invalid enrollment prevents a misleading partial total', () => {

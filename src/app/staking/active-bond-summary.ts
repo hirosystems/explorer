@@ -50,10 +50,10 @@ function getLastDistribution(
 }
 
 export function getActiveBondSummary(
-  bonds: Bond[],
+  active: Bond[],
   settlementsByBond?: BondRewards['settlementsByBond']
 ) {
-  const active = bonds.filter(bond => bond.status === 'active');
+  // Membership comes from the current cycle, independently of bond-detail status snapshots.
   const lastDistribution = getLastDistribution(active, settlementsByBond);
   const rates = active.map(bond => bond.parameters?.target_rate_bps);
   const averageTargetRateBps =

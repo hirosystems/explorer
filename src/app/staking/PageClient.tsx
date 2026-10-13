@@ -17,6 +17,7 @@ import type { CurrentCycleEstimate } from './reward-estimate';
 
 export interface StakingPageData {
   bonds: Bond[];
+  activeBonds?: Bond[];
   rewardHistoryNetwork?: RewardHistoryNetwork;
   bondsUnavailable?: boolean;
   poxInfo?: PoxInfo;
@@ -38,6 +39,7 @@ export interface StakingPageData {
 
 export function StakingPageClient({
   bonds,
+  activeBonds,
   rewardHistoryNetwork,
   bondsUnavailable,
   poxInfo,
@@ -80,7 +82,7 @@ export function StakingPageClient({
     ) : null;
   return (
     <Stack gap={{ base: 10, lg: 12 }}>
-      {bondsUnavailable || !poxInfo ? (
+      {bondsUnavailable || activeBonds === undefined || !poxInfo ? (
         <Text role="status" textStyle="text-regular-sm" color="textSecondary">
           Some staking data could not be loaded. Refresh the page to try again.
         </Text>
@@ -115,7 +117,7 @@ export function StakingPageClient({
               <HowToParticipateButton />
             </Flex>
             <StakingStats
-              bonds={bondsUnavailable ? undefined : bonds}
+              activeBonds={activeBonds}
               settlementsByBond={rewarded?.settlementsByBond}
             />
             <CurrentBond

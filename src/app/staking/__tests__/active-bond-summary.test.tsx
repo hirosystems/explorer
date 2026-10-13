@@ -19,9 +19,10 @@ const second: Bond = {
   parameters: { ...fixture.parameters, target_rate_bps: 400 },
   balances: { ...fixture.balances, locked: { btc: '900000000', stx: '8000000' } },
 };
+const latestTimestampMs = Date.parse('2026-10-08T01:30:00Z');
 const distribution = (calculationHeight: number, rewardedSats: bigint | undefined) => ({
   calculationHeight,
-  timestampMs: calculationHeight * 1000,
+  timestampMs: latestTimestampMs + (calculationHeight - 200) * 60 * 60 * 1000,
   rewardedSats,
 });
 const rewards = {
@@ -29,26 +30,19 @@ const rewards = {
   2: [distribution(200, BigInt(20000))],
 };
 
-test('averages active targets equally and sums only active balances and credited rewards', () => {
+test('averages cycle-selected targets and ignores rewards outside that membership', () => {
   expect(
-    getActiveBondSummary(
-      [
-        first,
-        second,
-        { ...first, index: 3, status: 'upcoming' },
-        { ...first, index: 4, status: 'unlocked' },
-        { ...first, index: 5, status: 'closed' },
-        { ...first, index: 6, status: 'projected' },
-      ],
-      rewards
-    )
+    getActiveBondSummary([first, { ...second, status: 'upcoming' }], {
+      ...rewards,
+      5: [distribution(300, BigInt(90000))],
+    })
   ).toEqual({
     count: 2,
     averageTargetRateBps: 300,
     bondedSats: BigInt(1000000000),
     pairedMicroStx: BigInt(10000000),
     lastDistributionSats: BigInt(30000),
-    lastDistributionTimestampMs: 200000,
+    lastDistributionTimestampMs: latestTimestampMs,
   });
 });
 
@@ -100,7 +94,7 @@ test('preserves exact base-unit totals beyond the safe integer range', () => {
 });
 
 test('zero active bonds have zero totals and no average yield', () => {
-  expect(getActiveBondSummary([{ ...first, status: 'upcoming' }])).toEqual({
+  expect(getActiveBondSummary([])).toEqual({
     count: 0,
     averageTargetRateBps: undefined,
     bondedSats: BigInt(0),
@@ -110,8 +104,10 @@ test('zero active bonds have zero totals and no average yield', () => {
   });
 });
 
-test('shows aggregate figures and omits the previous single-bond pairing and schedule captions', () => {
-  renderWithChakraProviders(<StakingStats bonds={[first, second]} settlementsByBond={rewards} />);
+test('renders the active summary and recorded distribution date', () => {
+  renderWithChakraProviders(
+    <StakingStats activeBonds={[first, second]} settlementsByBond={rewards} />
+  );
   expect(screen.getByText('3.00%')).toBeInTheDocument();
   expect(screen.getByText('Simple average · across 2 active bonds')).toBeInTheDocument();
   expect(within(screen.getByLabelText('BTC bonded')).getByText('10')).toBeInTheDocument();
@@ -120,17 +116,8 @@ test('shows aggregate figures and omits the previous single-bond pairing and sch
   ).toBeInTheDocument();
   expect(within(screen.getByLabelText('STX paired')).getByText('10')).toBeInTheDocument();
   expect(
-    screen.getByText(new RegExp(`${formatDateShort(200000)} · Across 2 active bonds`))
+    screen.getByText(new RegExp(`${formatDateShort(latestTimestampMs)} · Across 2 active bonds`))
   ).toBeInTheDocument();
-  expect(screen.queryByText('STX pairing')).not.toBeInTheDocument();
-  expect(screen.queryByText(/Next scheduled/)).not.toBeInTheDocument();
-  expect(screen.queryByText(/unlocks/)).not.toBeInTheDocument();
-});
-
-test('an unavailable bond list never displays zero totals', () => {
-  renderWithChakraProviders(<StakingStats />);
-  expect(screen.getAllByText('N/A')).toHaveLength(4);
-  expect(screen.getByText('Active bond data unavailable')).toBeInTheDocument();
 });
 
 test('uses a shared latest distribution, not each bond’s most recent payout', () => {
@@ -140,15 +127,6 @@ test('uses a shared latest distribution, not each bond’s most recent payout', 
       2: [distribution(200, BigInt(20000))],
     }).lastDistributionSats
   ).toBe(BigInt(20000));
-});
-
-test('ignores newer distributions belonging to inactive bonds', () => {
-  expect(
-    getActiveBondSummary([first, { ...second, status: 'closed' }], {
-      1: rewards[1],
-      2: [distribution(300, BigInt(90000))],
-    }).lastDistributionSats
-  ).toBe(BigInt(10000));
 });
 
 test('a new active bond with no distributions contributes zero', () => {
@@ -181,26 +159,4 @@ test('counts matching duplicate calculation records once, but rejects conflictin
       1: [...rewards[1], distribution(200, BigInt(20000))],
     }).lastDistributionSats
   ).toBeUndefined();
-});
-
-test('uses the recorded date from the same distribution as the headline amount', () => {
-  const timestampMs = Date.parse('2026-10-08T01:30:00Z');
-  const settlements = {
-    1: [
-      { ...distribution(100, BigInt(90000)), timestampMs: timestampMs - 604800000 },
-      { ...distribution(200, BigInt(10000)), timestampMs },
-    ],
-    2: [],
-  };
-  expect(getActiveBondSummary([first, second], settlements).lastDistributionTimestampMs).toBe(
-    timestampMs
-  );
-  renderWithChakraProviders(
-    <StakingStats bonds={[first, second]} settlementsByBond={settlements} />
-  );
-  expect(
-    within(screen.getByLabelText('Latest reward distribution')).getByText(
-      new RegExp(`${formatDateShort(timestampMs)} · Across 2 active bonds`)
-    )
-  ).toBeInTheDocument();
 });

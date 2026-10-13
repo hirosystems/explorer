@@ -60,14 +60,15 @@ export function HowToParticipateButton(props: ButtonProps) {
 }
 
 export function StakingStats({
-  bonds,
+  activeBonds,
   settlementsByBond,
 }: {
-  bonds?: Bond[];
+  activeBonds?: Bond[];
   settlementsByBond?: BondRewards['settlementsByBond'];
 }) {
   const { stxPrice, btcPrice } = useGlobalContext().tokenPrice;
-  const summary = bonds === undefined ? undefined : getActiveBondSummary(bonds, settlementsByBond);
+  const summary =
+    activeBonds === undefined ? undefined : getActiveBondSummary(activeBonds, settlementsByBond);
   const {
     averageTargetRateBps,
     bondedSats,

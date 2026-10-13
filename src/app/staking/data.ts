@@ -96,11 +96,21 @@ export async function fetchBondsPage(
     throw new Error(`Failed to fetch bonds: ${response.status}`);
   }
   const data: CursorPaginated<Bond> = await response.json();
-  const bonds = [...(data.results ?? [])].sort((a, b) => b.index - a.index);
+  if (
+    !Array.isArray(data?.results) ||
+    !Number.isSafeInteger(data.total) ||
+    data.total < 0 ||
+    (data.cursor?.next !== null &&
+      (typeof data.cursor?.next !== 'string' || !data.cursor.next.length)) ||
+    data.results.some(bond => !Number.isSafeInteger(bond?.index) || bond.index < 1)
+  ) {
+    throw new Error('Invalid bonds page');
+  }
+  const bonds = [...data.results].sort((a, b) => b.index - a.index);
   return {
     bonds,
-    total: data.total ?? bonds.length,
-    nextCursor: data.cursor?.next ?? null,
+    total: data.total,
+    nextCursor: data.cursor.next,
   };
 }
 
@@ -122,6 +132,37 @@ export async function fetchBond(
   );
   if (!response.ok) throw new Error(`Failed to fetch bond ${index}: ${response.status}`);
   return response.json();
+}
+
+export async function fetchCurrentCycleBonds(chain: string, api?: string): Promise<Bond[]> {
+  const response = await stacksAPIFetch(
+    `${getApiUrl(chain, api)}/extended/v3/staking/cycles/current`,
+    {
+      redirect: 'error',
+      cache: 'default',
+      next: { revalidate: REVALIDATE_SECONDS, tags: ['staking-current-cycle'] },
+    }
+  );
+  if (!response.ok) throw new Error(`Failed to fetch current staking cycle: ${response.status}`);
+  const cycle = await response.json();
+  const indexes: number[] = cycle?.bonds?.indexes;
+  if (
+    !Array.isArray(indexes) ||
+    !Number.isSafeInteger(cycle.bonds.total) ||
+    cycle.bonds.total !== indexes.length ||
+    indexes.some(index => !Number.isSafeInteger(index) || index < 1) ||
+    new Set(indexes).size !== indexes.length
+  ) {
+    throw new Error('Invalid current-cycle bond indexes');
+  }
+  // The cycle selects membership. Never return a partial set if a detail request fails.
+  return Promise.all(
+    indexes.map(async index => {
+      const bond = await fetchBond(index, chain, api);
+      if (bond?.index !== index) throw new Error(`Invalid details for bond ${index}`);
+      return bond;
+    })
+  );
 }
 
 export async function fetchHighestBondIndex(
