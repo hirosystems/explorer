@@ -24,7 +24,7 @@ enum StxTokenTab {
 }
 
 export const StxTokenTabs = () => {
-  const { holders } = useTokenIdPageData();
+  const { holders, supply } = useTokenIdPageData();
 
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
@@ -41,7 +41,7 @@ export const StxTokenTabs = () => {
   const deepLinkTabOnValueChange = useDeepLinkTabOnValueChange<StxTokenTab>({ setSelectedTab });
 
   const totalHolders = holders?.total || 0;
-  const totalSupply = holders?.total_supply ? Number(holders.total_supply) : 0;
+  const totalSupply = supply ? Number(supply) : 0;
 
   return (
     <TabsRoot

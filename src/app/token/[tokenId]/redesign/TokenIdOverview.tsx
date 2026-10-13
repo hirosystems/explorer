@@ -89,12 +89,12 @@ const NO_DATA = (
 );
 
 export function MarketDataCard() {
-  const { tokenData, holders } = useTokenIdPageData();
+  const { tokenData, holders, supply } = useTokenIdPageData();
 
   const circulatingSupply =
-    holders?.total_supply && tokenData?.decimals !== undefined
+    supply && tokenData?.decimals !== undefined
       ? formatNumber(
-          getFtDecimalAdjustedBalance(holders?.total_supply, tokenData?.decimals),
+          getFtDecimalAdjustedBalance(supply, tokenData?.decimals),
           0,
           tokenData?.decimals
         )

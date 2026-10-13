@@ -3,8 +3,6 @@ import { isSBTC } from '@/app/tokens/utils';
 import { NetworkModes } from '@/common/types/network';
 import { logError } from '@/common/utils/error-utils';
 
-import { FungibleTokenHolderList } from '@stacks/stacks-blockchain-api-types';
-
 import {
   DeveloperDataRedesign,
   MergedTokenData,
@@ -119,7 +117,7 @@ const safeGet = <T>(primary: T | undefined, fallback?: T | undefined): T | undef
 export function mergeTokenData(
   tokenDataFromStacksApi: TokenDataFromStacksApi | undefined,
   tokenDataFromLunarCrush: TokenDataFromLunarCrush | undefined,
-  holders: FungibleTokenHolderList | undefined,
+  supply: string | undefined,
   tokenId: string,
   networkMode: NetworkModes | undefined
 ): MergedTokenData {
@@ -133,9 +131,9 @@ export function mergeTokenData(
     ? parseFloat(tokenDataFromStacksApi?.totalSupply)
     : undefined;
 
-  // Special handling for circulating supply for SBTC. If it's SBTC, use the holders total supply (aka circulating supply), otherwise use the circulating supply from LunarCrush first, then fallback to the circulating supply from Stacks API
+  // Special handling for circulating supply for SBTC. If it's SBTC, use the on-chain total supply (aka circulating supply), otherwise use the circulating supply from LunarCrush first, then fallback to the circulating supply from Stacks API
   const isSbtc = isSBTC(tokenId, networkMode);
-  const circulatingSupplyFromStacksApi = parseFloat(holders?.total_supply || '0');
+  const circulatingSupplyFromStacksApi = parseFloat(supply || '0');
   const circulatingSupply = isSbtc
     ? safeGet(circulatingSupplyFromStacksApi, tokenDataFromLunarCrush?.circulatingSupply)
     : safeGet(tokenDataFromLunarCrush?.circulatingSupply, circulatingSupplyFromStacksApi);

@@ -16,6 +16,7 @@ export interface TablePaginationControlsProps {
   totalRows: number; // the total number of rows
   onPageChange: (page: PaginationState) => void; // the callback to handle page indexchange
   onPageSizeChange?: (page: PaginationState) => void; // the callback to handle page size change
+  previousNextOnly?: boolean; // cursor-paginated data can only move one page at a time
 }
 
 export function TablePaginationControls({
@@ -23,6 +24,7 @@ export function TablePaginationControls({
   pageSize,
   totalRows,
   onPageChange,
+  previousNextOnly = false,
 }: TablePaginationControlsProps) {
   const [inputValue, setInputValue] = useState<string>('');
   const pageCount = Math.ceil(totalRows / pageSize);
@@ -92,30 +94,36 @@ export function TablePaginationControls({
         >
           <HStack gap={{ base: 1, lg: 4 }}>
             <PaginationPrevTrigger aria-label="Go to previous page" />
-            <HStack gap={1}>
-              <PaginationItems
-                itemProps={{
-                  px: 1,
-                  minW: 8,
-                  minH: 8,
-                  maxH: 8,
-                  border: 'none',
-                }}
-                ellipsisProps={{
-                  px: 1,
-                  minW: 8,
-                  minH: 8,
-                  maxH: 8,
-                  border: 'none',
-                }}
-              />
-            </HStack>
+            {previousNextOnly ? (
+              <Text fontSize="xs" color="textTertiary" whiteSpace="nowrap">
+                Page {pageIndex + 1} of {numPages}
+              </Text>
+            ) : (
+              <HStack gap={1}>
+                <PaginationItems
+                  itemProps={{
+                    px: 1,
+                    minW: 8,
+                    minH: 8,
+                    maxH: 8,
+                    border: 'none',
+                  }}
+                  ellipsisProps={{
+                    px: 1,
+                    minW: 8,
+                    minH: 8,
+                    maxH: 8,
+                    border: 'none',
+                  }}
+                />
+              </HStack>
+            )}
             <PaginationNextTrigger aria-label="Go to next page" />
           </HStack>
         </PaginationRoot>
       </Flex>
 
-      {numPages > 5 && (
+      {numPages > 5 && !previousNextOnly && (
         <>
           <Separator
             orientation={{ base: 'horizontal', lg: 'vertical' }}

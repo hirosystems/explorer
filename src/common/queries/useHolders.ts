@@ -1,75 +1,71 @@
 import { callApiWithErrorHandling } from '@/api/callApiWithErrorHandling';
 import { useApiClient } from '@/api/useApiClient';
-import { TEN_MINUTES } from '@/common/queries/query-stale-time';
-import { getNextPageParam } from '@/common/utils/utils';
-import {
-  InfiniteData,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryResult,
-  useQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query';
-
-import { FungibleTokenHolderList } from '@stacks/stacks-blockchain-api-types';
+import { STX_ASSET_ID } from '@/app/stx/consts';
+import { FtHolderListResponse } from '@/common/types/tokens-v3';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 const DEFAULT_HOLDER_LIMIT = 20;
 const HOLDERS_QUERY_KEY = 'holders';
+const TOKEN_SUPPLY_QUERY_KEY = 'token-supply';
 
-export function getHoldersQueryKey(assetId: string, limit?: number, offset?: number) {
-  return [HOLDERS_QUERY_KEY, assetId, limit, offset];
+export function getHoldersQueryKey(assetId: string, limit?: number, cursor?: string) {
+  return [HOLDERS_QUERY_KEY, assetId, limit, cursor];
 }
 
+/**
+ * Holders of a fungible token, or of STX when `assetId` is `stx`. Cursor-paginated: pass the
+ * previous page's `cursor.next` to get the following page.
+ */
 export function useHolders(
   assetId: string,
   limit = DEFAULT_HOLDER_LIMIT,
-  offset = 0,
+  cursor?: string,
   options: any = {}
-): UseQueryResult<FungibleTokenHolderList> {
+): UseQueryResult<FtHolderListResponse> {
   const apiClient = useApiClient();
 
-  return useQuery<FungibleTokenHolderList>({
-    queryKey: getHoldersQueryKey(assetId, limit, offset),
+  return useQuery<FtHolderListResponse>({
+    queryKey: getHoldersQueryKey(assetId, limit, cursor),
     queryFn: async () => {
       if (!assetId) return undefined;
-      return await callApiWithErrorHandling(apiClient, `/extended/v1/tokens/ft/{token}/holders`, {
-        params: {
-          path: { token: assetId },
-          query: {
-            limit,
-            offset,
-          },
-        },
-      });
+      const query = { limit, ...(cursor && { cursor }) };
+      if (assetId === STX_ASSET_ID) {
+        return await callApiWithErrorHandling(apiClient, '/extended/v3/tokens/stx/holders', {
+          params: { query },
+        });
+      }
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v3/tokens/ft/{asset_identifier}/holders',
+        { params: { path: { asset_identifier: assetId }, query } }
+      );
     },
     enabled: !!assetId,
     ...options,
   });
 }
 
-export function useSuspenseFtHolders(
-  assetId: string,
-  options: any = {}
-): UseSuspenseInfiniteQueryResult<InfiniteData<FungibleTokenHolderList>> {
+/**
+ * Total supply of a fungible token, or of STX when `assetId` is `stx`, as a string-quoted integer
+ * in the token's base units.
+ */
+export function useTokenSupply(assetId: string, options: any = {}): UseQueryResult<string> {
   const apiClient = useApiClient();
 
-  return useSuspenseInfiniteQuery({
-    queryKey: [HOLDERS_QUERY_KEY, assetId],
-    queryFn: ({ pageParam }: { pageParam: number }) => {
-      const limit = options.limit || DEFAULT_HOLDER_LIMIT;
-      const offset = pageParam;
-      return callApiWithErrorHandling(apiClient, `/extended/v1/tokens/ft/{token}/holders`, {
-        params: {
-          path: { token: assetId },
-          query: {
-            limit,
-            offset,
-          },
-        },
-      });
+  return useQuery<string>({
+    queryKey: [TOKEN_SUPPLY_QUERY_KEY, assetId],
+    queryFn: async () => {
+      if (assetId === STX_ASSET_ID) {
+        const supply = await callApiWithErrorHandling(apiClient, '/extended/v3/tokens/stx/supply');
+        return supply.total;
+      }
+      const supply = await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v3/tokens/ft/{asset_identifier}/supply',
+        { params: { path: { asset_identifier: assetId } } }
+      );
+      return supply.total;
     },
-    getNextPageParam,
-    initialPageParam: 0,
-    staleTime: TEN_MINUTES,
     enabled: !!assetId,
     ...options,
   });

@@ -3,11 +3,10 @@
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { useContractById } from '@/common/queries/useContractById';
 import { useFtMetadata } from '@/common/queries/useFtMetadata';
-import { useHolders } from '@/common/queries/useHolders';
+import { useHolders, useTokenSupply } from '@/common/queries/useHolders';
+import { FtHolderListResponse } from '@/common/types/tokens-v3';
 import { CompressedTxAndMempoolTxTableData } from '@/common/utils/transaction-utils';
 import { ReactNode, createContext, useContext, useMemo } from 'react';
-
-import { FungibleTokenHolderList } from '@stacks/stacks-blockchain-api-types';
 
 import { MergedTokenData } from '../../types';
 
@@ -22,7 +21,9 @@ interface TokenIdPageDataContextType {
   txBlockTime: number | undefined;
   txId: string | undefined;
   assetId: string | undefined;
-  holders: FungibleTokenHolderList | undefined;
+  holders: FtHolderListResponse | undefined;
+  // On-chain total supply in the token's base units, as a string-quoted integer.
+  supply: string | undefined;
   numFunctions: number | undefined;
   isLoadingTokenData: boolean;
 }
@@ -45,6 +46,7 @@ export function TokenIdPageDataProvider({
   txId,
   assetId: ssrAssetId,
   holders: ssrHolders,
+  supply: ssrSupply,
   numFunctions: ssrNumFunctions,
 }: TokenIdPageDataProviderProps) {
   const { data: contractInfo, isLoading: isLoadingContract } = useContractById(tokenId, {
@@ -60,21 +62,21 @@ export function TokenIdPageDataProvider({
 
   const needsMetadataFetch = !ssrTokenData || typeof ssrTokenData.decimals !== 'number';
 
-  const needsTotalSupplyFetch =
-    typeof ssrTokenData?.totalSupply !== 'number' && !ssrHolders?.total_supply;
+  const needsSupplyFetch = !ssrSupply;
 
   const { data: ftMetadata, isLoading: isLoadingFtMetadata } = useFtMetadata(tokenId, {
     enabled: needsMetadataFetch,
   });
 
-  const { data: clientHoldersData, isLoading: isLoadingHolders } = useHolders(
-    clientAssetId || '',
-    1,
-    0,
-    {
-      enabled: needsTotalSupplyFetch && !!clientAssetId,
-    }
-  );
+  const { data: clientHoldersData } = useHolders(clientAssetId || '', 1, undefined, {
+    enabled: !ssrHolders && !!clientAssetId,
+  });
+
+  const { data: clientSupply, isLoading: isLoadingSupply } = useTokenSupply(clientAssetId || '', {
+    enabled: needsSupplyFetch && !!clientAssetId,
+  });
+
+  const supply = ssrSupply ?? clientSupply;
 
   const clientNumFunctions = useMemo(() => {
     if (ssrNumFunctions !== undefined) return ssrNumFunctions;
@@ -84,10 +86,7 @@ export function TokenIdPageDataProvider({
   const tokenData = useMemo((): MergedTokenData | undefined => {
     const decimals = ssrTokenData?.decimals ?? ftMetadata?.decimals;
 
-    const totalSupplyRaw =
-      ssrTokenData?.totalSupply ?? ssrHolders?.total_supply ?? clientHoldersData?.total_supply;
-    const totalSupply =
-      typeof totalSupplyRaw === 'string' ? parseFloat(totalSupplyRaw) : totalSupplyRaw;
+    const totalSupply = ssrTokenData?.totalSupply ?? (supply ? parseFloat(supply) : undefined);
 
     return {
       ...ssrTokenData,
@@ -97,12 +96,15 @@ export function TokenIdPageDataProvider({
       decimals,
       totalSupply,
     };
-  }, [ssrTokenData, ftMetadata, ssrHolders, clientHoldersData]);
+  }, [ssrTokenData, ftMetadata, supply]);
 
   const isLoadingTokenData =
     (needsMetadataFetch && isLoadingFtMetadata) ||
     (!ssrAssetId && isLoadingContract) ||
-    (needsTotalSupplyFetch && !!clientAssetId && isLoadingHolders);
+    (typeof ssrTokenData?.totalSupply !== 'number' &&
+      needsSupplyFetch &&
+      !!clientAssetId &&
+      isLoadingSupply);
 
   const holders = ssrHolders || clientHoldersData;
 
@@ -116,6 +118,7 @@ export function TokenIdPageDataProvider({
     txId,
     assetId: clientAssetId,
     holders,
+    supply,
     numFunctions: clientNumFunctions,
     isLoadingTokenData,
   };

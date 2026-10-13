@@ -139,6 +139,7 @@ export type TableProps<T> = {
     totalRows: number;
     onPageChange: (pagination: PaginationState) => void;
     onPageSizeChange?: (pageSize: PaginationState) => void;
+    previousNextOnly?: boolean;
   };
   tableProps?: ChakraTableRootProps;
   emptyTableUi?: React.ReactElement;
@@ -566,6 +567,7 @@ export function Table<T>({
               totalRows={pagination.totalRows}
               onPageChange={pagination.onPageChange}
               onPageSizeChange={pagination.onPageSizeChange}
+              previousNextOnly={pagination.previousNextOnly}
             />
           )}
         </Stack>

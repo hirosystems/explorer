@@ -2,6 +2,7 @@ import { stacksAPIFetch, stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 import { LUNAR_CRUSH_API_KEY } from '@/common/constants/env';
 import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { LunarCrushCoinRedesign } from '@/common/types/lunarCrush';
+import { FtHolderListResponse, FtSupplyResponse } from '@/common/types/tokens-v3';
 import { logError } from '@/common/utils/error-utils';
 import { FT_BALANCES_PAGE_SIZE, fetchAllFtBalances } from '@/common/utils/ft-balances';
 import { validateAssettId } from '@/common/utils/utils';
@@ -12,7 +13,6 @@ import {
   AddressTransactionsListResponse,
   BnsNamesOwnByAddressResponse,
   BurnchainRewardsTotal,
-  FungibleTokenHolderList,
   MempoolTransaction,
   SmartContract,
   Transaction,
@@ -296,9 +296,8 @@ export async function fetchTx(
 export async function fetchHolders(
   apiUrl: string,
   assetId: string,
-  limit?: number,
-  offset?: number
-): Promise<FungibleTokenHolderList | undefined> {
+  limit?: number
+): Promise<FtHolderListResponse | undefined> {
   if (!validateAssettId(assetId)) {
     return undefined;
   }
@@ -309,16 +308,26 @@ export async function fetchHolders(
     params.append('limit', limit.toString());
   }
 
-  if (offset !== undefined) {
-    params.append('offset', offset.toString());
-  }
-
   const queryString = params.toString();
-  const url = queryString
-    ? `${apiUrl}/extended/v1/tokens/ft/${assetId}/holders?${queryString}`
-    : `${apiUrl}/extended/v1/tokens/ft/${assetId}/holders`;
+  const baseUrl = `${apiUrl}/extended/v3/tokens/ft/${encodeURIComponent(assetId)}/holders`;
+  const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
   const response = await stacksAPIFetch(url);
-  const holderList: FungibleTokenHolderList = await response.json();
+  const holderList: FtHolderListResponse = await response.json();
   return holderList;
+}
+
+export async function fetchFtSupply(
+  apiUrl: string,
+  assetId: string
+): Promise<FtSupplyResponse | undefined> {
+  if (!validateAssettId(assetId)) {
+    return undefined;
+  }
+
+  return stacksAPIFetchJson<FtSupplyResponse>(
+    `${apiUrl}/extended/v3/tokens/ft/${encodeURIComponent(assetId)}/supply`,
+    {},
+    'Failed to fetch token supply'
+  );
 }
