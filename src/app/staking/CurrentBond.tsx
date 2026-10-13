@@ -300,11 +300,13 @@ export function CurrentBond({
           <Stack gap={2}>
             <Flex justify="space-between" gap={3}>
               <Text textStyle="text-medium-sm">
-                {!hasValidDay
-                  ? 'Day unavailable'
-                  : hasStarted
-                    ? `Day ${Math.min(progress.dayOfTerm, progress.termDays)} of ${progress.termDays}`
-                    : 'Not yet started'}
+                <ClientOnly>
+                  {!hasValidDay
+                    ? 'Day unavailable'
+                    : hasStarted
+                      ? `Day ${Math.min(progress.dayOfTerm, progress.termDays)} of ${progress.termDays}`
+                      : 'Not yet started'}
+                </ClientOnly>
               </Text>
               <Text textStyle="text-regular-sm" color="textSecondary">
                 {Number.isFinite(elapsedPercentage)
