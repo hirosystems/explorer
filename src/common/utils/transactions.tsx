@@ -18,6 +18,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../constants/constants';
+import { TxStatus } from '../types/tx';
 import { getContractName, getFunctionName, microToStacksFormatted } from './utils';
 
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
@@ -88,8 +89,7 @@ export function getTxTypeColor(txType: string) {
   }
 }
 
-export function getTxStatusIcon(tx: Transaction | MempoolTransaction, isBold?: boolean) {
-  const txStatus = getTransactionStatus(tx);
+export function getTxStatusIcon(txStatus: TxStatus, isBold?: boolean) {
   if (txStatus === TransactionStatus.PENDING) {
     return <Clock {...(isBold ? { weight: 'bold' } : {})} />;
   }
@@ -121,8 +121,7 @@ export const TX_STATUS_ICON_COLORS = {
   default: 'iconError',
 };
 
-export function getTxStatusIconColor(tx: Transaction | MempoolTransaction) {
-  const txStatus = getTransactionStatus(tx);
+export function getTxStatusIconColor(txStatus: TxStatus) {
   const iconColor = TX_STATUS_ICON_COLORS[txStatus] || TX_STATUS_ICON_COLORS.default;
   return iconColor;
 }
@@ -137,8 +136,7 @@ export const TX_STATUS_BG_COLORS = {
   default: 'surfacePrimary',
 };
 
-export function getTxStatusBgColor(tx: Transaction | MempoolTransaction) {
-  const txStatus = getTransactionStatus(tx);
+export function getTxStatusBgColor(txStatus: TxStatus) {
   const bgColor = TX_STATUS_BG_COLORS[txStatus] || TX_STATUS_BG_COLORS.default;
   return bgColor;
 }
@@ -153,8 +151,7 @@ const TX_STATUS_LABELS = {
   default: 'Unknown',
 };
 
-export function getTxStatusLabel(tx: Transaction | MempoolTransaction) {
-  const txStatus = getTransactionStatus(tx);
+export function getTxStatusLabel(txStatus: TxStatus) {
   const label = TX_STATUS_LABELS[txStatus] || TX_STATUS_LABELS.default;
   return label;
 }

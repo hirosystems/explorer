@@ -1,14 +1,13 @@
 'use client';
 
+import { TxDetails } from '@/common/types/tx-v3';
 import { ReactNode, createContext, useContext } from 'react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TxIdPageFilters } from './page';
 
 interface TxIdPageDataContextType {
   stxPrice: number;
-  initialTxData?: Transaction | MempoolTransaction;
+  initialTxData?: TxDetails;
   txId: string;
   filters: TxIdPageFilters;
   numFunctions?: number;
@@ -32,7 +31,7 @@ const TxIdPageDataContext = createContext<TxIdPageDataContextType>(DEFAULT_TX_ID
 interface TxIdPageDataProviderProps {
   children: ReactNode;
   stxPrice?: number;
-  initialTxData?: Transaction | MempoolTransaction;
+  initialTxData?: TxDetails;
   txId: string;
   filters: TxIdPageFilters;
   numFunctions?: number;

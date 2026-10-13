@@ -1,94 +1,49 @@
+import { TxEvent } from '@/common/types/tx-v3';
 import TransferIcon from '@/ui/icons/TransferIcon';
 import { Fire, Lock, Question, Sparkle, TextAlignLeft } from '@phosphor-icons/react';
 
-import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
+import { getTxAssetEventDetails } from '../../tx-details-utils';
 
-const EMPTY_VALUE = '-';
-
-export function getFromAddress(event: TransactionEvent): string {
-  if (event.event_type === 'stx_asset') {
-    return event.asset.sender ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'fungible_token_asset') {
-    return event.asset.sender ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'non_fungible_token_asset') {
-    return event.asset.sender ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'smart_contract_log') {
-    return '';
-  }
-
-  return '';
+export function getFromAddress(event: TxEvent): string {
+  return getTxAssetEventDetails(event)?.sender ?? '';
 }
 
-export function getAmount(event: TransactionEvent): string {
-  if (event.event_type === 'stx_asset') {
-    return event.asset.amount || '';
-  }
-  if (event.event_type === 'fungible_token_asset') {
-    return event.asset.amount || '';
-  }
-  if (event.event_type === 'non_fungible_token_asset') {
+export function getAmount(event: TxEvent): string {
+  if (event.type === 'nft_asset') {
     return '1';
   }
-
-  return '';
+  return getTxAssetEventDetails(event)?.amount ?? '';
 }
 
-export function getToAddress(event: TransactionEvent): string {
-  if (event.event_type === 'stx_asset') {
-    return event.asset.recipient ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'fungible_token_asset') {
-    return event.asset.recipient ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'non_fungible_token_asset') {
-    return event.asset.recipient ?? EMPTY_VALUE;
-  }
-  if (event.event_type === 'smart_contract_log') {
-    return '';
-  }
-
-  return '';
+export function getToAddress(event: TxEvent): string {
+  return getTxAssetEventDetails(event)?.recipient ?? '';
 }
 
-export function getAssetType(event: TransactionEvent): string {
-  if (event.event_type === 'smart_contract_log') {
-    return 'Contract log';
+export function getAssetType(event: TxEvent): string {
+  switch (event.type) {
+    case 'contract_log':
+      return 'Contract log';
+    case 'stx_lock':
+      return 'STX lock';
+    case 'stx_asset':
+      return 'STX token';
+    case 'ft_asset':
+      return 'Fungible token';
+    case 'nft_asset':
+      return 'Non fungible token';
   }
-  if (event.event_type === 'stx_lock') {
-    return 'STX lock';
-  }
-  if (event.event_type === 'stx_asset') {
-    return 'STX token';
-  }
-  if (event.event_type === 'fungible_token_asset') {
-    return 'Fungible token';
-  }
-  if (event.event_type === 'non_fungible_token_asset') {
-    return 'Non fungible token';
-  }
-  return 'uncovered case';
 }
 
-export type ExtendedTransactionEventAssetType = TransactionEventAssetType | 'stx_lock' | 'print';
+export type ExtendedTransactionEventAssetType = 'transfer' | 'mint' | 'burn' | 'stx_lock' | 'print';
 
-export function getAssetEventType(event: TransactionEvent): ExtendedTransactionEventAssetType {
-  if ('asset' in event && event.asset.asset_event_type) {
-    // covers TransactionEventFungibleAsset and TransactionEventNonFungibleAsset
-    return event.asset.asset_event_type as TransactionEventAssetType;
+export function getAssetEventType(event: TxEvent): ExtendedTransactionEventAssetType {
+  if (event.type === 'contract_log') {
+    return event.contract_log.topic;
   }
-  if ('contract_log' in event) {
-    // covers TransactionEventSmartContractLog
-    return event.contract_log.topic as 'print';
-  }
-  if ('stx_lock_event' in event) {
-    // covers TransactionEventStxLock
+  if (event.type === 'stx_lock') {
     return 'stx_lock';
   }
-
-  return EMPTY_VALUE as TransactionEventAssetType;
+  return getTxAssetEventDetails(event)!.assetEventType;
 }
 
 export function getAssetEventTypeLabel(assetEventType: ExtendedTransactionEventAssetType): string {
@@ -131,30 +86,23 @@ export function getAssetEventTypeIcon(
   return <Question />;
 }
 
-export function getAsset(event: TransactionEvent): string {
-  if (event.event_type === 'smart_contract_log') {
+export function getAsset(event: TxEvent): string {
+  if (event.type === 'contract_log') {
     return ''; // could be the contract id
   }
-  if (event.event_type === 'stx_asset') {
+  if (event.type === 'stx_asset' || event.type === 'stx_lock') {
     return 'STX';
   }
-  if (event.event_type === 'stx_lock') {
-    return 'STX';
-  }
-  if ('asset' in event) {
-    return event.asset.asset_id ?? '';
-  }
-
-  return '';
+  return getTxAssetEventDetails(event)?.assetIdentifier ?? '';
 }
 
-export function getContractLogPrintValue(event: TransactionEvent):
+export function getContractLogPrintValue(event: TxEvent):
   | {
       hex: string;
       repr: string;
     }
   | undefined {
-  if (event.event_type === 'smart_contract_log') {
+  if (event.type === 'contract_log') {
     return event.contract_log.value;
   }
   return undefined;

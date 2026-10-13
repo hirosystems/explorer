@@ -1,34 +1,29 @@
+import { getTxBlockTime, isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { formatBlockTime } from '@/common/utils/time-utils';
 import { isConfirmedTx } from '@/common/utils/transaction-utils';
 import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Flex } from '@chakra-ui/react';
 
-import {
-  MempoolTenureChangeTransaction,
-  TenureChangeTransaction,
-} from '@stacks/stacks-blockchain-api-types';
-
 import { useTxIdPageData } from '../../TxIdPageContext';
 import { ExecutionCostItem } from './ExecutionCost';
 import { PriceSummaryItemValue, SponsorTag, SummaryItem } from './SummaryItem';
 
-export const TenureChangeTxSummaryItems = ({
-  tx,
-}: {
-  tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
-}) => {
+export const TenureChangeTxSummaryItems = ({ tx }: { tx: TxDetailsOf<'tenure_change'> }) => {
   const { stxPrice } = useTxIdPageData();
-  const isSponsored = tx.sponsored;
-  const sponsor = tx.sponsor_address;
+  // v3 omits the tenure change payload for transactions still in the mempool.
+  const tenureChange = isConfirmedTxDetails(tx) ? tx.tenure_change : undefined;
+  const isSponsored = tx.sponsor !== null;
+  const sponsor = tx.sponsor?.address;
 
   return (
     <>
       <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
       <SummaryItem
         label="By"
-        value={tx.sender_address}
+        value={tx.sender.address}
         valueRenderer={value => (
           <AddressLink address={value} wordBreak="break-all" variant="tableLink">
             {value}
@@ -36,10 +31,10 @@ export const TenureChangeTxSummaryItems = ({
         )}
         showCopyButton
       />
-      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Timestamp"
-          value={formatBlockTime(tx.block_time)}
+          value={formatBlockTime(getTxBlockTime(tx))}
           valueRenderer={value => (
             <Badge
               variant="solid"
@@ -64,15 +59,12 @@ export const TenureChangeTxSummaryItems = ({
           </Flex>
         )}
       />
-      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
-      <SummaryItem
-        label="Cause"
-        value={capitalize(tx.tenure_change_payload?.cause.replace('_', ' ') || '')}
-      />
-      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+      <SummaryItem label="Nonce" value={tx.sender.nonce.toString()} showCopyButton />
+      <SummaryItem label="Cause" value={capitalize(tenureChange?.cause.replace('_', ' ') || '')} />
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Block height"
-          value={tx.block_height?.toString() || ''}
+          value={tx.block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge
@@ -85,10 +77,10 @@ export const TenureChangeTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Block hash"
-          value={tx.block_hash?.toString() || ''}
+          value={tx.block.hash?.toString() || ''}
           showCopyButton
           valueRenderer={value => (
             <BlockLink hash={value} wordBreak="break-all" variant="tableLink">
@@ -97,10 +89,10 @@ export const TenureChangeTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Bitcoin Anchor"
-          value={tx.burn_block_height?.toString() || ''}
+          value={tx.bitcoin_block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge
@@ -115,32 +107,26 @@ export const TenureChangeTxSummaryItems = ({
       )}
       <SummaryItem
         label="Tenure consensus hash"
-        value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
+        value={tenureChange?.tenure_consensus_hash || ''}
         showCopyButton
       />
       <SummaryItem
         label="Burn view consensus hash"
-        value={tx.tenure_change_payload?.burn_view_consensus_hash || ''}
+        value={tenureChange?.burn_view_consensus_hash || ''}
         showCopyButton
       />
       <SummaryItem
         label="Previous tenure end"
-        value={tx.tenure_change_payload?.previous_tenure_end || ''}
+        value={tenureChange?.previous_tenure_end || ''}
         showCopyButton
       />
       <SummaryItem
         label="Previous tenure blocks"
-        value={tx.tenure_change_payload?.previous_tenure_blocks?.toString() || ''}
+        value={tenureChange?.previous_tenure_blocks?.toString() || ''}
         showCopyButton
       />
-      <SummaryItem
-        label="Pubkey hash"
-        value={tx.tenure_change_payload?.pubkey_hash || ''}
-        showCopyButton
-      />
-      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
-        <ExecutionCostItem tx={tx} />
-      )}
+      <SummaryItem label="Pubkey hash" value={tenureChange?.pubkey_hash || ''} showCopyButton />
+      {isConfirmedTxDetails(tx) && <ExecutionCostItem tx={tx} />}
     </>
   );
 };

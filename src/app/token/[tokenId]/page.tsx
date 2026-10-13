@@ -8,6 +8,7 @@ import {
 import { handleSettledResult } from '@/app/address/[principal]/page-data';
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
+import { getTxBlockTime, isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { NetworkModes } from '@/common/types/network';
 import { FtHolderListResponse } from '@/common/types/tokens-v3';
@@ -145,8 +146,7 @@ export default async function (props: {
         networkMode
       );
 
-      txBlockTime =
-        tx && isConfirmedTx<Transaction, MempoolTransaction>(tx) ? tx.block_time : undefined;
+      txBlockTime = tx && isConfirmedTxDetails(tx) ? getTxBlockTime(tx) : undefined;
 
       const compressedRecentAddressTransactions = recentAddressTransactions
         ? {

@@ -1,10 +1,13 @@
-import { Singleton } from '@/common/types/utils';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 
 import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
-import { Cl, ClarityType, cvToJSON, hexToCV } from '@stacks/transactions';
+  Cl,
+  ClarityAbiFunction,
+  ClarityType,
+  cvToJSON,
+  getTypeString,
+  hexToCV,
+} from '@stacks/transactions';
 
 export interface PrettyFunctionResult {
   display: string;
@@ -122,11 +125,10 @@ export function formatClarityValue(cv: ClarityValue): FormattedClarityValue {
   };
 }
 
-type ContractCallTxFunctionArg = Singleton<
-  Required<Required<ContractCallTransaction['contract_call']>['function_args']>
->;
+type ContractCallTxFunctionArg = ClarityValue;
 
-type ContractCallTxResult = ContractCallTransaction['tx_result'];
+/** A Clarity value as the API encodes it: hex plus its Clarity representation. */
+type ContractCallTxResult = { hex: string; repr: string };
 
 export interface FormattedClarityValue {
   name: string;
@@ -179,15 +181,27 @@ export function formatFunctionResult(result: ContractCallTxResult): FormattedCla
   }
 }
 
+/**
+ * The v3 API encodes contract call arguments without their names or types, so those come from the
+ * called function's ABI, matched by position.
+ */
 export function getContractCallTxFunctionArgs(
-  tx: ContractCallTransaction | MempoolContractCallTransaction
+  tx: TxDetailsOf<'contract_call'>,
+  functionAbi?: ClarityAbiFunction
 ): ContractCallTxFunctionArg[] {
   const args = (tx?.contract_call?.function_args || []).filter(arg => !!arg);
-  return args;
+  return args.map((arg, index) => {
+    const abiArg = functionAbi?.args?.[index];
+    return {
+      hex: arg.hex,
+      repr: arg.repr,
+      name: abiArg?.name ?? '',
+      type: abiArg ? getTypeString(abiArg.type) : '',
+    };
+  });
 }
 
-export function getFunctionResultSuccessStatus(tx: ContractCallTransaction) {
-  const result = tx.tx_result;
+export function getFunctionResultSuccessStatus(result: ContractCallTxResult) {
   const { success } = cvToJSON(hexToCV(result.hex));
   return success;
 }

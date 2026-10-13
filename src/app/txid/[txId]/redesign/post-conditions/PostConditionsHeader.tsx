@@ -1,13 +1,9 @@
+import { TxPostConditionMode } from '@/common/types/tx-v3';
 import { SimpleTag } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 
-import { PostConditionMode } from '@stacks/stacks-blockchain-api-types';
-
-const postConditionModeMap: Record<
-  PostConditionMode | 'originator',
-  { label: string; description: string }
-> = {
+const postConditionModeMap: Record<TxPostConditionMode, { label: string; description: string }> = {
   allow: {
     label: 'Allow mode',
     description:
@@ -28,7 +24,7 @@ const postConditionModeMap: Record<
 export function PostConditionsHeader({
   postConditionMode,
 }: {
-  postConditionMode: PostConditionMode | 'originator';
+  postConditionMode: TxPostConditionMode;
 }) {
   const { label, description } = postConditionModeMap[postConditionMode] ?? {
     label: postConditionMode,

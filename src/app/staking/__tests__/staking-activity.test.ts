@@ -69,10 +69,11 @@ function serveChain(txs: TxStub[], { failingFunction }: { failingFunction?: stri
       });
     }
 
-    const txId = /\/extended\/v1\/tx\/(0x[0-9a-f]+)/.exec(url)?.[1];
+    const txId = /\/extended\/v3\/transactions\/(0x[0-9a-f]+)\/events/.exec(url)?.[1];
     const events = (txId ? byId.get(txId)?.events : undefined) ?? [];
     return respond({
-      events: events.map(repr => ({
+      cursor: { next: null },
+      results: events.map(repr => ({
         contract_log: { contract_id: POX_CONTRACT, value: { repr } },
       })),
     });
@@ -119,9 +120,9 @@ describe('fetchStakingActivity', () => {
     const serve = fetchMock.getMockImplementation()!;
     fetchMock.mockImplementation(async (url, options) => {
       const response = await serve(url, options);
-      if (!url.includes('/extended/v1/tx/')) return response;
+      if (!url.includes('/extended/v3/transactions/')) return response;
       const body = await response.json();
-      body.events.unshift({
+      body.results.unshift({
         contract_log: {
           contract_id: 'SP000000000000000000002Q6VF78.other-contract',
           value: { repr: enrollment(99, 900_000_000, 1) },
@@ -231,7 +232,7 @@ describe('fetchStakingActivity', () => {
       if (url.includes('function_name=')) {
         expect(options?.cache).toBe('default');
         expect(options?.next?.revalidate).toBe(15);
-      } else if (url.includes('/extended/v1/tx/')) {
+      } else if (url.includes('/extended/v3/transactions/')) {
         expect(options?.next?.revalidate).toBe(86400);
       }
     }
@@ -354,7 +355,7 @@ describe('fetchStakingActivity', () => {
     const serve = fetchMock.getMockImplementation()!;
     let detailRequests = 0;
     fetchMock.mockImplementation(async (url, options) => {
-      if (url.includes('/extended/v1/tx/0x') && ++detailRequests === 1) {
+      if (url.includes('/extended/v3/transactions/0x') && ++detailRequests === 1) {
         return { ok: false, status: 429 } as Response;
       }
       return serve(url, options);
@@ -378,7 +379,7 @@ describe('fetchStakingActivity', () => {
     serveChain([enrollmentTx(1, 2500000000)]);
     const serve = fetchMock.getMockImplementation()!;
     fetchMock.mockImplementation(async (url, options) =>
-      url.includes('/extended/v1/tx/0x')
+      url.includes('/extended/v3/transactions/0x')
         ? ({ ok: false, status: 503 } as Response)
         : serve(url, options)
     );
@@ -400,7 +401,7 @@ describe('fetchStakingActivity', () => {
     let active = 0;
     let peak = 0;
     fetchMock.mockImplementation(async (url, options) => {
-      if (!url.includes('/extended/v1/tx/0x')) return serve(url, options);
+      if (!url.includes('/extended/v3/transactions/0x')) return serve(url, options);
       active++;
       peak = Math.max(peak, active);
       await new Promise(resolve => setTimeout(resolve, 5));
@@ -464,7 +465,7 @@ test('a truncated search also preserves detail lookup failures', async () => {
   serveChain(Array.from({ length: 4 }, (_, i) => enrollmentTx(i, 100)));
   const serve = fetchMock.getMockImplementation()!;
   fetchMock.mockImplementation((url, options) =>
-    url.includes('/extended/v1/tx/0x')
+    url.includes('/extended/v3/transactions/0x')
       ? Promise.resolve({ ok: false, status: 503 } as Response)
       : serve(url, options)
   );
@@ -508,7 +509,7 @@ test.each(['pox', 'bonds', 'transactions', 'details', 'setup-bond'])(
             : stage === 'transactions'
               ? url.includes('function_name=')
               : stage === 'details'
-                ? url.includes('/extended/v1/tx/0x')
+                ? url.includes('/extended/v3/transactions/0x')
                 : url.endsWith('/bonds/100');
       if (shouldStall) {
         expect(options?.signal).toBe(controller.signal);
@@ -547,7 +548,7 @@ test('cancelling during the retry delay clears the timer and stops the retry', a
     const serve = fetchMock.getMockImplementation()!;
     let attempts = 0;
     fetchMock.mockImplementation((url, options) => {
-      if (url.includes('/extended/v1/tx/0x')) {
+      if (url.includes('/extended/v3/transactions/0x')) {
         attempts++;
         return Promise.resolve({ ok: false, status: 503 } as Response);
       }

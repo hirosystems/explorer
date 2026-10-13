@@ -1,20 +1,11 @@
-import {
-  UseQueryResult,
-  UseSuspenseQueryResult,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { TX_DETAILS_INCLUDE } from '@/app/txid/[txId]/tx-details-utils';
+import { TxDetails } from '@/common/types/tx-v3';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
-import { DEFAULT_TX_EVENTS_LIMIT } from '../constants/constants';
 
-export function useTxById(
-  txId?: string,
-  options: any = {}
-): UseQueryResult<Transaction | MempoolTransaction> {
+export function useTxById(txId?: string, options: any = {}): UseQueryResult<TxDetails> {
   const apiClient = useApiClient();
 
   return useQuery({
@@ -22,38 +13,15 @@ export function useTxById(
     queryFn: async () => {
       if (!txId) return undefined;
 
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
+      return await callApiWithErrorHandling(apiClient, '/extended/v3/transactions/{tx_id}', {
         params: {
           path: { tx_id: txId },
-          query: { event_limit: DEFAULT_TX_EVENTS_LIMIT, event_offset: 0 },
+          query: { include: [...TX_DETAILS_INCLUDE] },
         },
       });
     },
     staleTime: Infinity,
     enabled: !!txId,
-    ...options,
-  });
-}
-
-export function useSuspenseTxById(
-  txId: string,
-  options: any = {}
-): UseSuspenseQueryResult<Transaction | MempoolTransaction> {
-  const apiClient = useApiClient();
-
-  return useSuspenseQuery({
-    queryKey: ['txById', txId],
-    queryFn: async () => {
-      if (!txId) return undefined;
-
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
-        params: {
-          path: { tx_id: txId },
-          query: { event_limit: DEFAULT_TX_EVENTS_LIMIT, event_offset: 0 },
-        },
-      });
-    },
-    staleTime: Infinity,
     ...options,
   });
 }

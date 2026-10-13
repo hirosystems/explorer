@@ -38,15 +38,15 @@ function TransactionIdPage() {
 
   let txPage = null;
 
-  if (tx?.tx_type === 'smart_contract') txPage = <SmartContractPageRedesign tx={tx} />;
+  if (tx?.type === 'smart_contract') txPage = <SmartContractPageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'token_transfer') txPage = <TokenTransferPageRedesign tx={tx} />;
+  if (tx?.type === 'token_transfer') txPage = <TokenTransferPageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'tenure_change') txPage = <TenureChangePageRedesign tx={tx} />;
+  if (tx?.type === 'tenure_change') txPage = <TenureChangePageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'coinbase') txPage = <CoinbasePageRedesign tx={tx} />;
+  if (tx?.type === 'coinbase') txPage = <CoinbasePageRedesign tx={tx} />;
 
-  if (tx?.tx_type === 'contract_call') txPage = <ContractCallPageRedesign tx={tx} />;
+  if (tx?.type === 'contract_call') txPage = <ContractCallPageRedesign tx={tx} />;
 
   if (tx && !txPage) {
     return (

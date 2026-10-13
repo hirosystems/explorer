@@ -1,21 +1,13 @@
 import { SectionTabsContentContainer } from '@/common/components/SectionTabs';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
-
-import {
-  MempoolTenureChangeTransaction,
-  TenureChangeTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { getTxAlert } from './Alert';
 import { TxHeader } from './TxHeader';
 import { TxSummary } from './tx-summary/TxSummary';
 
-export const TenureChangePage = ({
-  tx,
-}: {
-  tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
-}) => {
+export const TenureChangePage = ({ tx }: { tx: TxDetailsOf<'tenure_change'> }) => {
   return (
     <>
       <Stack gap={3}>

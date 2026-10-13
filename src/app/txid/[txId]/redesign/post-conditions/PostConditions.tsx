@@ -1,14 +1,8 @@
 'use client';
 
 import { SectionTabsContentContainer } from '@/common/components/SectionTabs';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { Stack } from '@chakra-ui/react';
-
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-  MempoolSmartContractTransaction,
-  SmartContractTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { PostConditionsHeader } from './PostConditionsHeader';
 import { PostConditionsTable } from './PostConditionsTable';
@@ -16,18 +10,16 @@ import { PostConditionsTable } from './PostConditionsTable';
 export function PostConditions({
   tx,
 }: {
-  tx:
-    | ContractCallTransaction
-    | MempoolContractCallTransaction
-    | SmartContractTransaction
-    | MempoolSmartContractTransaction;
+  tx: TxDetailsOf<'contract_call'> | TxDetailsOf<'smart_contract'>;
 }) {
   const { post_condition_mode: mode } = tx;
   return (
     <Stack gap={1}>
-      <SectionTabsContentContainer>
-        <PostConditionsHeader postConditionMode={mode} />
-      </SectionTabsContentContainer>
+      {mode && (
+        <SectionTabsContentContainer>
+          <PostConditionsHeader postConditionMode={mode} />
+        </SectionTabsContentContainer>
+      )}
       <SectionTabsContentContainer>
         <PostConditionsTable tx={tx} />
       </SectionTabsContentContainer>

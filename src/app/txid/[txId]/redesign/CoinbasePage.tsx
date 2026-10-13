@@ -1,19 +1,14 @@
 import { SectionTabsContentContainer } from '@/common/components/SectionTabs';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { Text } from '@/ui/Text';
 import { Grid, Stack } from '@chakra-ui/react';
-
-import {
-  CoinbaseTransaction,
-  MempoolCoinbaseTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { getTxAlert } from './Alert';
 import { DetailsCard } from './DetailsCard';
 import { TxHeader } from './TxHeader';
 import { TxSummary } from './tx-summary/TxSummary';
 
-export const CoinbasePage = ({ tx }: { tx: CoinbaseTransaction | MempoolCoinbaseTransaction }) => {
+export const CoinbasePage = ({ tx }: { tx: TxDetailsOf<'coinbase'> }) => {
   return (
     <>
       <Stack gap={3}>
@@ -28,7 +23,7 @@ export const CoinbasePage = ({ tx }: { tx: CoinbaseTransaction | MempoolCoinbase
             <TxSummary tx={tx} />
           </SectionTabsContentContainer>
 
-          <DetailsCard tx={tx as Transaction} />
+          <DetailsCard tx={tx} />
         </Grid>
       </Stack>
     </>

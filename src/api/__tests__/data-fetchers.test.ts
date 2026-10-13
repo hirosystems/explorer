@@ -1,7 +1,7 @@
 /** @jest-environment node */
 import { stacksAPIFetch, stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 
-import { fetchFtSupply, fetchHolders } from '../data-fetchers';
+import { fetchFtSupply, fetchHolders, fetchTx } from '../data-fetchers';
 
 jest.mock('@/api/stacksAPIFetch', () => ({
   stacksAPIFetch: jest.fn(),
@@ -41,4 +41,28 @@ test('holders and supply fetchers skip invalid asset identifiers', async () => {
   await expect(fetchFtSupply('https://api.hiro.so', '')).resolves.toBeUndefined();
   expect(fetchMock).not.toHaveBeenCalled();
   expect(fetchJsonMock).not.toHaveBeenCalled();
+});
+
+test('fetchTx reads the v3 transaction, requesting the given heavy fields', async () => {
+  const tx = { tx_id: '0x01' };
+  fetchMock.mockResolvedValue(new Response(JSON.stringify(tx)));
+
+  await expect(
+    fetchTx('https://api.hiro.so', '0x01', {
+      include: ['post_conditions', 'result'],
+      redirect: 'error',
+    })
+  ).resolves.toEqual(tx);
+  expect(fetchMock.mock.calls[0][0]).toBe(
+    'https://api.hiro.so/extended/v3/transactions/0x01?include=post_conditions,result'
+  );
+  expect(fetchMock.mock.calls[0][1]).toMatchObject({ redirect: 'error' });
+  expect(fetchMock.mock.calls[0][1]).not.toHaveProperty('include');
+});
+
+test('fetchTx omits the include parameter when no heavy fields are requested', async () => {
+  fetchMock.mockResolvedValue(new Response('{}'));
+
+  await fetchTx('https://api.hiro.so', '0x01');
+  expect(fetchMock.mock.calls[0][0]).toBe('https://api.hiro.so/extended/v3/transactions/0x01');
 });

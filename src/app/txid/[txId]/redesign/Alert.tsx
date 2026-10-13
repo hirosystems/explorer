@@ -3,14 +3,14 @@
 import { MAINNET_SBTC_CONTRACT_ADDRESS } from '@/app/token/[tokenId]/consts';
 import { SbtcTokenLink } from '@/common/components/ExplorerLinks';
 import { TransactionStatus as TransactionStatusEnum } from '@/common/constants/constants';
-import { getTransactionStatus } from '@/common/utils/transactions';
+import { TxDetails } from '@/common/types/tx-v3';
 import { Alert } from '@/components/ui/alert';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Clock, Question, Warning, WarningDiamond, XCircle } from '@phosphor-icons/react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { getTxDetailsStatus } from '../tx-details-utils';
 
 export type AlertStatus = 'neutral' | 'warning' | 'error' | 'info';
 
@@ -95,20 +95,11 @@ export function TenureAlert() {
   );
 }
 
-export function NonCanonicalAlert() {
-  return (
-    <AlertWrapper
-      status="warning"
-      description="This transaction is in a non-canonical fork. It is not in the canonical Stacks chain"
-    />
-  );
-}
-
-export function getFailureDescription(tx: Transaction | MempoolTransaction) {
+export function getFailureDescription(tx: TxDetails) {
   const reasonForFailure =
-    tx.tx_status === 'abort_by_response'
+    tx.status === 'abort_by_response'
       ? 'This transaction did not succeed because the transaction was aborted during its execution'
-      : tx.tx_status === 'abort_by_post_condition'
+      : tx.status === 'abort_by_post_condition'
         ? 'This transaction would have succeeded, but was rolled back by a supplied post-condition'
         : undefined;
   const vmError =
@@ -132,16 +123,16 @@ export function getFailureDescription(tx: Transaction | MempoolTransaction) {
   );
 }
 
-export function TransactionFailedAlert({ tx }: { tx: Transaction | MempoolTransaction }) {
+export function TransactionFailedAlert({ tx }: { tx: TxDetails }) {
   const failureDescription = getFailureDescription(tx);
   return (
     <AlertWrapper status="error" title="Transaction failed" description={failureDescription} />
   );
 }
 
-export function getTxAlert(tx: Transaction | MempoolTransaction) {
-  const txType = tx.tx_type;
-  const txStatus = getTransactionStatus(tx);
+export function getTxAlert(tx: TxDetails) {
+  const txType = tx.type;
+  const txStatus = getTxDetailsStatus(tx);
 
   let alertContent;
 
@@ -157,9 +148,6 @@ export function getTxAlert(tx: Transaction | MempoolTransaction) {
       break;
     case TransactionStatusEnum.FAILED:
       alertContent = <TransactionFailedAlert tx={tx} />;
-      break;
-    case TransactionStatusEnum.NON_CANONICAL:
-      alertContent = <NonCanonicalAlert />;
       break;
     default:
       alertContent = null;

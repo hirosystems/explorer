@@ -7,14 +7,9 @@ import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useAccountBalance } from '@/common/queries/useAccountBalance';
 import { useAddressConfirmedTxsWithTransfers } from '@/common/queries/useAddressConfirmedTxsWithTransfersInfinite';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { TabsContent } from '@/ui/Tabs';
 import { Grid, Stack } from '@chakra-ui/react';
-
-import {
-  MempoolSmartContractTransaction,
-  SmartContractTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { useTxIdPageData } from '../TxIdPageContext';
 import { getTxAlert } from './Alert';
@@ -27,11 +22,7 @@ import { PostConditions } from './post-conditions/PostConditions';
 import { Source } from './source/Source';
 import { TxSummary } from './tx-summary/TxSummary';
 
-export const SmartContractPage = ({
-  tx,
-}: {
-  tx: SmartContractTransaction | MempoolSmartContractTransaction;
-}) => {
+export const SmartContractPage = ({ tx }: { tx: TxDetailsOf<'smart_contract'> }) => {
   return (
     <>
       <Stack gap={3}>
@@ -47,7 +38,7 @@ export function SmartContractTabTriggers({
   tx,
   selectedTab,
 }: {
-  tx: SmartContractTransaction | MempoolSmartContractTransaction;
+  tx: TxDetailsOf<'smart_contract'>;
   selectedTab: TransactionIdPageTab;
 }) {
   let { data } = useAddressConfirmedTxsWithTransfers(
@@ -62,7 +53,7 @@ export function SmartContractTabTriggers({
   );
   const { numFunctions } = useTxIdPageData();
   const txCount = data?.total || 0;
-  const numPostConditions = tx.post_conditions.length || 0;
+  const numPostConditions = tx.post_conditions?.length ?? 0;
 
   return (
     <>
@@ -101,11 +92,7 @@ export function SmartContractTabTriggers({
   );
 }
 
-export function SmartContractTabContent({
-  tx,
-}: {
-  tx: SmartContractTransaction | MempoolSmartContractTransaction;
-}) {
+export function SmartContractTabContent({ tx }: { tx: TxDetailsOf<'smart_contract'> }) {
   const contractId = tx.smart_contract?.contract_id;
   const { tokenPrice } = useGlobalContext();
   const { data: balancesData } = useAccountBalance(contractId);
@@ -123,7 +110,7 @@ export function SmartContractTabContent({
           </SectionTabsContentContainer>
 
           <Stack gap={2}>
-            <DetailsCard tx={tx as Transaction} />
+            <DetailsCard tx={tx} />
             <BalanceCard
               balancesData={balancesData}
               stxPrice={tokenPrice.stxPrice}

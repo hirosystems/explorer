@@ -9,18 +9,12 @@ import {
 import { Table } from '@/common/components/table/Table';
 import { DefaultTableColumnHeader } from '@/common/components/table/TableComponents';
 import { useBulkFtMetadata } from '@/common/queries/useBulkTokenMetadata';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { validateStacksContractId } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 import { ColumnDef, Header } from '@tanstack/react-table';
 import { useMemo } from 'react';
-
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-  MempoolSmartContractTransaction,
-  SmartContractTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import {
   PostConditionAmountCellRenderer,
@@ -93,15 +87,14 @@ const columnDefinitions: ColumnDef<PostConditionsTableData>[] = [
   },
 ];
 
-type TxWithPostConditions =
-  | ContractCallTransaction
-  | MempoolContractCallTransaction
-  | SmartContractTransaction
-  | MempoolSmartContractTransaction;
+type TxWithPostConditions = TxDetailsOf<'contract_call'> | TxDetailsOf<'smart_contract'>;
 
 export function PostConditionsTable({ tx }: { tx: TxWithPostConditions }) {
-  const postConditions: ExtendedPostCondition[] = tx.post_conditions;
-  const senderAddress = tx.sender_address;
+  const postConditions: ExtendedPostCondition[] = useMemo(
+    () => tx.post_conditions ?? [],
+    [tx.post_conditions]
+  );
+  const senderAddress = tx.sender.address;
   const isContract = validateStacksContractId(senderAddress);
 
   // Extract unique FT contract IDs for bulk metadata fetch

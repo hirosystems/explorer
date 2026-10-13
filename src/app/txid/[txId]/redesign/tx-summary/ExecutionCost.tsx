@@ -4,32 +4,22 @@ import {
   calculateExecutionCostPercentage,
   formatExecutionCostPercentage,
 } from '@/common/constants/execution-cost';
+import { ConfirmedTxDetails } from '@/common/types/tx-v3';
 import { abbreviateNumber } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
 import { Question } from '@phosphor-icons/react';
 
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
-
 import { SummaryItemLabel } from './SummaryItem';
 
-interface ExecutionCostData {
-  execution_cost_read_count: number;
-  execution_cost_read_length: number;
-  execution_cost_runtime: number;
-  execution_cost_write_count: number;
-  execution_cost_write_length: number;
-}
-
-function hasExecutionCost(tx: unknown): tx is ExecutionCostData {
-  const t = tx as ExecutionCostData;
+function hasExecutionCost(cost: ConfirmedTxDetails['execution_cost'] | undefined): boolean {
   return (
-    typeof t.execution_cost_read_count === 'number' &&
-    typeof t.execution_cost_read_length === 'number' &&
-    typeof t.execution_cost_runtime === 'number' &&
-    typeof t.execution_cost_write_count === 'number' &&
-    typeof t.execution_cost_write_length === 'number'
+    typeof cost?.read_count === 'number' &&
+    typeof cost.read_length === 'number' &&
+    typeof cost.runtime === 'number' &&
+    typeof cost.write_count === 'number' &&
+    typeof cost.write_length === 'number'
   );
 }
 
@@ -62,38 +52,39 @@ function ExecutionCostRow({ label, value, limit }: ExecutionCostRowProps) {
 }
 
 interface ExecutionCostItemProps {
-  tx: Transaction;
+  tx: ConfirmedTxDetails;
 }
 
 export function ExecutionCostItem({ tx }: ExecutionCostItemProps) {
-  if (!hasExecutionCost(tx)) {
+  const cost = tx.execution_cost;
+  if (!hasExecutionCost(cost)) {
     return null;
   }
 
   const costMetrics = [
     {
       key: 'runtime' as const,
-      value: tx.execution_cost_runtime,
+      value: cost.runtime,
       limit: BLOCK_EXECUTION_LIMITS.runtime,
     },
     {
       key: 'read_count' as const,
-      value: tx.execution_cost_read_count,
+      value: cost.read_count,
       limit: BLOCK_EXECUTION_LIMITS.read_count,
     },
     {
       key: 'read_length' as const,
-      value: tx.execution_cost_read_length,
+      value: cost.read_length,
       limit: BLOCK_EXECUTION_LIMITS.read_length,
     },
     {
       key: 'write_count' as const,
-      value: tx.execution_cost_write_count,
+      value: cost.write_count,
       limit: BLOCK_EXECUTION_LIMITS.write_count,
     },
     {
       key: 'write_length' as const,
-      value: tx.execution_cost_write_length,
+      value: cost.write_length,
       limit: BLOCK_EXECUTION_LIMITS.write_length,
     },
   ];

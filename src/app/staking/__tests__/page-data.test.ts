@@ -32,10 +32,9 @@ test.each([
   'corrects setup height and time using the selected $chain API',
   async ({ chain, api, expectedApi }) => {
     jest.mocked(fetchTx).mockResolvedValue({
-      tx_status: 'success',
-      canonical: true,
-      burn_block_height: 8500,
-      burn_block_time: 1699999900,
+      status: 'success',
+      block: { height: 100, hash: '0xblock', time: 1700000000 },
+      bitcoin_block: { height: 8500, time: 1699999900 },
     } as Awaited<ReturnType<typeof fetchTx>>);
 
     const result = await fetchFeaturedBond(bond.index, chain, api);
@@ -60,9 +59,12 @@ test('leaves bonds without setup metadata unchanged', async () => {
 });
 
 test.each([
-  { tx_status: 'pending' },
-  { tx_status: 'success', canonical: false, burn_block_height: 8500, burn_block_time: 1700000000 },
-  { tx_status: 'success', canonical: true, burn_block_height: 0, burn_block_time: 1700000000 },
+  { status: 'pending', receipt_time: 1700000000 },
+  {
+    status: 'success',
+    block: { height: 100, hash: '0xblock', time: 1700000000 },
+    bitcoin_block: { height: 0, time: 1700000000 },
+  },
 ])('falls back to the schedule for unconfirmed setup metadata: %j', async tx => {
   jest.mocked(fetchTx).mockResolvedValue(tx as Awaited<ReturnType<typeof fetchTx>>);
   await expect(fetchFeaturedBond(bond.index, 'testnet')).resolves.toEqual({
@@ -73,12 +75,11 @@ test.each([
 
 test.each(['abort_by_response', 'abort_by_post_condition'] as const)(
   'preserves the bond without setup metadata when a confirmed transaction has status %s',
-  async tx_status => {
+  async status => {
     jest.mocked(fetchTx).mockResolvedValue({
-      tx_status,
-      canonical: true,
-      burn_block_height: 8500,
-      burn_block_time: 1700000000,
+      status,
+      block: { height: 100, hash: '0xblock', time: 1700000000 },
+      bitcoin_block: { height: 8500, time: 1700000000 },
     } as Awaited<ReturnType<typeof fetchTx>>);
 
     await expect(fetchFeaturedBond(bond.index, 'testnet')).resolves.toEqual({

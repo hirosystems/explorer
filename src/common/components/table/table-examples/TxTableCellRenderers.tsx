@@ -22,7 +22,7 @@ import {
 import { EllipsisText } from '../CommonTableCellRenderers';
 
 export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
-  return <TransactionTypeBadge tx={{ tx_type: txType } as Transaction} />;
+  return <TransactionTypeBadge txType={txType} />;
 };
 
 export const TxLinkCellRenderer = (value: string) => {
