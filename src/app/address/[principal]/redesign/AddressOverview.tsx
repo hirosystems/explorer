@@ -60,12 +60,14 @@ export const AddressOverviewTable = () => {
           value={totalFees.toString()}
           valueRenderer={value => <PriceSummaryItemValue value={value} stxPrice={stxPrice} />}
         />
-        <SummaryItem
-          label="Last executed nonce"
-          value={initialAddressLatestNonceData?.last_confirmed_nonce?.toString() || ''}
-          showCopyButton
-          infoText="A nonce is a unique number used to track and order transactions from an address."
-        />
+        {initialAddressLatestNonceData && (
+          <SummaryItem
+            label="Last executed nonce"
+            value={initialAddressLatestNonceData.last_confirmed_nonce?.toString() || ''}
+            showCopyButton
+            infoText="A nonce is a unique number used to track and order transactions from an address."
+          />
+        )}
       </Table.Body>
     </Table.Root>
   );

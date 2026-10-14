@@ -1,14 +1,18 @@
 /** @jest-environment node */
-import { stacksAPIFetch } from '@/api/stacksAPIFetch';
+import { stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 
-import { fetchAddressLatestNonce } from '../page-data';
+import { fetchAddressLatestNonce, getAddressLatestNonceTag } from '../page-data';
 
 jest.mock('@/api/stacksAPIFetch', () => ({
   stacksAPIFetch: jest.fn(),
   stacksAPIFetchJson: jest.fn(),
 }));
 
-const fetchMock = stacksAPIFetch as jest.MockedFunction<typeof stacksAPIFetch>;
+const fetchJsonMock = stacksAPIFetchJson as jest.MockedFunction<typeof stacksAPIFetchJson>;
+
+const ADDRESS = 'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7';
+
+beforeEach(() => jest.clearAllMocks());
 
 test('fetchAddressLatestNonce reads the v3 principal nonces endpoint', async () => {
   const nonces = {
@@ -16,15 +20,19 @@ test('fetchAddressLatestNonce reads the v3 principal nonces endpoint', async () 
     last_confirmed_nonce: 5,
     mempool: { last_nonce: 7, pending_nonces: [7], missing_nonces: [6] },
   };
-  fetchMock.mockResolvedValue(new Response(JSON.stringify(nonces)));
+  fetchJsonMock.mockResolvedValue(nonces);
 
-  const result = await fetchAddressLatestNonce(
-    'https://api.hiro.so',
-    'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7'
-  );
+  const result = await fetchAddressLatestNonce('https://api.hiro.so', ADDRESS);
 
-  expect(fetchMock.mock.calls[0][0]).toBe(
-    'https://api.hiro.so/extended/v3/principals/SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7/nonces'
-  );
+  const [url, options] = fetchJsonMock.mock.calls[0];
+  expect(url).toBe(`https://api.hiro.so/extended/v3/principals/${ADDRESS}/nonces`);
+  expect(options?.next).toEqual({ revalidate: 3, tags: [getAddressLatestNonceTag(ADDRESS)] });
   expect(result).toEqual(nonces);
+});
+
+test('fetchAddressLatestNonce skips contract principals', async () => {
+  await expect(
+    fetchAddressLatestNonce('https://api.hiro.so', `${ADDRESS}.my-contract`)
+  ).resolves.toBeUndefined();
+  expect(fetchJsonMock).not.toHaveBeenCalled();
 });

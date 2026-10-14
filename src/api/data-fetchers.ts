@@ -19,7 +19,6 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import type { operations } from '@stacks/token-metadata-api-client/lib/generated/schema';
 
-type PrincipalNonces = OperationResponse['/extended/v3/principals/{principal}/nonces'];
 type StxBalanceResponse = OperationResponse['/extended/v2/addresses/{principal}/balances/stx'];
 type FtBalancesResponse = OperationResponse['/extended/v2/addresses/{principal}/balances/ft'];
 type AddressTransactionsResponse =
@@ -29,7 +28,6 @@ type FtMetadataResponse =
   operations['getFtMetadata']['responses']['200']['content']['application/json'];
 
 export const getAddressBalancesTag = (principal: string) => `address-balances-${principal}`;
-export const getAddressLatestNonceTag = (principal: string) => `address-latest-nonce-${principal}`;
 export const getAddressBNSNamesTag = (principal: string) => `address-bns-names-${principal}`;
 export const getAddressBurnChainRewardsTag = (principal: string) =>
   `address-burn-chain-rewards-${principal}`;
@@ -41,7 +39,6 @@ const ADDRESS_BALANCES_REVALIDATION_TIMEOUT_IN_SECONDS = 3;
 const POX_INFO_REVALIDATION_TIMEOUT_IN_SECONDS = 3;
 const RECENT_TRANSACTIONS_REVALIDATION_TIMEOUT_IN_SECONDS = 3;
 const ADDRESS_RECENT_TRANSACTIONS_LIMIT = 3;
-const ADDRESS_LATEST_NONCE_REVALIDATION_TIMEOUT_IN_SECONDS = 3;
 const ADDRESS_BNS_NAMES_REVALIDATION_TIMEOUT_IN_SECONDS = 10;
 const ADDRESS_BURNCHAIN_REWARDS_REVALIDATION_TIMEOUT_IN_SECONDS = 10;
 
@@ -106,25 +103,6 @@ export async function fetchAddressBalances(
     fungible_tokens: fungibleTokens,
     non_fungible_tokens: {},
   };
-}
-
-export async function fetchAddressLatestNonce(
-  apiUrl: string,
-  principal: string
-): Promise<PrincipalNonces> {
-  const response = await stacksAPIFetch(
-    `${apiUrl}/extended/v3/principals/${encodeURIComponent(principal)}/nonces`,
-    {
-      cache: 'default',
-      next: {
-        revalidate: ADDRESS_LATEST_NONCE_REVALIDATION_TIMEOUT_IN_SECONDS,
-        tags: [getAddressLatestNonceTag(principal)],
-      },
-    }
-  );
-
-  const nonceResponse: PrincipalNonces = await response.json();
-  return nonceResponse;
 }
 
 export async function fetchAddressBNSNames(

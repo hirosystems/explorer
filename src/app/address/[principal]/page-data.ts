@@ -3,6 +3,7 @@ import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { NUM_TEN_MINUTES_IN_DAY } from '@/common/utils/consts';
 import { logError } from '@/common/utils/error-utils';
 import { FT_BALANCES_PAGE_SIZE, fetchAllFtBalances } from '@/common/utils/ft-balances';
+import { validateStacksContractId } from '@/common/utils/utils';
 
 import { OperationResponse } from '@stacks/blockchain-api-client';
 import {
@@ -95,8 +96,11 @@ export async function fetchAddressBalances(
 export async function fetchAddressLatestNonce(
   apiUrl: string,
   principal: string
-): Promise<PrincipalNonces> {
-  const response = await stacksAPIFetch(
+): Promise<PrincipalNonces | undefined> {
+  // Only standard principals have nonces; the API rejects contract principals.
+  if (validateStacksContractId(principal)) return undefined;
+
+  return stacksAPIFetchJson<PrincipalNonces>(
     `${apiUrl}/extended/v3/principals/${encodeURIComponent(principal)}/nonces`,
     {
       cache: 'default',
@@ -104,11 +108,9 @@ export async function fetchAddressLatestNonce(
         revalidate: ADDRESS_LATEST_NONCE_REVALIDATION_TIMEOUT_IN_SECONDS,
         tags: [getAddressLatestNonceTag(principal)],
       },
-    }
+    },
+    'Failed to fetch principal nonces'
   );
-
-  const nonceResponse: PrincipalNonces = await response.json();
-  return nonceResponse;
 }
 
 export async function fetchAddressBNSNames(
