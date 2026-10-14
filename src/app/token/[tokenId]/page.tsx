@@ -8,7 +8,6 @@ import {
 import { handleSettledResult } from '@/app/address/[principal]/page-data';
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
-import { getTxBlockTime, isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { NetworkModes } from '@/common/types/network';
 import { FtHolderListResponse } from '@/common/types/tokens-v3';
@@ -19,6 +18,7 @@ import {
   compressMempoolTransaction,
   compressTransaction,
 } from '@/common/utils/transaction-utils';
+import { getTxBlockTime, isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { isAddressForNetworkMode, validateStacksContractId } from '@/common/utils/utils';
 
 import {

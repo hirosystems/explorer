@@ -3,11 +3,14 @@ import { AddressLink, TokenLink } from '@/common/components/ExplorerLinks';
 import { useSbtcNetworkMode } from '@/common/hooks/useSbtcNetworkMode';
 import { useFtMetadata } from '@/common/queries/useFtMetadata';
 import { TxEvent } from '@/common/types/tx-v3';
+import {
+  TxAssetEvent,
+  getTxAssetEventDetails,
+  isTxAssetEvent,
+} from '@/common/utils/tx-details-utils';
 import { ftDecimals, getAssetNameParts, truncateMiddle } from '@/common/utils/utils';
 import { Flex, Text } from '@chakra-ui/react';
 import { FC } from 'react';
-
-import { TxAssetEvent, getTxAssetEventDetails, isTxAssetEvent } from '../../tx-details-utils';
 
 interface TokenTransferItemProps {
   event: TxAssetEvent;

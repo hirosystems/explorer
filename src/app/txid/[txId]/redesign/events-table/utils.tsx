@@ -1,16 +1,21 @@
 import { TxEvent } from '@/common/types/tx-v3';
+import { getTxAssetEventDetails } from '@/common/utils/tx-details-utils';
 import TransferIcon from '@/ui/icons/TransferIcon';
 import { Fire, Lock, Question, Sparkle, TextAlignLeft } from '@phosphor-icons/react';
 
-import { getTxAssetEventDetails } from '../../tx-details-utils';
-
 export function getFromAddress(event: TxEvent): string {
+  if (event.type === 'stx_lock') {
+    return event.stx_lock.address;
+  }
   return getTxAssetEventDetails(event)?.sender ?? '';
 }
 
 export function getAmount(event: TxEvent): string {
   if (event.type === 'nft_asset') {
     return '1';
+  }
+  if (event.type === 'stx_lock') {
+    return event.stx_lock.amount;
   }
   return getTxAssetEventDetails(event)?.amount ?? '';
 }
@@ -34,7 +39,13 @@ export function getAssetType(event: TxEvent): string {
   }
 }
 
-export type ExtendedTransactionEventAssetType = 'transfer' | 'mint' | 'burn' | 'stx_lock' | 'print';
+export type ExtendedTransactionEventAssetType =
+  | 'transfer'
+  | 'mint'
+  | 'burn'
+  | 'stx_lock'
+  | 'print'
+  | 'unknown';
 
 export function getAssetEventType(event: TxEvent): ExtendedTransactionEventAssetType {
   if (event.type === 'contract_log') {
@@ -43,7 +54,7 @@ export function getAssetEventType(event: TxEvent): ExtendedTransactionEventAsset
   if (event.type === 'stx_lock') {
     return 'stx_lock';
   }
-  return getTxAssetEventDetails(event)!.assetEventType;
+  return getTxAssetEventDetails(event)?.assetEventType ?? 'unknown';
 }
 
 export function getAssetEventTypeLabel(assetEventType: ExtendedTransactionEventAssetType): string {

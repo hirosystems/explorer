@@ -4,13 +4,12 @@ import { MAINNET_SBTC_CONTRACT_ADDRESS } from '@/app/token/[tokenId]/consts';
 import { SbtcTokenLink } from '@/common/components/ExplorerLinks';
 import { TransactionStatus as TransactionStatusEnum } from '@/common/constants/constants';
 import { TxDetails } from '@/common/types/tx-v3';
+import { getTxDetailsStatus } from '@/common/utils/tx-details-utils';
 import { Alert } from '@/components/ui/alert';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Clock, Question, Warning, WarningDiamond, XCircle } from '@phosphor-icons/react';
-
-import { getTxDetailsStatus } from '../tx-details-utils';
 
 export type AlertStatus = 'neutral' | 'warning' | 'error' | 'info';
 
@@ -57,16 +56,6 @@ export function TransactionDroppedAlert() {
       status="error"
       title="Transaction dropped"
       description="This transaction was dropped because it could not be mined. Dropped transactions do not incur mining fees and will expire after 256 tenures (~42 hours). Although they do not become part of the blockchain history, some indexers may continue to display data for these transactions for a limited time after expiration."
-    />
-  );
-}
-
-export function TransactionRolledBackAlert() {
-  return (
-    <AlertWrapper
-      status="error"
-      title="Transaction rolled back"
-      description="This transaction would have succeeded but was rolled back due to a supplied post-condition. While a failed transaction is included in a block (with mining fees paid to the miner and non-refundable), it failed because it violated the rules of the Stacks protocol or the smart contract it interacted with. Refer to the error code and/or the contract for more details on the specific cause of failure."
     />
   );
 }
@@ -145,14 +134,11 @@ export function getTxAlert(tx: TxDetails) {
   let alertContent;
 
   switch (txStatus) {
-    case TransactionStatusEnum.Pending:
+    case TransactionStatusEnum.PENDING:
       alertContent = <PendingAlert />;
       break;
-    case TransactionStatusEnum.Dropped:
+    case TransactionStatusEnum.DROPPED:
       alertContent = <TransactionDroppedAlert />;
-      break;
-    case TransactionStatusEnum.RolledBack:
-      alertContent = <TransactionRolledBackAlert />;
       break;
     case TransactionStatusEnum.FAILED:
       alertContent = <TransactionFailedAlert tx={tx} />;

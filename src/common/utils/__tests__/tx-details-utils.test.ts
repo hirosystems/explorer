@@ -2,6 +2,8 @@ import { TransactionStatus } from '@/common/constants/constants';
 import { TxDetails, TxEvent } from '@/common/types/tx-v3';
 
 import {
+  canListTokensTransferred,
+  formatTenureChangeCause,
   getTxAssetEventDetails,
   getTxBlockTime,
   getTxDetailsStatus,
@@ -54,6 +56,18 @@ describe('getTxDetailsStatus', () => {
     ['dropped_stale_garbage_collect', TransactionStatus.DROPPED],
   ])('maps mempool status %s', (status, expected) => {
     expect(getTxDetailsStatus(mempoolTx({ type: 'coinbase', status }))).toBe(expected);
+  });
+
+  test('treats an unrecognized status on a mined transaction as failed', () => {
+    expect(
+      getTxDetailsStatus(confirmedTx({ type: 'coinbase', status: 'some_future_status' }))
+    ).toBe(TransactionStatus.FAILED);
+  });
+
+  test('treats an unrecognized status on a pending transaction as pending', () => {
+    expect(getTxDetailsStatus(mempoolTx({ type: 'coinbase', status: 'some_future_status' }))).toBe(
+      TransactionStatus.PENDING
+    );
   });
 });
 
@@ -134,6 +148,11 @@ test('getTxDetailsToAddress returns the recipient or the contract', () => {
       })
     )
   ).toBe(`${SENDER}.pool`);
+  expect(
+    getTxDetailsToAddress(
+      mempoolTx({ type: 'smart_contract', smart_contract: { contract_id: `${SENDER}.new-pool` } })
+    )
+  ).toBe(`${SENDER}.new-pool`);
   expect(getTxDetailsToAddress(confirmedTx({ type: 'coinbase' }))).toBe('');
 });
 
@@ -215,4 +234,38 @@ describe('getTxAssetEventDetails', () => {
 
     expect(events.map(getTxAssetEventDetails)).toEqual([undefined, undefined]);
   });
+});
+
+test('formatTenureChangeCause replaces every underscore', () => {
+  expect(formatTenureChangeCause('block_found')).toBe('Block found');
+  expect(formatTenureChangeCause('extended_read_count')).toBe('Extended read count');
+  expect(formatTenureChangeCause('extended')).toBe('Extended');
+});
+
+test('canListTokensTransferred only when one events request returns every event of a mined contract call', () => {
+  const call = { contract_id: `${SENDER}.pool`, function_name: 'swap' };
+  expect(
+    canListTokensTransferred(
+      confirmedTx({ type: 'contract_call', contract_call: call, event_count: 93 })
+    )
+  ).toBe(true);
+  expect(
+    canListTokensTransferred(
+      confirmedTx({ type: 'contract_call', contract_call: call, event_count: 100 })
+    )
+  ).toBe(true);
+  expect(
+    canListTokensTransferred(
+      confirmedTx({ type: 'contract_call', contract_call: call, event_count: 101 })
+    )
+  ).toBe(false);
+  expect(
+    canListTokensTransferred(
+      confirmedTx({ type: 'contract_call', contract_call: call, event_count: 0 })
+    )
+  ).toBe(false);
+  expect(canListTokensTransferred(mempoolTx({ type: 'contract_call', contract_call: call }))).toBe(
+    false
+  );
+  expect(canListTokensTransferred(confirmedTx({ type: 'coinbase', event_count: 5 }))).toBe(false);
 });

@@ -6,7 +6,7 @@ import {
   TxDetailsIncludeField,
   TxEvent,
 } from '@/common/types/tx-v3';
-import { getContractName, microToStacksFormatted } from '@/common/utils/utils';
+import { capitalize, getContractName, microToStacksFormatted } from '@/common/utils/utils';
 
 /** Heavy v3 transaction fields the transaction page renders; the API omits them unless asked. */
 export const TX_DETAILS_INCLUDE: readonly TxDetailsIncludeField[] = [
@@ -17,6 +17,19 @@ export const TX_DETAILS_INCLUDE: readonly TxDetailsIncludeField[] = [
 
 export function isConfirmedTxDetails(tx: TxDetails): tx is ConfirmedTxDetails {
   return 'block' in tx;
+}
+
+/** Most events one events request returns, so the most a contract call can have to list its transfers. */
+export const TOKENS_TRANSFERRED_MAX_EVENTS = 100;
+
+/** Whether a single events request returns all of a contract call's events, so its transfers can be listed. */
+export function canListTokensTransferred(tx: TxDetails): boolean {
+  return (
+    tx.type === 'contract_call' &&
+    isConfirmedTxDetails(tx) &&
+    tx.event_count > 0 &&
+    tx.event_count <= TOKENS_TRANSFERRED_MAX_EVENTS
+  );
 }
 
 /**
@@ -34,6 +47,8 @@ export function getTxDetailsStatus(tx: TxDetails): TxStatus {
     case 'pending':
       return TransactionStatus.PENDING;
     default:
+      // A mined transaction that didn't succeed failed, whatever new status the API reports.
+      if (isConfirmedTxDetails(tx)) return TransactionStatus.FAILED;
       return tx.status.startsWith('dropped_')
         ? TransactionStatus.DROPPED
         : TransactionStatus.PENDING;
@@ -65,6 +80,11 @@ export function getTxDetailsTitle(tx: TxDetails): string {
         ? `Tenure ${tx.tenure_change.cause} (#${tx.block.height})`
         : 'Tenure change';
   }
+}
+
+/** A tenure change cause as a label, e.g. `extended_read_count` → `Extended read count`. */
+export function formatTenureChangeCause(cause: string): string {
+  return capitalize(cause.replace(/_/g, ' '));
 }
 
 export function getTxDetailsToAddress(tx: TxDetails): string {

@@ -1,8 +1,13 @@
-import { getTxBlockTime, isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { AddressLink, BlockLink, TxLink } from '@/common/components/ExplorerLinks';
 import { useTxEventsById } from '@/common/queries/useTxEventsById';
 import { TxDetailsOf } from '@/common/types/tx-v3';
 import { formatBlockTime } from '@/common/utils/time-utils';
+import {
+  TOKENS_TRANSFERRED_MAX_EVENTS,
+  canListTokensTransferred,
+  getTxBlockTime,
+  isConfirmedTxDetails,
+} from '@/common/utils/tx-details-utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, StatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
@@ -13,11 +18,8 @@ import { ExecutionCostItem } from './ExecutionCost';
 import { PriceSummaryItemValue, SponsorTag, SummaryItem } from './SummaryItem';
 import { TokensTransferred, getTransferEvents } from './TokensTransferred';
 
-// Only list transfers when one request returns every event.
-const TOKENS_TRANSFERRED_MAX_EVENTS = 100;
-
 export const ContractCallTxSummaryItems = ({ tx }: { tx: TxDetailsOf<'contract_call'> }) => {
-  const { stxPrice } = useTxIdPageData();
+  const { stxPrice, initialTxEvents } = useTxIdPageData();
   const isSponsored = tx.sponsor !== null;
   const sponsor = tx.sponsor?.address;
 
@@ -31,11 +33,11 @@ export const ContractCallTxSummaryItems = ({ tx }: { tx: TxDetailsOf<'contract_c
     resultSuccess = getFunctionResultSuccessStatus(tx.result);
   }
 
-  const txHasAllEvents =
-    isConfirmed && tx.event_count > 0 && tx.event_count <= TOKENS_TRANSFERRED_MAX_EVENTS;
+  const txHasAllEvents = canListTokensTransferred(tx);
   const { data: eventsData } = useTxEventsById(tx.tx_id, TOKENS_TRANSFERRED_MAX_EVENTS, undefined, {
     enabled: txHasAllEvents,
     staleTime: Infinity,
+    initialData: initialTxEvents,
   });
   const events = txHasAllEvents ? eventsData?.results || [] : [];
   const showTransfers = getTransferEvents(events).length > 0;

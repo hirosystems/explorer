@@ -1,9 +1,10 @@
+import { ApiError } from '@/api/ApiError';
 import { stacksAPIFetch, stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 import { LUNAR_CRUSH_API_KEY } from '@/common/constants/env';
 import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { LunarCrushCoinRedesign } from '@/common/types/lunarCrush';
 import { FtHolderListResponse, FtSupplyResponse } from '@/common/types/tokens-v3';
-import { TxDetails, TxDetailsIncludeField } from '@/common/types/tx-v3';
+import { TxDetails, TxDetailsIncludeField, TxEventListResponse } from '@/common/types/tx-v3';
 import { logError } from '@/common/utils/error-utils';
 import { FT_BALANCES_PAGE_SIZE, fetchAllFtBalances } from '@/common/utils/ft-balances';
 import { validateAssettId } from '@/common/utils/utils';
@@ -290,10 +291,33 @@ export async function fetchTx(
     },
   });
   if (!response.ok) {
-    throw new Error(`Failed to fetch transaction: ${response.status} ${response.statusText}`);
+    throw new ApiError({
+      message: `Failed to fetch transaction: ${response.status} ${response.statusText}`,
+      status: response.status,
+      endpoint: '/extended/v3/transactions/{tx_id}',
+      method: 'GET',
+    });
   }
   const tx: TxDetails = await response.json();
   return tx;
+}
+
+export async function fetchTxEvents(
+  apiUrl: string,
+  txId: string,
+  limit: number
+): Promise<TxEventListResponse> {
+  return stacksAPIFetchJson<TxEventListResponse>(
+    `${apiUrl}/extended/v3/transactions/${txId}/events?limit=${limit}`,
+    {
+      cache: 'default',
+      next: {
+        revalidate: CONFIRMED_TX_REVALIDATION_TIMEOUT_IN_SECONDS,
+        tags: [getTxTag(txId)],
+      },
+    },
+    'Failed to fetch transaction events'
+  );
 }
 
 export async function fetchHolders(

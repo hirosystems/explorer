@@ -1,5 +1,5 @@
-import { TX_DETAILS_INCLUDE } from '@/app/txid/[txId]/tx-details-utils';
 import { TxDetails } from '@/common/types/tx-v3';
+import { TX_DETAILS_INCLUDE } from '@/common/utils/tx-details-utils';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';

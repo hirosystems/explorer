@@ -2,6 +2,11 @@ import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { TxDetails } from '@/common/types/tx-v3';
 import { getTxTypeColor } from '@/common/utils/transactions';
 import {
+  getTxDetailsStatus,
+  getTxDetailsTitle,
+  getTxDetailsToAddress,
+} from '@/common/utils/tx-details-utils';
+import {
   truncateHex,
   truncateStxAddress,
   truncateStxContractId,
@@ -14,8 +19,6 @@ import { Box, Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { forwardRef, useRef } from 'react';
-
-import { getTxDetailsStatus, getTxDetailsTitle, getTxDetailsToAddress } from '../tx-details-utils';
 
 const BORDER_WIDTH = 1;
 

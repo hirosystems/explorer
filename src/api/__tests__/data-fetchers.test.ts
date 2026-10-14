@@ -1,7 +1,8 @@
 /** @jest-environment node */
 import { stacksAPIFetch, stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 
-import { fetchFtSupply, fetchHolders, fetchTx } from '../data-fetchers';
+import { ApiError } from '../ApiError';
+import { fetchFtSupply, fetchHolders, fetchTx, fetchTxEvents } from '../data-fetchers';
 
 jest.mock('@/api/stacksAPIFetch', () => ({
   stacksAPIFetch: jest.fn(),
@@ -65,4 +66,22 @@ test('fetchTx omits the include parameter when no heavy fields are requested', a
 
   await fetchTx('https://api.hiro.so', '0x01');
   expect(fetchMock.mock.calls[0][0]).toBe('https://api.hiro.so/extended/v3/transactions/0x01');
+});
+
+test('fetchTx throws an ApiError carrying the status when the API rejects the request', async () => {
+  fetchMock.mockResolvedValue(new Response('{}', { status: 404, statusText: 'Not Found' }));
+
+  const error = await fetchTx('https://api.hiro.so', '0x01').catch(e => e);
+  expect(error).toBeInstanceOf(ApiError);
+  expect(error).toMatchObject({ status: 404, endpoint: '/extended/v3/transactions/{tx_id}' });
+});
+
+test('fetchTxEvents reads the first page of v3 transaction events', async () => {
+  const page = { total: 3, limit: 100, cursor: {}, results: [] };
+  fetchJsonMock.mockResolvedValue(page);
+
+  await expect(fetchTxEvents('https://api.hiro.so', '0x01', 100)).resolves.toEqual(page);
+  expect(fetchJsonMock.mock.calls[0][0]).toBe(
+    'https://api.hiro.so/extended/v3/transactions/0x01/events?limit=100'
+  );
 });

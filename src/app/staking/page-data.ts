@@ -1,7 +1,7 @@
 import { fetchTx } from '@/api/data-fetchers';
-import { isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { ensureError, logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 
 import { fetchBond } from './data';
 

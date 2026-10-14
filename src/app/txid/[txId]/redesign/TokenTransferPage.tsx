@@ -1,6 +1,6 @@
-import { isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { SectionTabsContentContainer, SectionTabsTrigger } from '@/common/components/SectionTabs';
 import { TxDetails, TxDetailsOf } from '@/common/types/tx-v3';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { TabsContent } from '@/ui/Tabs';
 import { Stack } from '@chakra-ui/react';
 

@@ -1,8 +1,8 @@
-import { getTxBlockTime, isConfirmedTxDetails } from '@/app/txid/[txId]/tx-details-utils';
 import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
 import { TxDetailsOf } from '@/common/types/tx-v3';
 import { formatBlockTime } from '@/common/utils/time-utils';
 import { isConfirmedTx } from '@/common/utils/transaction-utils';
+import { getTxBlockTime, isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Flex } from '@chakra-ui/react';
 

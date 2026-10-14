@@ -2,6 +2,7 @@ import { useUser } from '@/app/sandbox/hooks/useUser';
 import { SectionTabsContentContainer } from '@/common/components/SectionTabs';
 import { useContractById } from '@/common/queries/useContractById';
 import { TxDetailsOf } from '@/common/types/tx-v3';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
@@ -9,7 +10,6 @@ import { useState } from 'react';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
 
-import { isConfirmedTxDetails } from '../../tx-details-utils';
 import { FunctionArgsTable } from './FunctionArgsTable';
 import { FunctionCallForm } from './FunctionCallForm';
 import { FunctionListItem } from './FunctionListItem';

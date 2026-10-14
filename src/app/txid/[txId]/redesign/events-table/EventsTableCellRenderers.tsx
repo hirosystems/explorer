@@ -65,6 +65,7 @@ export function getEventAmountCellData(data: EventAmountData) {
 export function getAssetTypeFromEventType(eventType: TxEvent['type']) {
   switch (eventType) {
     case 'stx_asset':
+    case 'stx_lock':
       return AssetType.STX;
     case 'ft_asset':
       return AssetType.FUNGIBLE;
