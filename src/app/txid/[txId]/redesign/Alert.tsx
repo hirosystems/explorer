@@ -95,13 +95,21 @@ export function TenureAlert() {
   );
 }
 
+function getReasonForFailure(status: TxDetails['status']) {
+  switch (status) {
+    case 'abort_by_response':
+      return 'This transaction did not succeed because the transaction was aborted during its execution';
+    case 'abort_by_post_condition':
+      return 'This transaction would have succeeded, but was rolled back by a supplied post-condition';
+    case 'problematic_skipped':
+      return 'This transaction was marked as problematic by its block, so it was not executed: only its fee and nonce were applied';
+    default:
+      return 'This transaction did not succeed';
+  }
+}
+
 export function getFailureDescription(tx: TxDetails) {
-  const reasonForFailure =
-    tx.status === 'abort_by_response'
-      ? 'This transaction did not succeed because the transaction was aborted during its execution'
-      : tx.status === 'abort_by_post_condition'
-        ? 'This transaction would have succeeded, but was rolled back by a supplied post-condition'
-        : undefined;
+  const reasonForFailure = getReasonForFailure(tx.status);
   const vmError =
     'vm_error' in tx && tx.vm_error && typeof tx.vm_error === 'string' ? tx.vm_error : undefined;
 
