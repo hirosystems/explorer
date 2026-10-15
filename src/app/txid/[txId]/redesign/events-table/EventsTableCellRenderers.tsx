@@ -3,6 +3,7 @@ import {
   AssetType,
   EllipsisText,
 } from '@/common/components/table/CommonTableCellRenderers';
+import { TxEvent } from '@/common/types/tx-v3';
 import {
   formatStacksAmount,
   getAssetNameParts,
@@ -14,8 +15,6 @@ import { Tooltip } from '@/ui/Tooltip';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
-
-import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 
 import {
   ExtendedTransactionEventAssetType,
@@ -44,14 +43,14 @@ export const AssetEventTypeCellRenderer = ({
 };
 
 export interface EventAmountData {
-  event: TransactionEvent;
+  event: TxEvent;
   ftDecimals?: number;
 }
 
 export function getEventAmountCellData(data: EventAmountData) {
   const { event, ftDecimals } = data;
-  const eventType = event.event_type;
-  const assetId = eventType === 'fungible_token_asset' ? event.asset.asset_id : undefined;
+  const eventType = event.type;
+  const assetId = event.type === 'ft_asset' ? event.ft_asset.asset_identifier : undefined;
   const { asset } = assetId ? getAssetNameParts(assetId) : {};
   const amount = getAmount(event);
 
@@ -63,13 +62,14 @@ export function getEventAmountCellData(data: EventAmountData) {
   };
 }
 
-export function getAssetTypeFromEventType(eventType: TransactionEvent['event_type']) {
+export function getAssetTypeFromEventType(eventType: TxEvent['type']) {
   switch (eventType) {
     case 'stx_asset':
+    case 'stx_lock':
       return AssetType.STX;
-    case 'fungible_token_asset':
+    case 'ft_asset':
       return AssetType.FUNGIBLE;
-    case 'non_fungible_token_asset':
+    case 'nft_asset':
       return AssetType.NON_FUNGIBLE;
     default:
       return undefined;

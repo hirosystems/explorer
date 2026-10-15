@@ -1,33 +1,26 @@
 import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { formatBlockTime } from '@/common/utils/time-utils';
 import { isConfirmedTx } from '@/common/utils/transaction-utils';
+import { getTxBlockTime, isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel } from '@/ui/Badge';
 import { Flex } from '@chakra-ui/react';
-
-import {
-  CoinbaseTransaction,
-  MempoolCoinbaseTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { useTxIdPageData } from '../../TxIdPageContext';
 import { ExecutionCostItem } from './ExecutionCost';
 import { PriceSummaryItemValue, SponsorTag, SummaryItem } from './SummaryItem';
 
-export const CoinbaseTxSummaryItems = ({
-  tx,
-}: {
-  tx: CoinbaseTransaction | MempoolCoinbaseTransaction;
-}) => {
+export const CoinbaseTxSummaryItems = ({ tx }: { tx: TxDetailsOf<'coinbase'> }) => {
   const { stxPrice } = useTxIdPageData();
-  const isSponsored = tx.sponsored;
-  const sponsor = tx.sponsor_address;
+  const isSponsored = tx.sponsor !== null;
+  const sponsor = tx.sponsor?.address;
 
   return (
     <>
       <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
       <SummaryItem
         label="By"
-        value={tx.sender_address}
+        value={tx.sender.address}
         valueRenderer={value => (
           <AddressLink address={value} wordBreak="break-all" variant="tableLink">
             {value}
@@ -35,23 +28,22 @@ export const CoinbaseTxSummaryItems = ({
         )}
         showCopyButton
       />
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) &&
-        tx.coinbase_payload?.alt_recipient && (
-          <SummaryItem
-            label="Reward Recipient"
-            value={tx.coinbase_payload?.alt_recipient}
-            valueRenderer={value => (
-              <AddressLink address={value} wordBreak="break-all" variant="tableLink">
-                {value}
-              </AddressLink>
-            )}
-            showCopyButton
-          />
-        )}
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && tx.coinbase.alt_recipient && (
+        <SummaryItem
+          label="Reward Recipient"
+          value={tx.coinbase.alt_recipient}
+          valueRenderer={value => (
+            <AddressLink address={value} wordBreak="break-all" variant="tableLink">
+              {value}
+            </AddressLink>
+          )}
+          showCopyButton
+        />
+      )}
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Timestamp"
-          value={formatBlockTime(tx.block_time)}
+          value={formatBlockTime(getTxBlockTime(tx))}
           valueRenderer={value => (
             <Badge
               variant="solid"
@@ -76,11 +68,11 @@ export const CoinbaseTxSummaryItems = ({
           </Flex>
         )}
       />
-      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
+      <SummaryItem label="Nonce" value={tx.sender.nonce.toString()} showCopyButton />
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Block height"
-          value={tx.block_height?.toString() || ''}
+          value={tx.block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge
@@ -93,10 +85,10 @@ export const CoinbaseTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Block hash"
-          value={tx.block_hash?.toString() || ''}
+          value={tx.block.hash?.toString() || ''}
           showCopyButton
           valueRenderer={value => (
             <BlockLink hash={value} wordBreak="break-all" variant="tableLink">
@@ -105,10 +97,10 @@ export const CoinbaseTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
+      {isConfirmedTxDetails(tx) && (
         <SummaryItem
           label="Bitcoin Anchor"
-          value={tx.burn_block_height?.toString() || ''}
+          value={tx.bitcoin_block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge
@@ -121,9 +113,7 @@ export const CoinbaseTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmedTx<CoinbaseTransaction, MempoolCoinbaseTransaction>(tx) && (
-        <ExecutionCostItem tx={tx} />
-      )}
+      {isConfirmedTxDetails(tx) && <ExecutionCostItem tx={tx} />}
     </>
   );
 };

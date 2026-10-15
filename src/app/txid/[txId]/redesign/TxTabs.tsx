@@ -1,13 +1,12 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { mapTabParamToEnum, useDeepLinkTabOnValueChange } from '@/common/components/SectionTabs';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
+import { TxDetails } from '@/common/types/tx-v3';
 import { TabsList, TabsRoot } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ContractCallTabContent, ContractCallTabTriggers } from './ContractCallPage';
 import { SmartContractTabContent, SmartContractTabTriggers } from './SmartContractPage';
@@ -23,51 +22,45 @@ export enum TransactionIdPageTab {
   Transactions = 'transactions',
 }
 
-function TxTabsTriggers({
-  tx,
-  selectedTab,
-}: {
-  tx: Transaction | MempoolTransaction;
-  selectedTab: TransactionIdPageTab;
-}) {
-  if (tx.tx_type === 'token_transfer') {
+function TxTabsTriggers({ tx, selectedTab }: { tx: TxDetails; selectedTab: TransactionIdPageTab }) {
+  if (tx.type === 'token_transfer') {
     return <TokenTransferTabTriggers tx={tx} selectedTab={selectedTab} />;
   }
-  if (tx.tx_type === 'contract_call') {
+  if (tx.type === 'contract_call') {
     return <ContractCallTabTriggers tx={tx} selectedTab={selectedTab} />;
   }
-  if (tx.tx_type === 'coinbase') {
+  if (tx.type === 'coinbase') {
     return null;
   }
-  if (tx.tx_type === 'tenure_change') {
+  if (tx.type === 'tenure_change') {
     return null;
   }
-  if (tx.tx_type === 'smart_contract') {
+  if (tx.type === 'smart_contract') {
     return <SmartContractTabTriggers tx={tx} selectedTab={selectedTab} />;
   }
   return null;
 }
 
-function TxTabsContent({ tx }: { tx: Transaction | MempoolTransaction }) {
-  if (tx.tx_type === 'token_transfer') {
+function TxTabsContent({ tx }: { tx: TxDetails }) {
+  if (tx.type === 'token_transfer') {
     return <TokenTransferTabContent tx={tx} />;
   }
-  if (tx.tx_type === 'contract_call') {
+  if (tx.type === 'contract_call') {
     return <ContractCallTabContent tx={tx} />;
   }
-  if (tx.tx_type === 'coinbase') {
+  if (tx.type === 'coinbase') {
     return null;
   }
-  if (tx.tx_type === 'tenure_change') {
+  if (tx.type === 'tenure_change') {
     return null;
   }
-  if (tx.tx_type === 'smart_contract') {
+  if (tx.type === 'smart_contract') {
     return <SmartContractTabContent tx={tx} />;
   }
   return null;
 }
 
-export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+export const TxTabs = ({ tx }: { tx: TxDetails }) => {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const initialTab = useMemo(
@@ -111,7 +104,7 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
           </TabsList>
         </ScrollIndicator>
 
-        {tx.tx_type === 'token_transfer' && (
+        {tx.type === 'token_transfer' && (
           <Flex alignItems={'center'} gap={2}>
             <Text textStyle="text-regular-sm">Show:</Text>
             <ValueBasisFilterPopover />

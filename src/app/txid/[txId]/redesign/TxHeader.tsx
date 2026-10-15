@@ -1,6 +1,11 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
-import { getToAddress } from '@/common/utils/transaction-utils';
-import { getTxTitle, getTxTypeColor } from '@/common/utils/transactions';
+import { TxDetails } from '@/common/types/tx-v3';
+import { getTxTypeColor } from '@/common/utils/transactions';
+import {
+  getTxDetailsStatus,
+  getTxDetailsTitle,
+  getTxDetailsToAddress,
+} from '@/common/utils/tx-details-utils';
 import {
   truncateHex,
   truncateStxAddress,
@@ -14,8 +19,6 @@ import { Box, Flex, Icon, Stack, useClipboard } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { forwardRef, useRef } from 'react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 const BORDER_WIDTH = 1;
 
@@ -55,7 +58,7 @@ const Badge = ({
   );
 };
 
-const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+const TxIdBadge = ({ tx }: { tx: TxDetails }) => {
   return (
     <Badge
       value={truncateHex(tx.tx_id, 4, 5, false)}
@@ -76,11 +79,11 @@ const AddressBadge = ({ address }: { address: string }) => {
   ) : null;
 };
 
-const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
-  const toAddress = getToAddress(tx);
+const FromToBadges = ({ tx }: { tx: TxDetails }) => {
+  const toAddress = getTxDetailsToAddress(tx);
   return (
     <Flex gap={1} alignItems="center" flexWrap="wrap">
-      <AddressBadge address={tx.sender_address} />
+      <AddressBadge address={tx.sender.address} />
       {toAddress ? (
         <>
           <Icon h={6} w={3.5} color="iconTertiary">
@@ -93,13 +96,10 @@ const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   );
 };
 
-export const TxHeaderUnminimized = forwardRef<
-  HTMLDivElement,
-  { tx: Transaction | MempoolTransaction }
->(({ tx }, ref) => {
+export const TxHeaderUnminimized = forwardRef<HTMLDivElement, { tx: TxDetails }>(({ tx }, ref) => {
   return (
     <Flex
-      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.tx_type)}, var(--stacks-colors-surface-primary))`}
+      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.type)}, var(--stacks-colors-surface-primary))`}
       padding={`${BORDER_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
       boxShadow="elevation2"
@@ -107,11 +107,11 @@ export const TxHeaderUnminimized = forwardRef<
     >
       <Stack p={4} gap={3} w="full" borderRadius="redesign.xl" bg="surfaceSecondary">
         <Flex gap={2}>
-          <TransactionTypeBadge tx={tx} />
-          <TransactionStatusBadge tx={tx} />
+          <TransactionTypeBadge txType={tx.type} />
+          <TransactionStatusBadge status={getTxDetailsStatus(tx)} />
         </Flex>
         <Flex gap={4} flexWrap="wrap">
-          <Text textStyle="heading-sm">{getTxTitle(tx)}</Text>
+          <Text textStyle="heading-sm">{getTxDetailsTitle(tx)}</Text>
           <Flex gap={2} flexWrap="wrap">
             <TxIdBadge tx={tx} />
             <FromToBadges tx={tx} />
@@ -122,10 +122,10 @@ export const TxHeaderUnminimized = forwardRef<
   );
 });
 
-export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+export const TxHeaderMinimized = ({ tx }: { tx: TxDetails }) => {
   return (
     <Flex
-      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.tx_type)}, var(--stacks-colors-surface-primary))`}
+      bg={`linear-gradient(to bottom, ${getTxTypeColor(tx.type)}, var(--stacks-colors-surface-primary))`}
       padding={`${BORDER_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-xl) + ${BORDER_WIDTH}px)`}
       boxShadow="elevation2"
@@ -139,11 +139,11 @@ export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction
         alignItems="center"
       >
         <Flex gap={1} alignItems="center">
-          <TransactionTypeBadge tx={tx} withoutLabel />
-          <TransactionStatusBadge tx={tx} withoutLabel />
+          <TransactionTypeBadge txType={tx.type} withoutLabel />
+          <TransactionStatusBadge status={getTxDetailsStatus(tx)} withoutLabel />
         </Flex>
         <Flex gap={3} alignItems="center">
-          <Text textStyle="text-medium-md">{getTxTitle(tx)}</Text>
+          <Text textStyle="text-medium-md">{getTxDetailsTitle(tx)}</Text>
           <Flex alignItems="center" gap={2} hideBelow="md">
             <TxIdBadge tx={tx} />
             <FromToBadges tx={tx} />
@@ -154,7 +154,7 @@ export const TxHeaderMinimized = ({ tx }: { tx: Transaction | MempoolTransaction
   );
 };
 
-export const TxHeader = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+export const TxHeader = ({ tx }: { tx: TxDetails }) => {
   const txHeaderRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useIsInViewport(txHeaderRef);
 

@@ -1,14 +1,8 @@
 import { SectionTabsContentContainer, SectionTabsTrigger } from '@/common/components/SectionTabs';
-import { isConfirmedTx } from '@/common/utils/transactions';
+import { TxDetails, TxDetailsOf } from '@/common/types/tx-v3';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { TabsContent } from '@/ui/Tabs';
 import { Grid, Stack } from '@chakra-ui/react';
-
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-  MempoolTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { getTxAlert } from './Alert';
 import { DetailsCard } from './DetailsCard';
@@ -20,7 +14,7 @@ import { PostConditions } from './post-conditions/PostConditions';
 import { Source } from './source/Source';
 import { TxSummary } from './tx-summary/TxSummary';
 
-export const ContractCallPage = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+export const ContractCallPage = ({ tx }: { tx: TxDetails }) => {
   return (
     <>
       <Stack gap={3}>
@@ -36,13 +30,11 @@ export function ContractCallTabTriggers({
   tx,
   selectedTab,
 }: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
+  tx: TxDetailsOf<'contract_call'>;
   selectedTab: TransactionIdPageTab;
 }) {
-  const numPostConditions = tx.post_conditions.length || 0;
-  const numTxEvents = isConfirmedTx<ContractCallTransaction, MempoolContractCallTransaction>(tx)
-    ? tx.event_count
-    : 0;
+  const numPostConditions = tx.post_conditions?.length ?? 0;
+  const numTxEvents = isConfirmedTxDetails(tx) ? tx.event_count : 0;
 
   return (
     <>
@@ -82,11 +74,7 @@ export function ContractCallTabTriggers({
   );
 }
 
-export function ContractCallTabContent({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) {
+export function ContractCallTabContent({ tx }: { tx: TxDetailsOf<'contract_call'> }) {
   return (
     <>
       <TabsContent
@@ -98,7 +86,7 @@ export function ContractCallTabContent({
           <SectionTabsContentContainer>
             <TxSummary tx={tx} />
           </SectionTabsContentContainer>
-          <DetailsCard tx={tx as Transaction} />
+          <DetailsCard tx={tx} />
         </Grid>
       </TabsContent>
       <TabsContent

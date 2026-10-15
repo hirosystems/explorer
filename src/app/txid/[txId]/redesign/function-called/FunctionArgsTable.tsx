@@ -1,11 +1,9 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table } from '@/common/components/table/Table';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { ColumnDef } from '@tanstack/react-table';
 
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
+import { ClarityAbiFunction } from '@stacks/transactions';
 
 import {
   NameCellRenderer,
@@ -54,10 +52,12 @@ const columnDefinitions: ColumnDef<FunctionArgsTableData>[] = [
 
 export function FunctionArgsTable({
   tx,
+  functionAbi,
 }: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
+  tx: TxDetailsOf<'contract_call'>;
+  functionAbi?: ClarityAbiFunction;
 }) {
-  const args = getContractCallTxFunctionArgs(tx);
+  const args = getContractCallTxFunctionArgs(tx, functionAbi);
   const formattedArgs = args.map(arg => formatClarityValue(arg));
   return (
     <Table

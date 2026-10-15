@@ -467,39 +467,41 @@ async function fetchTxEvents(
 ): Promise<string[]> {
   const eventLimit = 100;
   const reprs: string[] = [];
-  let offset = 0;
+  let cursor: string | undefined;
   while (true) {
-    const params = new URLSearchParams({
-      event_limit: String(eventLimit),
-      event_offset: String(offset),
-    });
-    const response = await fetchRequest(`${apiUrl}/extended/v1/tx/${txId}?${params}`, {
-      redirect: 'error',
-      cache: 'default',
-      next: {
-        revalidate: settled ? SETTLED_REVALIDATE_SECONDS : REVALIDATE_SECONDS,
-        tags: [`staking-tx-${txId}`],
-      },
-    });
+    const params = new URLSearchParams({ limit: String(eventLimit) });
+    if (cursor !== undefined) params.set('cursor', cursor);
+    const response = await fetchRequest(
+      `${apiUrl}/extended/v3/transactions/${txId}/events?${params}`,
+      {
+        redirect: 'error',
+        cache: 'default',
+        next: {
+          revalidate: settled ? SETTLED_REVALIDATE_SECONDS : REVALIDATE_SECONDS,
+          tags: [`staking-tx-${txId}`],
+        },
+      }
+    );
     if (!response.ok) {
-      throw new Error(`Failed to fetch transaction ${txId}: ${response.status}`);
+      throw new Error(`Failed to fetch transaction ${txId} events: ${response.status}`);
     }
     const data: {
-      event_count?: number;
-      events?: { contract_log?: { contract_id?: string; value?: { repr?: string } } }[];
+      cursor?: { next?: string | null };
+      results?: { contract_log?: { contract_id?: string; value?: { repr?: string } } }[];
     } = await response.json();
-    const events = data.events ?? [];
+    const events = data.results ?? [];
     reprs.push(
       ...events
         .filter(event => event.contract_log?.contract_id === poxContractId)
         .map(event => event.contract_log?.value?.repr)
         .filter((repr): repr is string => !!repr)
     );
-    offset += events.length;
-    if (data.event_count !== undefined ? offset >= data.event_count : events.length < eventLimit) {
-      return reprs;
+    const next = data.cursor?.next;
+    if (next === undefined || next === null) return reprs;
+    if (next === cursor || events.length === 0) {
+      throw new Error(`Incomplete events for transaction ${txId}`);
     }
-    if (events.length === 0) throw new Error(`Incomplete events for transaction ${txId}`);
+    cursor = next;
   }
 }
 

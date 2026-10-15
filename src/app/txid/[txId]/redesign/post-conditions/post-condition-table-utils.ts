@@ -1,3 +1,5 @@
+import { TxPostCondition } from '@/common/types/tx-v3';
+
 import type { Transaction } from '@stacks/blockchain-api-client';
 import {
   PostCondition,
@@ -23,7 +25,11 @@ export interface PoxPostCondition {
   condition_code: PoxPostConditionConditionCode;
 }
 
-export type ExtendedPostCondition = PostCondition | StakingPostCondition | PoxPostCondition;
+export type ExtendedPostCondition =
+  | PostCondition
+  | StakingPostCondition
+  | PoxPostCondition
+  | TxPostCondition;
 
 type PostConditionNonFungibleConditionCode = Extract<
   Transaction['post_conditions'][number],
@@ -33,7 +39,8 @@ type PostConditionNonFungibleConditionCode = Extract<
 export type PostConditionConditionCode =
   | PostConditionFungibleConditionCode
   | PostConditionNonFungibleConditionCode
-  | PoxPostConditionConditionCode;
+  | PoxPostConditionConditionCode
+  | TxPostCondition['condition_code'];
 
 export function getAmount(postCondition: ExtendedPostCondition): string {
   if (postCondition.type === 'stx') {

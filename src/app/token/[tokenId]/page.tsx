@@ -18,6 +18,7 @@ import {
   compressMempoolTransaction,
   compressTransaction,
 } from '@/common/utils/transaction-utils';
+import { getTxBlockTime, isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { isAddressForNetworkMode, validateStacksContractId } from '@/common/utils/utils';
 
 import {
@@ -145,8 +146,7 @@ export default async function (props: {
         networkMode
       );
 
-      txBlockTime =
-        tx && isConfirmedTx<Transaction, MempoolTransaction>(tx) ? tx.block_time : undefined;
+      txBlockTime = tx && isConfirmedTxDetails(tx) ? getTxBlockTime(tx) : undefined;
 
       const compressedRecentAddressTransactions = recentAddressTransactions
         ? {

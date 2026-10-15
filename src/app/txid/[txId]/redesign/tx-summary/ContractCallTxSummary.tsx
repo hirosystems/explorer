@@ -1,50 +1,46 @@
 import { AddressLink, BlockLink, TxLink } from '@/common/components/ExplorerLinks';
+import { useTxEventsById } from '@/common/queries/useTxEventsById';
+import { TxDetailsOf } from '@/common/types/tx-v3';
 import { formatBlockTime } from '@/common/utils/time-utils';
-import { isConfirmedTx } from '@/common/utils/transaction-utils';
+import {
+  TOKENS_TRANSFERRED_MAX_EVENTS,
+  canListTokensTransferred,
+  getTxBlockTime,
+  isConfirmedTxDetails,
+} from '@/common/utils/tx-details-utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, StatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
-
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { useTxIdPageData } from '../../TxIdPageContext';
 import { formatFunctionResult, getFunctionResultSuccessStatus } from '../function-called/utils';
 import { ExecutionCostItem } from './ExecutionCost';
 import { PriceSummaryItemValue, SponsorTag, SummaryItem } from './SummaryItem';
-import { TokensTransferred } from './TokensTransferred';
+import { TokensTransferred, getTransferEvents } from './TokensTransferred';
 
-export const ContractCallTxSummaryItems = ({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) => {
-  const { stxPrice } = useTxIdPageData();
-  const isSponsored = tx.sponsored;
-  const sponsor = tx.sponsor_address;
+export const ContractCallTxSummaryItems = ({ tx }: { tx: TxDetailsOf<'contract_call'> }) => {
+  const { stxPrice, initialTxEvents } = useTxIdPageData();
+  const isSponsored = tx.sponsor !== null;
+  const sponsor = tx.sponsor?.address;
 
-  const isConfirmed = isConfirmedTx<ContractCallTransaction, MempoolContractCallTransaction>(tx);
+  const isConfirmed = isConfirmedTxDetails(tx);
 
   let resultValue = '';
   let resultSuccess = false;
-  if (isConfirmed && tx.tx_result) {
-    const formattedResult = formatFunctionResult(tx.tx_result);
+  if (isConfirmed && tx.result) {
+    const formattedResult = formatFunctionResult(tx.result);
     resultValue = formattedResult.map(r => r.value).join(', ');
-    resultSuccess = getFunctionResultSuccessStatus(tx);
+    resultSuccess = getFunctionResultSuccessStatus(tx.result);
   }
 
-  const txHasAllEvents = isConfirmed && tx.event_count <= 100;
-  const showTransfers =
-    txHasAllEvents &&
-    tx.events?.some(
-      event =>
-        ((event.event_type === 'fungible_token_asset' ||
-          event.event_type === 'non_fungible_token_asset') &&
-          event.asset.asset_event_type === 'transfer') ||
-        (event.event_type === 'stx_asset' && event.asset.asset_event_type === 'transfer')
-    );
+  const txHasAllEvents = canListTokensTransferred(tx);
+  const { data: eventsData } = useTxEventsById(tx.tx_id, TOKENS_TRANSFERRED_MAX_EVENTS, undefined, {
+    enabled: txHasAllEvents,
+    staleTime: Infinity,
+    initialData: initialTxEvents,
+  });
+  const events = txHasAllEvents ? eventsData?.results || [] : [];
+  const showTransfers = getTransferEvents(events).length > 0;
 
   return (
     <>
@@ -60,7 +56,7 @@ export const ContractCallTxSummaryItems = ({
       />
       <SummaryItem
         label="By"
-        value={tx.sender_address}
+        value={tx.sender.address}
         valueRenderer={value => (
           <AddressLink address={value} wordBreak="break-all" variant="tableLink">
             {value}
@@ -78,7 +74,7 @@ export const ContractCallTxSummaryItems = ({
         )}
         showCopyButton
       />
-      {isConfirmed && tx.tx_result && (
+      {isConfirmed && tx.result && (
         <SummaryItem
           label="Result"
           value={resultValue}
@@ -97,13 +93,13 @@ export const ContractCallTxSummaryItems = ({
         <SummaryItem
           label="Tokens Transferred"
           value=""
-          valueRenderer={() => <TokensTransferred events={isConfirmed ? tx.events || [] : []} />}
+          valueRenderer={() => <TokensTransferred events={events} />}
         />
       )}
-      {isConfirmed && tx.block_time && (
+      {isConfirmed && getTxBlockTime(tx) && (
         <SummaryItem
           label="Timestamp"
-          value={formatBlockTime(tx.block_time)}
+          value={formatBlockTime(getTxBlockTime(tx))}
           valueRenderer={value => (
             <Badge
               variant="solid"
@@ -127,11 +123,11 @@ export const ContractCallTxSummaryItems = ({
           </Flex>
         )}
       />
-      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
+      <SummaryItem label="Nonce" value={tx.sender.nonce.toString()} showCopyButton />
       {isConfirmed && (
         <SummaryItem
           label="Block height"
-          value={tx.block_height?.toString() || ''}
+          value={tx.block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge
@@ -144,10 +140,10 @@ export const ContractCallTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmed && tx.block_hash && (
+      {isConfirmed && tx.block.hash && (
         <SummaryItem
           label="Block hash"
-          value={tx.block_hash?.toString() || ''}
+          value={tx.block.hash?.toString() || ''}
           showCopyButton
           valueRenderer={value => (
             <BlockLink hash={value} wordBreak="break-all" variant="tableLink">
@@ -156,10 +152,10 @@ export const ContractCallTxSummaryItems = ({
           )}
         />
       )}
-      {isConfirmed && tx.burn_block_height && (
+      {isConfirmed && tx.bitcoin_block.height && (
         <SummaryItem
           label="Bitcoin Anchor"
-          value={tx.burn_block_height?.toString() || ''}
+          value={tx.bitcoin_block.height.toString()}
           showCopyButton
           valueRenderer={value => (
             <BlockHeightBadge

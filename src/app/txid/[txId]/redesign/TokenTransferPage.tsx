@@ -1,14 +1,8 @@
 import { SectionTabsContentContainer, SectionTabsTrigger } from '@/common/components/SectionTabs';
-import { isConfirmedTx } from '@/common/utils/transactions';
+import { TxDetails, TxDetailsOf } from '@/common/types/tx-v3';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { TabsContent } from '@/ui/Tabs';
 import { Stack } from '@chakra-ui/react';
-
-import {
-  MempoolTokenTransferTransaction,
-  MempoolTransaction,
-  TokenTransferTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
 
 import { getTxAlert } from './Alert';
 import { Events } from './Events';
@@ -16,7 +10,7 @@ import { TxHeader } from './TxHeader';
 import { TransactionIdPageTab, TxTabs } from './TxTabs';
 import { TxSummary } from './tx-summary/TxSummary';
 
-export const TokenTransferPage = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+export const TokenTransferPage = ({ tx }: { tx: TxDetails }) => {
   return (
     <>
       <Stack gap={3}>
@@ -32,12 +26,10 @@ export function TokenTransferTabTriggers({
   tx,
   selectedTab,
 }: {
-  tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
+  tx: TxDetailsOf<'token_transfer'>;
   selectedTab: TransactionIdPageTab;
 }) {
-  const numTxEvents = isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx)
-    ? tx.event_count
-    : 0;
+  const numTxEvents = isConfirmedTxDetails(tx) ? tx.event_count : 0;
 
   return (
     <>
@@ -58,11 +50,7 @@ export function TokenTransferTabTriggers({
   );
 }
 
-export function TokenTransferTabContent({
-  tx,
-}: {
-  tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
-}) {
+export function TokenTransferTabContent({ tx }: { tx: TxDetailsOf<'token_transfer'> }) {
   return (
     <>
       <TabsContent

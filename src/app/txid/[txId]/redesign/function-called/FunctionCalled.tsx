@@ -1,16 +1,13 @@
 import { useUser } from '@/app/sandbox/hooks/useUser';
 import { SectionTabsContentContainer } from '@/common/components/SectionTabs';
 import { useContractById } from '@/common/queries/useContractById';
-import { isConfirmedTx } from '@/common/utils/transactions';
+import { TxDetailsOf } from '@/common/types/tx-v3';
+import { isConfirmedTxDetails } from '@/common/utils/tx-details-utils';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import {
-  ContractCallTransaction,
-  MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
 import { ClarityAbiFunction } from '@stacks/transactions';
 
 import { FunctionArgsTable } from './FunctionArgsTable';
@@ -40,9 +37,9 @@ function FunctionTitle({
   );
 }
 
-function FunctionResult({ tx }: { tx: ContractCallTransaction | MempoolContractCallTransaction }) {
-  if (!isConfirmedTx(tx) || !tx.tx_result) return null;
-  const { display, success } = prettyFunctionResult(tx.tx_result.hex);
+function FunctionResult({ tx }: { tx: TxDetailsOf<'contract_call'> }) {
+  if (!isConfirmedTxDetails(tx) || !tx.result) return null;
+  const { display, success } = prettyFunctionResult(tx.result.hex);
 
   return (
     <SectionTabsContentContainer px={6}>
@@ -66,8 +63,14 @@ function FunctionResult({ tx }: { tx: ContractCallTransaction | MempoolContractC
   );
 }
 
-function FunctionArgs({ tx }: { tx: ContractCallTransaction | MempoolContractCallTransaction }) {
-  const args = getContractCallTxFunctionArgs(tx);
+function FunctionArgs({
+  tx,
+  functionAbi,
+}: {
+  tx: TxDetailsOf<'contract_call'>;
+  functionAbi?: ClarityAbiFunction;
+}) {
+  const args = getContractCallTxFunctionArgs(tx, functionAbi);
   if (!args.length) return null;
   return (
     <SectionTabsContentContainer px={6}>
@@ -81,17 +84,13 @@ function FunctionArgs({ tx }: { tx: ContractCallTransaction | MempoolContractCal
             Arguments
           </Text>
         </Box>
-        <FunctionArgsTable tx={tx} />
+        <FunctionArgsTable tx={tx} functionAbi={functionAbi} />
       </Grid>
     </SectionTabsContentContainer>
   );
 }
 
-export const FunctionCalled = ({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) => {
+export const FunctionCalled = ({ tx }: { tx: TxDetailsOf<'contract_call'> }) => {
   const [isFunctionCallOpen, setIsFunctionCallOpen] = useState(false);
   const contractCallName = tx.contract_call?.function_name;
   const contractId = tx.contract_call?.contract_id;
@@ -129,7 +128,7 @@ export const FunctionCalled = ({
       ) : (
         <>
           <FunctionResult tx={tx} />
-          <FunctionArgs tx={tx} />
+          <FunctionArgs tx={tx} functionAbi={functionAbi} />
         </>
       )}
     </Stack>

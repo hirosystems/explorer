@@ -2,31 +2,33 @@ import { SBTC_DECIMALS, getSbtcAssetId } from '@/app/token/[tokenId]/consts';
 import { AddressLink, TokenLink } from '@/common/components/ExplorerLinks';
 import { useSbtcNetworkMode } from '@/common/hooks/useSbtcNetworkMode';
 import { useFtMetadata } from '@/common/queries/useFtMetadata';
+import { TxEvent } from '@/common/types/tx-v3';
+import {
+  TxAssetEvent,
+  getTxAssetEventDetails,
+  isTxAssetEvent,
+} from '@/common/utils/tx-details-utils';
 import { ftDecimals, getAssetNameParts, truncateMiddle } from '@/common/utils/utils';
 import { Flex, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import {
-  TransactionEvent,
-  TransactionEventFungibleAsset,
-  TransactionEventNonFungibleAsset,
-  TransactionEventStxAsset,
-} from '@stacks/stacks-blockchain-api-types';
-
 interface TokenTransferItemProps {
-  event:
-    | TransactionEventStxAsset
-    | TransactionEventFungibleAsset
-    | TransactionEventNonFungibleAsset;
+  event: TxAssetEvent;
 }
 
 export const TokenTransferItem: FC<TokenTransferItemProps> = ({ event }) => {
   const networkMode = useSbtcNetworkMode();
-  const isStx = event.event_type === 'stx_asset';
-  const isFt = event.event_type === 'fungible_token_asset';
-  const isNft = event.event_type === 'non_fungible_token_asset';
+  const isStx = event.type === 'stx_asset';
+  const isFt = event.type === 'ft_asset';
+  const isNft = event.type === 'nft_asset';
+  const {
+    sender,
+    recipient,
+    amount: rawAmount,
+    assetIdentifier,
+  } = getTxAssetEventDetails(event) ?? {};
 
-  const ftAssetId = isFt ? event.asset.asset_id : undefined;
+  const ftAssetId = isFt ? assetIdentifier : undefined;
   const ftAssetParts = ftAssetId ? getAssetNameParts(ftAssetId) : undefined;
   const ftContractId = ftAssetParts
     ? `${ftAssetParts.address}.${ftAssetParts.contract}`
@@ -40,14 +42,14 @@ export const TokenTransferItem: FC<TokenTransferItemProps> = ({ event }) => {
   let amount = '1';
 
   if (isStx) {
-    amount = ftDecimals(event.asset.amount || '0', 6);
+    amount = ftDecimals(rawAmount || '0', 6);
   } else if (isFt) {
     contractId = ftContractId!;
     symbol = ftAssetParts!.asset;
     const decimals = isSbtc ? SBTC_DECIMALS : ftMetadata?.decimals;
-    amount = ftDecimals(event.asset.amount || '0', decimals ?? 0);
+    amount = ftDecimals(rawAmount || '0', decimals ?? 0);
   } else if (isNft) {
-    const { asset, address, contract } = getAssetNameParts(event.asset.asset_id);
+    const { asset, address, contract } = getAssetNameParts(assetIdentifier || '');
     contractId = `${address}.${contract}`;
     symbol = asset;
     amount = '1';
@@ -55,18 +57,18 @@ export const TokenTransferItem: FC<TokenTransferItemProps> = ({ event }) => {
 
   return (
     <Flex gap={1} flexWrap="wrap" alignItems="center">
-      {event.asset.sender && (
+      {sender && (
         <>
           <Text textStyle="text-regular-sm">From:</Text>
-          <AddressLink address={event.asset.sender} variant="tableLink">
-            {truncateMiddle(event.asset.sender, 4, 5)}
+          <AddressLink address={sender} variant="tableLink">
+            {truncateMiddle(sender, 4, 5)}
           </AddressLink>
           <Text textStyle="text-regular-sm">→</Text>
         </>
       )}
       <Text textStyle="text-regular-sm">To:</Text>
-      <AddressLink address={event.asset.recipient || ''} variant="tableLink">
-        {truncateMiddle(event.asset.recipient || '', 4, 5)}
+      <AddressLink address={recipient || ''} variant="tableLink">
+        {truncateMiddle(recipient || '', 4, 5)}
       </AddressLink>
       <Text textStyle="text-regular-sm">For:</Text>
       <Text textStyle="text-regular-sm" fontWeight="medium">
@@ -84,24 +86,18 @@ export const TokenTransferItem: FC<TokenTransferItemProps> = ({ event }) => {
 };
 
 interface TokensTransferredProps {
-  events: TransactionEvent[];
+  events: TxEvent[];
+}
+
+export function getTransferEvents(events: TxEvent[]): TxAssetEvent[] {
+  return events.filter(
+    (event): event is TxAssetEvent =>
+      isTxAssetEvent(event) && getTxAssetEventDetails(event)?.assetEventType === 'transfer'
+  );
 }
 
 export const TokensTransferred: FC<TokensTransferredProps> = ({ events }) => {
-  const transferEvents = events.filter(
-    (
-      event
-    ): event is
-      | TransactionEventStxAsset
-      | TransactionEventFungibleAsset
-      | TransactionEventNonFungibleAsset => {
-      const isStx = event.event_type === 'stx_asset';
-      const isFt = event.event_type === 'fungible_token_asset';
-      const isNft = event.event_type === 'non_fungible_token_asset';
-
-      return (isStx || isFt || isNft) && event.asset.asset_event_type === 'transfer';
-    }
-  );
+  const transferEvents = getTransferEvents(events);
 
   if (transferEvents.length === 0) {
     return (

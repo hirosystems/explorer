@@ -11,7 +11,6 @@ import { TableContainer } from '@/common/components/table/TableContainer';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useBulkFtMetadata } from '@/common/queries/useBulkTokenMetadata';
-import { useTxById } from '@/common/queries/useTxById';
 import { getTxEventsByIdQueryKey, useTxEventsById } from '@/common/queries/useTxEventsById';
 import { handleContractLogHex } from '@/common/utils/transaction-utils';
 import { getContractIdFromAssetId, validateStacksContractId } from '@/common/utils/utils';
@@ -19,9 +18,7 @@ import { Box, Code, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, PaginationState, Row } from '@tanstack/react-table';
-import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
+import { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import {
   AssetEventTypeCellRenderer,
@@ -29,7 +26,6 @@ import {
   EventAmountData,
 } from './EventsTableCellRenderers';
 import { EVENTS_TABLE_PAGE_SIZE } from './consts';
-import { EventsTableFilters } from './filters/useEventsTableFilters';
 import {
   ExtendedTransactionEventAssetType,
   getAmount,
@@ -145,17 +141,10 @@ export interface EventsTableProps {
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<EventsTableData>[];
   pageSize?: number;
-  filters?: EventsTableFilters;
 }
-
-const DEFAULT_FILTERS: EventsTableFilters = {
-  address: '',
-  eventAssetTypes: [],
-};
 
 export function EventsTable({
   txId,
-  filters = DEFAULT_FILTERS,
   initialData,
   disablePagination = false,
   columnDefinitions,
@@ -185,49 +174,28 @@ export function EventsTable({
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = getTxEventsByIdQueryKey(
-      pagination.pageSize,
-      pagination.pageIndex * pagination.pageSize,
-      txId,
-      { address: filters.address, type: filters.eventAssetTypes } // TODO: currently we are only listening to the from address even though users can set a to address
-    );
+    const queryKey = getTxEventsByIdQueryKey(txId, pagination.pageSize, undefined);
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
 
-  // There is a bug in the API where the tx events endpoint does not return total (total # events for the tx), which is causing pagination to not work correctly. So, we have to fetch the tx to get the total number of events
-  const { data: tx } = useTxById(txId);
-  const numTxEvents = tx && 'event_count' in tx ? tx.event_count : 0;
+  // The events cursor is an `event_index`, and a transaction's event indexes run from 0, so any page
+  // can be fetched directly.
+  const cursor =
+    pagination.pageIndex > 0 ? String(pagination.pageIndex * pagination.pageSize) : undefined;
+  const { data, isFetching, isLoading } = useTxEventsById(txId, pagination.pageSize, cursor, {
+    staleTime: THIRTY_SECONDS,
+    gcTime: THIRTY_SECONDS,
+  });
 
-  // fetch data
-  let { data, isFetching, isLoading } = useTxEventsById(
-    pagination.pageSize,
-    pagination.pageIndex * pagination.pageSize,
-    txId,
-    { address: filters.address, type: filters.eventAssetTypes }, // TODO: currently we are only listening to the from address even though users can set a to address
-    {
-      staleTime: THIRTY_SECONDS,
-      gcTime: THIRTY_SECONDS,
-    }
-  );
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  }, [filters]);
-
-  const { total = numTxEvents, events = [] } = data || {};
-  const isTableFiltered = Object.values(filters).some(v => v != null && v !== '');
+  const { total = 0, results: events = [] } = data || {};
 
   // Extract unique FT contract IDs for bulk metadata fetch
   const ftContractIds = useMemo(() => {
     const ids = new Set<string>();
     events.forEach(event => {
-      if (event.event_type === 'fungible_token_asset') {
-        ids.add(getContractIdFromAssetId(event.asset.asset_id));
+      if (event.type === 'ft_asset') {
+        ids.add(getContractIdFromAssetId(event.ft_asset.asset_identifier));
       }
     });
     return Array.from(ids);
@@ -247,8 +215,8 @@ export function EventsTable({
       const contractLogPrintValue = getContractLogPrintValue(event);
 
       let ftDecimals: number | undefined;
-      if (event.event_type === 'fungible_token_asset') {
-        const metadata = metadataMap.get(getContractIdFromAssetId(event.asset.asset_id));
+      if (event.type === 'ft_asset') {
+        const metadata = metadataMap.get(getContractIdFromAssetId(event.ft_asset.asset_identifier));
         ftDecimals = metadata?.decimals;
       }
 
@@ -297,7 +265,6 @@ export function EventsTable({
       }
       isLoading={isLoading}
       isFetching={isFetching}
-      isFiltered={isTableFiltered}
       getRowCanExpand={() => true}
       renderSubComponent={renderSubComponent}
       expandAllRowsByDefault

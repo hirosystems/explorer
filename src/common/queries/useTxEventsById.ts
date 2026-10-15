@@ -1,102 +1,37 @@
-import {
-  InfiniteData,
-  UseInfiniteQueryResult,
-  UseQueryResult,
-  useInfiniteQuery,
-  useQuery,
-} from '@tanstack/react-query';
-
-import {
-  Transaction,
-  TransactionEvent,
-  TransactionEventType,
-} from '@stacks/stacks-blockchain-api-types';
+import { TxEventListResponse } from '@/common/types/tx-v3';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
 import { useApiClient } from '../../api/useApiClient';
-import { DEFAULT_LIST_LIMIT, DEFAULT_TX_EVENTS_LIMIT } from '../constants/constants';
-import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
-import { getNextPageParam } from '../utils/utils';
+import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 
-export const TX_EVENTS_BY_ID_QUERY_KEY = 'tx-by-id-infinite';
-export function getTxEventsByIdQueryKey(
-  limit: number,
-  offset: number,
-  txId: string,
-  filters: TxEventsQueryFilters = {}
-) {
-  return [
-    TX_EVENTS_BY_ID_QUERY_KEY,
-    limit,
-    offset,
-    txId,
-    ...(filters.address ? [{ address: filters.address }] : []),
-    ...(filters.type ? [{ type: filters.type }] : []),
-  ];
+export const TX_EVENTS_BY_ID_QUERY_KEY = 'tx-events-by-id';
+export function getTxEventsByIdQueryKey(txId: string, limit: number, cursor?: string) {
+  return [TX_EVENTS_BY_ID_QUERY_KEY, txId, limit, cursor];
 }
 
-export function useTxEventsByIdInfinite(
-  txId: string,
-  options: any = {}
-): UseInfiniteQueryResult<InfiniteData<GenericResponseType<TransactionEvent>>> {
-  const apiClient = useApiClient();
-  return useInfiniteQuery({
-    queryKey: [TX_EVENTS_BY_ID_QUERY_KEY, txId],
-    queryFn: async ({ pageParam }: { pageParam?: number }) => {
-      const tx = await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
-        // This query isn't for tx events
-        params: {
-          path: { tx_id: txId },
-          query: { event_limit: DEFAULT_TX_EVENTS_LIMIT, event_offset: pageParam },
-        },
-      });
-      return {
-        results: (tx as Transaction).events,
-        total: (tx as Transaction).event_count,
-        limit: DEFAULT_TX_EVENTS_LIMIT,
-        offset: pageParam,
-      };
-    },
-    staleTime: Infinity,
-    getNextPageParam,
-    initialPageParam: 0,
-    ...options,
-  });
-}
-
-export type TxEventsQueryFilters = {
-  address?: string;
-  type?: TransactionEventType[];
-};
-
+/**
+ * A page of a transaction's events, in `event_index` order. The cursor is the `event_index` of the
+ * page's first event, so page N of size L starts at cursor `N * L`.
+ */
 export function useTxEventsById(
-  limit = DEFAULT_LIST_LIMIT,
-  offset = 0,
   txId: string,
-  { address, type }: TxEventsQueryFilters = {},
+  limit = DEFAULT_LIST_LIMIT,
+  cursor?: string,
   options: any = {}
-): UseQueryResult<{
-  limit: number;
-  offset: number;
-  total: number;
-  events: TransactionEvent[];
-}> {
+): UseQueryResult<TxEventListResponse> {
   const apiClient = useApiClient();
   return useQuery({
-    queryKey: getTxEventsByIdQueryKey(limit, offset, txId, { address, type }),
+    queryKey: getTxEventsByIdQueryKey(txId, limit, cursor),
     queryFn: async () => {
-      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/events', {
+      return await callApiWithErrorHandling(apiClient, '/extended/v3/transactions/{tx_id}/events', {
         params: {
-          query: {
-            tx_id: txId,
-            limit,
-            offset,
-            ...(address && { address }),
-            ...(type && { type }),
-          },
+          path: { tx_id: txId },
+          query: { limit, ...(cursor !== undefined && { cursor }) },
         },
       });
     },
+    enabled: !!txId,
     ...options,
   });
 }

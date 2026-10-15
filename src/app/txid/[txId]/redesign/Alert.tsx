@@ -3,14 +3,13 @@
 import { MAINNET_SBTC_CONTRACT_ADDRESS } from '@/app/token/[tokenId]/consts';
 import { SbtcTokenLink } from '@/common/components/ExplorerLinks';
 import { TransactionStatus as TransactionStatusEnum } from '@/common/constants/constants';
-import { getTransactionStatus } from '@/common/utils/transactions';
+import { TxDetails } from '@/common/types/tx-v3';
+import { getTxDetailsStatus } from '@/common/utils/tx-details-utils';
 import { Alert } from '@/components/ui/alert';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Clock, Question, Warning, WarningDiamond, XCircle } from '@phosphor-icons/react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export type AlertStatus = 'neutral' | 'warning' | 'error' | 'info';
 
@@ -61,16 +60,6 @@ export function TransactionDroppedAlert() {
   );
 }
 
-export function TransactionRolledBackAlert() {
-  return (
-    <AlertWrapper
-      status="error"
-      title="Transaction rolled back"
-      description="This transaction would have succeeded but was rolled back due to a supplied post-condition. While a failed transaction is included in a block (with mining fees paid to the miner and non-refundable), it failed because it violated the rules of the Stacks protocol or the smart contract it interacted with. Refer to the error code and/or the contract for more details on the specific cause of failure."
-    />
-  );
-}
-
 export function TenureAlert() {
   return (
     <AlertWrapper
@@ -95,22 +84,21 @@ export function TenureAlert() {
   );
 }
 
-export function NonCanonicalAlert() {
-  return (
-    <AlertWrapper
-      status="warning"
-      description="This transaction is in a non-canonical fork. It is not in the canonical Stacks chain"
-    />
-  );
+function getReasonForFailure(status: TxDetails['status']) {
+  switch (status) {
+    case 'abort_by_response':
+      return 'This transaction did not succeed because the transaction was aborted during its execution';
+    case 'abort_by_post_condition':
+      return 'This transaction would have succeeded, but was rolled back by a supplied post-condition';
+    case 'problematic_skipped':
+      return 'This transaction was marked as problematic by its block, so it was not executed: only its fee and nonce were applied';
+    default:
+      return 'This transaction did not succeed';
+  }
 }
 
-export function getFailureDescription(tx: Transaction | MempoolTransaction) {
-  const reasonForFailure =
-    tx.tx_status === 'abort_by_response'
-      ? 'This transaction did not succeed because the transaction was aborted during its execution'
-      : tx.tx_status === 'abort_by_post_condition'
-        ? 'This transaction would have succeeded, but was rolled back by a supplied post-condition'
-        : undefined;
+export function getFailureDescription(tx: TxDetails) {
+  const reasonForFailure = getReasonForFailure(tx.status);
   const vmError =
     'vm_error' in tx && tx.vm_error && typeof tx.vm_error === 'string' ? tx.vm_error : undefined;
 
@@ -132,34 +120,28 @@ export function getFailureDescription(tx: Transaction | MempoolTransaction) {
   );
 }
 
-export function TransactionFailedAlert({ tx }: { tx: Transaction | MempoolTransaction }) {
+export function TransactionFailedAlert({ tx }: { tx: TxDetails }) {
   const failureDescription = getFailureDescription(tx);
   return (
     <AlertWrapper status="error" title="Transaction failed" description={failureDescription} />
   );
 }
 
-export function getTxAlert(tx: Transaction | MempoolTransaction) {
-  const txType = tx.tx_type;
-  const txStatus = getTransactionStatus(tx);
+export function getTxAlert(tx: TxDetails) {
+  const txType = tx.type;
+  const txStatus = getTxDetailsStatus(tx);
 
   let alertContent;
 
   switch (txStatus) {
-    case TransactionStatusEnum.Pending:
+    case TransactionStatusEnum.PENDING:
       alertContent = <PendingAlert />;
       break;
-    case TransactionStatusEnum.Dropped:
+    case TransactionStatusEnum.DROPPED:
       alertContent = <TransactionDroppedAlert />;
-      break;
-    case TransactionStatusEnum.RolledBack:
-      alertContent = <TransactionRolledBackAlert />;
       break;
     case TransactionStatusEnum.FAILED:
       alertContent = <TransactionFailedAlert tx={tx} />;
-      break;
-    case TransactionStatusEnum.NON_CANONICAL:
-      alertContent = <NonCanonicalAlert />;
       break;
     default:
       alertContent = null;

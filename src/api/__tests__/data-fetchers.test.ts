@@ -1,7 +1,8 @@
 /** @jest-environment node */
 import { stacksAPIFetch, stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 
-import { fetchFtSupply, fetchHolders } from '../data-fetchers';
+import { ApiError } from '../ApiError';
+import { fetchFtSupply, fetchHolders, fetchTx, fetchTxEvents } from '../data-fetchers';
 
 jest.mock('@/api/stacksAPIFetch', () => ({
   stacksAPIFetch: jest.fn(),
@@ -41,4 +42,46 @@ test('holders and supply fetchers skip invalid asset identifiers', async () => {
   await expect(fetchFtSupply('https://api.hiro.so', '')).resolves.toBeUndefined();
   expect(fetchMock).not.toHaveBeenCalled();
   expect(fetchJsonMock).not.toHaveBeenCalled();
+});
+
+test('fetchTx reads the v3 transaction, requesting the given heavy fields', async () => {
+  const tx = { tx_id: '0x01' };
+  fetchMock.mockResolvedValue(new Response(JSON.stringify(tx)));
+
+  await expect(
+    fetchTx('https://api.hiro.so', '0x01', {
+      include: ['post_conditions', 'result'],
+      redirect: 'error',
+    })
+  ).resolves.toEqual(tx);
+  expect(fetchMock.mock.calls[0][0]).toBe(
+    'https://api.hiro.so/extended/v3/transactions/0x01?include=post_conditions,result'
+  );
+  expect(fetchMock.mock.calls[0][1]).toMatchObject({ redirect: 'error' });
+  expect(fetchMock.mock.calls[0][1]).not.toHaveProperty('include');
+});
+
+test('fetchTx omits the include parameter when no heavy fields are requested', async () => {
+  fetchMock.mockResolvedValue(new Response('{}'));
+
+  await fetchTx('https://api.hiro.so', '0x01');
+  expect(fetchMock.mock.calls[0][0]).toBe('https://api.hiro.so/extended/v3/transactions/0x01');
+});
+
+test('fetchTx throws an ApiError carrying the status when the API rejects the request', async () => {
+  fetchMock.mockResolvedValue(new Response('{}', { status: 404, statusText: 'Not Found' }));
+
+  const error = await fetchTx('https://api.hiro.so', '0x01').catch(e => e);
+  expect(error).toBeInstanceOf(ApiError);
+  expect(error).toMatchObject({ status: 404, endpoint: '/extended/v3/transactions/{tx_id}' });
+});
+
+test('fetchTxEvents reads the first page of v3 transaction events', async () => {
+  const page = { total: 3, limit: 100, cursor: {}, results: [] };
+  fetchJsonMock.mockResolvedValue(page);
+
+  await expect(fetchTxEvents('https://api.hiro.so', '0x01', 100)).resolves.toEqual(page);
+  expect(fetchJsonMock.mock.calls[0][0]).toBe(
+    'https://api.hiro.so/extended/v3/transactions/0x01/events?limit=100'
+  );
 });

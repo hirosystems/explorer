@@ -1,5 +1,6 @@
-import { ContractCallTransaction, PostConditionMode } from '@stacks/stacks-blockchain-api-types';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { TxDetailsOf } from '@/common/types/tx-v3';
+
+import { ClarityAbiFunction, cvToJSON, hexToCV } from '@stacks/transactions';
 
 import {
   formatClarityValue,
@@ -186,7 +187,74 @@ export const contractCallTxWithTupleResult = {
 jest.mock('@stacks/transactions', () => ({
   cvToJSON: jest.fn(),
   hexToCV: jest.fn(),
+  getTypeString: jest.requireActual('@stacks/transactions').getTypeString,
 }));
+
+// v3 encodes contract call arguments as bare `{ hex, repr }` values.
+function toV3ContractCallTx(tx: {
+  contract_call: {
+    contract_id: string;
+    function_name: string;
+    function_args: { hex: string; repr: string }[];
+  };
+}) {
+  return {
+    type: 'contract_call',
+    contract_call: {
+      contract_id: tx.contract_call.contract_id,
+      function_name: tx.contract_call.function_name,
+      function_args: tx.contract_call.function_args.map(({ hex, repr }) => ({ hex, repr })),
+    },
+  } as unknown as TxDetailsOf<'contract_call'>;
+}
+
+const delegateStxAbi = {
+  name: 'delegate-stx',
+  access: 'public',
+  outputs: { type: { response: { ok: 'bool', error: 'int128' } } },
+  args: [
+    { name: 'amount-ustx', type: 'uint128' },
+    { name: 'delegate-to', type: 'principal' },
+    { name: 'until-burn-ht', type: { optional: 'uint128' } },
+    {
+      name: 'pool-pox-addr',
+      type: {
+        optional: {
+          tuple: [
+            { name: 'hashbytes', type: { buffer: { length: 32 } } },
+            { name: 'version', type: { buffer: { length: 1 } } },
+          ],
+        },
+      },
+    },
+    {
+      name: 'user-pox-addr',
+      type: {
+        tuple: [
+          { name: 'hashbytes', type: { buffer: { length: 32 } } },
+          { name: 'version', type: { buffer: { length: 1 } } },
+        ],
+      },
+    },
+    {
+      name: 'user-metadata',
+      type: {
+        optional: {
+          tuple: [
+            {
+              name: 'keys',
+              type: { list: { type: { 'string-ascii': { length: 8 } }, length: 30 } },
+            },
+            {
+              name: 'values',
+              type: { list: { type: { 'string-ascii': { length: 80 } }, length: 30 } },
+            },
+          ],
+        },
+      },
+    },
+  ],
+} as unknown as ClarityAbiFunction;
 
 describe('isTupleType', () => {
   it('returns true for direct tuple types', () => {
@@ -532,29 +600,39 @@ describe('Function Called Utils', () => {
   });
 
   describe('getContractCallTxFunctionArgs', () => {
-    it('extracts function args from contract call transaction', () => {
-      // Cast the test data to the expected type
-      const typedTx = {
-        ...contractCallTxWithNonTupleResult,
-        post_condition_mode:
-          contractCallTxWithNonTupleResult.post_condition_mode as PostConditionMode,
-      } as ContractCallTransaction;
+    it('takes argument names and types from the function ABI by position', () => {
+      const args = getContractCallTxFunctionArgs(
+        toV3ContractCallTx(contractCallTxWithNonTupleResult),
+        delegateStxAbi
+      );
 
-      const args = getContractCallTxFunctionArgs(typedTx);
+      // Matches the names and type strings the v1 API used to embed in each argument.
+      expect(args).toEqual(
+        contractCallTxWithNonTupleResult.contract_call.function_args.map(
+          ({ hex, repr, name, type }) => ({ hex, repr, name, type })
+        )
+      );
+    });
+
+    it('leaves names and types empty when the ABI is not loaded', () => {
+      const args = getContractCallTxFunctionArgs(
+        toV3ContractCallTx(contractCallTxWithNonTupleResult)
+      );
 
       expect(args).toHaveLength(6);
-      expect(args[0].name).toBe('amount-ustx');
-      expect(args[0].type).toBe('uint');
+      expect(args[0]).toEqual({
+        hex: '0x01000000000000000000000000564ae970',
+        repr: 'u1447750000',
+        name: '',
+        type: '',
+      });
     });
 
     it('returns empty array when no function args exist', () => {
-      // Cast the test data to the expected type
-      const typedTx = {
-        ...contractCallTxWithTupleResult,
-        post_condition_mode: contractCallTxWithTupleResult.post_condition_mode as PostConditionMode,
-      } as ContractCallTransaction;
-
-      const args = getContractCallTxFunctionArgs(typedTx);
+      const args = getContractCallTxFunctionArgs(
+        toV3ContractCallTx(contractCallTxWithTupleResult),
+        delegateStxAbi
+      );
 
       expect(args).toHaveLength(0);
     });
@@ -566,14 +644,7 @@ describe('Function Called Utils', () => {
       (hexToCV as jest.Mock).mockReturnValue({});
       (cvToJSON as jest.Mock).mockReturnValue({ success: true });
 
-      // Cast the test data to the expected type with proper post_condition_mode
-      const typedTx = {
-        ...contractCallTxWithNonTupleResult,
-        post_condition_mode:
-          contractCallTxWithNonTupleResult.post_condition_mode as PostConditionMode,
-      } as ContractCallTransaction;
-
-      const result = getFunctionResultSuccessStatus(typedTx);
+      const result = getFunctionResultSuccessStatus(contractCallTxWithNonTupleResult.tx_result);
 
       expect(result).toBe(true);
       expect(hexToCV).toHaveBeenCalledWith('0x0703');
@@ -584,14 +655,7 @@ describe('Function Called Utils', () => {
       (hexToCV as jest.Mock).mockReturnValue({});
       (cvToJSON as jest.Mock).mockReturnValue({ success: false });
 
-      // Cast the test data to the expected type with proper post_condition_mode
-      const typedTx = {
-        ...contractCallTxWithNonTupleResult,
-        post_condition_mode:
-          contractCallTxWithNonTupleResult.post_condition_mode as PostConditionMode,
-      } as ContractCallTransaction;
-
-      const result = getFunctionResultSuccessStatus(typedTx);
+      const result = getFunctionResultSuccessStatus(contractCallTxWithNonTupleResult.tx_result);
 
       expect(result).toBe(false);
     });

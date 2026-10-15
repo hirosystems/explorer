@@ -1,16 +1,19 @@
-import { fetchContractInfo, fetchTx } from '@/api/data-fetchers';
+import { ApiError } from '@/api/ApiError';
+import { fetchContractInfo, fetchTx, fetchTxEvents } from '@/api/data-fetchers';
 import { getTokenPrice } from '@/app/getTokenPriceInfo';
 import { CommonSearchParams } from '@/app/transactions/page';
 import { NetworkModes } from '@/common/types/network';
+import { TxDetails, TxEventListResponse } from '@/common/types/tx-v3';
 import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
+import {
+  TOKENS_TRANSFERRED_MAX_EVENTS,
+  TX_DETAILS_INCLUDE,
+  canListTokensTransferred,
+} from '@/common/utils/tx-details-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
 
-import {
-  ContractInterfaceResponse,
-  MempoolTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
+import { ContractInterfaceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import TransactionIdPage from './PageClient';
 import { TxIdPageDataProvider } from './TxIdPageContext';
@@ -47,8 +50,10 @@ export default async function Page(props: {
     stxPrice: 0,
     btcPrice: 0,
   };
-  let initialTxData: Transaction | MempoolTransaction | undefined;
+  let initialTxData: TxDetails | undefined;
+  let initialTxEvents: TxEventListResponse | undefined;
   let numFunctions: number | undefined;
+  let isTxNotFound = false;
 
   const isContractId = validateStacksContractId(txId);
   const isSSRDisabled = ssr === 'false';
@@ -62,24 +67,53 @@ export default async function Page(props: {
           ? JSON.parse(contractData.abi)
           : null;
         numFunctions = abi?.functions?.length;
-        initialTxData = await fetchTx(apiUrl, contractData.tx_id);
+        initialTxData = await fetchTx(apiUrl, contractData.tx_id, { include: TX_DETAILS_INCLUDE });
       } else {
-        initialTxData = await fetchTx(apiUrl, txId);
+        initialTxData = await fetchTx(apiUrl, txId, { include: TX_DETAILS_INCLUDE });
       }
     } catch (error) {
-      logError(
-        error as Error,
-        'Transaction Id page server-side fetch for initial data',
-        { txId, tokenPrice, initialTxData, chain, api },
-        'error'
-      );
+      if (error instanceof ApiError && error.status === 404) {
+        isTxNotFound = true;
+      } else {
+        logError(
+          error as Error,
+          'Transaction Id page server-side fetch for initial data',
+          { txId, tokenPrice, initialTxData, chain, api },
+          'error'
+        );
+      }
     }
+
+    if (initialTxData && canListTokensTransferred(initialTxData)) {
+      try {
+        initialTxEvents = await fetchTxEvents(
+          apiUrl,
+          initialTxData.tx_id,
+          TOKENS_TRANSFERRED_MAX_EVENTS
+        );
+      } catch (error) {
+        // Not fatal: the Tokens Transferred row fetches the events in the browser instead.
+        logError(
+          error as Error,
+          'Transaction Id page server-side fetch for transaction events',
+          { txId, chain, api },
+          'error'
+        );
+      }
+    }
+  }
+
+  // notFound() throws, so it has to run outside the try/catch above.
+  if (isTxNotFound) {
+    const { notFound } = await import('next/navigation');
+    notFound();
   }
 
   return (
     <TxIdPageDataProvider
       stxPrice={tokenPrice.stxPrice}
       initialTxData={initialTxData}
+      initialTxEvents={initialTxEvents}
       txId={txId}
       numFunctions={numFunctions}
       filters={{

@@ -2,6 +2,7 @@ import { AddressLink, BlockLink, TxLink } from '@/common/components/ExplorerLink
 import { EllipsisText } from '@/common/components/table/CommonTableCellRenderers';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { useContractById } from '@/common/queries/useContractById';
+import { TxDetails, TxDetailsOf } from '@/common/types/tx-v3';
 import { truncateHex, truncateStxAddress } from '@/common/utils/utils';
 import { BlockHeightBadge, SimpleTag } from '@/ui/Badge';
 import { Link } from '@/ui/Link';
@@ -9,21 +10,10 @@ import { Text } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import { Stack } from '@chakra-ui/react';
 
-import {
-  CoinbaseTransaction,
-  ContractCallTransaction,
-  MempoolCoinbaseTransaction,
-  MempoolContractCallTransaction,
-  MempoolSmartContractTransaction,
-  MempoolTransaction,
-  SmartContractTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
-
 import { useTxBlock } from '../useTxBlock';
 import { SummaryItemLabel, SummaryItemValue } from './tx-summary/SummaryItem';
 
-export function DetailsCard({ tx }: { tx: Transaction | MempoolTransaction }) {
+export function DetailsCard({ tx }: { tx: TxDetails }) {
   const items = getDetailsCardItems(tx);
   const title = getDetailsCardTitle(tx);
 
@@ -45,22 +35,20 @@ export function DetailsCard({ tx }: { tx: Transaction | MempoolTransaction }) {
   );
 }
 
-function getDetailsCardTitle(tx: Transaction | MempoolTransaction) {
-  if (tx.tx_type === 'coinbase') return 'Burn block details';
-  if (tx.tx_type === 'token_transfer') return null;
-  if (tx.tx_type === 'smart_contract') return 'Contract details';
-  if (tx.tx_type === 'contract_call') return 'Contract called';
-  if (tx.tx_type === 'tenure_change') return null;
-  if (tx.tx_type === 'poison_microblock') return null;
+function getDetailsCardTitle(tx: TxDetails) {
+  if (tx.type === 'coinbase') return 'Burn block details';
+  if (tx.type === 'token_transfer') return null;
+  if (tx.type === 'smart_contract') return 'Contract details';
+  if (tx.type === 'contract_call') return 'Contract called';
+  if (tx.type === 'tenure_change') return null;
+  if (tx.type === 'poison_microblock') return null;
   return null;
 }
 
-function getDetailsCardItems(tx: Transaction | MempoolTransaction) {
-  if (tx.tx_type === 'coinbase') return <CoinbaseDetailsCardItems tx={tx as CoinbaseTransaction} />;
-  if (tx.tx_type === 'contract_call')
-    return <ContractCallDetailsCardItems tx={tx as ContractCallTransaction} />;
-  if (tx.tx_type === 'smart_contract')
-    return <SmartContractDetailsCardItems tx={tx as SmartContractTransaction} />;
+function getDetailsCardItems(tx: TxDetails) {
+  if (tx.type === 'coinbase') return <CoinbaseDetailsCardItems tx={tx} />;
+  if (tx.type === 'contract_call') return <ContractCallDetailsCardItems tx={tx} />;
+  if (tx.type === 'smart_contract') return <SmartContractDetailsCardItems tx={tx} />;
   return null;
 }
 
@@ -90,11 +78,7 @@ export function SummaryItem({
   );
 }
 
-function CoinbaseDetailsCardItems({
-  tx,
-}: {
-  tx: CoinbaseTransaction | MempoolCoinbaseTransaction;
-}) {
+function CoinbaseDetailsCardItems({ tx }: { tx: TxDetailsOf<'coinbase'> }) {
   const { data: block } = useTxBlock(tx);
   const { btcTxBaseUrl } = useGlobalContext().activeNetwork;
 
@@ -143,11 +127,7 @@ function CoinbaseDetailsCardItems({
   );
 }
 
-function ContractCallDetailsCardItems({
-  tx,
-}: {
-  tx: ContractCallTransaction | MempoolContractCallTransaction;
-}) {
+function ContractCallDetailsCardItems({ tx }: { tx: TxDetailsOf<'contract_call'> }) {
   const contractId = tx.contract_call.contract_id;
   const contractName = contractId.split('.')[1];
   const contractAddress = contractId.split('.')[0];
@@ -194,11 +174,7 @@ function ContractCallDetailsCardItems({
   );
 }
 
-function SmartContractDetailsCardItems({
-  tx,
-}: {
-  tx: SmartContractTransaction | MempoolSmartContractTransaction;
-}) {
+function SmartContractDetailsCardItems({ tx }: { tx: TxDetailsOf<'smart_contract'> }) {
   const contractId = tx.smart_contract.contract_id;
   const contractName = contractId.split('.')[1];
   const contractAddress = contractId.split('.')[0];

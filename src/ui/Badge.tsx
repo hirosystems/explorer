@@ -1,6 +1,7 @@
 'use client';
 
 import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { TxStatus } from '@/common/types/tx';
 import { buildUrl } from '@/common/utils/buildUrl';
 import {
   getTxStatusBgColor,
@@ -25,8 +26,6 @@ import {
 } from '@chakra-ui/react';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { forwardRef } from 'react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import BitcoinCircleIcon from './icons/BitcoinCircleIcon';
 import StacksIconBlock from './icons/StacksIconBlock';
@@ -84,8 +83,8 @@ export const BlockHeightBadge = forwardRef<
 
 export const TransactionTypeBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { tx: Transaction | MempoolTransaction; withoutLabel?: boolean }
->(({ children, tx, withoutLabel, ...rest }, ref) => {
+  BadgeProps & { txType: string; withoutLabel?: boolean }
+>(({ children, txType, withoutLabel, ...rest }, ref) => {
   return (
     <Badge
       ref={ref}
@@ -95,8 +94,8 @@ export const TransactionTypeBadge = forwardRef<
       {...rest}
     >
       <Flex alignItems="center" gap={1.5}>
-        <DefaultBadgeIcon icon={getTxTypeIcon(tx.tx_type)} bg={getTxTypeColor(tx.tx_type)} />
-        {withoutLabel ? null : <DefaultBadgeLabel label={getTxTypeLabel(tx.tx_type)} />}
+        <DefaultBadgeIcon icon={getTxTypeIcon(txType)} bg={getTxTypeColor(txType)} />
+        {withoutLabel ? null : <DefaultBadgeLabel label={getTxTypeLabel(txType)} />}
       </Flex>
     </Badge>
   );
@@ -104,19 +103,22 @@ export const TransactionTypeBadge = forwardRef<
 
 export const TransactionStatusBadge = forwardRef<
   HTMLDivElement,
-  BadgeProps & { tx: Transaction | MempoolTransaction; withoutLabel?: boolean }
->(({ children, tx, withoutLabel, ...rest }, ref) => {
+  BadgeProps & { status: TxStatus; withoutLabel?: boolean }
+>(({ children, status, withoutLabel, ...rest }, ref) => {
   return (
     <Badge
       ref={ref}
-      bg={getTxStatusBgColor(tx)}
+      bg={getTxStatusBgColor(status)}
       type="transactionStatus"
       content={withoutLabel ? 'iconOnly' : 'iconAndLabel'}
       {...rest}
     >
       <Flex alignItems="center" gap={1}>
-        <DefaultBadgeIcon icon={getTxStatusIcon(tx, true)} color={getTxStatusIconColor(tx)} />
-        {withoutLabel ? null : <DefaultBadgeLabel label={getTxStatusLabel(tx)} />}
+        <DefaultBadgeIcon
+          icon={getTxStatusIcon(status, true)}
+          color={getTxStatusIconColor(status)}
+        />
+        {withoutLabel ? null : <DefaultBadgeLabel label={getTxStatusLabel(status)} />}
       </Flex>
     </Badge>
   );

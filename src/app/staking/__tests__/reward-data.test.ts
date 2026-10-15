@@ -144,7 +144,7 @@ test('falls back to complete calculation history on deployments without bond eve
     )
     .mockResolvedValueOnce(
       respond({
-        events: [
+        results: [
           calculationLog(143, 968449),
           {
             contract_log: {
@@ -336,7 +336,7 @@ test('bond history and settlement share one deadline and retain verified cycle h
       .mockResolvedValueOnce(
         respond({ results: [calculationTx('0xverified'), calculationTx('0xstalled')] })
       )
-      .mockResolvedValueOnce(respond({ events: [calculationLog(142, 966349)] }))
+      .mockResolvedValueOnce(respond({ results: [calculationLog(142, 966349)] }))
       .mockImplementationOnce(stalledRequest);
     let finished = false;
     const settlement = fetchCycleCalculationHeights(
@@ -421,7 +421,7 @@ test('verifies a cycle without bonds, ignores failed calculations and foreign lo
       })
     )
     .mockResolvedValueOnce(
-      respond({ events: [calculationLog(142, 999999, 'SP.other'), calculationLog(142, 966349)] })
+      respond({ results: [calculationLog(142, 999999, 'SP.other'), calculationLog(142, 966349)] })
     );
   await expect(
     fetchCycleCalculationHeights({ 142: 966349, 143: 968449 }, contract, 'mainnet', undefined, {
@@ -429,13 +429,13 @@ test('verifies a cycle without bonds, ignores failed calculations and foreign lo
     })
   ).resolves.toEqual({ 142: 966349, 143: 968449 });
   expect(fetchMock).toHaveBeenCalledTimes(2);
-  expect(fetchMock.mock.calls[1][0]).toContain('/tx/0xsuccess?');
+  expect(fetchMock.mock.calls[1][0]).toContain('/transactions/0xsuccess/events?');
 });
 
 test('mid-cycle calculation cannot stand in for the final calculation', async () => {
   fetchMock
     .mockResolvedValueOnce(respond({ results: [calculationTx('0xmid')] }))
-    .mockResolvedValueOnce(respond({ events: [calculationLog(143, 967399)] }));
+    .mockResolvedValueOnce(respond({ results: [calculationLog(143, 967399)] }));
   await expect(fetchCycleCalculationHeights({ 143: 968449 }, contract, 'mainnet')).resolves.toEqual(
     { 143: 967399 }
   );
@@ -445,15 +445,17 @@ test('settlement fallback reads later event pages and rejects truncated logs', a
   fetchMock
     .mockResolvedValueOnce(respond({ results: [calculationTx('0xsuccess')] }))
     .mockResolvedValueOnce(
-      respond({ event_count: 101, events: Array.from({ length: 100 }, () => ({})) })
+      respond({ cursor: { next: '100' }, results: Array.from({ length: 100 }, () => ({})) })
     )
-    .mockResolvedValueOnce(respond({ event_count: 101, events: [calculationLog(143, 968449)] }));
+    .mockResolvedValueOnce(
+      respond({ cursor: { next: null }, results: [calculationLog(143, 968449)] })
+    );
   await expect(fetchCycleCalculationHeights({ 143: 968449 }, contract, 'mainnet')).resolves.toEqual(
     { 143: 968449 }
   );
   fetchMock
     .mockResolvedValueOnce(respond({ results: [calculationTx('0xtruncated')] }))
-    .mockResolvedValueOnce(respond({ event_count: 10, events: [] }));
+    .mockResolvedValueOnce(respond({ cursor: { next: '10' }, results: [] }));
   await expect(fetchCycleCalculationHeights({ 143: 968449 }, contract, 'mainnet')).rejects.toThrow(
     'Incomplete events'
   );
