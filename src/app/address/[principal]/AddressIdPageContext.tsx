@@ -1,6 +1,6 @@
 'use client';
 
-import { CompressedPoxInfo, PrincipalNonces } from '@/app/address/[principal]/page-data';
+import type { CompressedPoxInfo, PrincipalNonces } from '@/app/address/[principal]/page-data';
 // TODO: Temporarily disabled - re-enable when API performance is fixed
 // import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 // import { CompressedTxAndMempoolTxTableData } from '@/common/utils/transaction-utils';
