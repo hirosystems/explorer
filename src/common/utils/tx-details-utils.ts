@@ -1,3 +1,4 @@
+import { ApiError } from '@/api/ApiError';
 import { TransactionStatus } from '@/common/constants/constants';
 import { TxStatus } from '@/common/types/tx';
 import {
@@ -140,14 +141,24 @@ export function getTxAssetEventDetails(event: TxEvent): TxAssetEventDetails | un
 }
 
 /**
+ * Whether a failed transaction read won't succeed on a retry: a client error such as the 404 v3
+ * returns once a transaction is dropped. Timeouts, rate limits, server errors and network failures
+ * are transient.
+ */
+function isTerminalTxReadError(error: unknown): boolean {
+  if (!(error instanceof ApiError) || error.status === undefined) return false;
+  return error.status >= 400 && error.status < 500 && error.status !== 408 && error.status !== 429;
+}
+
+/**
  * How often an open transaction page should re-read the transaction: only while it is still
- * pending, and not after a read has failed (v3 stops serving a transaction once it is dropped).
+ * pending. Polling continues through transient failures and stops after a terminal one.
  */
 export function getPendingTxRefetchInterval(
   tx: TxDetails | undefined,
-  hasError: boolean,
+  error: unknown,
   intervalMs: number
 ): number | false {
-  if (!tx || hasError || isConfirmedTxDetails(tx)) return false;
+  if (!tx || isTerminalTxReadError(error) || isConfirmedTxDetails(tx)) return false;
   return tx.status === 'pending' ? intervalMs : false;
 }

@@ -29,13 +29,13 @@ function TransactionIdPage() {
     refetchInterval: (query: Query<TxDetails>) =>
       getPendingTxRefetchInterval(
         query.state.data,
-        !!query.state.error,
+        query.state.error,
         PENDING_TX_REFETCH_INTERVAL_MS
       ),
   });
   const tx = clientTxData ?? initialTxData;
 
-  if (!initialTxData && isLoading) {
+  if (!tx && isLoading) {
     return (
       <Flex align="center" justify="center" py={20}>
         <Spinner size="lg" />
@@ -43,7 +43,8 @@ function TransactionIdPage() {
     );
   }
 
-  if (!initialTxData && error) {
+  // A failed re-read keeps showing the last known transaction.
+  if (!tx && error) {
     return (
       <Flex align="center" justify="center" py={20} direction="column" gap={4}>
         <Text color="error">Failed to load transaction</Text>

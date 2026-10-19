@@ -1,3 +1,4 @@
+import { ApiError } from '@/api/ApiError';
 import { TransactionStatus } from '@/common/constants/constants';
 import { TxDetails, TxEvent } from '@/common/types/tx-v3';
 
@@ -272,26 +273,45 @@ test('canListTokensTransferred only when one events request returns every event 
 });
 
 describe('getPendingTxRefetchInterval', () => {
+  const apiError = (status: number) =>
+    new ApiError({
+      message: `Failed (${status})`,
+      status,
+      endpoint: '/extended/v3/transactions/{tx_id}',
+      method: 'GET',
+    });
+
   test('polls a pending transaction', () => {
-    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), false, 5000)).toBe(5000);
+    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), null, 5000)).toBe(5000);
   });
 
   test('stops once the transaction is mined', () => {
-    expect(getPendingTxRefetchInterval(confirmedTx({ type: 'coinbase' }), false, 5000)).toBe(false);
+    expect(getPendingTxRefetchInterval(confirmedTx({ type: 'coinbase' }), null, 5000)).toBe(false);
   });
 
-  test('stops after a failed read, such as a dropped transaction that no longer resolves', () => {
-    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), true, 5000)).toBe(false);
+  test.each([404, 400])('stops after a terminal %i, such as a dropped transaction', status => {
+    expect(
+      getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), apiError(status), 5000)
+    ).toBe(false);
+  });
+
+  test.each([
+    ['a rate limit', apiError(429)],
+    ['a timeout', apiError(408)],
+    ['a server error', apiError(503)],
+    ['a network failure', new TypeError('Failed to fetch')],
+  ])('keeps polling through %s', (_label, error) => {
+    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), error, 5000)).toBe(5000);
   });
 
   test('does not poll dropped or missing transactions', () => {
     expect(
       getPendingTxRefetchInterval(
         mempoolTx({ type: 'coinbase', status: 'dropped_replace_by_fee' }),
-        false,
+        null,
         5000
       )
     ).toBe(false);
-    expect(getPendingTxRefetchInterval(undefined, false, 5000)).toBe(false);
+    expect(getPendingTxRefetchInterval(undefined, null, 5000)).toBe(false);
   });
 });
