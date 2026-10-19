@@ -4,6 +4,7 @@ import { TxDetails, TxEvent } from '@/common/types/tx-v3';
 import {
   canListTokensTransferred,
   formatTenureChangeCause,
+  getPendingTxRefetchInterval,
   getTxAssetEventDetails,
   getTxBlockTime,
   getTxDetailsStatus,
@@ -268,4 +269,29 @@ test('canListTokensTransferred only when one events request returns every event 
     false
   );
   expect(canListTokensTransferred(confirmedTx({ type: 'coinbase', event_count: 5 }))).toBe(false);
+});
+
+describe('getPendingTxRefetchInterval', () => {
+  test('polls a pending transaction', () => {
+    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), false, 5000)).toBe(5000);
+  });
+
+  test('stops once the transaction is mined', () => {
+    expect(getPendingTxRefetchInterval(confirmedTx({ type: 'coinbase' }), false, 5000)).toBe(false);
+  });
+
+  test('stops after a failed read, such as a dropped transaction that no longer resolves', () => {
+    expect(getPendingTxRefetchInterval(mempoolTx({ type: 'coinbase' }), true, 5000)).toBe(false);
+  });
+
+  test('does not poll dropped or missing transactions', () => {
+    expect(
+      getPendingTxRefetchInterval(
+        mempoolTx({ type: 'coinbase', status: 'dropped_replace_by_fee' }),
+        false,
+        5000
+      )
+    ).toBe(false);
+    expect(getPendingTxRefetchInterval(undefined, false, 5000)).toBe(false);
+  });
 });

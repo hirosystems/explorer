@@ -138,3 +138,16 @@ export function getTxAssetEventDetails(event: TxEvent): TxAssetEventDetails | un
     assetIdentifier: 'asset_identifier' in asset ? asset.asset_identifier : undefined,
   };
 }
+
+/**
+ * How often an open transaction page should re-read the transaction: only while it is still
+ * pending, and not after a read has failed (v3 stops serving a transaction once it is dropped).
+ */
+export function getPendingTxRefetchInterval(
+  tx: TxDetails | undefined,
+  hasError: boolean,
+  intervalMs: number
+): number | false {
+  if (!tx || hasError || isConfirmedTxDetails(tx)) return false;
+  return tx.status === 'pending' ? intervalMs : false;
+}
