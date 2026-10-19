@@ -1,4 +1,4 @@
-import { stacksAPIFetch } from '@/api/stacksAPIFetch';
+import { stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 import { NetworkModes } from '@/common/types/network';
 import { MempoolTransactionSummaryListResponse } from '@/common/types/tx-v3';
@@ -16,15 +16,14 @@ export async function fetchUIMempoolTransactions(
   try {
     const fetchUrl = `${apiUrl}/extended/v3/mempool/transactions?limit=${TX_TABLE_PAGE_SIZE}`;
 
-    const response = await stacksAPIFetch(fetchUrl, {
+    // stacksAPIFetchJson throws on non-2xx so an error body is never cached as a summary page.
+    return await stacksAPIFetchJson<MempoolTransactionSummaryListResponse>(fetchUrl, {
       cache: 'default',
       next: {
         revalidate: 10, // 10 seconds
         tags: ['mempool-transactions'],
       },
     });
-
-    return await response.json();
   } catch (error) {
     logError(
       error as Error,

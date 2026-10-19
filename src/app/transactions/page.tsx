@@ -1,4 +1,4 @@
-import { stacksAPIFetch } from '@/api/stacksAPIFetch';
+import { stacksAPIFetchJson } from '@/api/stacksAPIFetch';
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 import { NetworkModes } from '@/common/types/network';
 import { TransactionSummaryListResponse } from '@/common/types/tx-v3';
@@ -41,12 +41,12 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   // type filters — so the list is fetched unfiltered and filtered client-side by type.
   try {
     const fetchUrl = `${apiUrl}/extended/v3/transactions?limit=${TX_TABLE_PAGE_SIZE}`;
-    const response = await stacksAPIFetch(fetchUrl, {
+    // stacksAPIFetchJson throws on non-2xx so an error body is never cached as a summary page.
+    initialData = await stacksAPIFetchJson<TransactionSummaryListResponse>(fetchUrl, {
       next: {
         revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
       },
     });
-    initialData = await response.json();
   } catch (error) {
     logError(
       error as Error,

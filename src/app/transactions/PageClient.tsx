@@ -4,7 +4,6 @@ import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { TransactionSummaryListResponse } from '@/common/types/tx-v3';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { FilterButton } from '@/features/txsFilterAndSort/FilterButton';
-import { ShowValueMenu } from '@/features/txsFilterAndSort/ShowValueMenu';
 import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
@@ -36,7 +35,6 @@ export default function ({
         </Flex>
         <Stack gap={5}>
           <Flex gap={2} flexWrap={'wrap'}>
-            <ShowValueMenu />
             <FilterButton />
           </Flex>
           <ConfirmedTxsSummaryTable initialData={initialData} />

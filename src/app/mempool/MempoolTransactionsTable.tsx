@@ -2,7 +2,6 @@
 
 import { MempoolTransactionSummaryListResponse } from '@/common/types/tx-v3';
 import { FilterButton } from '@/features/txsFilterAndSort/FilterButton';
-import { ShowValueMenu } from '@/features/txsFilterAndSort/ShowValueMenu';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
 
@@ -22,7 +21,6 @@ export default function MempoolTransactionsTable({
       </Text>
       <Stack gap={5}>
         <Flex gap={2} flexWrap={'wrap'}>
-          <ShowValueMenu />
           <FilterButton />
         </Flex>
         <MempoolTxsSummaryTable initialData={initialMempoolTxData} />

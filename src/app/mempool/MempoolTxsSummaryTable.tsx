@@ -158,7 +158,7 @@ export function MempoolTxsSummaryTable({
 
   const response = useMempoolTxSummariesInfinite(TX_TABLE_PAGE_SIZE);
   const txs = useMemo(
-    () => response.data?.pages.flatMap(page => page.results) ?? [],
+    () => response.data?.pages.flatMap(page => page.results ?? []) ?? [],
     [response.data?.pages]
   );
 
